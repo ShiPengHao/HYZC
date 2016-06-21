@@ -101,6 +101,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 if(object.optBoolean("Succeed")){
                     saveAccountInfo();
                     goToHome();
+                }else {
+                    MyToast.show(getString(R.string.connet_error));
                 }
                 return null;
             }
@@ -108,6 +110,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             @Override
             public void onError(Call call, Exception e, int i) {
                 e.printStackTrace();
+                MyToast.show(getString(R.string.connet_error));
             }
 
             @Override
