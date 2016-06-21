@@ -41,6 +41,7 @@ public class PullDownToRefreshListView extends ListView {
     private int state = STATE_DOWN;
     private RotateAnimation downToUp;
     private RotateAnimation upToDown;
+    private static final long TIME_OFFSET = 8*60*60*1000l;
     /**
      * 刷新头下增加的第一个view
      */
@@ -132,7 +133,7 @@ public class PullDownToRefreshListView extends ListView {
         headerRoot.measure(0, 0);
         headerRootHeight = headerRoot.getMeasuredHeight();
         headerRoot.setPadding(0, -headerRootHeight, 0, 0);
-        String date = (String) DateFormat.format("yy-MM-dd kk:mm:ss", System.currentTimeMillis());
+        String date = (String) DateFormat.format("yyyy-MM-dd kk:mm:ss", System.currentTimeMillis());
         tvDate.setText(date);
         addHeaderView(view);
     }

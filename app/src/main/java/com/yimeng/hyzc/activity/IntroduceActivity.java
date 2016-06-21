@@ -27,6 +27,8 @@ public class IntroduceActivity extends AppCompatActivity {
     private LazyViewPager vp;
     private PagerAdapter adapter;
     private List<Fragment> fragments;
+    private LazyViewPager.OnPageChangeListener onPageChangeListener;
+    private boolean isRunning = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,14 +45,14 @@ public class IntroduceActivity extends AppCompatActivity {
     private void setListener() {
         adapter = new IntroduceFragmentAdapter(getSupportFragmentManager());
         vp.setAdapter(adapter);
-        vp.setOnPageChangeListener(new LazyViewPager.OnPageChangeListener() {
+        onPageChangeListener = new LazyViewPager.OnPageChangeListener() {
             private int count = 0;
-
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
                 MyLog.i("introduce", "positon=" + position + "count=" + count);
-                if (position == vp.getAdapter().getCount() - 1) {
+                if (isRunning && position == vp.getAdapter().getCount() - 1) {
                     if (count > 10) {
+                        isRunning = false;
                         startActivity(new Intent(IntroduceActivity.this, LoginActivity.class));
                         finish();
                     } else {
@@ -71,7 +73,8 @@ public class IntroduceActivity extends AppCompatActivity {
                     count = 0;
                 }
             }
-        });
+        };
+        vp.setOnPageChangeListener(onPageChangeListener);
     }
 
     private void initData() {

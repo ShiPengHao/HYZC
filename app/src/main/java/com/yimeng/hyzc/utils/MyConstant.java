@@ -42,7 +42,8 @@ public class MyConstant {
      */
     public static final String URL_LOGIN = URL_BASE + "login/loginauth";
     /**
-     * 登录接口
+     * 药品类型接口
      */
     public static final String URL_DRUGTYPE = URL_BASE + "cpw/cpw_drugtype/getlist";
+    //http://192.168.0.168/CPW/CPW_drug/getlist
 }

@@ -10,6 +10,7 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.CursorAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -22,6 +23,7 @@ import com.yimeng.hyzc.bean.DrugTypeBean;
 import com.yimeng.hyzc.db.DrugTypeDAO;
 import com.yimeng.hyzc.utils.MyApp;
 import com.yimeng.hyzc.utils.MyConstant;
+import com.yimeng.hyzc.utils.MyLog;
 import com.yimeng.hyzc.utils.MyToast;
 import com.yimeng.hyzc.utils.ThreadUtils;
 import com.yimeng.hyzc.utils.UiUtils;
@@ -40,7 +42,7 @@ import okhttp3.Response;
 /**
  * Created by 依萌 on 2016/6/21.
  */
-public class DrugFragment extends Fragment {
+public class DrugFragment extends Fragment implements AdapterView.OnItemClickListener {
 
     private PullDownToRefreshListView listView;
 
@@ -50,7 +52,16 @@ public class DrugFragment extends Fragment {
     private int pageCount;
     private int itemIndex;
 
-    private class DrugTypeCursorAdapter extends CursorAdapter implements View.OnLayoutChangeListener{
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        if (adapter.getCursor().moveToPosition(position - listView.getHeaderViewsCount())) {
+            String name = adapter.getCursor().getString(DrugTypeDAO.ID_NAME);
+            MyToast.show(name);
+        }
+
+    }
+
+    private class DrugTypeCursorAdapter extends CursorAdapter implements View.OnLayoutChangeListener {
         @Override
         public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
             itemIndex++;
@@ -75,7 +86,15 @@ public class DrugFragment extends Fragment {
 
         @Override
         protected void onContentChanged() {
-            //getLimitCursor();
+//            if (getCursor() == null || getCursor().getCount() == 0 || pageCount != 0) {
+                getLimitCursor();
+//            }
+            MyLog.i("onContentChanged", "onContentChanged");
+        }
+
+        @Override
+        public Object getItem(int position) {
+            return super.getItem(position);
         }
 
         @Override
@@ -133,6 +152,7 @@ public class DrugFragment extends Fragment {
     private void setListener() {
         adapter = new DrugTypeCursorAdapter(null);
         listView.setAdapter(adapter);
+        listView.setOnItemClickListener(this);
         getLimitCursor();
     }
 
@@ -146,10 +166,8 @@ public class DrugFragment extends Fragment {
                     public void run() {
                         adapter.swapCursor(cursor);
                         if (listView.isRefreshing) {
-                            MyToast.show("刷新成功" + itemCount + "条数据");
                             listView.refreshCompleted(true);
                         } else if (listView.isLoadingMore) {
-                            MyToast.show("加载成功" + itemCount + "条数据");
                             listView.hideFooter();
                         }
                     }
