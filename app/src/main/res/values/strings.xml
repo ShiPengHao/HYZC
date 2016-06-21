@@ -14,4 +14,5 @@
     <string name="reVerify">秒后，点击重试</string>
     <string name="drug">药品</string>
     <string name="health">健康教育</string>
+    <string name="connet_error">连接不上了，请检查网络设置或者稍后再试</string>
 </resources>

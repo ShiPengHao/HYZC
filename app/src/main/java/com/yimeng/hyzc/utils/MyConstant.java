@@ -36,9 +36,13 @@ public class MyConstant {
     /**
      * 服务器ip
      */
-    private static final String URL_BASE = "http://192.168.0.168/";
+    public static final String URL_BASE = "http://192.168.0.168/";
     /**
      * 登录接口
      */
     public static final String URL_LOGIN = URL_BASE + "login/loginauth";
+    /**
+     * 登录接口
+     */
+    public static final String URL_DRUGTYPE = URL_BASE + "cpw/cpw_drugtype/getlist";
 }

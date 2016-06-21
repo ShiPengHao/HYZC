@@ -2,10 +2,8 @@ package com.yimeng.hyzc.utils;
 
 import android.app.Application;
 
-import com.squareup.picasso.Picasso;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.cookie.CookieJarImpl;
-import com.zhy.http.okhttp.cookie.store.PersistentCookieStore;
 
 import java.util.concurrent.TimeUnit;
 

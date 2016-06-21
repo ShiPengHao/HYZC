@@ -11,6 +11,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.yimeng.hyzc.R;
+import com.yimeng.hyzc.fragment.DrugFragment;
 import com.yimeng.hyzc.fragment.HomeFragment;
 import com.yimeng.hyzc.fragment.Introduce1;
 import com.yimeng.hyzc.fragment.Introduce2;
@@ -57,7 +58,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     private void initData() {
         fragments= new ArrayList<>();
         fragments.add(new HomeFragment());
-        fragments.add(new Introduce1());
+        fragments.add(new DrugFragment());
         fragments.add(new Introduce2());
     }
 
