@@ -1,33 +1,35 @@
 package com.yimeng.hyzc.fragment;
 
-import android.content.Context;
+import android.database.ContentObserver;
 import android.database.Cursor;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.CursorAdapter;
-import android.widget.ImageView;
-import android.widget.TextView;
+import android.widget.LinearLayout;
+import android.widget.ListView;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.squareup.picasso.Picasso;
 import com.yimeng.hyzc.R;
+import com.yimeng.hyzc.adapter.DrugTypeAdapter;
 import com.yimeng.hyzc.bean.DrugTypeBean;
 import com.yimeng.hyzc.db.DrugTypeDAO;
-import com.yimeng.hyzc.utils.MyApp;
 import com.yimeng.hyzc.utils.MyConstant;
-import com.yimeng.hyzc.utils.MyLog;
 import com.yimeng.hyzc.utils.MyToast;
+import com.yimeng.hyzc.utils.PinYinUtils;
 import com.yimeng.hyzc.utils.ThreadUtils;
 import com.yimeng.hyzc.utils.UiUtils;
-import com.yimeng.hyzc.view.PullDownToRefreshListView;
+import com.yimeng.hyzc.view.ClearEditText;
+import com.yimeng.hyzc.view.QuickIndexBar;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.Callback;
 
@@ -35,6 +37,8 @@ import org.json.JSONObject;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 import okhttp3.Call;
 import okhttp3.Response;
@@ -42,99 +46,18 @@ import okhttp3.Response;
 /**
  * Created by 依萌 on 2016/6/21.
  */
-public class DrugFragment extends Fragment implements AdapterView.OnItemClickListener {
+public class DrugFragment extends Fragment implements AdapterView.OnItemClickListener, TextWatcher, QuickIndexBar.OnLetterChangeListener {
 
-    private PullDownToRefreshListView listView;
+    private ListView listView;
+    private QuickIndexBar quickIndexBar;
 
-    private int itemCount = 10;
-    private int itemHeightCount = 0;
-    private DrugTypeCursorAdapter adapter;
-    private int pageCount;
-    private int itemIndex;
+    private DrugTypeAdapter adapter;
+    private ClearEditText clearEditText;
 
-    @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        if (adapter.getCursor().moveToPosition(position - listView.getHeaderViewsCount())) {
-            String name = adapter.getCursor().getString(DrugTypeDAO.ID_NAME);
-            MyToast.show(name);
-        }
+    private List<DrugTypeBean> datas = new ArrayList<>();
+    private boolean isFlushing = false;
+    private LinearLayout loading;
 
-    }
-
-    private class DrugTypeCursorAdapter extends CursorAdapter implements View.OnLayoutChangeListener {
-        @Override
-        public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
-            itemIndex++;
-            itemHeightCount += v.getHeight();
-            if (pageCount == 0 && itemIndex == itemCount) {
-                if (itemHeightCount < listView.getHeight()
-                        && getCursor() != null
-                        && getCursor().getCount() >= itemCount) {
-                    itemCount++;
-                    itemIndex = 0;
-                    itemHeightCount = 0;
-                    getLimitCursor();
-                } else {
-                    pageCount = itemCount;
-                }
-            }
-        }
-
-        public DrugTypeCursorAdapter(Cursor c) {
-            super(MyApp.getAppContext(), c, CursorAdapter.FLAG_REGISTER_CONTENT_OBSERVER);
-        }
-
-        @Override
-        protected void onContentChanged() {
-//            if (getCursor() == null || getCursor().getCount() == 0 || pageCount != 0) {
-                getLimitCursor();
-//            }
-            MyLog.i("onContentChanged", "onContentChanged");
-        }
-
-        @Override
-        public Object getItem(int position) {
-            return super.getItem(position);
-        }
-
-        @Override
-        public View newView(Context context, Cursor cursor, ViewGroup parent) {
-            View view = UiUtils.inflate(R.layout.item_drug_type);
-            view.removeOnLayoutChangeListener(this);
-            if (pageCount == 0) {
-                view.addOnLayoutChangeListener(this);
-            }
-            ViewHolder holder = new ViewHolder(view);
-            view.setTag(holder);
-            return view;
-        }
-
-        @Override
-        public void bindView(View view, Context context, Cursor cursor) {
-            ViewHolder holder = (ViewHolder) view.getTag();
-            String string = cursor.getString(DrugTypeDAO.ID_ICON);
-            if (!TextUtils.isEmpty(string)) {
-                Picasso.with(getContext()).load(MyConstant.URL_BASE + string).into(holder.iv);
-            } else {
-                holder.iv.setImageBitmap(BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher));
-            }
-            holder.tv_drug.setText(cursor.getString(DrugTypeDAO.ID_NAME));
-        }
-
-        public class ViewHolder {
-            public View rootView;
-            public ImageView iv;
-            public TextView tv_drug;
-
-            public ViewHolder(View rootView) {
-                this.rootView = rootView;
-                this.iv = (ImageView) rootView.findViewById(R.id.iv);
-                this.tv_drug = (TextView) rootView.findViewById(R.id.tv_drug);
-            }
-
-        }
-
-    }
 
     @Nullable
     @Override
@@ -146,32 +69,30 @@ public class DrugFragment extends Fragment implements AdapterView.OnItemClickLis
         return view;
     }
 
+    private void initView(View view) {
+        clearEditText = (ClearEditText) view.findViewById(R.id.cet);
+        listView = (ListView) view.findViewById(R.id.lv);
+        quickIndexBar = (QuickIndexBar) view.findViewById(R.id.quickindexbar);
+        loading = (LinearLayout) view.findViewById(R.id.ll_loading);
+    }
+
     /**
      * 设置适配器和监听
      */
     private void setListener() {
-        adapter = new DrugTypeCursorAdapter(null);
+        adapter = new DrugTypeAdapter(datas);
         listView.setAdapter(adapter);
         listView.setOnItemClickListener(this);
-        getLimitCursor();
-    }
+        clearEditText.addTextChangedListener(this);
+        quickIndexBar.setOnLetterChangeListener(this);
 
-    private void getLimitCursor() {
-        ThreadUtils.runOnBackThread(new Runnable() {
+        getActivity().getContentResolver().registerContentObserver(DrugTypeDAO.DRUG_TYPE_URI, true, new ContentObserver(null) {
             @Override
-            public void run() {
-                final Cursor cursor = DrugTypeDAO.getInstance().getCursorByLimit(itemCount);
-                ThreadUtils.runOnUIThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        adapter.swapCursor(cursor);
-                        if (listView.isRefreshing) {
-                            listView.refreshCompleted(true);
-                        } else if (listView.isLoadingMore) {
-                            listView.hideFooter();
-                        }
-                    }
-                });
+            public void onChange(boolean selfChange) {
+                Log.i("onChange" , String.valueOf(selfChange));
+                if (!isFlushing) {
+                    flushData();
+                }
             }
         });
     }
@@ -180,6 +101,7 @@ public class DrugFragment extends Fragment implements AdapterView.OnItemClickLis
      * 初始化数据源
      */
     private void initData() {
+        flushData();
         OkHttpUtils.get().url(MyConstant.URL_DRUGTYPE).build().execute(new Callback() {
             @Override
             public Object parseNetworkResponse(Response response, int i) throws Exception {
@@ -207,33 +129,107 @@ public class DrugFragment extends Fragment implements AdapterView.OnItemClickLis
 
     }
 
-    private void parseJson(String datas) {
-        if (datas == null) {
+
+
+    /**
+     * 从本地数据库读取数据后刷新页面
+     */
+    private void flushData() {
+        ThreadUtils.runOnBackThread(new Runnable() {
+            @Override
+            public void run() {
+                synchronized (DrugFragment.this) {
+                    isFlushing = true;
+                    Cursor cursor = DrugTypeDAO.getInstance().getAllCursor();
+                    datas.clear();
+                    while (cursor.moveToNext()) {
+                        DrugTypeBean bean = new DrugTypeBean();
+                        bean.name = cursor.getString(DrugTypeDAO.ID_NAME);
+                        bean.icon = cursor.getString(DrugTypeDAO.ID_ICON);
+                        bean.TypeCode = cursor.getString(DrugTypeDAO.ID_CODE);
+                        datas.add(bean);
+                    }
+                    Collections.sort(datas);
+                    isFlushing = false;
+                }
+                ThreadUtils.runOnUIThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        adapter.notifyDataSetChanged();
+                        if (datas.size() > 0){
+                            loading.setVisibility(View.GONE);
+                        }else{
+                            loading.setVisibility(View.VISIBLE);
+                        }
+                    }
+                });
+            }
+        });
+    }
+
+    /**
+     * 解析json
+     * @param json json数据
+     */
+    private void parseJson(String json) {
+        if (json == null) {
             return;
         }
         Gson gson = new Gson();
         Type type = new TypeToken<ArrayList<DrugTypeBean>>() {
         }.getType();
-        ArrayList<DrugTypeBean> beans = gson.fromJson(datas, type);
-        for (int i = 0; i < beans.size(); i++) {
-            DrugTypeDAO.getInstance().update(beans.get(i));
+        ArrayList<DrugTypeBean> beans = gson.fromJson(json, type);
+//        SystemClock.sleep(3000);
+        if(!datas.equals(beans)) {
+            for (int i = 0; i < beans.size(); i++) {
+                DrugTypeDAO.getInstance().update(beans.get(i));
+            }
         }
-        getLimitCursor();
     }
 
-    private void initView(View view) {
-        listView = (PullDownToRefreshListView) view.findViewById(R.id.lv);
-        listView.setOnRefreshListener(new PullDownToRefreshListView.OnRefreshListener() {
-            @Override
-            public void onPullToRefresh() {
-                getLimitCursor();
+    /**
+     * 让listview滚动到指定的位置
+     * @param s 名称拼音的起始字符
+     */
+    private void scrollListTo(CharSequence s) {
+        String pinYin;
+        for (int i = 0; i < datas.size(); i++) {
+            pinYin = PinYinUtils.getPinYin(datas.get(i).name);
+            if (pinYin.startsWith(String.valueOf(s).toUpperCase())) {
+                listView.setSelection(i + listView.getHeaderViewsCount());
+                break;
             }
+        }
+    }
 
-            @Override
-            public void onLoadMore() {
-                itemCount += pageCount;
-                getLimitCursor();
-            }
-        });
+    @Override
+    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+    }
+
+    @Override
+    public void onTextChanged(CharSequence s, int start, int before, int count) {
+        scrollListTo(s);
+    }
+
+    @Override
+    public void afterTextChanged(Editable s) {
+
+    }
+
+    @Override
+    public void onLetterChange(String letter) {
+        scrollListTo(letter);
+    }
+
+    @Override
+    public void onReset() {
+
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        DrugTypeBean bean = datas.get(position - listView.getHeaderViewsCount());
+        MyToast.show(bean.toString());
     }
 }

@@ -3,14 +3,55 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center_horizontal"
-
     android:orientation="vertical">
-    <com.yimeng.hyzc.view.PullDownToRefreshListView
-        android:id="@+id/lv"
+
+    <com.yimeng.hyzc.view.ClearEditText
+        android:id="@+id/cet"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:drawableRight="@mipmap/delete_xxx"
+        android:ellipsize="end"
+        android:hint="@string/hint_search"
+        android:maxLines="1" />
+
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-    </com.yimeng.hyzc.view.PullDownToRefreshListView>
+        <ListView
+            android:id="@+id/lv"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"></ListView>
+
+        <com.yimeng.hyzc.view.QuickIndexBar
+            android:id="@+id/quickindexbar"
+            android:layout_width="30dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:background="@android:color/transparent" />
+
+        <LinearLayout
+            android:id="@+id/ll_loading"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_centerInParent="true"
+            android:background="@color/colorAccent"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:padding="20dp">
+
+            <ProgressBar
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/loading" />
+        </LinearLayout>
+
+    </RelativeLayout>
 
 
 </LinearLayout>

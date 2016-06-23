@@ -13,10 +13,10 @@ import com.yimeng.hyzc.utils.MyApp;
  * Created by 依萌 on 2016/6/21.
  */
 public class DrugTypeDAO {
-    private static DrugTypeDAO instace = new DrugTypeDAO();
+    private static DrugTypeDAO instance = new DrugTypeDAO();
     private final HYZCHelper helper;
     private final ContentResolver resolver = MyApp.getAppContext().getContentResolver();
-    private final Uri notifyUri = Uri.parse("content://" + MyApp.getAppContext().getPackageName());
+    public static final Uri DRUG_TYPE_URI = Uri.parse("content://" + MyApp.getAppContext().getPackageName());
 
     public static final int ID_CODE = 1;
     public static final int ID_ICON = 2;
@@ -27,38 +27,42 @@ public class DrugTypeDAO {
     }
 
     public static DrugTypeDAO getInstance() {
-        return instace;
+        return instance;
     }
 
-    public Cursor getAllCursor() {
+    public synchronized Cursor getAllCursor() {
         SQLiteDatabase db = helper.getReadableDatabase();
         Cursor cursor = db.rawQuery("select * from DrugType", null);
-        cursor.setNotificationUri(resolver, notifyUri);
+        cursor.setNotificationUri(resolver, DRUG_TYPE_URI);
         return cursor;
     }
 
-    public Cursor getCursorByLimit(int limit) {
+    public synchronized Cursor getCursorByLimit(int limit) {
         SQLiteDatabase db = helper.getReadableDatabase();
         Cursor cursor = db.rawQuery("select * from DrugType limit ?", new String[]{String.valueOf(limit)});
-        cursor.setNotificationUri(resolver, notifyUri);
+        cursor.setNotificationUri(resolver, DRUG_TYPE_URI);
         return cursor;
     }
 
-    public int update(DrugTypeBean bean) {
+    public synchronized void update(DrugTypeBean bean) {
         SQLiteDatabase db = helper.getWritableDatabase();
-        ContentValues values = new ContentValues();
-        values.put("name", bean.name);
-        values.put("icon", bean.icon);
-        int count = db.update("DrugType", values, " code = ?", new String[]{bean.TypeCode});
-        if (count == 0) {
-            return insert(bean);
-        } else {
-            resolver.notifyChange(notifyUri, null);
+        Cursor cursor = db.rawQuery("select * from DrugType where code = ?", new String[]{bean.TypeCode});
+        if (cursor.moveToNext()) {
+            if (!cursor.getString(ID_NAME).equals(bean.name) || !cursor.getString(ID_ICON).equals(bean.icon)) {
+                ContentValues values = new ContentValues();
+                values.put("name", bean.name);
+                values.put("icon", bean.icon);
+                int count = db.update("DrugType", values, " code = ?", new String[]{bean.TypeCode});
+                if (count > 0) {
+                    resolver.notifyChange(DRUG_TYPE_URI, null);
+                }
+            }
+        }else {
+            insert(bean);
         }
-        return 0;
     }
 
-    private int insert(DrugTypeBean bean) {
+    private synchronized void insert(DrugTypeBean bean) {
         SQLiteDatabase db = helper.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put("code", bean.TypeCode);
@@ -66,8 +70,7 @@ public class DrugTypeDAO {
         values.put("icon", bean.icon);
         int count = (int) db.insert("DrugType", null, values);
         if (count != -1) {
-            resolver.notifyChange(notifyUri, null);
+            resolver.notifyChange(DRUG_TYPE_URI, null);
         }
-        return count;
     }
 }

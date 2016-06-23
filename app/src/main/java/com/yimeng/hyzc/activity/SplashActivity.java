@@ -9,8 +9,6 @@ import android.os.Bundle;
 
 import com.yimeng.hyzc.R;
 import com.yimeng.hyzc.utils.MyConstant;
-import com.yimeng.hyzc.utils.MyToast;
-import com.yimeng.hyzc.utils.ThreadUtils;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.Callback;
 
@@ -32,6 +30,7 @@ public class SplashActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
 
+
         handler = new Handler() {
             @Override
             public void handleMessage(Message msg) {
@@ -39,8 +38,9 @@ public class SplashActivity extends AppCompatActivity {
             }
         };
 
-        spAccount = getSharedPreferences(MyConstant.SPREFS_ACCOUNT, MODE_PRIVATE);
+        spAccount = getSharedPreferences(MyConstant.PREFS_ACCOUNT, MODE_PRIVATE);
         if (isFirstRunning()) {
+            copyDataToLocal();
             handler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
@@ -70,6 +70,13 @@ public class SplashActivity extends AppCompatActivity {
                 }
             }, 2000);
         }
+    }
+
+    /**
+     * 将资源文件拷贝到本地
+     */
+    private void copyDataToLocal() {
+
     }
 
     /**

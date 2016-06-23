@@ -51,7 +51,7 @@ public class IntroduceActivity extends AppCompatActivity {
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
                 MyLog.i("introduce", "positon=" + position + "count=" + count);
                 if (isRunning && position == vp.getAdapter().getCount() - 1) {
-                    if (count > 10) {
+                    if (count > 2) {
                         isRunning = false;
                         startActivity(new Intent(IntroduceActivity.this, LoginActivity.class));
                         finish();

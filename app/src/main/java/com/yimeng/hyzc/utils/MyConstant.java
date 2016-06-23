@@ -7,7 +7,7 @@ public class MyConstant {
     /**
      * 账号、登陆有关的本地存储sp文件名称
      */
-    public static final String SPREFS_ACCOUNT = "SPREFS_ACCOUNT";
+    public static final String PREFS_ACCOUNT = "PREFS_ACCOUNT";
     /**
      * 首次运行的键
      */
@@ -36,14 +36,14 @@ public class MyConstant {
     /**
      * 服务器ip
      */
-    public static final String URL_BASE = "http://192.168.0.168/";
+    public static final String URL_BASE = "http://192.168.0.168";
     /**
      * 登录接口
      */
-    public static final String URL_LOGIN = URL_BASE + "login/loginauth";
+    public static final String URL_LOGIN = URL_BASE + "/login/loginauth";
     /**
      * 药品类型接口
      */
-    public static final String URL_DRUGTYPE = URL_BASE + "cpw/cpw_drugtype/getlist";
+    public static final String URL_DRUGTYPE = URL_BASE + "/cpw/cpw_drugtype/getlist";
     //http://192.168.0.168/CPW/CPW_drug/getlist
 }
