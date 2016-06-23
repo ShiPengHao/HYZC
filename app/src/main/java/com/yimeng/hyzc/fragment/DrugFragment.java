@@ -24,6 +24,7 @@ import com.yimeng.hyzc.adapter.DrugTypeAdapter;
 import com.yimeng.hyzc.bean.DrugTypeBean;
 import com.yimeng.hyzc.db.DrugTypeDAO;
 import com.yimeng.hyzc.utils.MyConstant;
+import com.yimeng.hyzc.utils.MyLog;
 import com.yimeng.hyzc.utils.MyToast;
 import com.yimeng.hyzc.utils.PinYinUtils;
 import com.yimeng.hyzc.utils.ThreadUtils;
@@ -44,7 +45,7 @@ import okhttp3.Call;
 import okhttp3.Response;
 
 /**
- * Created by 依萌 on 2016/6/21.
+ * 药品类型列表的fragment
  */
 public class DrugFragment extends Fragment implements AdapterView.OnItemClickListener, TextWatcher, QuickIndexBar.OnLetterChangeListener {
 
@@ -89,7 +90,7 @@ public class DrugFragment extends Fragment implements AdapterView.OnItemClickLis
         getActivity().getContentResolver().registerContentObserver(DrugTypeDAO.DRUG_TYPE_URI, true, new ContentObserver(null) {
             @Override
             public void onChange(boolean selfChange) {
-                Log.i("onChange" , String.valueOf(selfChange));
+                MyLog.i("onChange" , String.valueOf(selfChange));
                 if (!isFlushing) {
                     flushData();
                 }

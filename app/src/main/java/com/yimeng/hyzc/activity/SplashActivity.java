@@ -2,10 +2,10 @@ package com.yimeng.hyzc.activity;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 
 import com.yimeng.hyzc.R;
 import com.yimeng.hyzc.utils.MyConstant;
@@ -78,6 +78,7 @@ public class SplashActivity extends AppCompatActivity {
     private void copyDataToLocal() {
 
     }
+
 
     /**
      * 自动登陆

@@ -44,6 +44,10 @@ public class MyConstant {
     /**
      * 药品类型接口
      */
-    public static final String URL_DRUGTYPE = URL_BASE + "/cpw/cpw_drugtype/getlist";
-    //http://192.168.0.168/CPW/CPW_drug/getlist
+    public static final String URL_DRUGTYPE = URL_BASE + "/cpw/cpw_drugtype/getlist";//http://192.168.0.168/CPW/CPW_drug/getlist
+
+    /**
+     * 注册接口
+     */
+    public static final String URL_REGISTER = URL_BASE + "";
 }

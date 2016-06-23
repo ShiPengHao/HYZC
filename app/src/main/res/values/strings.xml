@@ -2,7 +2,7 @@
     <string name="app_name">HYZC</string>
     <string name="login">登录</string>
     <string name="username">用户名</string>
-    <string name="pwd">密码</string>
+    <string name="pwd">设置密码</string>
     <string name="pwd_confirm">确认密码</string>
     <string name="phone">手机号码</string>
     <string name="autoLogin">自动登陆</string>
@@ -17,4 +17,17 @@
     <string name="connet_error">连接不上了，请检查网络设置或者稍后再试</string>
     <string name="hint_search">输入关键字</string>
     <string name="loading">加载中。。。</string>
+    <string name="province">省</string>
+    <string name="city">市</string>
+    <string name="area">区</string>
+    <string name="email">邮箱</string>
+    <string name="hint_email">用于找回密码</string>
+    <string name="account_info">账号信息</string>
+    <string name="id_info">身份信息</string>
+    <string name="id_number">身份证号</string>
+    <string name="male">男</string>
+    <string name="sex">性别</string>
+    <string name="female">女</string>
+    <string name="address_detail">详细地址</string>
+    <string name="test">测试</string>
 </resources>
