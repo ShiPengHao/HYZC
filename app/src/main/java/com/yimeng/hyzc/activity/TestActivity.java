@@ -78,6 +78,22 @@ public class TestActivity extends AppCompatActivity implements View.OnClickListe
                 request("Patient_Login", values);
                 break;
             case R.id.bt_register:
+                values.clear();
+                values.put("user", "zhaoziy");
+                values.put("pwd", "123456");
+                values.put("email", "aaa@34.df");
+
+                values.put("phone", "13345678900");
+                values.put("name", "123456");
+                values.put("sex", 1);
+                values.put("age", "11");
+                values.put("province", "aa");
+                values.put("city", "bb");
+                values.put("area", "cc");
+                values.put("address", "dfdf");
+                values.put("identification", "410236555555555555");
+
+                request("Patient_Register", values);
                 break;
         }
     }

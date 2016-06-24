@@ -1,6 +1,8 @@
 package com.yimeng.hyzc.fragment;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.view.View;
 import android.widget.TextView;
@@ -10,6 +12,7 @@ import com.yimeng.hyzc.activity.TestActivity;
 import com.yimeng.hyzc.view.AutoRollViewPager;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.util.ArrayList;
 
 /**
@@ -38,10 +41,49 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
 
     @Override
     protected void initData() {
+
+        File file1 = new File(getActivity().getFilesDir(), "/a.png");
+        if (!file1.exists()){
+            try {
+                FileOutputStream outputStream = new FileOutputStream(file1);
+                BitmapFactory.decodeResource(getResources(), R.drawable.a)
+                        .compress(Bitmap.CompressFormat.PNG, 100, outputStream);
+                outputStream.flush();
+                outputStream.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        File file2 = new File(getActivity().getFilesDir(), "/b.jpg");
+        if (!file2.exists()){
+            try {
+                FileOutputStream outputStream = new FileOutputStream(file2);
+                BitmapFactory.decodeResource(getResources(), R.drawable.b)
+                        .compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
+                outputStream.flush();
+                outputStream.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        File file3 = new File(getActivity().getFilesDir(), "/c.jpg");
+        if (!file3.exists()){
+            try {
+                FileOutputStream outputStream = new FileOutputStream(file1);
+                BitmapFactory.decodeResource(getResources(), R.drawable.c)
+                        .compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
+                outputStream.flush();
+                outputStream.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
         ArrayList<String> datas = new ArrayList<>();
-        datas.add(Uri.fromFile(new File(getActivity().getFilesDir(),"/1.png")).toString());
-        datas.add(Uri.fromFile(new File(getActivity().getFilesDir(),"/2.jpg")).toString());
-        datas.add(Uri.fromFile(new File(getActivity().getFilesDir(),"/3.jpg")).toString());
+        datas.add(Uri.fromFile(file1).toString());
+        datas.add(Uri.fromFile(file2).toString());
+        datas.add(Uri.fromFile(file3).toString());
         viewPager.setData(datas);
     }
 

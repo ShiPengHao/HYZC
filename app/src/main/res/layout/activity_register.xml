@@ -3,9 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/grey"
     android:gravity="center_horizontal"
     android:orientation="vertical"
-    android:background="@color/grey"
     tools:context="com.yimeng.hyzc.activity.LoginActivity">
 
     <TextView
@@ -17,14 +17,101 @@
         android:textSize="24dp" />
 
     <ScrollView
-        android:padding="5dp"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:padding="5dp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:padding="5dp"
+                    android:text="@string/account_type"
+                    android:textColor="@color/black"
+                    android:textSize="18dp" />
+
+                <RadioGroup
+                    android:id="@+id/rg_type"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <RadioButton
+                        android:id="@+id/rb_patient"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="15dp"
+                        android:text="@string/patient" />
+
+                    <RadioButton
+                        android:id="@+id/rb_doctor"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:text="@string/doctor" />
+
+                    <RadioButton
+                        android:id="@+id/rb_pharmacy"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:text="@string/pharmacy" />
+                </RadioGroup>
+            </LinearLayout>
+
+            <LinearLayout
+                android:visibility="gone"
+                android:id="@+id/ll_certi_info"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="5dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:text="@string/certi_info"
+                    android:textColor="@color/black"
+                    android:textSize="18dp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <Button
+                        android:id="@+id/bt_doctor_certi"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/selector_bt_bg"
+                        android:gravity="center"
+                        android:padding="5dp"
+                        android:text="@string/doctor_certi"
+                        android:textSize="18dp" />
+
+                    <ImageView
+                        android:layout_marginLeft="10dp"
+                        android:src="@mipmap/ic_launcher"
+                        android:id="@+id/iv_doctor_certi"
+                        android:scaleType="centerInside"
+                        android:layout_width="match_parent"
+                        android:layout_height="150dp" />
+                </LinearLayout>
+            </LinearLayout>
 
             <TextView
                 android:layout_width="match_parent"
@@ -55,10 +142,10 @@
                         android:textSize="18dp" />
 
                     <EditText
-                        android:hint="@string/username"
                         android:id="@+id/et_username"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:hint="@string/username"
                         android:padding="6dp" />
                 </LinearLayout>
 
@@ -120,7 +207,7 @@
                         android:textSize="18dp" />
 
                     <EditText
-                        android:id="@+id/email"
+                        android:id="@+id/et_email"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="@string/hint_email"
@@ -143,6 +230,26 @@
                 android:orientation="vertical"
                 android:padding="5dp">
 
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="6dp"
+                        android:text="@string/name"
+                        android:textSize="18dp" />
+
+                    <EditText
+                        android:id="@+id/et_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/name"
+                        android:padding="6dp" />
+                </LinearLayout>
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -311,10 +418,10 @@
 
                 <Button
                     android:id="@+id/bt_register"
-                    android:background="@drawable/item_outer_shape1"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:background="@drawable/selector_bt_bg"
                     android:gravity="center"
                     android:text="@string/register" />
             </LinearLayout>

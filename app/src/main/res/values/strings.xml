@@ -30,4 +30,11 @@
     <string name="female">女</string>
     <string name="address_detail">详细地址</string>
     <string name="test">测试</string>
+    <string name="account_type">账号类型</string>
+    <string name="patient">普通</string>
+    <string name="pharmacy">药店</string>
+    <string name="doctor">医生</string>
+    <string name="certi_info">证书信息</string>
+    <string name="doctor_certi">医生资格证</string>
+    <string name="name">姓名</string>
 </resources>

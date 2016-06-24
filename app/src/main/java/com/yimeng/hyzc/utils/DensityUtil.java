@@ -5,6 +5,14 @@ public class DensityUtil {
      * 手机的分辨率
      */
     public static final float DENSITY = MyApp.getAppContext().getResources().getDisplayMetrics().density;
+    /**
+     * 手机的分辨率
+     */
+    public static final int SCREEN_WIDTH = MyApp.getAppContext().getResources().getDisplayMetrics().widthPixels;
+    /**
+     * 手机的分辨率
+     */
+    public static final int SCREEN_HEIGHT = MyApp.getAppContext().getResources().getDisplayMetrics().heightPixels;
 
     /** 
      * 根据手机的分辨率从 dp 的单位 转成为 px(像素) 
