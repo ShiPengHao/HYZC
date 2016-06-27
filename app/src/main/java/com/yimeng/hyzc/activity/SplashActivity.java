@@ -30,6 +30,7 @@ public class SplashActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
 
+        getImage();
 
         handler = new Handler() {
             @Override
@@ -70,6 +71,12 @@ public class SplashActivity extends AppCompatActivity {
                 }
             }, 2000);
         }
+    }
+
+    /**
+     * 获得闪屏界面的背景图片
+     */
+    private void getImage() {
     }
 
     /**

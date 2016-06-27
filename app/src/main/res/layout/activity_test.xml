@@ -14,7 +14,6 @@
         android:gravity="center"
         android:text="@string/test"
         android:textSize="24dp" />
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -41,6 +40,32 @@
             android:layout_weight="1"
             android:text="@string/area" />
     </LinearLayout>
+<LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/bt_hospital"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/hospital" />
+
+        <Button
+            android:id="@+id/bt_department"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/department" />
+
+        <Button
+            android:id="@+id/bt_professional"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/professional" />
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -60,6 +85,12 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="@string/register" />
+        <Button
+            android:id="@+id/bt_upload_img"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/upload_img" />
 
     </LinearLayout>
 

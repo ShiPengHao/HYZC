@@ -35,25 +35,34 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
-
-        <CheckBox
-            android:id="@+id/cb_remeber"
+        <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:paddingLeft="30dp"
-            android:gravity="center"
-            android:text="@string/rememberPwd" />
+            >
 
-        <CheckBox
-            android:id="@+id/cb_auto"
+            <CheckBox
+                android:id="@+id/cb_remeber"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/rememberPwd" />
+        </LinearLayout>
+
+        <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:paddingLeft="30dp"
-            android:gravity="center"
-            android:text="@string/autoLogin" />
+            >
+
+            <CheckBox
+                android:id="@+id/cb_auto"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/autoLogin" />
+        </LinearLayout>
     </LinearLayout>
+
+    <include layout="@layout/layout_user_type" />
 
     <LinearLayout
         android:layout_width="match_parent"

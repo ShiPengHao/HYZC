@@ -35,6 +35,11 @@
     <string name="pharmacy">药店</string>
     <string name="doctor">医生</string>
     <string name="certi_info">证书信息</string>
-    <string name="doctor_certi">医生资格证</string>
+    <string name="doctor_cert">医生资格证</string>
     <string name="name">姓名</string>
+    <string name="upload_img">上传图片</string>
+    <string name="hospital">医院</string>
+    <string name="department">科室</string>
+    <string name="professional">专业</string>
+    <string name="doctor_signature">医生电子签名</string>
 </resources>

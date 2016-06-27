@@ -26,54 +26,12 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="5dp"
-                    android:padding="5dp"
-                    android:text="@string/account_type"
-                    android:textColor="@color/black"
-                    android:textSize="18dp" />
-
-                <RadioGroup
-                    android:id="@+id/rg_type"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal">
-
-                    <RadioButton
-                        android:id="@+id/rb_patient"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="15dp"
-                        android:text="@string/patient" />
-
-                    <RadioButton
-                        android:id="@+id/rb_doctor"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp"
-                        android:text="@string/doctor" />
-
-                    <RadioButton
-                        android:id="@+id/rb_pharmacy"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp"
-                        android:text="@string/pharmacy" />
-                </RadioGroup>
-            </LinearLayout>
+            <include
+                layout="@layout/layout_user_type"/>
 
             <LinearLayout
                 android:visibility="gone"
-                android:id="@+id/ll_certi_info"
+                android:id="@+id/ll_cert_info"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
@@ -94,19 +52,43 @@
                     android:orientation="horizontal">
 
                     <Button
-                        android:id="@+id/bt_doctor_certi"
+                        android:id="@+id/bt_doctor_cert"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:background="@drawable/selector_bt_bg"
                         android:gravity="center"
-                        android:padding="5dp"
-                        android:text="@string/doctor_certi"
+                        android:padding="10dp"
+                        android:text="@string/doctor_cert"
                         android:textSize="18dp" />
 
                     <ImageView
                         android:layout_marginLeft="10dp"
                         android:src="@mipmap/ic_launcher"
-                        android:id="@+id/iv_doctor_certi"
+                        android:id="@+id/iv_doctor_cert"
+                        android:scaleType="centerInside"
+                        android:layout_width="match_parent"
+                        android:layout_height="150dp" />
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <Button
+                        android:id="@+id/bt_doctor_signature"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/selector_bt_bg"
+                        android:gravity="center"
+                        android:padding="10dp"
+                        android:text="@string/doctor_signature"
+                        android:textSize="18dp" />
+
+                    <ImageView
+                        android:layout_marginLeft="10dp"
+                        android:src="@mipmap/ic_launcher"
+                        android:id="@+id/iv_doctor_signature"
                         android:scaleType="centerInside"
                         android:layout_width="match_parent"
                         android:layout_height="150dp" />
@@ -389,6 +371,7 @@
                 </LinearLayout>
 
                 <LinearLayout
+                    android:id="@+id/ll_address_detail"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"

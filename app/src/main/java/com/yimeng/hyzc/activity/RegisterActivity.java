@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -34,7 +35,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -42,7 +43,8 @@ import java.util.Map;
 
 public class RegisterActivity extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemSelectedListener, RadioGroup.OnCheckedChangeListener {
 
-    private static final int PHOTO_REQUEST_GALLERY = 1;
+    private static final int REQUEST_GALLERY_FOR_DOCTOR_CERT = 101;
+    private static final int REQUEST_GALLERY_FOR_DOCTOR_SIGN = 102;
     private static final int PHOTO_REQUEST_CUT = 2;
     private EditText et_username;
     private EditText et_pwd;
@@ -68,11 +70,18 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     private ArrayAdapter<AddressBean> areaAdapter;
     private boolean isIniting;
     private RadioGroup rg_type;
-    private Button bt_doctor_certi;
-    private ImageView iv_doctor_certi;
-    private LinearLayout ll_certi;
+    private Button bt_doctor_cert;
+    private ImageView iv_doctor_cert;
+    private LinearLayout ll_cert_info;
     private EditText et_name;
     private String doctorCert;
+    private LinearLayout ll_addressDetail;
+    private Button bt_doctor_signature;
+    private ImageView iv_doctor_signature;
+    private android.support.v7.app.AlertDialog alertDialog;
+
+
+    private String lastPath;
 
 
     @Override
@@ -93,26 +102,38 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         et_email = (EditText) findViewById(R.id.et_email);
         et_name = (EditText) findViewById(R.id.et_name);
         et_id = (EditText) findViewById(R.id.et_id);
-        rg_sex = (RadioGroup) findViewById(R.id.rg_sex);
         et_address_detail = (EditText) findViewById(R.id.et_address_detail);
 
+        rg_sex = (RadioGroup) findViewById(R.id.rg_sex);
+        rg_type = (RadioGroup) findViewById(R.id.rg_type);
 
         spinner_province = (Spinner) findViewById(R.id.spinner_province);
         spinner_city = (Spinner) findViewById(R.id.spinner_city);
         spinner_area = (Spinner) findViewById(R.id.spinner_area);
 
         bt_register = (Button) findViewById(R.id.bt_register);
-        rg_type = (RadioGroup) findViewById(R.id.rg_type);
-        bt_doctor_certi = (Button) findViewById(R.id.bt_doctor_certi);
-        iv_doctor_certi = (ImageView) findViewById(R.id.iv_doctor_certi);
+        bt_doctor_cert = (Button) findViewById(R.id.bt_doctor_cert);
+        bt_doctor_signature = (Button) findViewById(R.id.bt_doctor_signature);
 
-        ll_certi = (LinearLayout) findViewById(R.id.ll_certi_info);
+        iv_doctor_cert = (ImageView) findViewById(R.id.iv_doctor_cert);
+        iv_doctor_signature = (ImageView) findViewById(R.id.iv_doctor_signature);
+
+        ll_cert_info = (LinearLayout) findViewById(R.id.ll_cert_info);
+        ll_addressDetail = (LinearLayout) findViewById(R.id.ll_address_detail);
+
+
+        android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(this);
+        builder.setTitle("图片上传");
+        builder.setCancelable(false);
+        builder.setMessage("正在上传，请稍后。。。");
+        alertDialog = builder.create();
 
     }
 
     private void setListener() {
         bt_register.setOnClickListener(this);
-        bt_doctor_certi.setOnClickListener(this);
+        bt_doctor_cert.setOnClickListener(this);
+        bt_doctor_signature.setOnClickListener(this);
 
         provinceAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, province);
         provinceAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -130,8 +151,8 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         spinner_area.setOnItemSelectedListener(this);
 
         rg_sex.check(R.id.rb_male);
-        rg_type.check(R.id.rb_patient);
         rg_type.setOnCheckedChangeListener(this);
+        rg_type.check(getIntent().getIntExtra("checdId", R.id.rb_patient));
     }
 
     public void initData() {
@@ -249,92 +270,100 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
             case R.id.bt_register:
                 submit();
                 break;
-            case R.id.bt_doctor_certi:
-                getDocCerti();
+            case R.id.bt_doctor_cert:
+                getGalleryImage(REQUEST_GALLERY_FOR_DOCTOR_CERT);
+                break;
+            case R.id.bt_doctor_signature:
+                getGalleryImage(REQUEST_GALLERY_FOR_DOCTOR_SIGN);
                 break;
         }
     }
 
     /**
-     * 获得医生资格证
+     * 从手机图库中选择图片
      */
-    private void getDocCerti() {
+    private void getGalleryImage(int requestCode) {
         // 激活系统图库，选择一张图片
         Intent intent = new Intent(Intent.ACTION_PICK);
 //        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);// 照相
 //        Intent intent=new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
 //        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
         intent.setType("image/*");
-        startActivityForResult(intent, PHOTO_REQUEST_GALLERY);
+        startActivityForResult(intent, requestCode);
     }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == PHOTO_REQUEST_GALLERY) {
-            // 从相册返回的数据
-            if (data != null) {
-                // 得到图片的全路径
-                Uri uri = data.getData();
-                if (uri != null) {
-                    try {
-                        Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), uri);
-                        iv_doctor_certi.setImageBitmap(BitmapUtils.zoomBitmap(bitmap, iv_doctor_certi.getWidth(), iv_doctor_certi.getHeight()));
-                        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                        if (bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos)) {
-                            doctorCert = Base64.encodeToString(baos.toByteArray(), Base64.DEFAULT);
-                        }
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                } else {
-                    Bundle extras = data.getExtras();
-                    if (extras != null) {
-                        //这里是有些拍照后的图片是直接存放到Bundle中的所以我们可以从这里面获取Bitmap图片
-                        Bitmap bitmap = extras.getParcelable("data");
-                        if (bitmap == null) {
-                            return;
-                        }
-                        iv_doctor_certi.setImageBitmap(BitmapUtils.zoomBitmap(bitmap, iv_doctor_certi.getWidth(), iv_doctor_certi.getHeight()));
-                        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                        if (bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos)) {
-                            doctorCert = Base64.encodeToString(baos.toByteArray(), Base64.DEFAULT);
-                        }
-                    }
-                }
-//                crop(uri);
-
-            }
-//        else if (requestCode == PHOTO_REQUEST_CAREMA) {
-//            // 从相机返回的数据
-//            if (hasSdcard()) {
-//                crop(Uri.fromFile(tempFile));
-//            } else {
-//                Toast.makeText(MainActivity.this, "未找到存储卡，无法存储照片！", 0).show();
-//            }
-//
-//        }
-            else if (requestCode == PHOTO_REQUEST_CUT) {
-                // 从剪切图片返回的数据
-                if (data != null) {
-                    Bitmap bitmap = data.getParcelableExtra("data");
-                    BitmapUtils.zoomBitmap(bitmap, iv_doctor_certi.getWidth(), iv_doctor_certi.getHeight());
-                    iv_doctor_certi.setImageBitmap(bitmap);
-                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                    if (bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos)) {
-                        doctorCert = Base64.encodeToString(baos.toByteArray(), Base64.DEFAULT);
-                    }
-                }
-//            try {
-//                // 将临时文件删除
-//                tempFile.delete();
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//            }
-
-            }
-
-            super.onActivityResult(requestCode, resultCode, data);
+        if (data == null) {
+            return;
         }
+        Uri uri = data.getData();
+        Bitmap bitmap = null;
+        // 从相册返回的数据，得到图片的全路径
+        if (uri != null) {
+            try {
+//                InputStream inputStream = getContentResolver().openInputStream(uri);
+//                Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
+                bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), uri);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else {
+            Bundle extras = data.getExtras();
+            if (extras != null) {
+                //这里是有些拍照后的图片是直接存放到Bundle中的所以我们可以从这里面获取Bitmap图片
+                bitmap = extras.getParcelable("data");
+            }
+        }
+        if (bitmap == null) {
+            return;
+        }
+        saveBitmap(requestCode, bitmap);
+        super.onActivityResult(requestCode, resultCode, data);
     }
+
+    /**
+     * 将用户用图库选择的图片展示到对应的控件，或者上传到服务器，保存结果
+     *
+     * @param bitmap
+     */
+    private void saveBitmap(int requestCode, Bitmap bitmap) {
+        ImageView iv = null;
+        switch (requestCode) {
+            case REQUEST_GALLERY_FOR_DOCTOR_CERT:
+                iv = iv_doctor_cert;
+                break;
+            case REQUEST_GALLERY_FOR_DOCTOR_SIGN:
+                iv = iv_doctor_signature;
+                break;
+        }
+        if (iv == null) {
+            return;
+        }
+        iv.setImageBitmap(BitmapUtils.zoomBitmap(bitmap, iv.getWidth(), iv.getHeight()));
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        byte[] bytes;
+        int quality = 100;
+        while (quality > 0) {
+            if (bitmap.compress(Bitmap.CompressFormat.JPEG, quality, baos)
+                    && (bytes = baos.toByteArray()).length < 2 * 1024 * 1024) {
+                if (alertDialog != null) {
+                    alertDialog.show();
+                }
+                values.clear();
+                values.put("fileName", "1.jpg");
+                values.put("DelFilePath", lastPath);
+                values.put("image", Base64.encodeToString(bytes, Base64.DEFAULT));
+//                request("upload_img", values, 1);//TODO 请求框架抽取
+                break;
+            }
+            quality -= 10;
+        }
+
+        bitmap.recycle();
+    }
+
+
 
     /*
      * 剪切图片
@@ -484,13 +513,13 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         values.put("identification", id);
         switch (rg_type.getCheckedRadioButtonId()) {
             case R.id.rb_patient:
-                register("Patient_Register", values);
+                register("Patient_Register", values, 1);
                 break;
             case R.id.rb_pharmacy:
-                register("Patient_Register", values);
+                register("Shop_Register", values, 2);
                 break;
             case R.id.rb_doctor:
-                register("Patient_Register", values);
+                register("Doctor_Register", values, 3);
                 break;
         }
 
@@ -557,14 +586,17 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     public void onCheckedChanged(RadioGroup group, int checkedId) {
         if (group.getId() == R.id.rg_type) {
             switch (checkedId) {
-                case R.id.rb_doctor:
-                    ll_certi.setVisibility(View.VISIBLE);
-                    break;
                 case R.id.rb_patient:
-                    ll_certi.setVisibility(View.GONE);
+                    ll_addressDetail.setVisibility(View.VISIBLE);
+                    ll_cert_info.setVisibility(View.GONE);
+                    break;
+                case R.id.rb_doctor:
+                    ll_addressDetail.setVisibility(View.GONE);
+                    ll_cert_info.setVisibility(View.VISIBLE);
                     break;
                 case R.id.rb_pharmacy:
-                    ll_certi.setVisibility(View.VISIBLE);
+                    ll_addressDetail.setVisibility(View.VISIBLE);
+                    ll_cert_info.setVisibility(View.VISIBLE);
                     break;
             }
         }
