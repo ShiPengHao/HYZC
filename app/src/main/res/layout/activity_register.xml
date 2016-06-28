@@ -26,72 +26,243 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <include
-                layout="@layout/layout_user_type"/>
+            <include layout="@layout/layout_user_type" />
 
             <LinearLayout
-                android:visibility="gone"
                 android:id="@+id/ll_cert_info"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:padding="5dp">
+                android:padding="5dp"
+                android:visibility="gone">
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
-                    android:text="@string/certi_info"
+                    android:text="@string/cert_info"
                     android:textColor="@color/black"
                     android:textSize="18dp" />
 
                 <LinearLayout
+                    android:id="@+id/ll_doctor_cert"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal">
+                    android:orientation="vertical">
 
-                    <Button
-                        android:id="@+id/bt_doctor_cert"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/selector_bt_bg"
-                        android:gravity="center"
-                        android:padding="10dp"
-                        android:text="@string/doctor_cert"
-                        android:textSize="18dp" />
-
-                    <ImageView
-                        android:layout_marginLeft="10dp"
-                        android:src="@mipmap/ic_launcher"
-                        android:id="@+id/iv_doctor_cert"
-                        android:scaleType="centerInside"
+                    <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="150dp" />
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="vertical">
+
+                        <Button
+                            android:id="@+id/bt_doctor_cert"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/selector_bt_bg"
+                            android:gravity="center"
+                            android:padding="10dp"
+                            android:text="@string/doctor_cert"
+                            android:textSize="18dp" />
+
+                        <ImageView
+                            android:id="@+id/iv_doctor_cert"
+                            android:layout_width="match_parent"
+                            android:layout_height="150dp"
+                            android:scaleType="centerInside"
+                            android:visibility="gone" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="vertical">
+
+                        <Button
+                            android:id="@+id/bt_doctor_signature"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/selector_bt_bg"
+                            android:gravity="center"
+                            android:padding="10dp"
+                            android:text="@string/doctor_signature"
+                            android:textSize="18dp" />
+
+                        <ImageView
+                            android:id="@+id/iv_doctor_signature"
+                            android:layout_width="match_parent"
+                            android:layout_height="150dp"
+                            android:scaleType="centerInside"
+                            android:visibility="gone" />
+                    </LinearLayout>
                 </LinearLayout>
+
                 <LinearLayout
+                    android:id="@+id/ll_pharmacy_cert"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal">
+                    android:orientation="vertical">
 
-                    <Button
-                        android:id="@+id/bt_doctor_signature"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/selector_bt_bg"
-                        android:gravity="center"
-                        android:padding="10dp"
-                        android:text="@string/doctor_signature"
-                        android:textSize="18dp" />
-
-                    <ImageView
-                        android:layout_marginLeft="10dp"
-                        android:src="@mipmap/ic_launcher"
-                        android:id="@+id/iv_doctor_signature"
-                        android:scaleType="centerInside"
+                    <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="150dp" />
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="vertical">
+
+                        <Button
+                            android:id="@+id/bt_organization_cert"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/selector_bt_bg"
+                            android:gravity="center"
+                            android:padding="10dp"
+                            android:text="@string/organization_cert"
+                            android:textSize="18dp" />
+
+                        <ImageView
+                            android:id="@+id/iv_organization_cert"
+                            android:layout_width="match_parent"
+                            android:layout_height="150dp"
+                            android:scaleType="centerInside"
+                            android:visibility="gone" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="vertical">
+
+                        <Button
+                            android:id="@+id/bt_license_cert"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/selector_bt_bg"
+                            android:gravity="center"
+                            android:padding="10dp"
+                            android:text="@string/license_cert"
+                            android:textSize="18dp" />
+
+                        <ImageView
+                            android:id="@+id/iv_license_cert"
+                            android:layout_width="match_parent"
+                            android:layout_height="150dp"
+                            android:scaleType="centerInside"
+                            android:src="@mipmap/ic_launcher"
+                            android:visibility="gone" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="vertical">
+
+                        <Button
+                            android:id="@+id/bt_permit_cert"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/selector_bt_bg"
+                            android:gravity="center"
+                            android:padding="10dp"
+                            android:text="@string/permit_cert"
+                            android:textSize="18dp" />
+
+                        <ImageView
+                            android:id="@+id/iv_permit_cert"
+                            android:layout_width="match_parent"
+                            android:layout_height="150dp"
+                            android:scaleType="centerInside"
+                            android:src="@mipmap/ic_launcher"
+                            android:visibility="gone" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:padding="6dp"
+                            android:text="@string/pharmacy_name"
+                            android:textSize="18dp" />
+
+                        <EditText
+                            android:id="@+id/et_pharmacy_name"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/pharmacy_name"
+                            android:padding="6dp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:padding="6dp"
+                            android:text="@string/pharmacy_corporation"
+                            android:textSize="18dp" />
+
+                        <EditText
+                            android:id="@+id/et_pharmacy_corporation"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/pharmacy_name"
+                            android:padding="6dp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:padding="6dp"
+                            android:text="@string/pharmacy_flag"
+                            android:textSize="18dp" />
+
+                        <RadioGroup
+                            android:id="@+id/rg_pharmacy_type"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+
+                            <RadioButton
+                                android:id="@+id/rb_work"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="10dp"
+                                android:text="@string/yibao" />
+
+                            <RadioButton
+                                android:id="@+id/rb_home"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="30dp"
+                                android:text="@string/chengzhen" />
+
+                            <RadioButton
+                                android:id="@+id/rb_farm"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="30dp"
+                                android:text="@string/nonghe" />
+                        </RadioGroup>
+                    </LinearLayout>
                 </LinearLayout>
             </LinearLayout>
 
@@ -232,6 +403,7 @@
                         android:hint="@string/name"
                         android:padding="6dp" />
                 </LinearLayout>
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -255,61 +427,68 @@
                 </LinearLayout>
 
                 <LinearLayout
+                    android:id="@+id/ll_personal_info"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal">
+                    android:orientation="vertical">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:padding="6dp"
-                        android:text="@string/id_number"
-                        android:textSize="18dp" />
-
-                    <EditText
-                        android:id="@+id/et_id"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="@string/id_number"
-                        android:inputType="number"
-                        android:padding="6dp" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:padding="6dp"
-                        android:text="@string/sex"
-                        android:textSize="18dp" />
-
-                    <RadioGroup
-                        android:id="@+id/rg_sex"
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center_vertical"
                         android:orientation="horizontal">
 
-                        <RadioButton
-                            android:id="@+id/rb_male"
+                        <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="10dp"
-                            android:text="@string/male" />
+                            android:padding="6dp"
+                            android:text="@string/id_number"
+                            android:textSize="18dp" />
 
-                        <RadioButton
-                            android:id="@+id/rb_female"
+                        <EditText
+                            android:id="@+id/et_id"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/id_number"
+                            android:inputType="number"
+                            android:padding="6dp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="30dp"
-                            android:text="@string/female" />
-                    </RadioGroup>
+                            android:padding="6dp"
+                            android:text="@string/sex"
+                            android:textSize="18dp" />
+
+                        <RadioGroup
+                            android:id="@+id/rg_sex"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+
+                            <RadioButton
+                                android:id="@+id/rb_male"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="10dp"
+                                android:text="@string/male" />
+
+                            <RadioButton
+                                android:id="@+id/rb_female"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="30dp"
+                                android:text="@string/female" />
+                        </RadioGroup>
+                    </LinearLayout>
                 </LinearLayout>
 
                 <LinearLayout
@@ -371,6 +550,72 @@
                 </LinearLayout>
 
                 <LinearLayout
+                    android:id="@+id/ll_hospital"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:padding="6dp"
+                            android:text="@string/hospital"
+                            android:textSize="18dp" />
+
+                        <Spinner
+                            android:id="@+id/spinner_hospital"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:padding="6dp"
+                            android:text="@string/department"
+                            android:textSize="18dp" />
+
+                        <Spinner
+                            android:id="@+id/spinner_department"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:padding="6dp"
+                            android:text="@string/professional"
+                            android:textSize="18dp" />
+
+                        <Spinner
+                            android:id="@+id/spinner_professional"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+                    </LinearLayout>
+
+                </LinearLayout>
+
+
+                <LinearLayout
                     android:id="@+id/ll_address_detail"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -389,6 +634,28 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="@string/address_detail"
+                        android:padding="6dp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/ll_remark"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="6dp"
+                        android:text="@string/remark"
+                        android:textSize="18dp" />
+
+                    <EditText
+                        android:id="@+id/et_remark"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/remark"
                         android:padding="6dp" />
                 </LinearLayout>
             </LinearLayout>

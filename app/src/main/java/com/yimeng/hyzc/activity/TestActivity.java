@@ -155,14 +155,22 @@ public class TestActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.bt_hospital:
                 values.clear();
-                values.put("province", "110000");//北京
-                values.put("city", "110100");
-                values.put("area", "110101");
+                values.put("province", "410000");
+                values.put("city", "410100");
+                values.put("area", "410103");
                 request("Load_Hospital", values);
                 break;
             case R.id.bt_department:
+                values.clear();
+                values.put("hospital_id", "1");
+                values.put("parentid", "0");
+                request("Load_KS", values);
                 break;
             case R.id.bt_professional:
+                values.clear();
+                values.put("hospital_id", "1");//北京
+                values.put("parentid", "1");
+                request("Load_KS", values);
                 break;
         }
     }

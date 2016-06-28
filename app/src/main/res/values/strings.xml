@@ -34,7 +34,7 @@
     <string name="patient">普通</string>
     <string name="pharmacy">药店</string>
     <string name="doctor">医生</string>
-    <string name="certi_info">证书信息</string>
+    <string name="cert_info">证书信息</string>
     <string name="doctor_cert">医生资格证</string>
     <string name="name">姓名</string>
     <string name="upload_img">上传图片</string>
@@ -42,4 +42,14 @@
     <string name="department">科室</string>
     <string name="professional">专业</string>
     <string name="doctor_signature">医生电子签名</string>
+    <string name="remark">备注</string>
+    <string name="organization_cert">机构代码证</string>
+    <string name="license_cert">营业执照</string>
+    <string name="permit_cert">经营许可证</string>
+    <string name="pharmacy_name">药店名称</string>
+    <string name="pharmacy_corporation">药店法人</string>
+    <string name="yibao">医保</string>
+    <string name="chengzhen">城镇</string>
+    <string name="nonghe">农合</string>
+    <string name="pharmacy_flag">药店标志</string>
 </resources>
