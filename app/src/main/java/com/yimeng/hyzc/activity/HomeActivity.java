@@ -1,14 +1,14 @@
 package com.yimeng.hyzc.activity;
 
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.widget.LinearLayout;
 
 import com.yimeng.hyzc.R;
-import com.yimeng.hyzc.fragment.BookingFragment;
+import com.yimeng.hyzc.adapter.BaseFragmentPagerAdapter;
+import com.yimeng.hyzc.fragment.MyFragment;
 import com.yimeng.hyzc.fragment.DrugFragment;
 import com.yimeng.hyzc.fragment.HomeFragment;
 
@@ -21,23 +21,6 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
     private LinearLayout ll_tab;
     private List<Fragment> fragments = new ArrayList<>();
     private FragmentPagerAdapter adapter;
-
-    private class MyHomePagerAdapter extends FragmentPagerAdapter {
-
-        public MyHomePagerAdapter(FragmentManager fm) {
-            super(getSupportFragmentManager());
-        }
-
-        @Override
-        public Fragment getItem(int position) {
-            return fragments.get(position);
-        }
-
-        @Override
-        public int getCount() {
-            return fragments.size();
-        }
-    }
 
     @Override
     protected int getLayoutResId() {
@@ -58,25 +41,15 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
                 view.setEnabled(false);
             }
         }
-        adapter = new MyHomePagerAdapter(getSupportFragmentManager());
+        adapter = new BaseFragmentPagerAdapter(getSupportFragmentManager(),fragments);
         vp.setAdapter(adapter);
         vp.setCurrentItem(0);
-        vp.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-            }
-
+        vp.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener(){
             @Override
             public void onPageSelected(int position) {
                 for (int i = 0; i < ll_tab.getChildCount(); i++) {
                     ll_tab.getChildAt(i).setEnabled(i != position);
                 }
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-
             }
         });
     }
@@ -84,7 +57,7 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
     protected void initData() {
         fragments.clear();
         fragments.add(new HomeFragment());
-        fragments.add(new BookingFragment());
+        fragments.add(new MyFragment());
         fragments.add(new DrugFragment());
         adapter.notifyDataSetChanged();
     }

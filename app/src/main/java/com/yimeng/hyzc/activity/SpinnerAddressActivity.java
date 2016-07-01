@@ -48,7 +48,7 @@ public class SpinnerAddressActivity extends BaseActivity implements AdapterView.
 
     @Override
     protected int getLayoutResId() {
-        return R.layout.fragment_booking;
+        return R.layout.activity_booking;
     }
 
 

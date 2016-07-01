@@ -6,9 +6,11 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.yimeng.hyzc.R;
+import com.yimeng.hyzc.activity.BookingActivity;
 import com.yimeng.hyzc.activity.TestActivity;
 import com.yimeng.hyzc.view.AutoRollViewPager;
 
@@ -22,8 +24,9 @@ import java.util.ArrayList;
 public class HomeFragment extends BaseFragment implements View.OnClickListener {
 
     private AutoRollViewPager viewPager;
-    private TextView btTest;
+    private Button btTest;
     private ArrayList<String> datas;
+    private Button bt_booking;
 
 
     @Override
@@ -33,12 +36,14 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
 
     protected void initView(View view) {
         viewPager = (AutoRollViewPager) view.findViewById(R.id.vp);
-        btTest = (TextView) view.findViewById(R.id.bt_test);
+        btTest = (Button) view.findViewById(R.id.bt_test);
+        bt_booking = (Button) view.findViewById(R.id.bt_booking);
     }
 
     @Override
     protected void setListener() {
         btTest.setOnClickListener(this);
+        bt_booking.setOnClickListener(this);
     }
 
     @Override
@@ -58,6 +63,9 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
         switch (v.getId()) {
             case R.id.bt_test:
                 startActivity(new Intent(getActivity(), TestActivity.class));
+                break;
+            case R.id.bt_booking:
+                startActivity(new Intent(getActivity(), BookingActivity.class));
                 break;
         }
     }

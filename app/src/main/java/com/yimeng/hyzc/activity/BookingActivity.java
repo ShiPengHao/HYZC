@@ -1,25 +1,34 @@
-package com.yimeng.hyzc.fragment;
+package com.yimeng.hyzc.activity;
 
-import android.content.Intent;
+import android.app.DatePickerDialog;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.GridView;
+import android.widget.ImageView;
+import android.widget.PopupWindow;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.yimeng.hyzc.R;
-import com.yimeng.hyzc.activity.DoctorDetailActivity;
 import com.yimeng.hyzc.adapter.DoctorAdapter;
 import com.yimeng.hyzc.bean.AddressBean;
 import com.yimeng.hyzc.bean.DepartmentBean;
 import com.yimeng.hyzc.bean.DoctorBean;
 import com.yimeng.hyzc.bean.HospitalBean;
+import com.yimeng.hyzc.utils.DensityUtil;
 import com.yimeng.hyzc.utils.MyConstant;
-import com.yimeng.hyzc.utils.MyLog;
 import com.yimeng.hyzc.utils.MyToast;
+import com.yimeng.hyzc.utils.UiUtils;
 import com.yimeng.hyzc.utils.WebServiceUtils;
 
 import org.json.JSONException;
@@ -27,13 +36,15 @@ import org.json.JSONObject;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
 /**
- * 预约挂号
+ * 查询医生，在线预约的activity
  */
-public class BookingFragment extends BaseFragment implements AdapterView.OnItemSelectedListener, AdapterView.OnItemClickListener {
+public class BookingActivity extends BaseActivity implements AdapterView.OnItemSelectedListener, AdapterView.OnItemClickListener, View.OnClickListener {
     private Map<String, Object> values = new HashMap<>();
     private ArrayList<AddressBean> province = new ArrayList<>();
     private ArrayAdapter<AddressBean> provinceAdapter;
@@ -58,51 +69,66 @@ public class BookingFragment extends BaseFragment implements AdapterView.OnItemS
     private Spinner spinner_professional;
     private GridView gridView;
     private DoctorAdapter doctorAdapter;
+    private TextView tv_title;
+    private PopupWindow popupWindow;
+    private ImageView iv_avatar;
+    private EditText et_disease_description;
+    private Button bt_appoint;
+    private Button bt_chat;
+    private Button bt_back;
+    private View popView;
+    private TextView tv_name;
+    private TextView tv_sex;
+    private TextView tv_age;
+    private TextView tv_email;
+    private TextView tv_remark;
+    private DoctorBean doctorBean;
 
     @Override
     protected int getLayoutResId() {
-        return R.layout.fragment_booking;
+        return R.layout.activity_booking;
     }
 
     @Override
-    protected void initView(View view) {
-        spinner_province = (Spinner) view.findViewById(R.id.spinner_province);
-        spinner_city = (Spinner) view.findViewById(R.id.spinner_city);
-        spinner_area = (Spinner) view.findViewById(R.id.spinner_area);
-        spinner_hospital = (Spinner) view.findViewById(R.id.spinner_hospital);
-        spinner_department = (Spinner) view.findViewById(R.id.spinner_department);
-        spinner_professional = (Spinner) view.findViewById(R.id.spinner_professional);
-        gridView = (GridView)view.findViewById(R.id.gv);
+    protected void initView() {
+        spinner_province = (Spinner) findViewById(R.id.spinner_province);
+        spinner_city = (Spinner) findViewById(R.id.spinner_city);
+        spinner_area = (Spinner) findViewById(R.id.spinner_area);
+        spinner_hospital = (Spinner) findViewById(R.id.spinner_hospital);
+        spinner_department = (Spinner) findViewById(R.id.spinner_department);
+        spinner_professional = (Spinner) findViewById(R.id.spinner_professional);
+        gridView = (GridView) findViewById(R.id.gv);
+        tv_title = (TextView) findViewById(R.id.tv_title);
     }
 
     @Override
     protected void setListener() {
-        provinceAdapter = new ArrayAdapter<>(context, android.R.layout.simple_spinner_item, province);
+        provinceAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, province);
         provinceAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner_province.setAdapter(provinceAdapter);
         spinner_province.setOnItemSelectedListener(this);
 
-        cityAdapter = new ArrayAdapter<>(context, android.R.layout.simple_spinner_item, city);
+        cityAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, city);
         cityAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner_city.setAdapter(cityAdapter);
         spinner_city.setOnItemSelectedListener(this);
 
-        areaAdapter = new ArrayAdapter<>(context, android.R.layout.simple_spinner_item, area);
+        areaAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, area);
         areaAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner_area.setAdapter(areaAdapter);
         spinner_area.setOnItemSelectedListener(this);
 
-        hospitalAdapter = new ArrayAdapter<>(context, android.R.layout.simple_spinner_item, hospital);
+        hospitalAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, hospital);
         hospitalAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner_hospital.setAdapter(hospitalAdapter);
         spinner_hospital.setOnItemSelectedListener(this);
 
-        departmentAdapter = new ArrayAdapter<>(context, android.R.layout.simple_spinner_item, department);
+        departmentAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, department);
         departmentAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner_department.setAdapter(departmentAdapter);
         spinner_department.setOnItemSelectedListener(this);
 
-        professionalAdapter = new ArrayAdapter<>(context, android.R.layout.simple_spinner_item, professional);
+        professionalAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, professional);
         professionalAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner_professional.setAdapter(professionalAdapter);
         spinner_professional.setOnItemSelectedListener(this);
@@ -227,11 +253,6 @@ public class BookingFragment extends BaseFragment implements AdapterView.OnItemS
 
                 break;
         }
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
     }
 
     @Override
@@ -393,7 +414,7 @@ public class BookingFragment extends BaseFragment implements AdapterView.OnItemS
             }
             if (department.size() > 0) {
                 spinner_department.setSelection(0);
-                if(!isIniting) {
+                if (!isIniting) {
                     values.clear();
                     values.put("hospital_id", department.get(0).hospital_id);
                     values.put("parentid", department.get(0).departments_id);
@@ -426,7 +447,7 @@ public class BookingFragment extends BaseFragment implements AdapterView.OnItemS
             professionalAdapter.notifyDataSetChanged();
             if (professional.size() > 0) {
                 spinner_professional.setSelection(0);
-                if(!isIniting) {
+                if (!isIniting) {
                     values.clear();
                     values.put("departments_id", professional.get(0).departments_id);
                     requestDoctor("Load_Doctor", values);
@@ -483,9 +504,9 @@ public class BookingFragment extends BaseFragment implements AdapterView.OnItemS
             e.printStackTrace();
         }
         doctorAdapter.notifyDataSetChanged();
-        if (doctor.size() > 0){
+        if (doctor.size() > 0) {
             gridView.setVisibility(View.VISIBLE);
-        }else{
+        } else {
             gridView.setVisibility(View.GONE);
         }
     }
@@ -497,6 +518,113 @@ public class BookingFragment extends BaseFragment implements AdapterView.OnItemS
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        startActivity(new Intent(context,DoctorDetailActivity.class).putExtra("doctor",doctor.get(position)));
+        initPopView();
+        bindPopView(position);
+        if (popupWindow == null) {
+            popupWindow = new PopupWindow(DensityUtil.SCREEN_WIDTH, DensityUtil.SCREEN_HEIGHT);
+            popupWindow.setContentView(popView);
+            popupWindow.setFocusable(true);
+            popupWindow.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        } else if (popupWindow.isShowing()) {
+            popupWindow.dismiss();
+        }
+        int[] location = new int[2];
+        tv_title.getLocationInWindow(location);
+        popupWindow.showAtLocation(parent, Gravity.NO_GRAVITY, location[0], location[1]);
+    }
+
+    /**
+     * 为医生详情界面绑定数据
+     *
+     * @param position 所点击条目在doctor集合中的索引
+     */
+    private void bindPopView(int position) {
+        doctorBean = doctor.get(position);
+        tv_name.setText(String.format("%s：%s", getString(R.string.name), doctorBean.doctor_user == null ? "" : doctorBean.doctor_user));
+        try {
+            String birth = doctorBean.doctor_age.substring(doctorBean.doctor_age.indexOf("(") + 1, doctorBean.doctor_age.indexOf(")"));
+            tv_age.setText(String.format("%s：%s", getString(R.string.age),
+                    new Date().getYear() - new Date(Long.parseLong(birth)).getYear()));
+        } catch (Exception e) {
+            tv_age.setText(getString(R.string.age));
+        }
+        tv_email.setText(String.format("%s：%s", getString(R.string.email), doctorBean.doctor_user == null ? "" : doctorBean.doctor_email));
+        tv_remark.setText(String.format("%s：%s", getString(R.string.remark),
+                doctorBean.remark == null ? "" : doctorBean.remark.replace("\n", "")));
+        tv_sex.setText(String.format("%s：%s", getString(R.string.sex),
+                doctorBean.doctor_sex == 1 ? getString(R.string.male) : getString(R.string.female)));
+    }
+
+    /**
+     * 初始化医生详情的PopWindow
+     */
+    private void initPopView() {
+        if (popView == null) {
+            popView = UiUtils.inflate(R.layout.popwindow_doctor_detail);
+            iv_avatar = (ImageView) popView.findViewById(R.id.iv_avatar);
+            et_disease_description = (EditText) popView.findViewById(R.id.et_disease_description);
+            bt_appoint = (Button) popView.findViewById(R.id.bt_appoint);
+            bt_chat = (Button) popView.findViewById(R.id.bt_chat);
+            bt_back = (Button) popView.findViewById(R.id.bt_back);
+
+            bt_appoint.setOnClickListener(this);
+            bt_chat.setOnClickListener(this);
+            bt_back.setOnClickListener(this);
+
+            tv_name = (TextView) popView.findViewById(R.id.tv_name);
+            tv_sex = (TextView) popView.findViewById(R.id.tv_sex);
+            tv_age = (TextView) popView.findViewById(R.id.tv_age);
+            tv_email = (TextView) popView.findViewById(R.id.tv_email);
+            tv_remark = (TextView) popView.findViewById(R.id.tv_remark);
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        dismissPopWindow();
+        super.onDestroy();
+    }
+
+    /**
+     * 让PopWindow消失，防止内存泄漏
+     */
+    private void dismissPopWindow() {
+        if (popupWindow != null && popupWindow.isShowing()) {
+            popupWindow.dismiss();
+        }
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.bt_appoint:
+                Calendar calendar = Calendar.getInstance();
+                int year = calendar.get(Calendar.YEAR);
+                int monthOfYear = calendar.get(Calendar.MONTH);
+                int dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
+                new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+//                        StringBuilder sb = new StringBuilder();
+//                        sb.append(year).append("-").append(monthOfYear)
+//                        MyToast.show();
+                        requestAppoint();
+                    }
+                }, year, monthOfYear, dayOfMonth).show();
+                break;
+            case R.id.bt_chat:
+                MyToast.show(getString(R.string.chat_online));
+                break;
+            case R.id.bt_back:
+                dismissPopWindow();
+                break;
+        }
+    }
+
+    /**
+     * 提交预约申请
+     */
+    private void requestAppoint() {
+
     }
 }

@@ -23,7 +23,7 @@ import java.util.List;
  */
 public class DrugTypeAdapter extends BaseAdapter {
 
-    private final List<DrugTypeBean> datas;
+    private List<DrugTypeBean> datas;
 
     public DrugTypeAdapter(List<DrugTypeBean> datas){
         this.datas = datas;

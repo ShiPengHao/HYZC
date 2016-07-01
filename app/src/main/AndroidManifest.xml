@@ -29,7 +29,7 @@
             android:windowSoftInputMode="stateHidden" />
         <activity android:name=".activity.HomeActivity" />
         <activity android:name=".activity.TestActivity" />
-        <activity android:name=".activity.BaseActivity" />
+        <activity android:name=".activity.BookingActivity" />
         <activity android:name=".activity.SpinnerAddressActivity"></activity>
     </application>
 

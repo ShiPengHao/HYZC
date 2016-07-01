@@ -17,9 +17,9 @@
     <string name="connet_error">网络连接异常，请检查网络设置或者稍后再试</string>
     <string name="hint_search">输入关键字</string>
     <string name="loading">努力加载中，请稍侯</string>
-    <string name="province">省</string>
-    <string name="city">市</string>
-    <string name="area">区</string>
+    <string name="province">省份</string>
+    <string name="city">地市</string>
+    <string name="area">区县</string>
     <string name="email">邮箱</string>
     <string name="hint_email">用于找回密码</string>
     <string name="account_info">账号信息</string>
@@ -53,10 +53,18 @@
     <string name="nonghe">农合</string>
     <string name="pharmacy_flag">药店标志</string>
     <string name="booking">查询预约</string>
-    <string name="pick_doctor">选择医生：</string>
+    <string name="pick_doctor">请选择合适的地区、医院、科室、医生</string>
     <string name="introduce_page">引导页面</string>
     <string name="splash_page">闪屏界面</string>
     <string name="skip_introduce">跳过引导，马上体验</string>
     <string name="doctor_introduce">医生简介</string>
     <string name="pharmacy_introduce">药店简介</string>
+    <string name="my">我的</string>
+    <string name="personal">个人信息</string>
+    <string name="my_appointment">我的预约历史</string>
+    <string name="age">年龄</string>
+    <string name="disease_description">病情描述</string>
+    <string name="appoint_now">马上预约</string>
+    <string name="chat_online">在线咨询</string>
+    <string name="back">返回</string>
 </resources>

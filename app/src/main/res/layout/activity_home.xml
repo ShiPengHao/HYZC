@@ -28,7 +28,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:background="@drawable/selector_tv_bg"
-            android:drawableTop="@mipmap/ic_launcher"
+            android:drawableTop="@mipmap/home"
             android:gravity="center"
             android:text="@string/home"
             android:textSize="18dp" />
@@ -38,9 +38,10 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:background="@drawable/selector_tv_bg"
-            android:drawableTop="@mipmap/ic_launcher"
+            android:drawableTop="@mipmap/my"
+            android:drawablePadding="3dp"
             android:gravity="center"
-            android:text="@string/booking"
+            android:text="@string/my"
             android:textSize="18dp" />
 
         <TextView
@@ -48,7 +49,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:background="@drawable/selector_tv_bg"
-            android:drawableTop="@mipmap/ic_launcher"
+            android:drawableTop="@mipmap/pill"
             android:gravity="center"
             android:text="@string/drug"
             android:textSize="18dp" />

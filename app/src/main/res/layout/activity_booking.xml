@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:background="@color/colorAccent"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -9,6 +10,7 @@
         android:orientation="vertical">
 
         <TextView
+            android:id="@+id/tv_title"
             style="@style/TextTitle"
             android:text="@string/booking" />
 
@@ -20,6 +22,7 @@
             android:padding="10dp">
 
             <TextView
+                android:padding="10dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/pick_doctor"
@@ -130,14 +133,7 @@
                 android:layout_marginTop="10dp"
                 android:numColumns="3"
                 android:verticalSpacing="10dp">
-
             </GridView>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="bottom" />
 
         </LinearLayout>
     </LinearLayout>
