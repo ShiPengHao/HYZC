@@ -5,12 +5,11 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.provider.MediaStore;
-import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Base64;
 import android.view.Gravity;
@@ -33,19 +32,22 @@ import com.yimeng.hyzc.bean.DepartmentBean;
 import com.yimeng.hyzc.bean.HospitalBean;
 import com.yimeng.hyzc.utils.BitmapUtils;
 import com.yimeng.hyzc.utils.DensityUtil;
+import com.yimeng.hyzc.utils.MyConstant;
 import com.yimeng.hyzc.utils.MyToast;
+import com.yimeng.hyzc.utils.ThreadUtils;
 import com.yimeng.hyzc.utils.WebServiceUtils;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class RegisterActivity extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemSelectedListener, RadioGroup.OnCheckedChangeListener {
+public class RegisterActivity extends BaseActivity implements View.OnClickListener, AdapterView.OnItemSelectedListener, RadioGroup.OnCheckedChangeListener {
 
     private static final int REQUEST_GALLERY_FOR_DOCTOR_CERT = 101;
     private static final int REQUEST_GALLERY_FOR_DOCTOR_SIGN = 102;
@@ -76,8 +78,6 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
 
 
     private Map<String, Object> values = new HashMap<>();
-    private final String NAMESPACE = "http://192.168.0.108:888/";
-    private final String WEB_SERVICE_URL = "http://192.168.0.108:888/API/ymOR_WebService.asmx";
     private ArrayList<AddressBean> province = new ArrayList<>();
     private ArrayAdapter<AddressBean> provinceAdapter;
     private ArrayList<AddressBean> city = new ArrayList<>();
@@ -126,19 +126,16 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     private EditText et_pharmacy_corporation;
     private RadioGroup rg_pharmacy_type;
     private LinearLayout ll_personal_info;
+    private Button bt_float_register;
+    private TextView tv_remark;
 
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_register);
-        isIniting = true;
-        initView();
-        setListener();
-        initData();
+    protected int getLayoutResId() {
+        return R.layout.activity_register;
     }
 
-    private void initView() {
+    protected void initView() {
         et_username = (EditText) findViewById(R.id.et_username);
         et_pwd = (EditText) findViewById(R.id.et_pwd);
         et_pwd_confirm = (EditText) findViewById(R.id.et_pwd_confirm);
@@ -168,6 +165,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         bt_organization_cert = (Button) findViewById(R.id.bt_organization_cert);
         bt_license_cert = (Button) findViewById(R.id.bt_license_cert);
         bt_permit_cert = (Button) findViewById(R.id.bt_permit_cert);
+        bt_float_register = (Button) findViewById(R.id.bt_float_register);
 
         iv_doctor_cert = (ImageView) findViewById(R.id.iv_doctor_cert);
         iv_doctor_signature = (ImageView) findViewById(R.id.iv_doctor_signature);
@@ -182,6 +180,8 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         ll_doctor_cert = (LinearLayout) findViewById(R.id.ll_doctor_cert);
         ll_pharmacy_cert = (LinearLayout) findViewById(R.id.ll_pharmacy_cert);
         ll_personal_info = (LinearLayout) findViewById(R.id.ll_personal_info);
+
+        tv_remark = (TextView)findViewById(R.id.tv_remark);
 
 
         uploadImgBuilder = new android.support.v7.app.AlertDialog.Builder(this);
@@ -198,13 +198,15 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
 
     }
 
-    private void setListener() {
+    protected void setListener() {
         bt_register.setOnClickListener(this);
         bt_doctor_cert.setOnClickListener(this);
         bt_doctor_signature.setOnClickListener(this);
         bt_organization_cert.setOnClickListener(this);
         bt_license_cert.setOnClickListener(this);
         bt_permit_cert.setOnClickListener(this);
+        bt_float_register.setOnClickListener(this);
+
 
         provinceAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, province);
         provinceAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -242,7 +244,8 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         rg_type.check(getIntent().getIntExtra("checdId", R.id.rb_patient));
     }
 
-    public void initData() {
+    protected void initData() {
+        isIniting = true;
         requestAddress("GetProvince");
     }
 
@@ -256,10 +259,10 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
             @Override
             protected String doInBackground(Object... params) {
                 if (params != null && params.length >= 2) {
-                    return WebServiceUtils.callWebService(WEB_SERVICE_URL, NAMESPACE, (String) params[0],
+                    return WebServiceUtils.callWebService(MyConstant.WEB_SERVICE_URL, MyConstant.NAMESPACE, (String) params[0],
                             (Map<String, Object>) params[1]);
                 } else if (params != null && params.length == 1) {
-                    return WebServiceUtils.callWebService(WEB_SERVICE_URL, NAMESPACE, (String) params[0],
+                    return WebServiceUtils.callWebService(MyConstant.WEB_SERVICE_URL, MyConstant.NAMESPACE, (String) params[0],
                             null);
                 } else {
                     return null;
@@ -311,7 +314,14 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                 province.addAll(datas);
                 provinceAdapter.notifyDataSetChanged();
                 if (province.size() > 0) {
-                    spinner_province.setSelection(0);
+                    int i = province.size() - 1;
+                    while (i >= 0) {//默认选择河南省
+                        if ("410000".equalsIgnoreCase(province.get(i).code)) {
+                            break;
+                        }
+                        i--;
+                    }
+                    spinner_province.setSelection(i);
                 }
                 break;
             case 1:// 更新市，并且手动请求对应区的数据
@@ -340,6 +350,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                 }
                 break;
         }
+
     }
 
     @Override
@@ -398,10 +409,10 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
             @Override
             protected String doInBackground(Object... params) {
                 if (params != null && params.length >= 2) {
-                    return WebServiceUtils.callWebService(WEB_SERVICE_URL, NAMESPACE, (String) params[0],
+                    return WebServiceUtils.callWebService(MyConstant.WEB_SERVICE_URL, MyConstant.NAMESPACE, (String) params[0],
                             (Map<String, Object>) params[1]);
                 } else if (params != null && params.length == 1) {
-                    return WebServiceUtils.callWebService(WEB_SERVICE_URL, NAMESPACE, (String) params[0],
+                    return WebServiceUtils.callWebService(MyConstant.WEB_SERVICE_URL, MyConstant.NAMESPACE, (String) params[0],
                             null);
                 } else {
                     return null;
@@ -455,10 +466,10 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
             @Override
             protected String doInBackground(Object... params) {
                 if (params != null && params.length >= 2) {
-                    return WebServiceUtils.callWebService(WEB_SERVICE_URL, NAMESPACE, (String) params[0],
+                    return WebServiceUtils.callWebService(MyConstant.WEB_SERVICE_URL, MyConstant.NAMESPACE, (String) params[0],
                             (Map<String, Object>) params[1]);
                 } else if (params != null && params.length == 1) {
-                    return WebServiceUtils.callWebService(WEB_SERVICE_URL, NAMESPACE, (String) params[0],
+                    return WebServiceUtils.callWebService(MyConstant.WEB_SERVICE_URL, MyConstant.NAMESPACE, (String) params[0],
                             null);
                 } else {
                     return null;
@@ -543,6 +554,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.bt_register:
+            case R.id.bt_float_register:
                 checkInfo();
                 break;
             case R.id.bt_doctor_cert:
@@ -594,9 +606,9 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         // 从相册返回的数据，得到图片的全路径
         if (uri != null) {
             try {
-//                InputStream inputStream = getContentResolver().openInputStream(uri);
-//                Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
-                bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), uri);
+                InputStream inputStream = getContentResolver().openInputStream(uri);
+                bitmap = BitmapFactory.decodeStream(inputStream);
+//                bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), uri);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -649,8 +661,14 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         }
         iv.setImageBitmap(BitmapUtils.zoomBitmap(bitmap, DensityUtil.SCREEN_WIDTH, DensityUtil.dip2px(150)));
         iv.setVisibility(View.VISIBLE);
-        uploadImg(requestCode, bitmap, path);
-        bitmap.recycle();
+        final String pathCopy = path;
+        ThreadUtils.runOnBackThread(new Runnable() {
+            @Override
+            public void run() {
+                uploadImg(requestCode, bitmap, pathCopy);
+                bitmap.recycle();
+            }
+        });
     }
 
     /**
@@ -667,9 +685,15 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         while (quality > 0) {
             if (bitmap.compress(Bitmap.CompressFormat.JPEG, quality, baos)
                     && (bytes = baos.toByteArray()).length < 2 * 1024 * 1024) {
+
                 if (alertDialog != null) {
-                    alertDialog.show();
-                    uploadImgTextView.setText("正在上传，请稍后。。。");
+                    ThreadUtils.runOnUIThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            alertDialog.show();
+                            uploadImgTextView.setText("正在上传，请稍后。。。");
+                        }
+                    });
                 }
                 values.clear();
                 values.put("fileName", "1.jpg");
@@ -692,10 +716,10 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
             @Override
             protected String doInBackground(Object... params) {
                 if (params != null && params.length >= 2) {
-                    return WebServiceUtils.callWebService(WEB_SERVICE_URL, NAMESPACE, (String) params[0],
+                    return WebServiceUtils.callWebService(MyConstant.WEB_SERVICE_URL, MyConstant.NAMESPACE, (String) params[0],
                             (Map<String, Object>) params[1]);
                 } else if (params != null && params.length == 1) {
-                    return WebServiceUtils.callWebService(WEB_SERVICE_URL, NAMESPACE, (String) params[0],
+                    return WebServiceUtils.callWebService(MyConstant.WEB_SERVICE_URL, MyConstant.NAMESPACE, (String) params[0],
                             null);
                 } else {
                     return null;
@@ -738,7 +762,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                             public void run() {
                                 alertDialog.dismiss();
                             }
-                        }, 1000);
+                        }, 500);
 
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -1015,10 +1039,10 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
             @Override
             protected String doInBackground(Object... params) {
                 if (params != null && params.length >= 2) {
-                    return WebServiceUtils.callWebService(WEB_SERVICE_URL, NAMESPACE, (String) params[0],
+                    return WebServiceUtils.callWebService(MyConstant.WEB_SERVICE_URL, MyConstant.NAMESPACE, (String) params[0],
                             (Map<String, Object>) params[1]);
                 } else if (params != null && params.length == 1) {
-                    return WebServiceUtils.callWebService(WEB_SERVICE_URL, NAMESPACE, (String) params[0],
+                    return WebServiceUtils.callWebService(MyConstant.WEB_SERVICE_URL, MyConstant.NAMESPACE, (String) params[0],
                             null);
                 } else {
                     return null;
@@ -1050,7 +1074,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     private void showOkTips() {
         AlertDialog.Builder builder = new AlertDialog.Builder(RegisterActivity.this)
                 .setTitle("注册成功！")
-                .setMessage("欢迎你："+username +"，祝你健康！")
+                .setMessage("欢迎你：" + username + "，祝你健康！")
                 .setCancelable(true)
                 .setPositiveButton("开始体验", new DialogInterface.OnClickListener() {
                     @Override
@@ -1082,6 +1106,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                     ll_personal_info.setVisibility(View.VISIBLE);
                     break;
                 case R.id.rb_doctor:
+                    tv_remark.setText(R.string.doctor_introduce);
                     isIniting = true;
                     if (province.size() > 0 && city.size() > 0 && area.size() > 0) {
                         values.put("province", province.get(spinner_province.getSelectedItemPosition()).code);
@@ -1098,6 +1123,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                     ll_personal_info.setVisibility(View.VISIBLE);
                     break;
                 case R.id.rb_pharmacy:
+                    tv_remark.setText(R.string.pharmacy_introduce);
                     ll_doctor_cert.setVisibility(View.GONE);
                     ll_addressDetail.setVisibility(View.VISIBLE);
                     ll_pharmacy_cert.setVisibility(View.VISIBLE);

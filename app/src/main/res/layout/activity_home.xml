@@ -3,26 +3,18 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorAccent"
     android:gravity="center_horizontal"
     android:orientation="vertical"
-    android:background="@color/colorAccent"
     tools:context="com.yimeng.hyzc.activity.LoginActivity">
 
-    <TextView
-        android:id="@+id/tv_title"
-        android:layout_width="match_parent"
-        android:layout_height="55dp"
-        android:gravity="center"
-        android:text="@string/home"
-        android:textSize="24dp" />
-
-    <com.yimeng.hyzc.view.LazyViewPager
+    <android.support.v4.view.ViewPager
         android:id="@+id/vp"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1">
 
-    </com.yimeng.hyzc.view.LazyViewPager>
+    </android.support.v4.view.ViewPager>
 
     <LinearLayout
         android:id="@+id/ll_tab"
@@ -32,7 +24,6 @@
         android:padding="10dp">
 
         <TextView
-            android:id="@+id/tv_home"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -43,7 +34,16 @@
             android:textSize="18dp" />
 
         <TextView
-            android:id="@+id/tv_drug"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/selector_tv_bg"
+            android:drawableTop="@mipmap/ic_launcher"
+            android:gravity="center"
+            android:text="@string/booking"
+            android:textSize="18dp" />
+
+        <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -51,17 +51,6 @@
             android:drawableTop="@mipmap/ic_launcher"
             android:gravity="center"
             android:text="@string/drug"
-            android:textSize="18dp" />
-
-        <TextView
-            android:id="@+id/tv_health"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@drawable/selector_tv_bg"
-            android:drawableTop="@mipmap/ic_launcher"
-            android:gravity="center"
-            android:text="@string/health"
             android:textSize="18dp" />
 
     </LinearLayout>

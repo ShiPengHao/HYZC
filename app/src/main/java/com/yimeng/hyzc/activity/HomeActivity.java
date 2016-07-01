@@ -1,33 +1,26 @@
 package com.yimeng.hyzc.activity;
 
-import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.view.PagerAdapter;
-import android.support.v7.app.AppCompatActivity;
+import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import com.yimeng.hyzc.R;
+import com.yimeng.hyzc.fragment.BookingFragment;
 import com.yimeng.hyzc.fragment.DrugFragment;
 import com.yimeng.hyzc.fragment.HomeFragment;
-import com.yimeng.hyzc.fragment.Introduce1;
-import com.yimeng.hyzc.fragment.Introduce2;
-import com.yimeng.hyzc.view.LazyViewPager;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class HomeActivity extends AppCompatActivity implements View.OnClickListener {
+public class HomeActivity extends BaseActivity implements View.OnClickListener {
 
-    private LazyViewPager vp;
-    private TextView tv_home;
-    private TextView tv_drug;
-    private TextView tv_health;
+    private ViewPager vp;
     private LinearLayout ll_tab;
-    private List<Fragment> fragments;
+    private List<Fragment> fragments = new ArrayList<>();
+    private FragmentPagerAdapter adapter;
 
     private class MyHomePagerAdapter extends FragmentPagerAdapter {
 
@@ -47,27 +40,28 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_home);
-        initView();
-        initData();
-        setListener();
+    protected int getLayoutResId() {
+        return R.layout.activity_home;
     }
 
-    private void initData() {
-        fragments= new ArrayList<>();
-        fragments.add(new HomeFragment());
-        fragments.add(new DrugFragment());
-        fragments.add(new Introduce2());
+    protected void initView() {
+        vp = (ViewPager) findViewById(R.id.vp);
+        ll_tab = (LinearLayout) findViewById(R.id.ll_tab);
     }
 
-    private void setListener() {
-
-        PagerAdapter adapter = new MyHomePagerAdapter(getSupportFragmentManager());
+    protected void setListener() {
+        for (int i = 0; i < ll_tab.getChildCount(); i++) {
+            View view = ll_tab.getChildAt(i);
+            view.setOnClickListener(this);
+            view.setId(i);
+            if (i == 0) {
+                view.setEnabled(false);
+            }
+        }
+        adapter = new MyHomePagerAdapter(getSupportFragmentManager());
         vp.setAdapter(adapter);
         vp.setCurrentItem(0);
-        vp.setOnPageChangeListener(new LazyViewPager.OnPageChangeListener() {
+        vp.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
@@ -87,23 +81,14 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         });
     }
 
-    private void initView() {
-        vp = (LazyViewPager) findViewById(R.id.vp);
-        tv_home = (TextView) findViewById(R.id.tv_home);
-        tv_drug = (TextView) findViewById(R.id.tv_drug);
-        tv_health = (TextView) findViewById(R.id.tv_health);
-        ll_tab = (LinearLayout) findViewById(R.id.ll_tab);
-
-        for (int i = 0; i < ll_tab.getChildCount(); i++) {
-            View view = ll_tab.getChildAt(i);
-            view.setOnClickListener(this);
-            view.setId(i);
-            if (i == 0) {
-                view.setEnabled(false);
-            }
-        }
-
+    protected void initData() {
+        fragments.clear();
+        fragments.add(new HomeFragment());
+        fragments.add(new BookingFragment());
+        fragments.add(new DrugFragment());
+        adapter.notifyDataSetChanged();
     }
+
 
     @Override
     public void onClick(View v) {

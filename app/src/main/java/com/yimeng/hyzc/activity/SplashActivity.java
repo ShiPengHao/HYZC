@@ -2,12 +2,17 @@ package com.yimeng.hyzc.activity;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
+import android.widget.ImageView;
 
 import com.yimeng.hyzc.R;
+import com.yimeng.hyzc.utils.BitmapUtils;
+import com.yimeng.hyzc.utils.DensityUtil;
 import com.yimeng.hyzc.utils.MyConstant;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.Callback;
@@ -29,7 +34,6 @@ public class SplashActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
-
         getImage();
 
         handler = new Handler() {
@@ -46,7 +50,6 @@ public class SplashActivity extends AppCompatActivity {
                 @Override
                 public void run() {
                     goToIntroduce();
-                    spAccount.edit().putBoolean(MyConstant.KEY_ACCOUNT_FIRSTRUNNING,false).apply();
                 }
             }, 2000);
         } else if (isAutoUpdate()) {
@@ -77,6 +80,10 @@ public class SplashActivity extends AppCompatActivity {
      * 获得闪屏界面的背景图片
      */
     private void getImage() {
+        ImageView iv = (ImageView)findViewById(R.id.iv);
+        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.splash);
+        iv.setImageBitmap(BitmapUtils.zoomBitmap(bitmap, DensityUtil.SCREEN_WIDTH,DensityUtil.SCREEN_HEIGHT));
+        bitmap.recycle();
     }
 
     /**

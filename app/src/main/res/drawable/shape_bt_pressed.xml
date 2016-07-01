@@ -3,10 +3,10 @@
 
     <corners android:radius="10dp" />
 
-    <solid android:color="@color/grey"/>
+    <solid android:color="@color/button_pressed_green"/>
 
     <stroke
-        android:width="3dp"
+        android:width="2dp"
         android:color="#ccc" />
 
 </shape>

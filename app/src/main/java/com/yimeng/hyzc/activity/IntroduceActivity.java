@@ -1,91 +1,182 @@
 package com.yimeng.hyzc.activity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
-import android.widget.Adapter;
+import android.support.v4.widget.EdgeEffectCompat;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import com.yimeng.hyzc.R;
-import com.yimeng.hyzc.fragment.Introduce1;
-import com.yimeng.hyzc.fragment.Introduce2;
-import com.yimeng.hyzc.utils.MyLog;
-import com.yimeng.hyzc.view.LazyViewPager;
+import com.yimeng.hyzc.fragment.IntroduceFragment;
+import com.yimeng.hyzc.utils.DensityUtil;
+import com.yimeng.hyzc.utils.MyConstant;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * 引导界面，应用第一次运行时展示应用信息
  */
-public class IntroduceActivity extends AppCompatActivity {
+public class IntroduceActivity extends BaseActivity implements View.OnClickListener {
 
-    private LazyViewPager vp;
+    private ViewPager mViewPager;
     private PagerAdapter adapter;
-    private List<Fragment> fragments;
-    private LazyViewPager.OnPageChangeListener onPageChangeListener;
+    private List<Fragment> fragments = new ArrayList<>();
     private boolean isRunning = true;
+    private Button bt_login;
+    private LinearLayout ll_points;
+    private SharedPreferences spAccount;
+
+    /**
+     * 实现：1.去黑边 2.改变页码指示器 3.检测最后一张图片的检测
+     */
+    private class MyPageListener implements ViewPager.OnPageChangeListener{
+        private int count = 0;
+        private EdgeEffectCompat leftEdge;
+        private EdgeEffectCompat rightEdge;
+
+        public MyPageListener(){
+            try {
+                Field leftEdgeField = mViewPager.getClass().getDeclaredField("mLeftEdge");
+                Field rightEdgeField = mViewPager.getClass().getDeclaredField("mRightEdge");
+                if(leftEdgeField != null && rightEdgeField != null){
+                    leftEdgeField.setAccessible(true);
+                    rightEdgeField.setAccessible(true);
+                    leftEdge = (EdgeEffectCompat) leftEdgeField.get(mViewPager);
+                    rightEdge = (EdgeEffectCompat) rightEdgeField.get(mViewPager);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        @Override
+        public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+            if(leftEdge != null && rightEdge != null){
+                leftEdge.finish();
+                rightEdge.finish();
+                leftEdge.setSize(0, 0);
+                rightEdge.setSize(0, 0);
+            }
+
+            if (isRunning && position == mViewPager.getAdapter().getCount() - 1) {
+                if (count > 5) {
+                    isRunning = false;
+                    goToLogin();
+                } else {
+                    count++;
+                }
+            }
+        }
+
+        @Override
+        public void onPageSelected(int position) {
+            for (int i = 0; i < fragments.size(); i++) {
+                if (i == position) {
+                    ll_points.getChildAt(i).setEnabled(false);
+                } else {
+                    ll_points.getChildAt(i).setEnabled(true);
+                }
+            }
+        }
+
+        @Override
+        public void onPageScrollStateChanged(int state) {
+            if (state == ViewPager.SCROLL_STATE_IDLE) {
+                count = 0;
+            }
+        }
+    }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_introduce);
-        initView();
-        initData();
-        setListener();
+    protected int getLayoutResId() {
+        return R.layout.activity_introduce;
+    }
+
+    protected void initView() {
+        mViewPager = (ViewPager) findViewById(R.id.vp);
+        bt_login = (Button) findViewById(R.id.bt_login);
+        ll_points = (LinearLayout) findViewById(R.id.ll_points);
+    }
+
+    protected void setListener() {
+        adapter = new IntroduceFragmentAdapter(getSupportFragmentManager());
+        mViewPager.setAdapter(adapter);
+        mViewPager.addOnPageChangeListener(new MyPageListener());
+        bt_login.setOnClickListener(this);
+    }
+
+    protected void initData() {
+        spAccount = getSharedPreferences(MyConstant.PREFS_ACCOUNT, MODE_PRIVATE);
+        Fragment fragment1 = new IntroduceFragment();
+        Bundle bundle1 = new Bundle();
+        bundle1.putInt("resId", R.drawable.welcome1);
+        fragment1.setArguments(bundle1);
+        fragments.add(fragment1);
+
+        Fragment fragment2 = new IntroduceFragment();
+        Bundle bundle2 = new Bundle();
+        fragment2.setArguments(bundle2);
+        bundle2.putInt("resId", R.drawable.welcome2);
+        fragments.add(fragment2);
+
+        Fragment fragment3 = new IntroduceFragment();
+        Bundle bundle3 = new Bundle();
+        fragment3.setArguments(bundle3);
+        bundle3.putInt("resId", R.drawable.welcome3);
+        fragments.add(fragment3);
+
+        initDots();
+
+        if (adapter != null) {
+            adapter.notifyDataSetChanged();
+        }
     }
 
     /**
-     * 设置数据适配器和监听器
+     * 初始化页码指示器
      */
-    private void setListener() {
-        adapter = new IntroduceFragmentAdapter(getSupportFragmentManager());
-        vp.setAdapter(adapter);
-        onPageChangeListener = new LazyViewPager.OnPageChangeListener() {
-            private int count = 0;
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-                MyLog.i("introduce", "positon=" + position + "count=" + count);
-                if (isRunning && position == vp.getAdapter().getCount() - 1) {
-                    if (count > 2) {
-                        isRunning = false;
-                        startActivity(new Intent(IntroduceActivity.this, LoginActivity.class));
-                        finish();
-                    } else {
-                        count++;
-                    }
-                }
+    private void initDots() {
+        ll_points.removeAllViews();
+        for (int i = 0; i < fragments.size(); i++) {
+            ImageView imageView = new ImageView(this);
+            imageView.setBackgroundResource(R.drawable.selector_dot);
+            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+            if (i == 0) {
+                imageView.setEnabled(false);
+            } else {
+                layoutParams.leftMargin = DensityUtil.dip2px(20);
             }
-
-            @Override
-            public void onPageSelected(int position) {
-
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-                MyLog.i("introduce", "state=" + state);
-                if (state == ViewPager.SCROLL_STATE_IDLE) {
-                    count = 0;
-                }
-            }
-        };
-        vp.setOnPageChangeListener(onPageChangeListener);
+            ll_points.addView(imageView, layoutParams);
+        }
     }
 
-    private void initData() {
-        fragments = new ArrayList<>();
-        fragments.add(new Introduce1());
-        fragments.add(new Introduce2());
+    @Override
+    public void onClick(View v) {
+        goToLogin();
     }
 
-    private void initView() {
-        vp = (LazyViewPager) findViewById(R.id.vp);
+    /**
+     * 去登陆页面
+     */
+    private void goToLogin() {
+        // 更新首次运行标志
+        spAccount.edit().putBoolean(MyConstant.KEY_ACCOUNT_FIRSTRUNNING, false).apply();
+        // 去登录页面
+        startActivity(new Intent(IntroduceActivity.this, LoginActivity.class));
+        finish();
     }
+
 
     private class IntroduceFragmentAdapter extends FragmentPagerAdapter {
 

@@ -4,6 +4,10 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+    <TextView
+        style="@style/TextTitle"
+        android:text="@string/home" />
+
     <com.yimeng.hyzc.view.AutoRollViewPager
         android:id="@+id/vp"
         android:layout_width="match_parent"

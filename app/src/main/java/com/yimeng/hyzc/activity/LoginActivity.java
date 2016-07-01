@@ -4,31 +4,33 @@ import android.animation.ObjectAnimator;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
-import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.RadioGroup;
 
 import com.yimeng.hyzc.R;
 import com.yimeng.hyzc.utils.MyConstant;
+import com.yimeng.hyzc.utils.MyLog;
 import com.yimeng.hyzc.utils.MyToast;
+import com.yimeng.hyzc.utils.ThreadUtils;
 import com.yimeng.hyzc.utils.WebServiceUtils;
+import com.zhy.http.okhttp.OkHttpUtils;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
 /**
  * 登陆界面
  */
-public class LoginActivity extends AppCompatActivity implements View.OnClickListener, CompoundButton.OnCheckedChangeListener {
+public class LoginActivity extends BaseActivity implements View.OnClickListener, CompoundButton.OnCheckedChangeListener {
 
     private EditText et_username;
     private EditText et_pwd;
@@ -40,46 +42,78 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private String username;
     private String pwd;
     private RadioGroup rg_userType;
-
-    private final String NAMESPACE = "http://192.168.0.108:888/";
-    private final String WEB_SERVICE_URL = "http://192.168.0.108:888/API/ymOR_WebService.asmx";
     private Map<String, Object> values = new HashMap<>();
+    private LinearLayout ll_loading;
+
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
-        spAccount = getSharedPreferences(MyConstant.PREFS_ACCOUNT, MODE_PRIVATE);
-        initView();
+    protected int getLayoutResId() {
+        return R.layout.activity_login;
     }
 
-    private void initView() {
+    protected void initView() {
         et_username = (EditText) findViewById(R.id.et_username);
-        // 回显上次登录账号
-        et_username.setText(spAccount.getString(MyConstant.KEY_ACCOUNT_LAST_USERNAME, ""));
         et_pwd = (EditText) findViewById(R.id.et_pwd);
-        // 回显上次登录账号
-        et_pwd.setText(spAccount.getString(MyConstant.KEY_ACCOUNT_LAST_PASSWORD, ""));
         cb_remember = (CheckBox) findViewById(R.id.cb_remeber);
-        // 回显上次登录账号
-        cb_remember.setChecked(spAccount.getBoolean(MyConstant.KEY_ACCOUNT_LAST_REMEMBER, false));
         cb_auto = (CheckBox) findViewById(R.id.cb_auto);
         bt_register = (Button) findViewById(R.id.bt_register);
         bt_login = (Button) findViewById(R.id.bt_login);
-
         rg_userType = (RadioGroup) findViewById(R.id.rg_type);
-        rg_userType.check(R.id.rb_patient);
+        ll_loading = (LinearLayout) findViewById(R.id.ll_loading);
 
+    }
+
+    @Override
+    protected void setListener() {
         cb_auto.setOnCheckedChangeListener(this);
         bt_register.setOnClickListener(this);
         bt_login.setOnClickListener(this);
     }
 
     @Override
+    protected void initData() {
+        rg_userType.check(R.id.rb_patient);
+        ll_loading.setVisibility(View.GONE);
+        spAccount = getSharedPreferences(MyConstant.PREFS_ACCOUNT, MODE_PRIVATE);
+        // 回显上次登录账号
+        et_username.setText(spAccount.getString(MyConstant.KEY_ACCOUNT_LAST_USERNAME, ""));
+        // 回显上次登录账号密码
+        et_pwd.setText(spAccount.getString(MyConstant.KEY_ACCOUNT_LAST_PASSWORD, ""));
+        // 回显上次登录账号记住密码
+        cb_remember.setChecked(spAccount.getBoolean(MyConstant.KEY_ACCOUNT_LAST_REMEMBER, false));
+
+        testOldInterface();
+    }
+
+    /**
+     * 用老登陆接口登陆，获得cookie，方便在主页中请求药品数据
+     */
+    private void testOldInterface() {
+        ThreadUtils.runOnBackThread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    OkHttpUtils.post()
+                            .url(MyConstant.URL_LOGIN)
+                            .addParams("usercode", "sysadmin")
+                            .addParams("password", "123")
+                            .addParams("expired", "365")
+                            .build()
+                            .execute()
+                            .close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    MyLog.i("old","fail");
+                }
+            }
+        });
+    }
+
+    @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.bt_register:
-                startActivity(new Intent(this, RegisterActivity.class).putExtra("checdId",rg_userType.getCheckedRadioButtonId()));
+                goToRegister();
                 break;
             case R.id.bt_login:
                 login();
@@ -88,7 +122,14 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
     /**
-     * 登陆
+     * 去注册，意图对象携带选择的注册类型信息，默认是普通病人
+     */
+    private void goToRegister() {
+        startActivity(new Intent(this, RegisterActivity.class).putExtra("checdId", rg_userType.getCheckedRadioButtonId()));
+    }
+
+    /**
+     * 登陆信息核对无误后登陆
      */
     private void login() {
         username = et_username.getText().toString().trim();
@@ -104,52 +145,68 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             ObjectAnimator.ofFloat(et_pwd, "translationX", 15f, -15f, 20f, -20f, 0).setDuration(300).start();
             return;
         }
-
-//        OkHttpUtils.post().url(MyConstant.URL_LOGIN)
-//                .addParams("usercode", username).addParams("password", pwd).addParams("expired","365")
-//                .build().execute(new Callback() {
-//            @Override
-//            public Object parseNetworkResponse(Response response, int i) throws Exception {
-//                String string = response.body().string();
-//                JSONObject object = new JSONObject(string);
-//                //{"ResultID":0,"ResultMsg":"登录成功","Succeed":true,"ResultData":null,"s":true,"emsg":"登录成功"}
-//                MyToast.show(object.optString("ResultMsg"));
-//                if(object.optBoolean("Succeed")){
-//                    saveAccountInfo();
-//                    goToHome();
-//                }else {
-//                    MyToast.show(getString(R.string.connet_error));
-//                }
-//                return null;
-//            }
-//
-//            @Override
-//            public void onError(Call call, Exception e, int i) {
-//                e.printStackTrace();
-//                MyToast.show(getString(R.string.connet_error));
-//            }
-//
-//            @Override
-//            public void onResponse(Object o, int i) {
-//
-//            }
-//        });
-
         values.clear();
         values.put("user", username);
         values.put("pwd", pwd);
         switch (rg_userType.getCheckedRadioButtonId()) {
             case R.id.rb_patient:
-                request("Patient_Login", values);
+                requestLogin("Patient_Login", values);
                 break;
             case R.id.rb_doctor:
-                request("Doctor_Login", values);
+                requestLogin("Doctor_Login", values);
                 break;
             case R.id.rb_pharmacy:
-                request("Shop_Login", values);
+                requestLogin("Shop_Login", values);
                 break;
         }
 
+    }
+
+    /**
+     * 执行异步任务，登录
+     *
+     * @param params 方法名+参数列表（哈希表形式）
+     */
+    public void requestLogin(Object... params) {
+        ll_loading.setVisibility(View.VISIBLE);
+        new AsyncTask<Object, Object, String>() {
+            @Override
+            protected String doInBackground(Object... params) {
+                if (params != null && params.length == 2) {
+                    return WebServiceUtils.callWebService(MyConstant.WEB_SERVICE_URL, MyConstant.NAMESPACE, (String) params[0],
+                            (Map<String, Object>) params[1]);
+                } else if (params != null && params.length == 1) {
+                    return WebServiceUtils.callWebService(MyConstant.WEB_SERVICE_URL, MyConstant.NAMESPACE, (String) params[0],
+                            null);
+                } else {
+                    return null;
+                }
+            }
+
+            protected void onPostExecute(String result) {
+                if (result != null) {
+                    try {
+                        MyLog.i("result", result);
+//                        new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
+                        JSONObject object = new JSONObject(result);
+                        if ("ok".equalsIgnoreCase(object.optString("status"))) {
+                            saveAccountInfo();
+                            goToHome();
+                        } else {
+                            MyToast.show(object.optString("msg"));
+                            ll_loading.setVisibility(View.GONE);
+                        }
+                    } catch (Exception e) {
+                        MyToast.show(getString(R.string.connet_error));
+                        ll_loading.setVisibility(View.GONE);
+                        e.printStackTrace();
+                    }
+                } else {
+                    ll_loading.setVisibility(View.GONE);
+                    MyToast.show(getString(R.string.connet_error));
+                }
+            }
+        }.execute(params);
     }
 
     /**
@@ -166,48 +223,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             editor.putString(MyConstant.KEY_ACCOUNT_LAST_PASSWORD, "");
         }
         editor.apply();
-    }
-
-    /**
-     * 执行异步任务
-     *
-     * @param params 方法名+参数列表（哈希表形式）
-     */
-    public void request(Object... params) {
-        new AsyncTask<Object, Object, String>() {
-            @Override
-            protected String doInBackground(Object... params) {
-                if (params != null && params.length == 2) {
-                    return WebServiceUtils.callWebService(WEB_SERVICE_URL, NAMESPACE, (String) params[0],
-                            (Map<String, Object>) params[1]);
-                } else if (params != null && params.length == 1) {
-                    return WebServiceUtils.callWebService(WEB_SERVICE_URL, NAMESPACE, (String) params[0],
-                            null);
-                } else {
-                    return null;
-                }
-            }
-
-            protected void onPostExecute(String result) {
-                if (result != null) {
-                    try {
-//                        new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
-                        JSONObject object = new JSONObject(result);
-                        MyToast.show(object.optString("msg"));
-                        if ("ok".equalsIgnoreCase(object.optString("status"))) {
-                            saveAccountInfo();
-                            goToHome();
-                        }
-                    } catch (JSONException e) {
-                        MyToast.show(getString(R.string.connet_error));
-                        e.printStackTrace();
-                    }
-                } else {
-                    MyToast.show(getString(R.string.connet_error));
-                }
-            }
-
-        }.execute(params);
     }
 
     /**

@@ -1,5 +1,6 @@
 package com.yimeng.hyzc.activity;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
@@ -39,6 +40,8 @@ public class TestActivity extends AppCompatActivity implements View.OnClickListe
     private Button bt_hospital;
     private Button bt_department;
     private Button bt_professional;
+    private Button bt_spinner_test;
+    private Button bt_pick_doctor;
     //http://192.168.0.108:888/API/ymOR_WebService.asmx?op=GetProvince
 
 
@@ -47,7 +50,7 @@ public class TestActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_test);
         initView();
-
+        overridePendingTransition(R.anim.next_in, R.anim.next_out);
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("图片上传");
         builder.setCancelable(false);
@@ -83,6 +86,10 @@ public class TestActivity extends AppCompatActivity implements View.OnClickListe
         bt_department.setOnClickListener(this);
         bt_professional = (Button) findViewById(R.id.bt_professional);
         bt_professional.setOnClickListener(this);
+        bt_spinner_test = (Button) findViewById(R.id.bt_spinner_test);
+        bt_spinner_test.setOnClickListener(this);
+        bt_pick_doctor = (Button) findViewById(R.id.bt_pick_doctor);
+        bt_pick_doctor.setOnClickListener(this);
     }
 
     @Override
@@ -144,12 +151,12 @@ public class TestActivity extends AppCompatActivity implements View.OnClickListe
                 values.put("phone", "13345678900");
                 values.put("name", "123456");
                 values.put("sex", 1);
-                values.put("age", "11");
+                values.put("age", "2012-2-15");
                 values.put("province", "aa");
                 values.put("city", "bb");
                 values.put("area", "cc");
                 values.put("address", "dfdf");
-                values.put("identification", "410236555555555555");
+                values.put("identification", "410236196609155555");
 
                 request("Patient_Register", values);
                 break;
@@ -171,6 +178,14 @@ public class TestActivity extends AppCompatActivity implements View.OnClickListe
                 values.put("hospital_id", "1");//北京
                 values.put("parentid", "1");
                 request("Load_KS", values);
+                break;
+            case R.id.bt_pick_doctor:
+                values.clear();
+                values.put("departments_id", 4);
+                request("Load_Doctor", values);
+                break;
+            case R.id.bt_spinner_test:
+                startActivity(new Intent(this,SpinnerAddressActivity.class));
                 break;
         }
     }

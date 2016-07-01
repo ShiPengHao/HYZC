@@ -19,7 +19,7 @@ import com.yimeng.hyzc.utils.UiUtils;
 import java.util.List;
 
 /**
- * Created by 依萌 on 2016/6/22.
+ * 药品适配器
  */
 public class DrugTypeAdapter extends BaseAdapter {
 

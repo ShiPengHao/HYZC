@@ -6,7 +6,6 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
-
     <application
         android:name=".utils.MyApp"
         android:allowBackup="true"
@@ -22,10 +21,16 @@
             </intent-filter>
         </activity>
         <activity android:name=".activity.IntroduceActivity" />
-        <activity android:name=".activity.LoginActivity" android:windowSoftInputMode="adjustResize"/>
-        <activity android:name=".activity.RegisterActivity" />
+        <activity
+            android:name=".activity.LoginActivity"
+            android:windowSoftInputMode="stateHidden" />
+        <activity
+            android:name=".activity.RegisterActivity"
+            android:windowSoftInputMode="stateHidden" />
         <activity android:name=".activity.HomeActivity" />
         <activity android:name=".activity.TestActivity" />
+        <activity android:name=".activity.BaseActivity" />
+        <activity android:name=".activity.SpinnerAddressActivity"></activity>
     </application>
 
 </manifest>

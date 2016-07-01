@@ -1,16 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.yimeng.hyzc.activity.IntroduceActivity">
 
-    <com.yimeng.hyzc.view.LazyViewPager
+    <android.support.v4.view.ViewPager
 
         android:id="@+id/vp"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-    </com.yimeng.hyzc.view.LazyViewPager>
+    </android.support.v4.view.ViewPager>
 
-</RelativeLayout>
+    <LinearLayout
+        android:id="@+id/ll_points"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal|bottom"
+        android:layout_marginBottom="120dp"
+        android:gravity="center"
+        android:orientation="horizontal"></LinearLayout>
+
+    <Button
+        android:id="@+id/bt_login"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal|bottom"
+        android:layout_marginBottom="20dp"
+        android:background="@drawable/selector_bt_bg"
+        android:gravity="center"
+        android:padding="10dp"
+        android:text="@string/skip_introduce"
+         />
+</FrameLayout>

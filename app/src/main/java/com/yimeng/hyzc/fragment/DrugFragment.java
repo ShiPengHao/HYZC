@@ -3,13 +3,11 @@ package com.yimeng.hyzc.fragment;
 import android.database.ContentObserver;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.os.SystemClock;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -63,6 +61,7 @@ public class DrugFragment extends Fragment implements AdapterView.OnItemClickLis
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+
         View view = UiUtils.inflate(R.layout.fragment_drug);
         initView(view);
         setListener();
@@ -90,7 +89,6 @@ public class DrugFragment extends Fragment implements AdapterView.OnItemClickLis
         getActivity().getContentResolver().registerContentObserver(DrugTypeDAO.DRUG_TYPE_URI, true, new ContentObserver(null) {
             @Override
             public void onChange(boolean selfChange) {
-                MyLog.i("onChange" , String.valueOf(selfChange));
                 if (!isFlushing) {
                     flushData();
                 }
@@ -131,7 +129,6 @@ public class DrugFragment extends Fragment implements AdapterView.OnItemClickLis
     }
 
 
-
     /**
      * 从本地数据库读取数据后刷新页面
      */
@@ -157,9 +154,9 @@ public class DrugFragment extends Fragment implements AdapterView.OnItemClickLis
                     @Override
                     public void run() {
                         adapter.notifyDataSetChanged();
-                        if (datas.size() > 0){
+                        if (datas.size() > 0) {
                             loading.setVisibility(View.GONE);
-                        }else{
+                        } else {
                             loading.setVisibility(View.VISIBLE);
                         }
                     }
@@ -170,6 +167,7 @@ public class DrugFragment extends Fragment implements AdapterView.OnItemClickLis
 
     /**
      * 解析json
+     *
      * @param json json数据
      */
     private void parseJson(String json) {
@@ -181,7 +179,7 @@ public class DrugFragment extends Fragment implements AdapterView.OnItemClickLis
         }.getType();
         ArrayList<DrugTypeBean> beans = gson.fromJson(json, type);
 //        SystemClock.sleep(3000);
-        if(!datas.equals(beans)) {
+        if (!datas.equals(beans)) {
             for (int i = 0; i < beans.size(); i++) {
                 DrugTypeDAO.getInstance().update(beans.get(i));
             }
@@ -190,6 +188,7 @@ public class DrugFragment extends Fragment implements AdapterView.OnItemClickLis
 
     /**
      * 让listview滚动到指定的位置
+     *
      * @param s 名称拼音的起始字符
      */
     private void scrollListTo(CharSequence s) {

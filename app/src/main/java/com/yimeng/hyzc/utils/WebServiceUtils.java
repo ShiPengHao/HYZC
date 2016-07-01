@@ -2,6 +2,8 @@ package com.yimeng.hyzc.utils;
 
 import android.os.AsyncTask;
 
+import com.yimeng.hyzc.R;
+
 import org.ksoap2.SoapEnvelope;
 import org.ksoap2.SoapFault;
 import org.ksoap2.serialization.SoapObject;
@@ -52,12 +54,9 @@ public class WebServiceUtils {
         // 使用call方法调用WebService方法
         try {
             ht.call(null, envelope);
-        } catch (HttpResponseException e) {
+        } catch (Exception e) {
             e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (XmlPullParserException e) {
-            e.printStackTrace();
+            MyToast.show(MyApp.getAppContext().getString(R.string.connet_error));
         }
         try {
             final SoapPrimitive result = (SoapPrimitive) envelope.getResponse();
@@ -66,9 +65,10 @@ public class WebServiceUtils {
                 return result.toString();
             }
 
-        } catch (SoapFault e) {
+        } catch (Exception e) {
             MyLog.i("----发生错误---", e.getMessage());
             e.printStackTrace();
+            MyToast.show(MyApp.getAppContext().getString(R.string.connet_error));
         }
         return null;
     }

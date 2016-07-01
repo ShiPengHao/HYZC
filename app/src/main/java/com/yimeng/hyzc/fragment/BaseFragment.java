@@ -1,5 +1,6 @@
 package com.yimeng.hyzc.fragment;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -14,9 +15,13 @@ import com.yimeng.hyzc.utils.UiUtils;
  * fragment抽象基类
  */
 public abstract class BaseFragment extends Fragment {
+    protected Context context;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        if (context == null){
+            context = getActivity();
+        }
         View view = UiUtils.inflate(getLayoutResId());
         initView(view);
         setListener();

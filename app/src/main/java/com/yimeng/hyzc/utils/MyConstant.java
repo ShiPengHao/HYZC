@@ -50,4 +50,12 @@ public class MyConstant {
      * 注册接口
      */
     public static final String URL_REGISTER = URL_BASE + "";
+    /**
+     * webservice命名空间
+     */
+    public static final String NAMESPACE = "http://192.168.0.108:888/";
+    /**
+     * webserviceUrl
+     */
+    public static final String WEB_SERVICE_URL = NAMESPACE + "/API/ymOR_WebService.asmx";
 }

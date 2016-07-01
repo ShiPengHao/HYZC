@@ -2,9 +2,10 @@
 <resources>
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#62d7ca</color>
+    <color name="colorAccent">#088769</color>
     <color name="grey">#33aaaaaa</color>
     <color name="black">#000</color>
-    <color name="hint_green">#7cb472</color>
+    <color name="button_normal_green">#7cb472</color>
+    <color name="button_pressed_green">#83af7b</color>
     <color name="white">#fff</color>
 </resources>
