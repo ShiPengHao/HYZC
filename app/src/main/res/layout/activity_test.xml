@@ -100,13 +100,6 @@
         android:orientation="horizontal">
 
         <Button
-            android:id="@+id/bt_spinner_test"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="测试spinner" />
-
-        <Button
             android:id="@+id/bt_pick_doctor"
             android:layout_width="0dp"
             android:layout_height="wrap_content"

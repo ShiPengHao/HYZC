@@ -14,6 +14,7 @@ import android.widget.LinearLayout;
 import android.widget.RadioGroup;
 
 import com.yimeng.hyzc.R;
+import com.yimeng.hyzc.utils.MyApp;
 import com.yimeng.hyzc.utils.MyConstant;
 import com.yimeng.hyzc.utils.MyLog;
 import com.yimeng.hyzc.utils.MyToast;
@@ -25,7 +26,12 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
+
+import cn.jpush.android.api.JPushInterface;
+import cn.jpush.android.api.TagAliasCallback;
 
 /**
  * 登陆界面
@@ -190,6 +196,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
 //                        new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
                         JSONObject object = new JSONObject(result);
                         if ("ok".equalsIgnoreCase(object.optString("status"))) {
+                            setJPushAliasAndTag();
                             saveAccountInfo();
                             goToHome();
                         } else {
@@ -210,7 +217,33 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
     }
 
     /**
-     * 保存登陆成功的信息到本地sp文件中
+     * 登陆成功后为本应用用户绑定JPush的别名和标签，别名为用户名，标签为账号类型
+     */
+    private void setJPushAliasAndTag() {
+        HashSet<String> tags = new HashSet<>();
+        switch (rg_userType.getCheckedRadioButtonId()) {
+            case R.id.rb_patient:
+                tags.add("patient");
+                break;
+            case R.id.rb_doctor:
+                tags.add("doctor");
+                break;
+            case R.id.rb_pharmacy:
+                tags.add("pharmacy");
+                break;
+        }
+        JPushInterface.setAliasAndTags(MyApp.getAppContext(), username, tags, new TagAliasCallback() {
+            @Override
+            public void gotResult(int i, String s, Set<String> set) {
+                if (i != 0){
+                    MyLog.i("JPush","set alias and tag error");
+                }
+            }
+        });
+    }
+
+    /**
+     * 保存登陆成功的账号信息到本地sp文件中
      */
     private void saveAccountInfo() {
         SharedPreferences.Editor editor = spAccount.edit();

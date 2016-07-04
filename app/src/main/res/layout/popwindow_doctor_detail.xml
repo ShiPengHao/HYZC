@@ -79,6 +79,7 @@
                 android:layout_height="wrap_content"
                 android:hint="@string/disease_description"
                 android:padding="5dp" />
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -103,11 +104,6 @@
                     android:background="@drawable/selector_bt_bg"
                     android:gravity="center"
                     android:text="@string/chat_online" />
-
-                <DatePicker
-                    android:id="@+id/datePicker"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"></DatePicker>
 
                 <Button
                     android:id="@+id/bt_back"

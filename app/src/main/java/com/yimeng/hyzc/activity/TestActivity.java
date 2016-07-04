@@ -86,8 +86,6 @@ public class TestActivity extends AppCompatActivity implements View.OnClickListe
         bt_department.setOnClickListener(this);
         bt_professional = (Button) findViewById(R.id.bt_professional);
         bt_professional.setOnClickListener(this);
-        bt_spinner_test = (Button) findViewById(R.id.bt_spinner_test);
-        bt_spinner_test.setOnClickListener(this);
         bt_pick_doctor = (Button) findViewById(R.id.bt_pick_doctor);
         bt_pick_doctor.setOnClickListener(this);
     }
@@ -183,9 +181,6 @@ public class TestActivity extends AppCompatActivity implements View.OnClickListe
                 values.clear();
                 values.put("departments_id", 4);
                 request("Load_Doctor", values);
-                break;
-            case R.id.bt_spinner_test:
-                startActivity(new Intent(this,SpinnerAddressActivity.class));
                 break;
         }
     }

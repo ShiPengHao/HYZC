@@ -7,6 +7,7 @@ import com.zhy.http.okhttp.cookie.CookieJarImpl;
 
 import java.util.concurrent.TimeUnit;
 
+import cn.jpush.android.api.JPushInterface;
 import okhttp3.OkHttpClient;
 
 /**
@@ -23,8 +24,20 @@ public class MyApp extends Application {
         ThreadUtils.runOnUIThread(null);
 //        Picasso.setSingletonInstance(Picasso.with(this));
         initHttpUtils();
+        initJPush();
     }
 
+    /**
+     * 初始化jpush
+     */
+    private void initJPush() {
+        JPushInterface.setDebugMode(true);
+        JPushInterface.init(this);
+    }
+
+    /**
+     * 初始化httputils
+     */
     private void initHttpUtils() {
         CookieJarImpl cookieJar = new CookieJarImpl(new PersistentCookieStore(getApplicationContext()));
 

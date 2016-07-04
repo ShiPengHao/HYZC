@@ -5,6 +5,8 @@ import android.os.Bundle;
 
 import com.yimeng.hyzc.R;
 
+import cn.jpush.android.api.JPushInterface;
+
 public abstract class BaseActivity extends AppCompatActivity {
 
     @Override
@@ -15,6 +17,18 @@ public abstract class BaseActivity extends AppCompatActivity {
         setListener();
         initData();
         overridePendingTransition(R.anim.next_in, R.anim.next_out);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        JPushInterface.onResume(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        JPushInterface.onPause(this);
     }
 
     /**

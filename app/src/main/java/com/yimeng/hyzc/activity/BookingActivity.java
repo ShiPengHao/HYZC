@@ -1,9 +1,11 @@
 package com.yimeng.hyzc.activity;
 
+import android.animation.ObjectAnimator;
 import android.app.DatePickerDialog;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
+import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.AdapterView;
@@ -83,6 +85,9 @@ public class BookingActivity extends BaseActivity implements AdapterView.OnItemS
     private TextView tv_email;
     private TextView tv_remark;
     private DoctorBean doctorBean;
+    private DatePickerDialog datePickerDialog;
+    private Calendar calendar;
+    private DatePicker.OnDateChangedListener onDateChangedListener;
 
     @Override
     protected int getLayoutResId() {
@@ -140,7 +145,6 @@ public class BookingActivity extends BaseActivity implements AdapterView.OnItemS
 
     @Override
     protected void initData() {
-//        isIniting = true;
         requestAddress("GetProvince");
     }
 
@@ -598,19 +602,30 @@ public class BookingActivity extends BaseActivity implements AdapterView.OnItemS
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.bt_appoint:
-                Calendar calendar = Calendar.getInstance();
+                calendar = Calendar.getInstance();
                 int year = calendar.get(Calendar.YEAR);
                 int monthOfYear = calendar.get(Calendar.MONTH);
                 int dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
-                new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
-                    @Override
-                    public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-//                        StringBuilder sb = new StringBuilder();
-//                        sb.append(year).append("-").append(monthOfYear)
-//                        MyToast.show();
-                        requestAppoint();
-                    }
-                }, year, monthOfYear, dayOfMonth).show();
+                if (datePickerDialog == null) {
+                    datePickerDialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
+                        @Override
+                        public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                            requestAppoint(String.valueOf(year) + "-" + (monthOfYear + 1) + "-" + dayOfMonth);
+                        }
+                    }, year, monthOfYear, dayOfMonth);
+                    onDateChangedListener = new DatePicker.OnDateChangedListener() {
+                        @Override
+                        public void onDateChanged(DatePicker view, int tempYear, int tempMonthOfYear, int tempDayOfMonth) {
+                            Calendar tempCalendar = Calendar.getInstance();
+                            tempCalendar.set(tempYear, tempMonthOfYear, tempDayOfMonth);
+                            if (!tempCalendar.after(calendar)) {
+                                view.init(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH), this);
+                            }
+                        }
+                    };
+                }
+                datePickerDialog.getDatePicker().init(year, monthOfYear, dayOfMonth, onDateChangedListener);
+                datePickerDialog.show();
                 break;
             case R.id.bt_chat:
                 MyToast.show(getString(R.string.chat_online));
@@ -624,7 +639,13 @@ public class BookingActivity extends BaseActivity implements AdapterView.OnItemS
     /**
      * 提交预约申请
      */
-    private void requestAppoint() {
-
+    private void requestAppoint(String date) {
+        String description = et_disease_description.getText().toString().trim();
+        if (TextUtils.isEmpty(description)){
+            MyToast.show("请填写病情描述");
+            ObjectAnimator.ofFloat(et_disease_description,"translationX",-25,25,-25,25,0).setDuration(500).start();
+        }else {
+            MyToast.show("request:registration_time=" + date+",disease_description="+description);
+        }
     }
 }
