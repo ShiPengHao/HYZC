@@ -8,33 +8,137 @@
         style="@style/TextTitle"
         android:text="@string/my" />
 
-    <ScrollView
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="5dp">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:padding="10dp">
+        <RelativeLayout
+            android:id="@+id/rl_account_center"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:background="@drawable/selector_bt_bg"
+            android:padding="5dp">
 
             <TextView
-                android:padding="3dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/account_info"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="6dp"
+                android:text="@string/my_account"
                 android:textColor="@color/black"
                 android:textSize="18dp" />
 
-            <TextView
-                android:padding="3dp"
-                android:layout_marginTop="100dp"
+            <ImageView
+                android:id="@+id/iv_account_arrow"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="6dp"
+                android:scaleType="centerInside"
+                android:src="@drawable/selector_arrow" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/rl_account_info"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/shape_transparent_grey"
+                android:orientation="vertical"
+                android:padding="5dp">
+
+                <TextView
+                    android:id="@+id/tv_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="2dp"
+                    android:text="@string/name"
+                    android:textSize="14dp" />
+
+                <TextView
+                    android:id="@+id/tv_sex"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="2dp"
+                    android:text="@string/sex"
+                    android:textSize="14dp" />
+
+                <TextView
+                    android:id="@+id/tv_age"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="2dp"
+                    android:text="@string/age"
+                    android:textSize="14dp" />
+
+                <TextView
+                    android:id="@+id/tv_phone"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="2dp"
+                    android:text="@string/phone"
+                    android:textSize="14dp" />
+
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/bt_modify"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_gravity="center_horizontal"
+                android:background="@drawable/selector_green_shadow"
+                android:gravity="center"
+                android:padding="10dp"
+                android:text="@string/modify"
+                android:textColor="@color/black" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/rl_appointment_history"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:background="@drawable/selector_bt_bg"
+            android:padding="5dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="6dp"
                 android:text="@string/my_appointment"
                 android:textColor="@color/black"
                 android:textSize="18dp" />
 
-        </LinearLayout>
-    </ScrollView>
+            <ImageView
+                android:id="@+id/iv_appoint_arrow"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="6dp"
+                android:scaleType="centerInside"
+                android:src="@drawable/selector_arrow" />
+        </RelativeLayout>
+
+        <ListView
+            android:id="@+id/lv"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:cacheColorHint="@android:color/transparent"
+            android:listSelector="@null"></ListView>
+
+    </LinearLayout>
+
 </LinearLayout>

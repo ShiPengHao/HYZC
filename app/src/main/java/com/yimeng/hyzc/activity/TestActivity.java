@@ -136,7 +136,7 @@ public class TestActivity extends AppCompatActivity implements View.OnClickListe
 
             case R.id.bt_login:
                 values.clear();
-                values.put("user", "zhaoziyu");
+                values.put("user", "user001");
                 values.put("pwd", "123456");
                 request("Patient_Login", values);
                 break;

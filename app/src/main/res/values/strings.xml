@@ -67,4 +67,7 @@
     <string name="appoint_now">马上预约</string>
     <string name="chat_online">在线咨询</string>
     <string name="back">返回</string>
+    <string name="my_account">我的账号</string>
+    <string name="modify">修改</string>
+    <string name="fun_undo">功能正在测试，敬请期待！</string>
 </resources>

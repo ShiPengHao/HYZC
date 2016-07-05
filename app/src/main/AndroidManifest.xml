@@ -40,9 +40,13 @@
         <activity
             android:name=".activity.RegisterActivity"
             android:windowSoftInputMode="stateHidden" />
-        <activity android:name=".activity.HomeActivity" />
+        <activity
+            android:name=".activity.HomeActivity"
+            android:windowSoftInputMode="stateHidden" />
         <activity android:name=".activity.TestActivity" />
-        <activity android:name=".activity.BookingActivity" />
+        <activity
+            android:name=".activity.BookingActivity"
+            android:windowSoftInputMode="stateHidden" />
         <activity
             android:name="cn.jpush.android.ui.PushActivity"
             android:configChanges="orientation|keyboardHidden"
@@ -116,9 +120,13 @@
 
 
         <!-- 目前这个渠道统计功能的报表还未开放。-->
-        <meta-data android:name="JPUSH_CHANNEL" android:value="developer-default"/>
+        <meta-data
+            android:name="JPUSH_CHANNEL"
+            android:value="developer-default" />
         <!-- Required. AppKey copied from Portal -->
-        <meta-data android:name="JPUSH_APPKEY" android:value="6cc71092ddffdbf3da98a9ac"/>
+        <meta-data
+            android:name="JPUSH_APPKEY"
+            android:value="6cc71092ddffdbf3da98a9ac" />
     </application>
 
 </manifest>

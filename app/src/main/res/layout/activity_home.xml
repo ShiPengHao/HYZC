@@ -33,16 +33,6 @@
             android:text="@string/home"
             android:textSize="18dp" />
 
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@drawable/selector_tv_bg"
-            android:drawableTop="@mipmap/my"
-            android:drawablePadding="3dp"
-            android:gravity="center"
-            android:text="@string/my"
-            android:textSize="18dp" />
 
         <TextView
             android:layout_width="0dp"
@@ -52,6 +42,17 @@
             android:drawableTop="@mipmap/pill"
             android:gravity="center"
             android:text="@string/drug"
+            android:textSize="18dp" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/selector_tv_bg"
+            android:drawablePadding="3dp"
+            android:drawableTop="@mipmap/my"
+            android:gravity="center"
+            android:text="@string/my"
             android:textSize="18dp" />
 
     </LinearLayout>

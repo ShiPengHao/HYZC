@@ -18,9 +18,9 @@ import com.yimeng.hyzc.utils.DensityUtil;
  */
 public class QuickIndexBar extends View {
 
-    private static final String[] LETTERS = new String[]{"*","A", "B", "C", "D",
+    private static final String[] LETTERS = new String[]{"*", "A", "B", "C", "D",
             "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q",
-            "R", "S", "T", "U", "V", "W", "X", "Y", "Z","#"};
+            "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "#"};
 
     private Paint paint;
     private int mCellWidth;
@@ -29,7 +29,7 @@ public class QuickIndexBar extends View {
     private float mTextHeight;
     private int currentIndex = -1;
 
-    public interface OnLetterChangeListener{
+    public interface OnLetterChangeListener {
         void onLetterChange(String letter);
 
         void onReset();// 手指抬起
@@ -98,9 +98,9 @@ public class QuickIndexBar extends View {
             float x = mCellWidth * 0.5f - mTextWidth * 0.5f;
 
             float y = mCellHeight * 0.5f + mTextHeight * 0.5f + mCellHeight * i;
-            if (currentIndex == i){
+            if (currentIndex == i) {
                 paint.setColor(Color.RED);
-            }else{
+            } else {
                 paint.setColor(Color.WHITE);
             }
             canvas.drawText(text, x, y, paint);
@@ -118,7 +118,7 @@ public class QuickIndexBar extends View {
                 if (currentIndex < 0 || currentIndex > LETTERS.length - 1) {
 
                 } else {
-                    if (onLetterChangeListener != null){
+                    if (onLetterChangeListener != null) {
                         onLetterChangeListener.onLetterChange(LETTERS[currentIndex]);
                     }
                 }
@@ -132,7 +132,7 @@ public class QuickIndexBar extends View {
                 if (currentIndex < 1 || currentIndex > LETTERS.length - 2) {
 
                 } else {
-                    if (onLetterChangeListener != null){
+                    if (onLetterChangeListener != null) {
                         onLetterChangeListener.onLetterChange(LETTERS[currentIndex]);
                     }
                 }
@@ -144,7 +144,7 @@ public class QuickIndexBar extends View {
                 currentIndex = -1;
                 //重新绘制 ----> ondraw
                 invalidate();
-                if (onLetterChangeListener != null){
+                if (onLetterChangeListener != null) {
                     onLetterChangeListener.onReset();
                 }
                 break;

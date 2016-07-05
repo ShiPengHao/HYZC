@@ -15,8 +15,7 @@
 
         <TextView
             style="@style/TextTitle"
-            android:text="@string/register"
-             />
+            android:text="@string/register" />
 
         <ScrollView
             android:layout_width="match_parent"
@@ -685,8 +684,8 @@
         android:id="@+id/bt_float_register"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginRight="10dp"
         android:layout_gravity="center_vertical|right"
+        android:layout_marginRight="10dp"
         android:background="@drawable/selector_green_shadow"
         android:text="@string/register" />
 </FrameLayout>

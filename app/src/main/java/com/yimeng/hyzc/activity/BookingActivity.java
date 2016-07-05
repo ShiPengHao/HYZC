@@ -18,6 +18,7 @@ import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -602,30 +603,7 @@ public class BookingActivity extends BaseActivity implements AdapterView.OnItemS
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.bt_appoint:
-                calendar = Calendar.getInstance();
-                int year = calendar.get(Calendar.YEAR);
-                int monthOfYear = calendar.get(Calendar.MONTH);
-                int dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
-                if (datePickerDialog == null) {
-                    datePickerDialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
-                        @Override
-                        public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                            requestAppoint(String.valueOf(year) + "-" + (monthOfYear + 1) + "-" + dayOfMonth);
-                        }
-                    }, year, monthOfYear, dayOfMonth);
-                    onDateChangedListener = new DatePicker.OnDateChangedListener() {
-                        @Override
-                        public void onDateChanged(DatePicker view, int tempYear, int tempMonthOfYear, int tempDayOfMonth) {
-                            Calendar tempCalendar = Calendar.getInstance();
-                            tempCalendar.set(tempYear, tempMonthOfYear, tempDayOfMonth);
-                            if (!tempCalendar.after(calendar)) {
-                                view.init(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH), this);
-                            }
-                        }
-                    };
-                }
-                datePickerDialog.getDatePicker().init(year, monthOfYear, dayOfMonth, onDateChangedListener);
-                datePickerDialog.show();
+                showCalendarDialog();
                 break;
             case R.id.bt_chat:
                 MyToast.show(getString(R.string.chat_online));
@@ -637,15 +615,74 @@ public class BookingActivity extends BaseActivity implements AdapterView.OnItemS
     }
 
     /**
+     * 显示预约对话框，选定日期后调用requestAppoint
+     */
+    private void showCalendarDialog() {
+        calendar = Calendar.getInstance();
+        int year = calendar.get(Calendar.YEAR);
+        int monthOfYear = calendar.get(Calendar.MONTH);
+        int dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
+        if (datePickerDialog == null) {
+            datePickerDialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
+                @Override
+                public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                    requestAppoint(String.valueOf(year) + "-" + (monthOfYear + 1) + "-" + dayOfMonth);
+                }
+            }, year, monthOfYear, dayOfMonth);
+            onDateChangedListener = new DatePicker.OnDateChangedListener() {
+                @Override
+                public void onDateChanged(DatePicker view, int tempYear, int tempMonthOfYear, int tempDayOfMonth) {
+                    Calendar tempCalendar = Calendar.getInstance();
+                    tempCalendar.set(tempYear, tempMonthOfYear, tempDayOfMonth);
+                    if (!tempCalendar.after(calendar)) {
+                        view.init(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH), this);
+                    }
+                }
+            };
+        }
+        datePickerDialog.getDatePicker().init(year, monthOfYear, dayOfMonth, onDateChangedListener);
+        datePickerDialog.show();
+    }
+
+    /**
      * 提交预约申请
      */
     private void requestAppoint(String date) {
         String description = et_disease_description.getText().toString().trim();
-        if (TextUtils.isEmpty(description)){
+        if (TextUtils.isEmpty(description)) {
             MyToast.show("请填写病情描述");
-            ObjectAnimator.ofFloat(et_disease_description,"translationX",-25,25,-25,25,0).setDuration(500).start();
-        }else {
-            MyToast.show("request:registration_time=" + date+",disease_description="+description);
+            ObjectAnimator.ofFloat(et_disease_description, "translationX", -25, 25, -25, 25, 0).setDuration(500).start();
+            return;
         }
+
+        String patientId = getSharedPreferences(MyConstant.PREFS_ACCOUNT, MODE_PRIVATE).getString(MyConstant.KEY_ACCOUNT_LAST_ID, "");
+        if (TextUtils.isEmpty(patientId)) {
+            return;
+        }
+
+        HashMap<String, Object> params = new HashMap<>();
+        params.put("patient_id", patientId);
+        params.put("disease_description", description);
+        params.put("select_doctor_id", doctorBean.doctor_id);
+        params.put("registration_time", date);
+        new AsyncTask<Object, Object, String>() {
+            @Override
+            protected String doInBackground(Object... params) {
+                if (params != null) {
+                    return WebServiceUtils.callWebService(MyConstant.WEB_SERVICE_URL, MyConstant.NAMESPACE, "Patient_Sub_Applications",
+                            (Map<String, Object>) params[0]);
+                } else {
+                    return null;
+                }
+            }
+
+            protected void onPostExecute(String result) {
+                if (result != null) {
+                    MyToast.show(getString(R.string.connet_error));
+                    return;
+                }
+                MyToast.show(result);//TODO 提交病人预约申请
+            }
+        }.execute(params);
     }
 }

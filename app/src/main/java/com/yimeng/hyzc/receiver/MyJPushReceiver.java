@@ -4,10 +4,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
-
-import com.yimeng.hyzc.activity.TestActivity;
-import com.yimeng.hyzc.utils.MyToast;
 
 import cn.jpush.android.api.JPushInterface;
 
@@ -29,9 +25,9 @@ public class MyJPushReceiver extends BroadcastReceiver {
         } else if (JPushInterface.ACTION_NOTIFICATION_OPENED.equals(intent.getAction())) {
             System.out.println("用户点击打开了通知");
             // 在这里可以自己写代码去定义用户点击后的行为
-            Intent i = new Intent(context, TestActivity.class);  //自定义打开的界面
-            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            context.startActivity(i);
+//            Intent i = new Intent(context, TestActivity.class);  //自定义打开的界面
+//            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//            context.startActivity(i);
         }
 
 

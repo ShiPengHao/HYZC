@@ -4,6 +4,7 @@ import android.app.Application;
 
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.cookie.CookieJarImpl;
+import com.zhy.http.okhttp.log.LoggerInterceptor;
 
 import java.util.concurrent.TimeUnit;
 
@@ -11,7 +12,7 @@ import cn.jpush.android.api.JPushInterface;
 import okhttp3.OkHttpClient;
 
 /**
- * Created by 依萌 on 2016/6/20.
+ * 应用实例
  */
 public class MyApp extends Application {
 
@@ -41,14 +42,11 @@ public class MyApp extends Application {
     private void initHttpUtils() {
         CookieJarImpl cookieJar = new CookieJarImpl(new PersistentCookieStore(getApplicationContext()));
 
-        //                .addInterceptor(new LoggerInterceptor("TAG"))
-//其他配置
         okHttpClient = new OkHttpClient.Builder()
 //                .addInterceptor(new LoggerInterceptor("TAG"))
                 .connectTimeout(10000L, TimeUnit.MILLISECONDS)
                 .readTimeout(10000L, TimeUnit.MILLISECONDS)
                 .cookieJar(cookieJar)
-                //其他配置
                 .build();
 
         OkHttpUtils.initClient(okHttpClient);
@@ -60,8 +58,9 @@ public class MyApp extends Application {
         return instance;
     }
 
-    public static OkHttpClient getHttpClient(){return okHttpClient;}
-
+    public static OkHttpClient getHttpClient() {
+        return okHttpClient;
+    }
 
 
 }

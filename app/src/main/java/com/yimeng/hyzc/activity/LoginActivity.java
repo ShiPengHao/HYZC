@@ -109,7 +109,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
                             .close();
                 } catch (IOException e) {
                     e.printStackTrace();
-                    MyLog.i("old","fail");
+                    MyLog.i("old", "fail");
                 }
             }
         });
@@ -196,9 +196,11 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
 //                        new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
                         JSONObject object = new JSONObject(result);
                         if ("ok".equalsIgnoreCase(object.optString("status"))) {
-                            setJPushAliasAndTag();
-                            saveAccountInfo();
-                            goToHome();
+                            String type = object.optString("type");
+                            String id = object.optString("id");
+                            setJPushAliasAndTag(type, id);
+                            saveAccountInfo(type, id);
+                            goToHome(type);
                         } else {
                             MyToast.show(object.optString("msg"));
                             ll_loading.setVisibility(View.GONE);
@@ -217,26 +219,16 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
     }
 
     /**
-     * 登陆成功后为本应用用户绑定JPush的别名和标签，别名为用户名，标签为账号类型
+     * 登陆成功后为本应用用户绑定JPush的别名和标签，别名为账号类型+"-"+id，标签为账号类型
      */
-    private void setJPushAliasAndTag() {
+    private void setJPushAliasAndTag(String type, String id) {
         HashSet<String> tags = new HashSet<>();
-        switch (rg_userType.getCheckedRadioButtonId()) {
-            case R.id.rb_patient:
-                tags.add("patient");
-                break;
-            case R.id.rb_doctor:
-                tags.add("doctor");
-                break;
-            case R.id.rb_pharmacy:
-                tags.add("pharmacy");
-                break;
-        }
-        JPushInterface.setAliasAndTags(MyApp.getAppContext(), username, tags, new TagAliasCallback() {
+        tags.add(type);
+        JPushInterface.setAliasAndTags(MyApp.getAppContext(), type + "-" + id, tags, new TagAliasCallback() {
             @Override
             public void gotResult(int i, String s, Set<String> set) {
-                if (i != 0){
-                    MyLog.i("JPush","set alias and tag error");
+                if (i != 0) {
+                    MyLog.i("JPush", "set alias and tag error");
                 }
             }
         });
@@ -245,11 +237,13 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
     /**
      * 保存登陆成功的账号信息到本地sp文件中
      */
-    private void saveAccountInfo() {
+    private void saveAccountInfo(String type, String id) {
         SharedPreferences.Editor editor = spAccount.edit();
         editor.putString(MyConstant.KEY_ACCOUNT_LAST_USERNAME, username)
                 .putBoolean(MyConstant.KEY_ACCOUNT_LAST_REMEMBER, cb_remember.isChecked())
-                .putBoolean(MyConstant.KEY_ACCOUNT_AUTOLOGIN, cb_auto.isChecked());
+                .putBoolean(MyConstant.KEY_ACCOUNT_AUTOLOGIN, cb_auto.isChecked())
+                .putString(MyConstant.KEY_ACCOUNT_LAST_ID, id)
+                .putString(MyConstant.KEY_ACCOUNT_LAST_TYPE, type);
         if (cb_remember.isChecked()) {
             editor.putString(MyConstant.KEY_ACCOUNT_LAST_PASSWORD, pwd);
         } else {
@@ -259,9 +253,9 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
     }
 
     /**
-     * 跳转到主页
+     * 跳转到主页，根据账号类型判断
      */
-    private void goToHome() {
+    private void goToHome(String type) {
         startActivity(new Intent(this, HomeActivity.class));
         finish();
     }
