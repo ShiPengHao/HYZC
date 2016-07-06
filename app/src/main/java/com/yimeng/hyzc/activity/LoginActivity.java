@@ -224,7 +224,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
     private void setJPushAliasAndTag(String type, String id) {
         HashSet<String> tags = new HashSet<>();
         tags.add(type);
-        JPushInterface.setAliasAndTags(MyApp.getAppContext(), type + "-" + id, tags, new TagAliasCallback() {
+        JPushInterface.setAliasAndTags(MyApp.getAppContext(), type + "+" + id, tags, new TagAliasCallback() {
             @Override
             public void gotResult(int i, String s, Set<String> set) {
                 if (i != 0) {

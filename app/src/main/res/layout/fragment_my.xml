@@ -5,6 +5,7 @@
     android:orientation="vertical">
 
     <TextView
+        android:id="@+id/tv_title"
         style="@style/TextTitle"
         android:text="@string/my" />
 
@@ -136,8 +137,10 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
+            android:divider="@null"
+            android:dividerHeight="5dp"
             android:cacheColorHint="@android:color/transparent"
-            android:listSelector="@null"></ListView>
+            android:listSelector="@android:color/transparent"></ListView>
 
     </LinearLayout>
 

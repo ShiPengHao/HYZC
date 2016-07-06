@@ -1082,12 +1082,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
                         finish();
                     }
                 })
-                .setNegativeButton("稍作镇定", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-
-                    }
-                });
+                .setNegativeButton("稍作镇定", null);
         builder.show();
     }
 

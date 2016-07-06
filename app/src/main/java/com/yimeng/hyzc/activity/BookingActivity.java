@@ -1,7 +1,9 @@
 package com.yimeng.hyzc.activity;
 
 import android.animation.ObjectAnimator;
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
@@ -86,7 +88,6 @@ public class BookingActivity extends BaseActivity implements AdapterView.OnItemS
     private TextView tv_email;
     private TextView tv_remark;
     private DoctorBean doctorBean;
-    private DatePickerDialog datePickerDialog;
     private Calendar calendar;
     private DatePicker.OnDateChangedListener onDateChangedListener;
 
@@ -523,10 +524,17 @@ public class BookingActivity extends BaseActivity implements AdapterView.OnItemS
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        showPopWindow(parent, position);
+    }
+
+    /**
+     * 显示医生详情的popwindow
+     */
+    private void showPopWindow(AdapterView<?> parent, int position) {
         initPopView();
         bindPopView(position);
         if (popupWindow == null) {
-            popupWindow = new PopupWindow(DensityUtil.SCREEN_WIDTH, DensityUtil.SCREEN_HEIGHT);
+            popupWindow = new PopupWindow(DensityUtil.SCREEN_WIDTH, DensityUtil.SCREEN_HEIGHT-tv_title.getHeight());
             popupWindow.setContentView(popView);
             popupWindow.setFocusable(true);
             popupWindow.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
@@ -536,28 +544,6 @@ public class BookingActivity extends BaseActivity implements AdapterView.OnItemS
         int[] location = new int[2];
         tv_title.getLocationInWindow(location);
         popupWindow.showAtLocation(parent, Gravity.NO_GRAVITY, location[0], location[1]);
-    }
-
-    /**
-     * 为医生详情界面绑定数据
-     *
-     * @param position 所点击条目在doctor集合中的索引
-     */
-    private void bindPopView(int position) {
-        doctorBean = doctor.get(position);
-        tv_name.setText(String.format("%s：%s", getString(R.string.name), doctorBean.doctor_user == null ? "" : doctorBean.doctor_user));
-        try {
-            String birth = doctorBean.doctor_age.substring(doctorBean.doctor_age.indexOf("(") + 1, doctorBean.doctor_age.indexOf(")"));
-            tv_age.setText(String.format("%s：%s", getString(R.string.age),
-                    new Date().getYear() - new Date(Long.parseLong(birth)).getYear()));
-        } catch (Exception e) {
-            tv_age.setText(getString(R.string.age));
-        }
-        tv_email.setText(String.format("%s：%s", getString(R.string.email), doctorBean.doctor_user == null ? "" : doctorBean.doctor_email));
-        tv_remark.setText(String.format("%s：%s", getString(R.string.remark),
-                doctorBean.remark == null ? "" : doctorBean.remark.replace("\n", "")));
-        tv_sex.setText(String.format("%s：%s", getString(R.string.sex),
-                doctorBean.doctor_sex == 1 ? getString(R.string.male) : getString(R.string.female)));
     }
 
     /**
@@ -583,6 +569,29 @@ public class BookingActivity extends BaseActivity implements AdapterView.OnItemS
             tv_remark = (TextView) popView.findViewById(R.id.tv_remark);
         }
     }
+
+    /**
+     * 为医生详情界面绑定数据
+     *
+     * @param position 所点击条目在doctor集合中的索引
+     */
+    private void bindPopView(int position) {
+        doctorBean = doctor.get(position);
+        tv_name.setText(String.format("%s：%s", getString(R.string.name), doctorBean.doctor_user == null ? "" : doctorBean.doctor_user));
+        try {
+            String birth = doctorBean.doctor_age.substring(doctorBean.doctor_age.indexOf("(") + 1, doctorBean.doctor_age.indexOf(")"));
+            tv_age.setText(String.format("%s：%s", getString(R.string.age),
+                    new Date().getYear() - new Date(Long.parseLong(birth)).getYear()));
+        } catch (Exception e) {
+            tv_age.setText(getString(R.string.age));
+        }
+        tv_email.setText(String.format("%s：%s", getString(R.string.email), doctorBean.doctor_user == null ? "" : doctorBean.doctor_email));
+        tv_remark.setText(String.format("%s：%s", getString(R.string.remark),
+                doctorBean.remark == null ? "" : doctorBean.remark.replace("\n", "")));
+        tv_sex.setText(String.format("%s：%s", getString(R.string.sex),
+                doctorBean.doctor_sex == 1 ? getString(R.string.male) : getString(R.string.female)));
+    }
+
 
     @Override
     protected void onDestroy() {
@@ -622,13 +631,18 @@ public class BookingActivity extends BaseActivity implements AdapterView.OnItemS
         int year = calendar.get(Calendar.YEAR);
         int monthOfYear = calendar.get(Calendar.MONTH);
         int dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
-        if (datePickerDialog == null) {
-            datePickerDialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
-                @Override
-                public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+        DatePickerDialog datePickerDialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
+            private boolean isFirst = true;
+
+            @Override
+            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                if (isFirst) {
                     requestAppoint(String.valueOf(year) + "-" + (monthOfYear + 1) + "-" + dayOfMonth);
+                    isFirst = false;
                 }
-            }, year, monthOfYear, dayOfMonth);
+            }
+        }, year, monthOfYear, dayOfMonth);
+        if (onDateChangedListener == null) {
             onDateChangedListener = new DatePicker.OnDateChangedListener() {
                 @Override
                 public void onDateChanged(DatePicker view, int tempYear, int tempMonthOfYear, int tempDayOfMonth) {
@@ -677,12 +691,39 @@ public class BookingActivity extends BaseActivity implements AdapterView.OnItemS
             }
 
             protected void onPostExecute(String result) {
-                if (result != null) {
+                if (result == null) {
                     MyToast.show(getString(R.string.connet_error));
                     return;
                 }
-                MyToast.show(result);//TODO 提交病人预约申请
+                try {
+                    JSONObject object = new JSONObject(result);
+                    if ("ok".equalsIgnoreCase(object.optString("status"))) {
+                        showOkTips();
+                    } else {
+                        MyToast.show(object.optString("msg"));
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         }.execute(params);
+    }
+
+    /**
+     * 显示预约成功的提示对话框
+     */
+    private void showOkTips() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(BookingActivity.this)
+                .setTitle("预约成功！")
+                .setMessage("祝你早日康复！")
+                .setCancelable(true)
+                .setPositiveButton("关闭页面", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        finish();
+                    }
+                })
+                .setNegativeButton("留在本页", null);
+        builder.show();
     }
 }

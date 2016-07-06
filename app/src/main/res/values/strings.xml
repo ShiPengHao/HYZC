@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">HYZC</string>
+    <string name="app_name">华医之春</string>
     <string name="login">登录</string>
     <string name="username">用户名</string>
     <string name="pwd">设置密码</string>
@@ -31,7 +31,7 @@
     <string name="address_detail">详细地址</string>
     <string name="test">测试</string>
     <string name="account_type">账号类型</string>
-    <string name="patient">普通</string>
+    <string name="patient">用户</string>
     <string name="pharmacy">药店</string>
     <string name="doctor">医生</string>
     <string name="cert_info">证书信息</string>
@@ -70,4 +70,14 @@
     <string name="my_account">我的账号</string>
     <string name="modify">修改</string>
     <string name="fun_undo">功能正在测试，敬请期待！</string>
+    <string name="appointment_id">预约单号</string>
+    <string name="appointment_status">预约状态</string>
+    <string name="appointment_time">预约时间</string>
+    <string name="appointment_detail">预约详情</string>
+    <string name="doctor_response">医生回复</string>
+    <string name="doctor_response_time">回复时间</string>
+    <string name="doctor_response_way">医生意见</string>
+    <string name="appointment_info">预约信息</string>
+    <string name="response_info">回复信息</string>
+    <string name="patient_info">用户信息</string>
 </resources>
