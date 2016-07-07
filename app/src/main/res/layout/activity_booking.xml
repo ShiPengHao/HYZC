@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:background="@color/colorAccent"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/colorAccent">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -22,12 +22,14 @@
             android:padding="10dp">
 
             <TextView
-                android:padding="10dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:padding="4dp"
                 android:text="@string/pick_doctor"
-                android:textColor="@color/black"
-                android:textSize="18dp" />
+                android:textColor="@color/colorPrimary"
+                android:textSize="24dp" />
+
+            <include layout="@layout/layout_devider" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -41,9 +43,11 @@
 
                 <Spinner
                     android:id="@+id/spinner_province"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/finger_width" />
             </LinearLayout>
+
+            <include layout="@layout/layout_devider" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -57,9 +61,11 @@
 
                 <Spinner
                     android:id="@+id/spinner_city"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/finger_width" />
             </LinearLayout>
+
+            <include layout="@layout/layout_devider" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -70,12 +76,14 @@
                 <TextView
                     style="@style/TextAddress"
                     android:text="@string/area" />
-
                 <Spinner
                     android:id="@+id/spinner_area"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/finger_width" />
+
             </LinearLayout>
+
+            <include layout="@layout/layout_devider" />
 
 
             <LinearLayout
@@ -90,9 +98,11 @@
 
                 <Spinner
                     android:id="@+id/spinner_hospital"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/finger_width" />
             </LinearLayout>
+
+            <include layout="@layout/layout_devider" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -106,9 +116,11 @@
 
                 <Spinner
                     android:id="@+id/spinner_department"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/finger_width" />
             </LinearLayout>
+
+            <include layout="@layout/layout_devider" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -122,9 +134,12 @@
 
                 <Spinner
                     android:id="@+id/spinner_professional"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/finger_width" />
+
             </LinearLayout>
+
+            <include layout="@layout/layout_devider" />
 
             <GridView
                 android:id="@+id/gv"
@@ -132,8 +147,7 @@
                 android:layout_height="200dp"
                 android:layout_marginTop="10dp"
                 android:numColumns="3"
-                android:verticalSpacing="10dp">
-            </GridView>
+                android:verticalSpacing="10dp"></GridView>
 
         </LinearLayout>
     </LinearLayout>

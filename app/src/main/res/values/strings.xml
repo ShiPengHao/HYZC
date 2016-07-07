@@ -53,7 +53,7 @@
     <string name="nonghe">农合</string>
     <string name="pharmacy_flag">药店标志</string>
     <string name="booking">查询预约</string>
-    <string name="pick_doctor">请选择合适的地区、医院、科室、医生</string>
+    <string name="pick_doctor">请选择合适的地区、医院、科室、医生：</string>
     <string name="introduce_page">引导页面</string>
     <string name="splash_page">闪屏界面</string>
     <string name="skip_introduce">跳过引导，马上体验</string>

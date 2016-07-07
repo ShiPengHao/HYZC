@@ -508,7 +508,7 @@
                         <Spinner
                             android:id="@+id/spinner_province"
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content" />
+                            android:layout_height="@dimen/finger_width" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -527,7 +527,7 @@
                         <Spinner
                             android:id="@+id/spinner_city"
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content" />
+                            android:layout_height="@dimen/finger_width" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -546,7 +546,7 @@
                         <Spinner
                             android:id="@+id/spinner_area"
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content" />
+                            android:layout_height="@dimen/finger_width" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -571,7 +571,7 @@
                             <Spinner
                                 android:id="@+id/spinner_hospital"
                                 android:layout_width="wrap_content"
-                                android:layout_height="wrap_content" />
+                                android:layout_height="@dimen/finger_width" />
                         </LinearLayout>
 
                         <LinearLayout
@@ -590,7 +590,7 @@
                             <Spinner
                                 android:id="@+id/spinner_department"
                                 android:layout_width="wrap_content"
-                                android:layout_height="wrap_content" />
+                                android:layout_height="@dimen/finger_width" />
                         </LinearLayout>
 
                         <LinearLayout
@@ -609,7 +609,7 @@
                             <Spinner
                                 android:id="@+id/spinner_professional"
                                 android:layout_width="wrap_content"
-                                android:layout_height="wrap_content" />
+                                android:layout_height="@dimen/finger_width" />
                         </LinearLayout>
 
                     </LinearLayout>

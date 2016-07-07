@@ -130,12 +130,12 @@ public class DrugFragment extends Fragment implements AdapterView.OnItemClickLis
 
 
     /**
-     * 从本地数据库读取数据后刷新页面
+     * 从本地数据库读取数据后刷新页面//TODO 请求本地数据库更新界面优化
      */
     private void flushData() {
         ThreadUtils.runOnBackThread(new Runnable() {
             @Override
-            public void run() {
+            public synchronized void run() {
                 synchronized (DrugFragment.this) {
                     isFlushing = true;
                     Cursor cursor = DrugTypeDAO.getInstance().getAllCursor();
@@ -148,7 +148,6 @@ public class DrugFragment extends Fragment implements AdapterView.OnItemClickLis
                         datas.add(bean);
                     }
                     Collections.sort(datas);
-                    isFlushing = false;
                 }
                 ThreadUtils.runOnUIThread(new Runnable() {
                     @Override
@@ -159,6 +158,7 @@ public class DrugFragment extends Fragment implements AdapterView.OnItemClickLis
                         } else {
                             loading.setVisibility(View.VISIBLE);
                         }
+                        isFlushing = false;
                     }
                 });
             }
