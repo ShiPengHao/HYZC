@@ -150,7 +150,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
 
         rg_sex = (RadioGroup) findViewById(R.id.rg_sex);
         rg_type = (RadioGroup) findViewById(R.id.rg_type);
-        rg_pharmacy_type = (RadioGroup) findViewById(R.id.rg_pharmacy_type);
+        rg_pharmacy_type = (RadioGroup) findViewById(R.id.rg_pharmacy_type);//TODO 药店类型改变方式
 
         spinner_province = (Spinner) findViewById(R.id.spinner_province);
         spinner_city = (Spinner) findViewById(R.id.spinner_city);

@@ -26,6 +26,7 @@ import com.yimeng.hyzc.utils.MyConstant;
 import com.yimeng.hyzc.utils.MyToast;
 import com.yimeng.hyzc.utils.UiUtils;
 import com.yimeng.hyzc.utils.WebServiceUtils;
+import com.yimeng.hyzc.view.PullDownToRefreshListView;
 
 import org.json.JSONObject;
 
@@ -39,12 +40,12 @@ import java.util.Map;
 /**
  * 我的对应fragment
  */
-public class MyFragment extends BaseFragment implements View.OnClickListener, AdapterView.OnItemClickListener {
+public class MyFragment extends BaseFragment implements View.OnClickListener, AdapterView.OnItemClickListener, PullDownToRefreshListView.OnRefreshListener {
 
     private RelativeLayout rl_account_center;
     private RelativeLayout rl_appointment_history;
     private ImageView iv_appoint_arrow;
-    private ListView listView;
+    private PullDownToRefreshListView listView;
     private boolean listViewToogle;
     private boolean accountToogle;
     private RelativeLayout rl_account_info;
@@ -76,6 +77,7 @@ public class MyFragment extends BaseFragment implements View.OnClickListener, Ad
     private TextView tv_response_way;
     private String patientId;
     private HashMap<String, Object> params = new HashMap<>();
+    private TextView tv_appointment_add_time;
 
     @Override
     protected int getLayoutResId() {
@@ -88,7 +90,7 @@ public class MyFragment extends BaseFragment implements View.OnClickListener, Ad
         rl_account_info = (RelativeLayout) view.findViewById(R.id.rl_account_info);
         rl_appointment_history = (RelativeLayout) view.findViewById(R.id.rl_appointment_history);
 
-        listView = (ListView) view.findViewById(R.id.lv);
+        listView = (PullDownToRefreshListView) view.findViewById(R.id.lv);
         iv_appoint_arrow = (ImageView) view.findViewById(R.id.iv_appoint_arrow);
         iv_account_arrow = (ImageView) view.findViewById(R.id.iv_account_arrow);
 
@@ -111,8 +113,9 @@ public class MyFragment extends BaseFragment implements View.OnClickListener, Ad
         rl_appointment_history.setOnClickListener(this);
         bt_modify.setOnClickListener(this);
         appointmentAdapter = new AppointmentAdapter(data);
-        listView.setAdapter(appointmentAdapter);//TODO listview 用下拉刷新的
+        listView.setAdapter(appointmentAdapter);
         listView.setOnItemClickListener(this);
+        listView.setOnRefreshListener(this);
     }
 
     @Override
@@ -138,12 +141,16 @@ public class MyFragment extends BaseFragment implements View.OnClickListener, Ad
         if (TextUtils.isEmpty(patientId)) {
             return;
         }
-
         params.clear();
         params.put("where", "patient_id=" + patientId);
         params.put("orderby", "add_time desc");
-        params.put("startIndex", itemsCount + 1);
-        params.put("endIndex", itemsCount + itemsPerPage);
+        if (listView.isRefreshing()) {
+            params.put("startIndex", 1);
+            params.put("endIndex", itemsCount);
+        } else {
+            params.put("startIndex", itemsCount + 1);
+            params.put("endIndex", itemsCount + itemsPerPage);
+        }
         new AsyncTask<Object, Object, String>() {
             @Override
             protected String doInBackground(Object... params) {
@@ -158,17 +165,38 @@ public class MyFragment extends BaseFragment implements View.OnClickListener, Ad
             protected void onPostExecute(String result) {
                 if (result == null) {
                     MyToast.show(getString(R.string.connet_error));
+                    if (listView.isRefreshing()) {
+                        listView.refreshCompleted(false);
+                    } else if (listView.isLoadingMore()) {
+                        listView.hideFooter();
+                    }
                     return;
                 }
                 try {
                     JSONObject object = new JSONObject(result);
                     ArrayList<AppointmentBean> tempData = new Gson().fromJson(object.optString("data"), new TypeToken<ArrayList<AppointmentBean>>() {
                     }.getType());
+                    if (tempData.size() == 0) {
+                        MyToast.show(getString(R.string.no_more_data));
+                    }
+                    if (listView.isRefreshing()) {
+                        data.clear();
+                    }
                     data.addAll(tempData);
                     itemsCount = data.size();
                     appointmentAdapter.notifyDataSetChanged();
+                    if (listView.isRefreshing()) {
+                        listView.refreshCompleted(true);
+                    }
                 } catch (Exception e) {
                     e.printStackTrace();
+                    if (listView.isRefreshing()) {
+                        listView.refreshCompleted(false);
+                    }
+                } finally {
+                    if (listView.isLoadingMore()) {
+                        listView.hideFooter();
+                    }
                 }
             }
         }.execute(params);
@@ -219,7 +247,7 @@ public class MyFragment extends BaseFragment implements View.OnClickListener, Ad
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        requestAppointmentDetail(position);
+        requestAppointmentDetail(position - listView.getHeaderViewsCount());
     }
 
     /**
@@ -247,8 +275,9 @@ public class MyFragment extends BaseFragment implements View.OnClickListener, Ad
                 try {
                     JSONObject object = new JSONObject(result);
                     if (object.optInt("total") == 1) {
-                        ArrayList<AppointmentBean> tempData = new Gson().fromJson(object.optString("data"), new TypeToken<ArrayList<AppointmentBean>>() {
-                        }.getType());
+                        ArrayList<AppointmentBean> tempData = new Gson().fromJson(object.optString("data"),
+                                new TypeToken<ArrayList<AppointmentBean>>() {
+                                }.getType());
                         if (tempData.size() > 0) {
                             showAppointmentDetailPopWindow(tempData.get(0));
                         } else {
@@ -303,6 +332,7 @@ public class MyFragment extends BaseFragment implements View.OnClickListener, Ad
             tv_doctor = (TextView) popView.findViewById(R.id.tv_doctor);
             tv_appointStatus = (TextView) popView.findViewById(R.id.tv_appointStatus);
             tv_response_way = (TextView) popView.findViewById(R.id.tv_response_way);
+            tv_appointment_add_time = (TextView) popView.findViewById(R.id.tv_appointment_add_time);
         }
     }
 
@@ -315,7 +345,7 @@ public class MyFragment extends BaseFragment implements View.OnClickListener, Ad
         tv_doctor.setText(String.format("%s：%s", getString(R.string.doctor), bean.doctor_name == null ? "" : bean.doctor_name));
         tv_response.setText(String.format("%s：%s", getString(R.string.doctor_response), bean.doctor_Responses == null ? "" : bean.doctor_Responses));
         try {
-            String date = bean.add_time.substring(bean.add_time.indexOf("(") + 1, bean.add_time.indexOf(")"));
+            String date = bean.registration_time.substring(bean.registration_time.indexOf("(") + 1, bean.registration_time.indexOf(")"));
             date = new SimpleDateFormat("yyyy-MM-dd").format(new Date(Long.parseLong(date)));
             tv_appointmentTime.setText(String.format("%s：%s", MyApp.getAppContext().getString(R.string.appointment_time),
                     date));
@@ -323,12 +353,20 @@ public class MyFragment extends BaseFragment implements View.OnClickListener, Ad
             tv_appointmentTime.setText(MyApp.getAppContext().getString(R.string.appointment_time));
         }
         try {
+            String date = bean.add_time.substring(bean.add_time.indexOf("(") + 1, bean.add_time.indexOf(")"));
+            date = new SimpleDateFormat("yyyy-MM-dd HH:mm").format(new Date(Long.parseLong(date)));
+            tv_appointment_add_time.setText(String.format("%s：%s", MyApp.getAppContext().getString(R.string.appointment_add_time),
+                    date));
+        } catch (Exception e) {
+            tv_appointment_add_time.setText(MyApp.getAppContext().getString(R.string.appointment_add_time));
+        }
+        try {
             String date = bean.doctor_Responses_time.substring(bean.doctor_Responses_time.indexOf("(") + 1, bean.doctor_Responses_time.indexOf(")"));
-            date = new SimpleDateFormat("yyyy-MM-dd").format(new Date(Long.parseLong(date)));
+            date = new SimpleDateFormat("yyyy-MM-dd HH:mm").format(new Date(Long.parseLong(date)));
             tv_response_time.setText(String.format("%s：%s", MyApp.getAppContext().getString(R.string.doctor_response_time),
                     date));
         } catch (Exception e) {
-            tv_response_time.setText(MyApp.getAppContext().getString(R.string.appointment_time));
+            tv_response_time.setText(MyApp.getAppContext().getString(R.string.doctor_response_time));
         }
         try {
             String birth = bean.patient_age.substring(bean.patient_age.indexOf("(") + 1, bean.patient_age.indexOf(")"));
@@ -343,9 +381,11 @@ public class MyFragment extends BaseFragment implements View.OnClickListener, Ad
         tv_patient_sex.setText(String.format("%s：%s", getString(R.string.sex),
                 bean.patient_sex == 1 ? getString(R.string.male) : getString(R.string.female)));
         if (bean.doctor_dispose == 0) {
-            tv_appointStatus.setText(String.format("%s：%s", getString(R.string.appointment_status), "未回复"));
+            tv_appointStatus.setText(String.format("%s：%s", getString(R.string.appointment_status), getString(R.string.no_response)));
+            tv_appointStatus.setTextColor(Color.RED);
         } else {
-            tv_appointStatus.setText(String.format("%s：%s", getString(R.string.appointment_status), "已回复"));
+            tv_appointStatus.setText(String.format("%s：%s", getString(R.string.appointment_status), getString(R.string.has_response)));
+            tv_appointStatus.setTextColor(Color.BLUE);
         }
     }
 
@@ -366,4 +406,13 @@ public class MyFragment extends BaseFragment implements View.OnClickListener, Ad
     }
 
 
+    @Override
+    public void onPullToRefresh() {
+        requestAppointmentList();
+    }
+
+    @Override
+    public void onLoadMore() {
+        requestAppointmentList();
+    }
 }

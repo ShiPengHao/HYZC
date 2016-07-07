@@ -80,4 +80,8 @@
     <string name="appointment_info">预约信息</string>
     <string name="response_info">回复信息</string>
     <string name="patient_info">用户信息</string>
+    <string name="no_more_data">没有更多数据了!</string>
+    <string name="no_response">未回复</string>
+    <string name="has_response">已回复</string>
+    <string name="appointment_add_time">预约提交时间</string>
 </resources>

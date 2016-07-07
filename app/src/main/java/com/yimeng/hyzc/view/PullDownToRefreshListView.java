@@ -20,7 +20,7 @@ import com.yimeng.hyzc.R;
 
 /**
  * 可以下拉刷新的ListView。
- * 使用时不需要调用setOnscrollListener(),onTouchEvent(),addHeaderView()和addRooterView()方法
+ * 使用时不需要调用addHeaderView()和addRooterView()方法
  */
 public class PullDownToRefreshListView extends ListView {
     private LinearLayout headerRoot;
@@ -41,13 +41,46 @@ public class PullDownToRefreshListView extends ListView {
     private int state = STATE_DOWN;
     private RotateAnimation downToUp;
     private RotateAnimation upToDown;
-    private static final long TIME_OFFSET = 8*60*60*1000l;
     /**
      * 刷新头下增加的第一个view
      */
     private View appendedHeaderView;
     private int footerRootHeight;
-    public boolean isLoadingMore;
+    private boolean isLoadingMore;
+    private OnRefreshListener onRefreshListener;
+    private boolean isRefreshing;
+
+    /**
+     * OnScrollListener的内部包装类，主要监控上拉加载动作
+     */
+    private class InnerOnScrollListener implements OnScrollListener {
+        private OnScrollListener onScrollListener;
+
+        public InnerOnScrollListener(OnScrollListener onScrollListener) {
+            this.onScrollListener = onScrollListener;
+        }
+
+        @Override
+        public void onScrollStateChanged(AbsListView view, int scrollState) {
+            if (scrollState == SCROLL_STATE_IDLE
+                    && getLastVisiblePosition() == getCount() - 1
+                    && onRefreshListener != null && !isLoadingMore && !isRefreshing) {
+                isLoadingMore = true;
+                displayFooter();
+                onRefreshListener.onLoadMore();
+            }
+            if (onScrollListener != null) {
+                onScrollListener.onScrollStateChanged(view, scrollState);
+            }
+        }
+
+        @Override
+        public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+            if (onScrollListener != null) {
+                onScrollListener.onScroll(view, firstVisibleItem, visibleItemCount, totalItemCount);
+            }
+        }
+    }
 
     public PullDownToRefreshListView(Context context, AttributeSet attrs,
                                      int defStyle) {
@@ -72,28 +105,21 @@ public class PullDownToRefreshListView extends ListView {
         initAnimation();
         initHeaderView();
         initFooterView();
-        setOnScrollListener(new OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(AbsListView view, int scrollState) {
-                if (scrollState == SCROLL_STATE_IDLE
-                        && getLastVisiblePosition() == getCount() - 1
-                        && onRefreshListener != null && !isLoadingMore) {
-                    isLoadingMore = true;
-                    onRefreshListener.onLoadMore();
-                }
-            }
-
-            @Override
-            public void onScroll(AbsListView view, int firstVisibleItem,
-                                 int visibleItemCount, int totalItemCount) {
-            }
-        });
-
+        setOnScrollListener(null);
     }
 
+    @Override
+    public void setOnScrollListener(OnScrollListener l) {
+        super.setOnScrollListener(new InnerOnScrollListener(l));
+    }
 
-    private OnRefreshListener onRefreshListener;
-    public boolean isRefreshing;
+    public boolean isRefreshing() {
+        return isRefreshing;
+    }
+
+    public boolean isLoadingMore() {
+        return isLoadingMore;
+    }
 
     public void setOnRefreshListener(OnRefreshListener onRefreshListener) {
         this.onRefreshListener = onRefreshListener;
@@ -250,7 +276,7 @@ public class PullDownToRefreshListView extends ListView {
                 pb.setVisibility(View.VISIBLE);
                 ivArrow.setVisibility(View.INVISIBLE);
                 tvText.setText("正在刷新...");
-                if (onRefreshListener != null && !isRefreshing) {
+                if (onRefreshListener != null && !isRefreshing && !isLoadingMore) {
                     isRefreshing = true;
                     ivArrow.postDelayed(new Runnable() {
                         @Override

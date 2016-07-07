@@ -35,23 +35,24 @@ public class AppointmentHolder extends BaseHolder<AppointmentBean> {
 
     @Override
     public void bindData(AppointmentBean bean) {
-        tv_doctor.setText(String.format("%s：%s", MyApp.getAppContext().getString(R.string.doctor), bean.doctor_name));
-        tv_appointmentId.setText(String.format("%s：%s", MyApp.getAppContext().getString(R.string.appointment_id), bean.appointment_id));
-        tv_description.setText(String.format("%s：%s", MyApp.getAppContext().getString(R.string.disease_description), bean.disease_description.replace("\n","")));
+        MyApp context = MyApp.getAppContext();
+        tv_doctor.setText(String.format("%s：%s", context.getString(R.string.doctor), bean.doctor_name));
+        tv_appointmentId.setText(String.format("%s：%s", context.getString(R.string.appointment_id), bean.appointment_id));
+        tv_description.setText(String.format("%s：%s", context.getString(R.string.disease_description), bean.disease_description.replace("\n","")));
         if (bean.doctor_dispose == 0){
-            tv_status.setText("未回复");
+            tv_status.setText(String.format("%s：%s", context.getString(R.string.appointment_status), context.getString(R.string.no_response)));
             tv_status.setTextColor(Color.RED);
         }else{
-            tv_status.setText("已回复");
-            tv_status.setTextColor(Color.BLACK);
+            tv_status.setText(String.format("%s：%s", context.getString(R.string.appointment_status),context.getString(R.string.has_response)));
+            tv_status.setTextColor(Color.BLUE);
         }
         try {
             String date = bean.add_time.substring(bean.add_time.indexOf("(") + 1, bean.add_time.indexOf(")"));
-            date = new SimpleDateFormat("yyyy-MM-dd").format(new Date(Long.parseLong(date)));
-            tv_appointmentTime.setText(String.format("%s：%s", MyApp.getAppContext().getString(R.string.appointment_time),
+            date = new SimpleDateFormat("yyyy-MM-dd HH:mm").format(new Date(Long.parseLong(date)));
+            tv_appointmentTime.setText(String.format("%s：%s", context.getString(R.string.appointment_add_time),
                     date));
         } catch (Exception e) {
-            tv_appointmentTime.setText(MyApp.getAppContext().getString(R.string.appointment_time));
+            tv_appointmentTime.setText(context.getString(R.string.appointment_add_time));
         }
     }
 }

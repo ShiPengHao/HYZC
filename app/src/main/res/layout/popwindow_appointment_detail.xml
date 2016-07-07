@@ -68,6 +68,13 @@
                     android:padding="2dp"
                     android:text="@string/appointment_time"
                     android:textSize="16dp" />
+                <TextView
+                    android:id="@+id/tv_appointment_add_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="2dp"
+                    android:text="@string/appointment_add_time"
+                    android:textSize="16dp" />
             </LinearLayout>
 
             <TextView
