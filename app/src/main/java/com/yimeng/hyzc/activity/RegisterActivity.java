@@ -17,6 +17,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -124,10 +125,12 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
     private ImageView iv_permit_cert;
     private EditText et_pharmacy_name;
     private EditText et_pharmacy_corporation;
-    private RadioGroup rg_pharmacy_type;
     private LinearLayout ll_personal_info;
     private Button bt_float_register;
     private TextView tv_remark;
+    private CheckBox cb_work;
+    private CheckBox cb_home;
+    private CheckBox cb_farm;
 
 
     @Override
@@ -150,7 +153,9 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
 
         rg_sex = (RadioGroup) findViewById(R.id.rg_sex);
         rg_type = (RadioGroup) findViewById(R.id.rg_type);
-        rg_pharmacy_type = (RadioGroup) findViewById(R.id.rg_pharmacy_type);//TODO 药店类型改变方式
+        cb_work = (CheckBox) findViewById(R.id.cb_work);
+        cb_home = (CheckBox) findViewById(R.id.cb_home);
+        cb_farm = (CheckBox) findViewById(R.id.cb_farm);
 
         spinner_province = (Spinner) findViewById(R.id.spinner_province);
         spinner_city = (Spinner) findViewById(R.id.spinner_city);
@@ -181,7 +186,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
         ll_pharmacy_cert = (LinearLayout) findViewById(R.id.ll_pharmacy_cert);
         ll_personal_info = (LinearLayout) findViewById(R.id.ll_personal_info);
 
-        tv_remark = (TextView)findViewById(R.id.tv_remark);
+        tv_remark = (TextView) findViewById(R.id.tv_remark);
 
 
         uploadImgBuilder = new android.support.v7.app.AlertDialog.Builder(this);
@@ -239,7 +244,6 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
         spinner_professional.setOnItemSelectedListener(this);
 
         rg_sex.check(R.id.rb_male);
-        rg_pharmacy_type.check(R.id.rb_work);
         rg_type.setOnCheckedChangeListener(this);
         rg_type.check(getIntent().getIntExtra("checdId", R.id.rb_patient));
     }
@@ -846,7 +850,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
                     return;
                 }
                 String pharmacy_corporation = et_pharmacy_corporation.getText().toString().trim();
-                if (TextUtils.isEmpty(pharmacy_name)) {
+                if (TextUtils.isEmpty(pharmacy_corporation)) {
                     MyToast.show("药店法人不能为空");
                     return;
                 }
@@ -878,19 +882,17 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
                 values.put("city", city.get(spinner_city.getSelectedItemPosition()).code);
                 values.put("area", area.get(spinner_area.getSelectedItemPosition()).code);
                 values.put("remark", et_remark.getText().toString().trim());// 备注无需校验
-                int flag = 0;
-                switch (rg_pharmacy_type.getCheckedRadioButtonId()) {
-                    case R.id.rb_work:
-                        flag = 1;
-                        break;
-                    case R.id.rb_home:
-                        flag = 2;
-                        break;
-                    case R.id.rb_farm:
-                        flag = 3;
-                        break;
+                StringBuilder sb = new StringBuilder();
+                if (cb_farm.isChecked()) {
+                    sb.append(cb_farm.getText().toString().trim());
                 }
-                values.put("flag", flag);
+                if (cb_home.isChecked()) {
+                    sb.append(cb_home.getText().toString().trim());
+                }
+                if (cb_work.isChecked()) {
+                    sb.append(cb_work.getText().toString().trim());
+                }
+                values.put("flag", sb.toString());
                 method = "Shop_Register";
                 break;
             case R.id.rb_doctor:

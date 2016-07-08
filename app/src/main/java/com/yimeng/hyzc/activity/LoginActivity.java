@@ -135,7 +135,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
     }
 
     /**
-     * 登陆信息核对无误后登陆
+     * 登陆信息核对无误后登陆//TODO 线程阻塞
      */
     private void login() {
         username = et_username.getText().toString().trim();

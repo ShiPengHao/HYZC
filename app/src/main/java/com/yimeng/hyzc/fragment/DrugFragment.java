@@ -3,6 +3,8 @@ package com.yimeng.hyzc.fragment;
 import android.database.ContentObserver;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
@@ -22,7 +24,6 @@ import com.yimeng.hyzc.adapter.DrugTypeAdapter;
 import com.yimeng.hyzc.bean.DrugTypeBean;
 import com.yimeng.hyzc.db.DrugTypeDAO;
 import com.yimeng.hyzc.utils.MyConstant;
-import com.yimeng.hyzc.utils.MyLog;
 import com.yimeng.hyzc.utils.MyToast;
 import com.yimeng.hyzc.utils.PinYinUtils;
 import com.yimeng.hyzc.utils.ThreadUtils;
@@ -45,7 +46,7 @@ import okhttp3.Response;
 /**
  * 药品类型列表的fragment
  */
-public class DrugFragment extends Fragment implements AdapterView.OnItemClickListener, TextWatcher, QuickIndexBar.OnLetterChangeListener {
+public class DrugFragment extends BaseFragment implements AdapterView.OnItemClickListener, TextWatcher, QuickIndexBar.OnLetterChangeListener {
 
     private ListView listView;
     private QuickIndexBar quickIndexBar;
@@ -55,43 +56,49 @@ public class DrugFragment extends Fragment implements AdapterView.OnItemClickLis
 
     private List<DrugTypeBean> datas = new ArrayList<>();
     private boolean isFlushing = false;
-    private LinearLayout loading;
+    private LinearLayout ll_loading;
+    private Handler handler;
+    private static final int WAHT_FLUSH_DATA = 1;
 
-
-    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-
-        View view = UiUtils.inflate(R.layout.fragment_drug);
-        initView(view);
-        setListener();
-        initData();
-        return view;
+    protected int getLayoutResId() {
+        return R.layout.fragment_drug;
     }
 
-    private void initView(View view) {
+    protected void initView(View view) {
         clearEditText = (ClearEditText) view.findViewById(R.id.cet);
         listView = (ListView) view.findViewById(R.id.lv);
         quickIndexBar = (QuickIndexBar) view.findViewById(R.id.quickindexbar);
-        loading = (LinearLayout) view.findViewById(R.id.ll_loading);
+        ll_loading = (LinearLayout) view.findViewById(R.id.ll_loading);
     }
 
     /**
      * 设置适配器和监听
      */
-    private void setListener() {
+    protected void setListener() {
         adapter = new DrugTypeAdapter(datas);
         listView.setAdapter(adapter);
         listView.setOnItemClickListener(this);
         clearEditText.addTextChangedListener(this);
         quickIndexBar.setOnLetterChangeListener(this);
-
-        getActivity().getContentResolver().registerContentObserver(DrugTypeDAO.DRUG_TYPE_URI, true, new ContentObserver(null) {
+        handler = new Handler(){
+            @Override
+            public void handleMessage(Message msg) {
+                switch (msg.what){
+                    case WAHT_FLUSH_DATA:
+                        if (!isFlushing) {
+                            ll_loading.setVisibility(View.VISIBLE);
+                            flushData();
+                        }
+                        break;
+                }
+            }
+        };
+        getActivity().getContentResolver().registerContentObserver(DrugTypeDAO.DRUG_TYPE_URI, true, new ContentObserver(new Handler()) {
             @Override
             public void onChange(boolean selfChange) {
-                if (!isFlushing) {
-                    flushData();
-                }
+                handler.removeMessages(WAHT_FLUSH_DATA);
+                handler.sendEmptyMessageDelayed(WAHT_FLUSH_DATA,2000);
             }
         });
     }
@@ -99,7 +106,7 @@ public class DrugFragment extends Fragment implements AdapterView.OnItemClickLis
     /**
      * 初始化数据源
      */
-    private void initData() {
+    protected void initData() {
         flushData();
         OkHttpUtils.get().url(MyConstant.URL_DRUGTYPE).build().execute(new Callback() {
             @Override
@@ -130,33 +137,33 @@ public class DrugFragment extends Fragment implements AdapterView.OnItemClickLis
 
 
     /**
-     * 从本地数据库读取数据后刷新页面//TODO 请求本地数据库更新界面优化
+     * 从本地数据库读取数据后刷新页面
      */
     private void flushData() {
         ThreadUtils.runOnBackThread(new Runnable() {
             @Override
             public synchronized void run() {
-                synchronized (DrugFragment.this) {
-                    isFlushing = true;
-                    Cursor cursor = DrugTypeDAO.getInstance().getAllCursor();
-                    datas.clear();
-                    while (cursor.moveToNext()) {
-                        DrugTypeBean bean = new DrugTypeBean();
-                        bean.name = cursor.getString(DrugTypeDAO.ID_NAME);
-                        bean.icon = cursor.getString(DrugTypeDAO.ID_ICON);
-                        bean.TypeCode = cursor.getString(DrugTypeDAO.ID_CODE);
-                        datas.add(bean);
-                    }
-                    Collections.sort(datas);
+
+                isFlushing = true;
+                Cursor cursor = DrugTypeDAO.getInstance().getAllCursor();
+                datas.clear();
+                while (cursor.moveToNext()) {
+                    DrugTypeBean bean = new DrugTypeBean();
+                    bean.name = cursor.getString(DrugTypeDAO.ID_NAME);
+                    bean.icon = cursor.getString(DrugTypeDAO.ID_ICON);
+                    bean.TypeCode = cursor.getString(DrugTypeDAO.ID_CODE);
+                    datas.add(bean);
                 }
+                Collections.sort(datas);
+
                 ThreadUtils.runOnUIThread(new Runnable() {
                     @Override
                     public void run() {
                         adapter.notifyDataSetChanged();
                         if (datas.size() > 0) {
-                            loading.setVisibility(View.GONE);
+                            ll_loading.setVisibility(View.GONE);
                         } else {
-                            loading.setVisibility(View.VISIBLE);
+                            ll_loading.setVisibility(View.VISIBLE);
                         }
                         isFlushing = false;
                     }

@@ -7,7 +7,6 @@ import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v7.app.AppCompatActivity;
 import android.widget.ImageView;
 
 import com.yimeng.hyzc.R;
@@ -25,7 +24,7 @@ import okhttp3.Response;
 /**
  * 闪屏界面，处理apk版本更新，自动登陆，页面跳转等逻辑
  */
-public class SplashActivity extends AppCompatActivity {
+public class SplashActivity extends BaseActivity {
 
     private SharedPreferences spAccount;
     private Handler handler;
@@ -33,9 +32,8 @@ public class SplashActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_splash);
-        getImage();
 
+        getImage();
         handler = new Handler() {
             @Override
             public void handleMessage(Message msg) {
@@ -76,14 +74,36 @@ public class SplashActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    protected int getLayoutResId() {
+        return R.layout.activity_splash;
+    }
+
+    @Override
+    protected void initView() {
+
+    }
+
+    @Override
+    protected void setListener() {
+
+    }
+
+    @Override
+    protected void initData() {
+
+    }
+
     /**
      * 获得闪屏界面的背景图片
      */
     private void getImage() {
-        ImageView iv = (ImageView)findViewById(R.id.iv);
-        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.splash);
-        iv.setImageBitmap(BitmapUtils.zoomBitmap(bitmap, DensityUtil.SCREEN_WIDTH,DensityUtil.SCREEN_HEIGHT));
-        bitmap.recycle();
+        ImageView iv = (ImageView) findViewById(R.id.iv);
+        if (iv != null) {
+            Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.splash);
+            iv.setImageBitmap(BitmapUtils.zoomBitmap(bitmap, DensityUtil.SCREEN_WIDTH, DensityUtil.SCREEN_HEIGHT));
+            bitmap.recycle();
+        }
     }
 
     /**
@@ -98,10 +118,10 @@ public class SplashActivity extends AppCompatActivity {
      * 自动登陆
      */
     private void attempToLogin() {
-        String username = spAccount.getString(MyConstant.KEY_ACCOUNT_LAST_USERNAME,"");
-        String pwd = spAccount.getString(MyConstant.KEY_ACCOUNT_LAST_PASSWORD,"");
+        String username = spAccount.getString(MyConstant.KEY_ACCOUNT_LAST_USERNAME, "");
+        String pwd = spAccount.getString(MyConstant.KEY_ACCOUNT_LAST_PASSWORD, "");
         OkHttpUtils.post().url(MyConstant.URL_LOGIN)
-                .addParams("usercode", username).addParams("password", pwd).addParams("expired","365")
+                .addParams("usercode", username).addParams("password", pwd).addParams("expired", "365")
                 .build().execute(new Callback() {
             @Override
             public Object parseNetworkResponse(Response response, int i) throws Exception {
@@ -109,9 +129,9 @@ public class SplashActivity extends AppCompatActivity {
                 JSONObject object = new JSONObject(string);
                 //{"ResultID":0,"ResultMsg":"登录成功","Succeed":true,"ResultData":null,"s":true,"emsg":"登录成功"}
                 // MyToast.show(object.optString("ResultMsg"));
-                if(object.optBoolean("Succeed")){
+                if (object.optBoolean("Succeed")) {
                     goToHome();
-                }else{
+                } else {
                     goToLogin();
                 }
                 return null;
@@ -148,7 +168,7 @@ public class SplashActivity extends AppCompatActivity {
      * 跳转到主页
      */
     private void goToHome() {
-        startActivity(new Intent(this,HomeActivity.class));
+        startActivity(new Intent(this, HomeActivity.class));
         finish();
     }
 
@@ -156,7 +176,7 @@ public class SplashActivity extends AppCompatActivity {
      * 跳转到引导界面
      */
     private void goToIntroduce() {
-        startActivity(new Intent(this,IntroduceActivity.class));
+        startActivity(new Intent(this, IntroduceActivity.class));
         finish();
     }
 

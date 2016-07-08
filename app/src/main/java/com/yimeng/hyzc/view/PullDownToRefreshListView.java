@@ -189,6 +189,8 @@ public class PullDownToRefreshListView extends ListView {
         headerRoot.addView(view);
     }
 
+    private boolean isClick;
+
     @Override
     /**
      * 触摸事件发生时判断是否需要下拉刷新头，如果是调用对应方法，如果不是，将事件交给listview处理
@@ -207,14 +209,18 @@ public class PullDownToRefreshListView extends ListView {
         int headerY = location[1];
 
         switch (ev.getAction()) {
+            case MotionEvent.ACTION_DOWN:
+                isClick = true;
+                break;
             case MotionEvent.ACTION_MOVE:
                 if (downY == DEFAULT_Y) {
                     downY = ev.getY();
-                    break;
+                    return true;
                 }
                 float distanceY = ev.getY() - downY;
                 if (headerY >= listY && distanceY > 0) {
                     pullHearderRoot(ev.getY());
+                    isClick = false;
                     return true;
                 }
                 break;
@@ -228,6 +234,9 @@ public class PullDownToRefreshListView extends ListView {
                 }
                 startY = DEFAULT_Y;
                 downY = DEFAULT_Y;
+                if (!isClick){
+                    return true;
+                }
                 break;
 
             default:

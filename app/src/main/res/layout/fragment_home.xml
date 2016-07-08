@@ -16,14 +16,18 @@
     </com.yimeng.hyzc.view.AutoRollViewPager>
 
     <Button
+        android:layout_marginTop="8dp"
         android:id="@+id/bt_test"
         android:text="@string/test"
+        android:background="@drawable/selector_bt_bg_green"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
     <Button
+        android:layout_marginTop="8dp"
         android:id="@+id/bt_booking"
         android:text="@string/booking"
+        android:background="@drawable/selector_bt_bg_green"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 

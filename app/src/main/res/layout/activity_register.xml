@@ -61,7 +61,7 @@
                                 android:id="@+id/bt_doctor_cert"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:background="@drawable/selector_bt_bg"
+                                android:background="@drawable/selector_bt_bg_green"
                                 android:gravity="center"
                                 android:padding="10dp"
                                 android:text="@string/doctor_cert"
@@ -85,7 +85,7 @@
                                 android:id="@+id/bt_doctor_signature"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:background="@drawable/selector_bt_bg"
+                                android:background="@drawable/selector_bt_bg_green"
                                 android:gravity="center"
                                 android:padding="10dp"
                                 android:text="@string/doctor_signature"
@@ -116,7 +116,7 @@
                                 android:id="@+id/bt_organization_cert"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:background="@drawable/selector_bt_bg"
+                                android:background="@drawable/selector_bt_bg_green"
                                 android:gravity="center"
                                 android:padding="10dp"
                                 android:text="@string/organization_cert"
@@ -140,7 +140,7 @@
                                 android:id="@+id/bt_license_cert"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:background="@drawable/selector_bt_bg"
+                                android:background="@drawable/selector_bt_bg_green"
                                 android:gravity="center"
                                 android:padding="10dp"
                                 android:text="@string/license_cert"
@@ -165,7 +165,7 @@
                                 android:id="@+id/bt_permit_cert"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:background="@drawable/selector_bt_bg"
+                                android:background="@drawable/selector_bt_bg_green"
                                 android:gravity="center"
                                 android:padding="10dp"
                                 android:text="@string/permit_cert"
@@ -235,34 +235,33 @@
                                 android:text="@string/pharmacy_flag"
                                 android:textSize="18dp" />
 
-                            <RadioGroup
-                                android:id="@+id/rg_pharmacy_type"
+                            <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:gravity="center_vertical"
                                 android:orientation="horizontal">
 
-                                <RadioButton
-                                    android:id="@+id/rb_work"
+                                <CheckBox
+                                    android:id="@+id/cb_work"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_marginLeft="10dp"
                                     android:text="@string/yibao" />
 
-                                <RadioButton
-                                    android:id="@+id/rb_home"
+                                <CheckBox
+                                    android:id="@+id/cb_home"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_marginLeft="30dp"
                                     android:text="@string/chengzhen" />
 
-                                <RadioButton
-                                    android:id="@+id/rb_farm"
+                                <CheckBox
+                                    android:id="@+id/cb_farm"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_marginLeft="30dp"
                                     android:text="@string/nonghe" />
-                            </RadioGroup>
+                            </LinearLayout>
                         </LinearLayout>
                     </LinearLayout>
                 </LinearLayout>
@@ -672,7 +671,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:background="@drawable/selector_bt_bg"
+                        android:background="@drawable/selector_bt_bg_green"
                         android:gravity="center"
                         android:text="@string/register" />
                 </LinearLayout>

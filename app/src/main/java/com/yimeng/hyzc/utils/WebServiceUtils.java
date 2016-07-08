@@ -1,19 +1,13 @@
 package com.yimeng.hyzc.utils;
 
-import android.os.AsyncTask;
-
 import com.yimeng.hyzc.R;
 
 import org.ksoap2.SoapEnvelope;
-import org.ksoap2.SoapFault;
 import org.ksoap2.serialization.SoapObject;
 import org.ksoap2.serialization.SoapPrimitive;
 import org.ksoap2.serialization.SoapSerializationEnvelope;
-import org.ksoap2.transport.HttpResponseException;
 import org.ksoap2.transport.HttpTransportSE;
-import org.xmlpull.v1.XmlPullParserException;
 
-import java.io.IOException;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -66,7 +60,7 @@ public class WebServiceUtils {
             }
 
         } catch (Exception e) {
-            MyLog.i("----发生错误---", e.getMessage());
+//            MyLog.i("----发生错误---", e.getMessage());
             e.printStackTrace();
             MyToast.show(MyApp.getAppContext().getString(R.string.connet_error));
         }

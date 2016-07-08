@@ -4,16 +4,22 @@
     android:layout_height="match_parent"
     android:gravity="center_horizontal"
     android:orientation="vertical">
+    <TextView
+        android:id="@+id/tv_title"
+        style="@style/TextTitle"
+        android:text="@string/drug" />
 
     <com.yimeng.hyzc.view.ClearEditText
         android:id="@+id/cet"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="40dp"
         android:drawablePadding="8dp"
         android:drawableLeft="@mipmap/menu_search"
         android:drawableRight="@mipmap/delete_xxx"
         android:ellipsize="end"
         android:hint="@string/hint_search"
+        android:background="@color/grey_line"
+        android:textColor="@color/colorAccent"
         android:maxLines="1" />
 
     <RelativeLayout
@@ -27,10 +33,10 @@
 
         <com.yimeng.hyzc.view.QuickIndexBar
             android:id="@+id/quickindexbar"
-            android:layout_width="30dp"
+            android:layout_width="48dp"
             android:layout_height="match_parent"
             android:layout_alignParentRight="true"
-            android:background="@android:color/transparent" />
+             />
 
         <include layout="@layout/layout_loading" />
 

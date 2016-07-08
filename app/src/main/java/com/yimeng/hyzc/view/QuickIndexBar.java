@@ -59,7 +59,7 @@ public class QuickIndexBar extends View {
         paint = new Paint();
         // 抗锯齿
         paint.setAntiAlias(true);
-        paint.setColor(Color.WHITE);
+        paint.setColor(getResources().getColor(R.color.colorAccent));
 
         // 字体加粗
         paint.setTypeface(Typeface.DEFAULT_BOLD);
@@ -101,7 +101,7 @@ public class QuickIndexBar extends View {
             if (currentIndex == i) {
                 paint.setColor(Color.RED);
             } else {
-                paint.setColor(Color.WHITE);
+                paint.setColor(getResources().getColor(R.color.colorAccent));
             }
             canvas.drawText(text, x, y, paint);
         }
