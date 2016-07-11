@@ -2,6 +2,7 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/grey"
     >
 
     <LinearLayout
@@ -9,10 +10,23 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/tv_title"
-            style="@style/TextTitle"
-            android:text="@string/booking" />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/tv_title"
+                style="@style/TextTitle"
+                android:text="@string/booking" />
+
+            <ImageView
+                android:id="@+id/iv_back"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="20dp"
+                android:src="@mipmap/back" />
+        </RelativeLayout>
 
 
         <LinearLayout
@@ -24,12 +38,16 @@
             >
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="4dp"
+                android:gravity="center"
+                android:ellipsize="marquee"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
                 android:text="@string/pick_doctor"
-                android:textColor="@color/colorPrimary"
-                android:textSize="24dp" />
+                android:textColor="@color/colorAccent"
+                android:textSize="20dp" />
 
             <include layout="@layout/layout_devider" />
 

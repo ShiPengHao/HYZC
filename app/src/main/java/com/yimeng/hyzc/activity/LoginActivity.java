@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioGroup;
 
@@ -50,6 +51,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
     private RadioGroup rg_userType;
     private Map<String, Object> values = new HashMap<>();
     private LinearLayout ll_loading;
+    private ImageView iv_back;
 
 
     @Override
@@ -66,7 +68,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
         bt_login = (Button) findViewById(R.id.bt_login);
         rg_userType = (RadioGroup) findViewById(R.id.rg_type);
         ll_loading = (LinearLayout) findViewById(R.id.ll_loading);
-
     }
 
     @Override
@@ -189,47 +190,71 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
                 }
             }
 
-            protected void onPostExecute(String result) {
-                if (result != null) {
-                    try {
-                        MyLog.i("result", result);
-//                        new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
-                        JSONObject object = new JSONObject(result);
-                        if ("ok".equalsIgnoreCase(object.optString("status"))) {
-                            String type = object.optString("type");
-                            String id = object.optString("id");
-                            setJPushAliasAndTag(type, id);
-                            saveAccountInfo(type, id);
-                            goToHome(type);
+            protected void onPostExecute(final String result) {
+                ThreadUtils.runOnBackThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (result != null) {
+                            try {
+//                                new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
+                                JSONObject object = new JSONObject(result);
+                                if ("ok".equalsIgnoreCase(object.optString("status"))) {
+                                    String type = object.optString("type");
+                                    String id = object.optString("id");
+                                    setJPushAliasAndTag(type, id);
+                                } else {
+                                    MyToast.show(object.optString("msg"));
+                                    dismissLoginDialog();
+                                }
+                            } catch (Exception e) {
+                                MyToast.show(getString(R.string.connet_error));
+                                dismissLoginDialog();
+                                e.printStackTrace();
+                            }
                         } else {
-                            MyToast.show(object.optString("msg"));
-                            ll_loading.setVisibility(View.GONE);
+                            dismissLoginDialog();
+                            MyToast.show(getString(R.string.connet_error));
                         }
-                    } catch (Exception e) {
-                        MyToast.show(getString(R.string.connet_error));
-                        ll_loading.setVisibility(View.GONE);
-                        e.printStackTrace();
                     }
-                } else {
-                    ll_loading.setVisibility(View.GONE);
-                    MyToast.show(getString(R.string.connet_error));
-                }
+                });
             }
         }.execute(params);
     }
 
     /**
-     * 登陆成功后为本应用用户绑定JPush的别名和标签，别名为账号类型+"-"+id，标签为账号类型
+     * 让登陆加载对话框消失
      */
-    private void setJPushAliasAndTag(String type, String id) {
-        HashSet<String> tags = new HashSet<>();
-        tags.add(type);
-        JPushInterface.setAliasAndTags(MyApp.getAppContext(), type + "+" + id, tags, new TagAliasCallback() {
+    private void dismissLoginDialog() {
+        runOnUiThread(new Runnable() {
             @Override
-            public void gotResult(int i, String s, Set<String> set) {
-                if (i != 0) {
-                    MyLog.i("JPush", "set alias and tag error");
-                }
+            public void run() {
+                ll_loading.setVisibility(View.GONE);
+            }
+        });
+    }
+
+    /**
+     * 登陆成功后为本应用用户绑定JPush的别名和标签，别名为账号类型+"-"+id，标签为账号类型，设置成功以后缓存登陆信息，跳转到主页
+     */
+    private void setJPushAliasAndTag(final String type, final String id) {
+        final HashSet<String> tags = new HashSet<>();
+        tags.add(type);
+        ThreadUtils.runOnBackThread(new Runnable() {
+            @Override
+            public void run() {
+                JPushInterface.setAliasAndTags(MyApp.getAppContext(), type + "+" + id, tags, new TagAliasCallback() {
+                    @Override
+                    public void gotResult(int i, String s, Set<String> set) {
+                        if (i != 0) {
+                            MyLog.i("JPush", "set alias and tag error");
+                            dismissLoginDialog();
+                            MyToast.show(getString(R.string.connet_error));
+                        }else{
+                            saveAccountInfo(type, id);
+                            goToHome(type);
+                        }
+                    }
+                });
             }
         });
     }

@@ -5,7 +5,7 @@
     android:layout_height="wrap_content"
     android:layout_centerInParent="true"
     android:layout_gravity="center"
-    android:background="@color/colorAccent"
+    android:background="@color/bg_grey_aaa"
     android:gravity="center"
     android:orientation="vertical"
     android:padding="10dp">

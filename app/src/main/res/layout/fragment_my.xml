@@ -12,112 +12,101 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
         android:background="@color/grey"
-        android:padding="5dp">
+        android:orientation="vertical"
+        android:padding="8dp">
 
         <RelativeLayout
-            android:id="@+id/rl_account_center"
+            android:id="@+id/rl_account_info"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="5dp"
-            android:background="@drawable/selector_bt_bg_green"
+            android:layout_marginBottom="2dp"
+            android:background="@color/white"
             android:padding="5dp">
+
+            <ImageView
+                android:id="@+id/iv_icon"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_centerVertical="true"
+                android:src="@mipmap/data" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:layout_marginLeft="6dp"
-                android:text="@string/my_account"
+                android:layout_marginLeft="16dp"
+                android:layout_toRightOf="@id/iv_icon"
+                android:text="@string/my_account_info"
                 android:textColor="@color/black"
                 android:textSize="18dp" />
 
             <ImageView
-                android:id="@+id/iv_account_arrow"
                 android:layout_width="32dp"
                 android:layout_height="32dp"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
                 android:layout_marginRight="6dp"
                 android:scaleType="centerInside"
-                android:src="@drawable/selector_arrow" />
+                android:src="@mipmap/next" />
         </RelativeLayout>
 
         <RelativeLayout
-            android:id="@+id/rl_account_info"
-            android:layout_width="match_parent"
+            android:id="@+id/rl_booking"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="5dp">
+            android:layout_marginBottom="2dp"
+            android:background="@color/white"
+            android:padding="5dp">
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/shape_transparent_grey"
-                android:orientation="vertical"
-                android:padding="5dp">
+            <ImageView
+                android:id="@+id/iv_booking"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_centerVertical="true"
+                android:src="@mipmap/search" />
 
-                <TextView
-                    android:id="@+id/tv_name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="2dp"
-                    android:text="@string/name"
-                    android:textSize="14dp" />
-
-                <TextView
-                    android:id="@+id/tv_sex"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="2dp"
-                    android:text="@string/sex"
-                    android:textSize="14dp" />
-
-                <TextView
-                    android:id="@+id/tv_age"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="2dp"
-                    android:text="@string/age"
-                    android:textSize="14dp" />
-
-                <TextView
-                    android:id="@+id/tv_phone"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="2dp"
-                    android:text="@string/phone"
-                    android:textSize="14dp" />
-
-            </LinearLayout>
-
-            <Button
-                android:id="@+id/bt_modify"
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="16dp"
+                android:layout_toRightOf="@id/iv_booking"
+                android:text="@string/booking"
+                android:textColor="@color/black"
+                android:textSize="18dp" />
+
+            <ImageView
+                android:layout_width="32dp"
+                android:layout_height="32dp"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
-                android:layout_gravity="center_horizontal"
-                android:background="@drawable/selector_green_shadow"
-                android:gravity="center"
-                android:padding="10dp"
-                android:text="@string/modify"
-                android:textColor="@color/black" />
+                android:layout_marginRight="6dp"
+                android:scaleType="centerInside"
+                android:src="@mipmap/next" />
         </RelativeLayout>
 
         <RelativeLayout
             android:id="@+id/rl_appointment_history"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="5dp"
-            android:background="@drawable/selector_bt_bg_green"
+            android:layout_marginBottom="2dp"
+            android:background="@color/white"
             android:padding="5dp">
+
+            <ImageView
+                android:id="@+id/iv_list"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_centerVertical="true"
+                android:src="@mipmap/list" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:layout_marginLeft="6dp"
+                android:layout_marginLeft="16dp"
+                android:layout_toRightOf="@id/iv_list"
                 android:text="@string/my_appointment"
                 android:textColor="@color/black"
                 android:textSize="18dp" />
@@ -130,7 +119,7 @@
                 android:layout_centerVertical="true"
                 android:layout_marginRight="6dp"
                 android:scaleType="centerInside"
-                android:src="@drawable/selector_arrow" />
+                android:src="@mipmap/arrow_down" />
         </RelativeLayout>
 
         <com.yimeng.hyzc.view.PullDownToRefreshListView
@@ -138,11 +127,10 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:divider="@null"
-            android:dividerHeight="5dp"
             android:cacheColorHint="@android:color/transparent"
+            android:divider="@null"
+            android:dividerHeight="1dp"
             android:listSelector="@android:color/transparent"></com.yimeng.hyzc.view.PullDownToRefreshListView>
-
     </LinearLayout>
 
 </LinearLayout>

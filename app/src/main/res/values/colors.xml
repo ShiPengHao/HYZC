@@ -6,10 +6,11 @@
     <color name="colorStatusBar">#0a7c62</color>
     <color name="grey">#ebebeb</color>
     <color name="black">#000</color>
-    <color name="button_normal_green">#7cb472</color>
-    <color name="button_pressed_green">#83af7b</color>
     <color name="white">#fff</color>
     <color name="grey_line">#ddd</color>
     <color name="black_item_title">#333</color>
     <color name="black_item_content">#666</color>
+    <color name="bg_light_green">#0aa880</color>
+    <color name="bt_yellow">#fb7e00</color>
+    <color name="bg_grey_aaa">#aaa</color>
 </resources>

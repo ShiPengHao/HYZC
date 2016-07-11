@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/grey"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            style="@style/TextTitle"
+            android:text="@string/doctor_detail" />
+
+        <ImageView
+            android:id="@+id/iv_back"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="20dp"
+            android:src="@mipmap/back" />
+    </RelativeLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/bg_light_green"
+                android:padding="8dp">
+
+                <com.yimeng.hyzc.view.CircleImageView
+                    android:id="@+id/iv_avatar"
+                    android:layout_width="96dp"
+                    android:layout_height="96dp"
+                    android:layout_gravity="center_horizontal"
+                    android:src="@mipmap/ic_launcher"
+                    app:civ_border_color="@color/colorAccent"
+                    app:civ_border_width="2dp" />
+            </FrameLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp">
+
+                <TextView
+                    android:id="@+id/tv_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/item_width"
+                    android:gravity="center_vertical"
+                    android:padding="2dp"
+                    android:text="@string/name"
+                    android:textColor="@color/black_item_content"
+                    android:textSize="18dp" />
+
+                <include layout="@layout/layout_devider" />
+
+                <TextView
+                    android:id="@+id/tv_sex"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/item_width"
+                    android:gravity="center_vertical"
+                    android:padding="2dp"
+                    android:text="@string/sex"
+                    android:textColor="@color/black_item_content"
+                    android:textSize="18dp" />
+
+                <include layout="@layout/layout_devider" />
+
+                <TextView
+                    android:id="@+id/tv_age"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/item_width"
+                    android:gravity="center_vertical"
+                    android:padding="2dp"
+                    android:text="@string/age"
+                    android:textColor="@color/black_item_content"
+                    android:textSize="18dp" />
+
+                <include layout="@layout/layout_devider" />
+
+                <TextView
+                    android:id="@+id/tv_email"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/item_width"
+                    android:gravity="center_vertical"
+                    android:padding="2dp"
+                    android:text="@string/email"
+                    android:textColor="@color/black_item_content"
+                    android:textSize="18dp" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="3dp"
+                android:background="@color/grey_line" />
+
+            <TextView
+                android:id="@+id/tv_remark"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:padding="2dp"
+                android:text="@string/doctor_introduce"
+                android:textColor="@color/black_item_content"
+                android:textSize="18dp" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="3dp"
+                android:background="@color/grey_line" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:padding="8dp">
+
+                <TextView
+                    android:id="@+id/tv_appointmentTime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:layout_toLeftOf="@+id/bt_choose_time"
+                    android:gravity="center_vertical"
+                    android:text="@string/appointment_time"
+                    android:textColor="@color/black_item_content"
+                    android:textSize="18dp" />
+
+                <Button
+                    android:id="@+id/bt_choose_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="32dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:background="@drawable/selector_bt_bg_green"
+                    android:gravity="center"
+                    android:padding="6dp"
+                    android:text="@string/choose_time"
+                    android:textColor="@color/white" />
+            </RelativeLayout>
+
+            <include layout="@layout/layout_devider" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:padding="2dp"
+                android:text="@string/disease_description"
+                android:textColor="@color/black_item_content"
+                android:textSize="18dp" />
+
+            <EditText
+                android:id="@+id/et_disease_description"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:hint="@string/disease_description_hint"
+                android:textColor="@color/black_item_content"
+                android:textSize="16dp" />
+
+        </LinearLayout>
+    </ScrollView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingTop="10dp">
+
+        <Button
+            android:id="@+id/bt_appoint"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@color/colorAccent"
+            android:gravity="center"
+            android:text="@string/appoint_now"
+            android:textColor="@color/white" />
+
+        <Button
+            android:id="@+id/bt_chat"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@color/bt_yellow"
+            android:gravity="center"
+            android:text="@string/chat_online"
+            android:textColor="@color/white" />
+
+        <Button
+            android:id="@+id/bt_back"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@color/bg_grey_aaa"
+            android:gravity="center"
+            android:text="@string/back"
+            android:textColor="@color/white" />
+    </LinearLayout>
+
+</LinearLayout>

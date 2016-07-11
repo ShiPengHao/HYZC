@@ -131,6 +131,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
     private CheckBox cb_work;
     private CheckBox cb_home;
     private CheckBox cb_farm;
+    private ImageView iv_back;
 
 
     @Override
@@ -177,6 +178,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
         iv_organization_cert = (ImageView) findViewById(R.id.iv_organization_cert);
         iv_license_cert = (ImageView) findViewById(R.id.iv_license_cert);
         iv_permit_cert = (ImageView) findViewById(R.id.iv_permit_cert);
+        iv_back = (ImageView) findViewById(R.id.iv_back);
 
         ll_cert_info = (LinearLayout) findViewById(R.id.ll_cert_info);
         ll_addressDetail = (LinearLayout) findViewById(R.id.ll_address_detail);
@@ -211,6 +213,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
         bt_license_cert.setOnClickListener(this);
         bt_permit_cert.setOnClickListener(this);
         bt_float_register.setOnClickListener(this);
+        iv_back.setOnClickListener(this);
 
 
         provinceAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, province);
@@ -576,6 +579,9 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
             case R.id.bt_permit_cert:
                 getGalleryImage(REQUEST_GALLERY_FOR_PHARMACY_PERMIT_CERT);
                 break;
+            case R.id.iv_back:
+                finish();
+                break;
         }
     }
 
@@ -797,7 +803,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
 
         intent.putExtra("outputFormat", "JPEG");// 图片格式
         intent.putExtra("noFaceDetection", true);// 取消人脸识别
-        intent.putExtra("return-data", true);
+        intent.putExtra("back-data", true);
         // 开启一个带有返回值的Activity，请求码为PHOTO_REQUEST_CUT
         startActivityForResult(intent, PHOTO_REQUEST_CUT);
     }
@@ -883,13 +889,23 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
                 values.put("area", area.get(spinner_area.getSelectedItemPosition()).code);
                 values.put("remark", et_remark.getText().toString().trim());// 备注无需校验
                 StringBuilder sb = new StringBuilder();
+                boolean hasChecked = false;
                 if (cb_farm.isChecked()) {
                     sb.append(cb_farm.getText().toString().trim());
+                    hasChecked = true;
                 }
                 if (cb_home.isChecked()) {
+                    if (hasChecked) {
+                        sb.append(",");
+                    } else {
+                        hasChecked = true;
+                    }
                     sb.append(cb_home.getText().toString().trim());
                 }
                 if (cb_work.isChecked()) {
+                    if (hasChecked) {
+                        sb.append(",");
+                    }
                     sb.append(cb_work.getText().toString().trim());
                 }
                 values.put("flag", sb.toString());

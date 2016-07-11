@@ -9,4 +9,5 @@
     <dimen name="address_text_width">40dp</dimen>
     <dimen name="address_text_size">20dp</dimen>
     <dimen name="finger_width">48dp</dimen>
+    <dimen name="item_width">36dp</dimen>
 </resources>

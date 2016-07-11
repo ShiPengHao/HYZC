@@ -52,8 +52,8 @@
     <string name="chengzhen">城镇</string>
     <string name="nonghe">农合</string>
     <string name="pharmacy_flag">药店标志</string>
-    <string name="booking">查询预约</string>
-    <string name="pick_doctor">请选择合适的地区、医院、科室、医生：</string>
+    <string name="booking">开始预约</string>
+    <string name="pick_doctor">请选择期望就诊的医生</string>
     <string name="introduce_page">引导页面</string>
     <string name="splash_page">闪屏界面</string>
     <string name="skip_introduce">跳过引导，马上体验</string>
@@ -67,7 +67,7 @@
     <string name="appoint_now">马上预约</string>
     <string name="chat_online">在线咨询</string>
     <string name="back">返回</string>
-    <string name="my_account">我的账号</string>
+    <string name="my_account_info">个人资料</string>
     <string name="modify">修改</string>
     <string name="fun_undo">功能正在测试，敬请期待！</string>
     <string name="appointment_id">预约单号</string>
@@ -85,4 +85,7 @@
     <string name="has_response">已回复</string>
     <string name="appointment_add_time">预约提交时间</string>
     <string name="once_more_to_quit">再按一次退出应用</string>
+    <string name="doctor_detail">医生详情</string>
+    <string name="disease_description_hint">请输入您的病情和治疗历史</string>
+    <string name="choose_time">选择预约时间</string>
 </resources>

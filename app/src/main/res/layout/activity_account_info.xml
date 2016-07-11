@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/grey"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            style="@style/TextTitle"
+            android:text="@string/my_account_info" />
+
+        <ImageView
+            android:id="@+id/iv_back"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="20dp"
+            android:src="@mipmap/back" />
+    </RelativeLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/bg_light_green"
+                android:padding="8dp">
+
+                <com.yimeng.hyzc.view.CircleImageView
+                    android:id="@+id/iv_avatar"
+                    android:layout_width="96dp"
+                    android:layout_height="96dp"
+                    android:layout_gravity="center_horizontal"
+                    android:src="@mipmap/ic_launcher"
+                    app:civ_border_color="@color/colorAccent"
+                    app:civ_border_width="2dp" />
+            </FrameLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp">
+
+                <TextView
+                    android:id="@+id/tv_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/item_width"
+                    android:gravity="center_vertical"
+                    android:padding="2dp"
+                    android:text="@string/name"
+                    android:textColor="@color/black_item_content"
+                    android:textSize="18dp" />
+
+                <include layout="@layout/layout_devider" />
+
+                <TextView
+                    android:id="@+id/tv_sex"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/item_width"
+                    android:gravity="center_vertical"
+                    android:padding="2dp"
+                    android:text="@string/sex"
+                    android:textColor="@color/black_item_content"
+                    android:textSize="18dp" />
+
+                <include layout="@layout/layout_devider" />
+
+                <TextView
+                    android:id="@+id/tv_age"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/item_width"
+                    android:gravity="center_vertical"
+                    android:padding="2dp"
+                    android:text="@string/age"
+                    android:textColor="@color/black_item_content"
+                    android:textSize="18dp" />
+
+                <include layout="@layout/layout_devider" />
+
+                <TextView
+                    android:id="@+id/tv_email"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/item_width"
+                    android:gravity="center_vertical"
+                    android:padding="2dp"
+                    android:text="@string/email"
+                    android:textColor="@color/black_item_content"
+                    android:textSize="18dp" />
+            </LinearLayout>
+
+            <include layout="@layout/layout_devider" />
+
+        </LinearLayout>
+    </ScrollView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingTop="10dp">
+
+        <Button
+            android:id="@+id/bt_appoint"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@color/colorAccent"
+            android:gravity="center"
+            android:text="@string/appoint_now"
+            android:textColor="@color/white" />
+
+        <Button
+            android:id="@+id/bt_chat"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@color/bt_yellow"
+            android:gravity="center"
+            android:text="@string/chat_online"
+            android:textColor="@color/white" />
+
+        <Button
+            android:id="@+id/bt_back"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@color/bg_grey_aaa"
+            android:gravity="center"
+            android:text="@string/back"
+            android:textColor="@color/white" />
+    </LinearLayout>
+
+</LinearLayout>

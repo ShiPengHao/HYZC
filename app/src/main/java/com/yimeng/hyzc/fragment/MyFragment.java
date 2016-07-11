@@ -1,6 +1,7 @@
 package com.yimeng.hyzc.fragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
@@ -18,8 +19,11 @@ import android.widget.TextView;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.yimeng.hyzc.R;
+import com.yimeng.hyzc.activity.AccountInfoActivity;
+import com.yimeng.hyzc.activity.BookingActivity;
 import com.yimeng.hyzc.adapter.AppointmentAdapter;
 import com.yimeng.hyzc.bean.AppointmentBean;
+import com.yimeng.hyzc.utils.BitmapUtils;
 import com.yimeng.hyzc.utils.DensityUtil;
 import com.yimeng.hyzc.utils.MyApp;
 import com.yimeng.hyzc.utils.MyConstant;
@@ -42,19 +46,13 @@ import java.util.Map;
  */
 public class MyFragment extends BaseFragment implements View.OnClickListener, AdapterView.OnItemClickListener, PullDownToRefreshListView.OnRefreshListener {
 
-    private RelativeLayout rl_account_center;
     private RelativeLayout rl_appointment_history;
+    private RelativeLayout rl_booking;
     private ImageView iv_appoint_arrow;
     private PullDownToRefreshListView listView;
     private boolean listViewToogle;
-    private boolean accountToogle;
     private RelativeLayout rl_account_info;
-    private ImageView iv_account_arrow;
-    private Button bt_modify;
-    private TextView tv_name;
-    private TextView tv_sex;
-    private TextView tv_age;
-    private TextView tv_phone;
+
 
     private List<AppointmentBean> data = new ArrayList<>();
     private AppointmentAdapter appointmentAdapter;
@@ -78,6 +76,7 @@ public class MyFragment extends BaseFragment implements View.OnClickListener, Ad
     private String patientId;
     private HashMap<String, Object> params = new HashMap<>();
     private TextView tv_appointment_add_time;
+    private ImageView iv_back;
 
     @Override
     protected int getLayoutResId() {
@@ -86,32 +85,24 @@ public class MyFragment extends BaseFragment implements View.OnClickListener, Ad
 
     @Override
     protected void initView(View view) {
-        rl_account_center = (RelativeLayout) view.findViewById(R.id.rl_account_center);
         rl_account_info = (RelativeLayout) view.findViewById(R.id.rl_account_info);
         rl_appointment_history = (RelativeLayout) view.findViewById(R.id.rl_appointment_history);
+        rl_booking = (RelativeLayout) view.findViewById(R.id.rl_booking);
 
         listView = (PullDownToRefreshListView) view.findViewById(R.id.lv);
         iv_appoint_arrow = (ImageView) view.findViewById(R.id.iv_appoint_arrow);
-        iv_account_arrow = (ImageView) view.findViewById(R.id.iv_account_arrow);
 
-        bt_modify = (Button) view.findViewById(R.id.bt_modify);
-
-        tv_name = (TextView) view.findViewById(R.id.tv_name);
-        tv_sex = (TextView) view.findViewById(R.id.tv_sex);
-        tv_age = (TextView) view.findViewById(R.id.tv_age);
-        tv_phone = (TextView) view.findViewById(R.id.tv_phone);
         tv_title = (TextView) view.findViewById(R.id.tv_title);
     }
 
     @Override
     protected void setListener() {
         listViewToogle = true;
-        accountToogle = false;
-        switchAccountDisplay();
         switchAppointmentListDisplay();
-        rl_account_center.setOnClickListener(this);
+        rl_account_info.setOnClickListener(this);
         rl_appointment_history.setOnClickListener(this);
-        bt_modify.setOnClickListener(this);
+        rl_booking.setOnClickListener(this);
+
         appointmentAdapter = new AppointmentAdapter(data);
         listView.setAdapter(appointmentAdapter);
         listView.setOnItemClickListener(this);
@@ -206,30 +197,21 @@ public class MyFragment extends BaseFragment implements View.OnClickListener, Ad
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.rl_account_center:
-                switchAccountDisplay();
-                break;
             case R.id.rl_appointment_history:
                 switchAppointmentListDisplay();
                 break;
-            case R.id.bt_modify:
-                MyToast.show(getString(R.string.fun_undo));
+            case R.id.rl_account_info:
+                startActivity(new Intent(getActivity(), AccountInfoActivity.class));
+                break;
+            case R.id.iv_back:
+                dismissPopWindow();
+                break;
+            case R.id.rl_booking:
+                startActivity(new Intent(getActivity(), BookingActivity.class));
                 break;
         }
     }
 
-    /**
-     * 切换账户信息的展示与否
-     */
-    private void switchAccountDisplay() {
-        if (accountToogle) {
-            rl_account_info.setVisibility(View.VISIBLE);
-        } else {
-            rl_account_info.setVisibility(View.GONE);
-        }
-        accountToogle = !accountToogle;
-        iv_account_arrow.setEnabled(accountToogle);
-    }
 
     /**
      * 切换预约历史的展示与否
@@ -237,11 +219,13 @@ public class MyFragment extends BaseFragment implements View.OnClickListener, Ad
     private void switchAppointmentListDisplay() {
         if (listViewToogle) {
             listView.setVisibility(View.VISIBLE);
+            iv_appoint_arrow.setImageBitmap(BitmapUtils.getResImg(getActivity(),R.mipmap.next));
         } else {
             listView.setVisibility(View.INVISIBLE);
+            iv_appoint_arrow.setImageBitmap(BitmapUtils.getResImg(getActivity(),R.mipmap.arrow_down));
         }
         listViewToogle = !listViewToogle;
-        iv_appoint_arrow.setEnabled(listViewToogle);
+        
     }
 
 
@@ -260,7 +244,7 @@ public class MyFragment extends BaseFragment implements View.OnClickListener, Ad
             @Override
             protected String doInBackground(Object... params) {
                 if (params != null) {
-                    return WebServiceUtils.callWebService(MyConstant.WEB_SERVICE_URL, MyConstant.NAMESPACE, "load_patient_detail",
+                    return WebServiceUtils.callWebService(MyConstant.WEB_SERVICE_URL, MyConstant.NAMESPACE, "Load_patient_detail",
                             (Map<String, Object>) params[0]);
                 } else {
                     return null;
@@ -333,6 +317,8 @@ public class MyFragment extends BaseFragment implements View.OnClickListener, Ad
             tv_appointStatus = (TextView) popView.findViewById(R.id.tv_appointStatus);
             tv_response_way = (TextView) popView.findViewById(R.id.tv_response_way);
             tv_appointment_add_time = (TextView) popView.findViewById(R.id.tv_appointment_add_time);
+            iv_back = (ImageView) popView.findViewById(R.id.iv_back);
+            iv_back.setOnClickListener(this);
         }
     }
 

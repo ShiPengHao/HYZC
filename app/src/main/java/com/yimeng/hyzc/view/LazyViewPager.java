@@ -889,7 +889,7 @@ public class LazyViewPager extends ViewGroup {
             final int scrollPos = (int) ((oldScrollItem + scrollOffset) * widthWithMargin);
             scrollTo(scrollPos, getScrollY());
             if (!mScroller.isFinished()) {
-                // We now return to your regularly scheduled scroll, already in progress.
+                // We now back to your regularly scheduled scroll, already in progress.
                 final int newDuration = mScroller.getDuration() - mScroller.timePassed();
                 mScroller.startScroll(scrollPos, 0, mCurItem * widthWithMargin, 0, newDuration);
             }
@@ -995,7 +995,7 @@ public class LazyViewPager extends ViewGroup {
     public boolean onInterceptTouchEvent(MotionEvent ev) {
         /*
          * This method JUST determines whether we want to intercept the motion.
-         * If we return true, onMotionEvent will be called and we do the actual
+         * If we back true, onMotionEvent will be called and we do the actual
          * scrolling there.
          */
 
@@ -1329,7 +1329,7 @@ public class LazyViewPager extends ViewGroup {
      * {@link #endFakeDrag()} to complete the fake drag and fling as necessary.
      *
      * <p>During a fake drag the ViewPager will ignore all touch events. If a real drag
-     * is already in progress, this method will return false.
+     * is already in progress, this method will back false.
      *
      * @return true if the fake drag began successfully, false if it could not be started.
      *

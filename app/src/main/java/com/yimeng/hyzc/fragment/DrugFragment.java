@@ -81,10 +81,10 @@ public class DrugFragment extends BaseFragment implements AdapterView.OnItemClic
         listView.setOnItemClickListener(this);
         clearEditText.addTextChangedListener(this);
         quickIndexBar.setOnLetterChangeListener(this);
-        handler = new Handler(){
+        handler = new Handler() {
             @Override
             public void handleMessage(Message msg) {
-                switch (msg.what){
+                switch (msg.what) {
                     case WAHT_FLUSH_DATA:
                         if (!isFlushing) {
                             ll_loading.setVisibility(View.VISIBLE);
@@ -98,7 +98,7 @@ public class DrugFragment extends BaseFragment implements AdapterView.OnItemClic
             @Override
             public void onChange(boolean selfChange) {
                 handler.removeMessages(WAHT_FLUSH_DATA);
-                handler.sendEmptyMessageDelayed(WAHT_FLUSH_DATA,2000);
+                handler.sendEmptyMessageDelayed(WAHT_FLUSH_DATA, 2000);
             }
         });
     }
@@ -181,10 +181,8 @@ public class DrugFragment extends BaseFragment implements AdapterView.OnItemClic
         if (json == null) {
             return;
         }
-        Gson gson = new Gson();
-        Type type = new TypeToken<ArrayList<DrugTypeBean>>() {
-        }.getType();
-        ArrayList<DrugTypeBean> beans = gson.fromJson(json, type);
+        ArrayList<DrugTypeBean> beans = new Gson().fromJson(json, new TypeToken<ArrayList<DrugTypeBean>>() {
+        }.getType());
 //        SystemClock.sleep(3000);
         if (!datas.equals(beans)) {
             for (int i = 0; i < beans.size(); i++) {
