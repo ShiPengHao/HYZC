@@ -371,7 +371,7 @@ public class MyFragment extends BaseFragment implements View.OnClickListener, Ad
             tv_appointStatus.setTextColor(Color.RED);
         } else {
             tv_appointStatus.setText(String.format("%s：%s", getString(R.string.appointment_status), getString(R.string.has_response)));
-            tv_appointStatus.setTextColor(Color.BLUE);
+            tv_appointStatus.setTextColor(getResources().getColor(R.color.colorAccent));
         }
     }
 

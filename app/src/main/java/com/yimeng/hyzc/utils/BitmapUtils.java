@@ -156,7 +156,7 @@ public class BitmapUtils {
      * 从资源中获取Bitmap
      *
      * @param context 上下文
-     * @param resId  资源id R.drawable.icon(eg.)
+     * @param resId  资源id R.drawable.IconUrl(eg.)
      * @return bitmap对象
      */
     public Bitmap getBitmapFromResources(Context context, int resId) {

@@ -5,12 +5,16 @@ import com.yimeng.hyzc.utils.PinYinUtils;
 import java.io.Serializable;
 
 /**
- * Created by 依萌 on 2016/6/17.
+ * 药品类型数据bean
  */
 public class DrugTypeBean implements Comparable<DrugTypeBean>, Serializable {
-    public String name;
-    public String icon;
+    public String CnName;
+    public String IconUrl;
     public String TypeCode;
+    public String EnName;
+    public String ParentCode;
+    public String IconClass;
+    public int Position;
 
     @Override
     public int compareTo(DrugTypeBean another) {
@@ -20,13 +24,13 @@ public class DrugTypeBean implements Comparable<DrugTypeBean>, Serializable {
     @Override
     public String toString() {
         return "DrugTypeBean{" +
-                "name='" + name + '\'' +
-                ", icon='" + icon + '\'' +
+                "CnName='" + CnName + '\'' +
+                ", IconUrl='" + IconUrl + '\'' +
                 ", TypeCode='" + TypeCode + '\'' +
                 '}';
     }
 
     private String getPinYin() {
-        return PinYinUtils.getPinYin(name);
+        return PinYinUtils.getPinYin(CnName);
     }
 }

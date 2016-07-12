@@ -2,17 +2,13 @@ package com.yimeng.hyzc.fragment;
 
 import android.database.ContentObserver;
 import android.database.Cursor;
-import android.os.Bundle;
+import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.Message;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -27,21 +23,17 @@ import com.yimeng.hyzc.utils.MyConstant;
 import com.yimeng.hyzc.utils.MyToast;
 import com.yimeng.hyzc.utils.PinYinUtils;
 import com.yimeng.hyzc.utils.ThreadUtils;
-import com.yimeng.hyzc.utils.UiUtils;
+import com.yimeng.hyzc.utils.WebServiceUtils;
 import com.yimeng.hyzc.view.ClearEditText;
 import com.yimeng.hyzc.view.QuickIndexBar;
-import com.zhy.http.okhttp.OkHttpUtils;
-import com.zhy.http.okhttp.callback.Callback;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
-
-import okhttp3.Call;
-import okhttp3.Response;
 
 /**
  * 药品类型列表的fragment
@@ -59,6 +51,7 @@ public class DrugFragment extends BaseFragment implements AdapterView.OnItemClic
     private LinearLayout ll_loading;
     private Handler handler;
     private static final int WAHT_FLUSH_DATA = 1;
+    private HashMap<String,Object> paramsMap = new HashMap<>();
 
     @Override
     protected int getLayoutResId() {
@@ -108,33 +101,8 @@ public class DrugFragment extends BaseFragment implements AdapterView.OnItemClic
      */
     protected void initData() {
         flushData();
-        OkHttpUtils.get().url(MyConstant.URL_DRUGTYPE).build().execute(new Callback() {
-            @Override
-            public Object parseNetworkResponse(Response response, int i) throws Exception {
-                String s = response.body().string();
-                if (TextUtils.isEmpty(s)) {
-                    return null;
-                }
-                JSONObject object = new JSONObject(s);
-                if (object.optInt("total") > 0) {
-                    parseJson(object.optString("rows"));
-                }
-                return null;
-            }
-
-            @Override
-            public void onError(Call call, Exception e, int i) {
-                e.printStackTrace();
-            }
-
-            @Override
-            public void onResponse(Object o, int i) {
-
-            }
-        });
-
+        requestDrugType();
     }
-
 
     /**
      * 从本地数据库读取数据后刷新页面
@@ -149,8 +117,8 @@ public class DrugFragment extends BaseFragment implements AdapterView.OnItemClic
                 datas.clear();
                 while (cursor.moveToNext()) {
                     DrugTypeBean bean = new DrugTypeBean();
-                    bean.name = cursor.getString(DrugTypeDAO.ID_NAME);
-                    bean.icon = cursor.getString(DrugTypeDAO.ID_ICON);
+                    bean.CnName = cursor.getString(DrugTypeDAO.ID_NAME);
+                    bean.IconUrl = cursor.getString(DrugTypeDAO.ID_ICON);
                     bean.TypeCode = cursor.getString(DrugTypeDAO.ID_CODE);
                     datas.add(bean);
                 }
@@ -173,21 +141,85 @@ public class DrugFragment extends BaseFragment implements AdapterView.OnItemClic
     }
 
     /**
-     * 解析json
-     *
-     * @param json json数据
+     * 请求药品分类
      */
-    private void parseJson(String json) {
+    private void requestDrugType() {
+        new AsyncTask<Object, Object, String>() {
+            @Override
+            protected String doInBackground(Object... params) {
+                String s = WebServiceUtils.callWebService(MyConstant.WEB_SERVICE_URL, MyConstant.NAMESPACE, (String) params[0],
+                        null);
+                if (TextUtils.isEmpty(s)) {
+                    return null;
+                }
+                try {
+                    JSONObject object = new JSONObject(s);
+                    parseDrugTypeJson(object.optString("data"));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                return null;
+            }
+        }.execute("Load_Classify");
+    }
+
+
+    /**
+     * 请求药品分类
+     */
+    private void requestDrugByType(String typeCode) {
+        paramsMap.clear();
+        paramsMap.put("TypeCode",typeCode);
+        new AsyncTask<Object, Object, String>() {
+            @Override
+            protected String doInBackground(Object... params) {
+                String s = WebServiceUtils.callWebService(MyConstant.WEB_SERVICE_URL, MyConstant.NAMESPACE, (String) params[0],
+                        paramsMap);
+                if (TextUtils.isEmpty(s)) {
+                    return null;
+                }
+                try {
+                    JSONObject object = new JSONObject(s);
+                    if (object.optInt("total") > 0) {
+                        parseDrugJson(object.optString("data"));
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                return null;
+            }
+        }.execute("Load_Medicine");
+    }
+
+    /**
+     * 解析药品json数据
+     *
+     * @param json 药品json数据
+     */
+    private void parseDrugJson(String json) {
+//        if (json == null) {
+//            return;
+//        }
+//        ArrayList<DrugTypeBean> beans = new Gson().fromJson(json, new TypeToken<ArrayList<DrugTypeBean>>() {
+//        }.getType());
+//        for (int i = 0; i < beans.size(); i++) {
+//            DrugTypeDAO.getInstance().update(beans.get(i));
+//        }
+    }
+
+    /**
+     * 解析药品类型json数据
+     *
+     * @param json 药品类型json数据
+     */
+    private void parseDrugTypeJson(String json) {
         if (json == null) {
             return;
         }
         ArrayList<DrugTypeBean> beans = new Gson().fromJson(json, new TypeToken<ArrayList<DrugTypeBean>>() {
         }.getType());
-//        SystemClock.sleep(3000);
-        if (!datas.equals(beans)) {
-            for (int i = 0; i < beans.size(); i++) {
-                DrugTypeDAO.getInstance().update(beans.get(i));
-            }
+        for (int i = 0; i < beans.size(); i++) {
+            DrugTypeDAO.getInstance().update(beans.get(i));
         }
     }
 
@@ -199,7 +231,7 @@ public class DrugFragment extends BaseFragment implements AdapterView.OnItemClic
     private void scrollListTo(CharSequence s) {
         String pinYin;
         for (int i = 0; i < datas.size(); i++) {
-            pinYin = PinYinUtils.getPinYin(datas.get(i).name);
+            pinYin = PinYinUtils.getPinYin(datas.get(i).CnName);
             if (pinYin.startsWith(String.valueOf(s).toUpperCase())) {
                 listView.setSelection(i + listView.getHeaderViewsCount());
                 break;
@@ -236,5 +268,6 @@ public class DrugFragment extends BaseFragment implements AdapterView.OnItemClic
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         DrugTypeBean bean = datas.get(position - listView.getHeaderViewsCount());
         MyToast.show(bean.toString());
+        requestDrugByType(bean.TypeCode);
     }
 }

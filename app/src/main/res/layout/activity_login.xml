@@ -75,8 +75,9 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:background="@color/colorAccent"
+                android:background="@drawable/selector_bt_bg_green"
                 android:gravity="center"
+                android:textColor="@color/white"
                 android:text="@string/login" />
 
             <Button
@@ -85,8 +86,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
                 android:layout_weight="1"
-                android:background="@color/bt_yellow"
+                android:background="@drawable/selector_bt_bg_yellow"
                 android:gravity="center"
+                android:textColor="@color/white"
                 android:text="@string/register" />
         </LinearLayout>
     </LinearLayout>

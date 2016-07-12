@@ -29,7 +29,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * 医生详情界面
+ * 医生详情界面，展示医生详情介绍，提交病人预约申请
  */
 public class DoctorDetailActivity extends BaseActivity implements View.OnClickListener {
 

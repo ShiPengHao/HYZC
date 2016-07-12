@@ -19,8 +19,8 @@ public class HYZCHelper extends SQLiteOpenHelper {
         db.execSQL("create table if not exists DrugType (" +
                 "_id integer primary key autoincrement, " +
                 "code varchar(16), " +
-                "icon varchar(16), " +
-                "name varchar(16) " +
+                "IconUrl varchar(16), " +
+                "CnName varchar(16) " +
                 ");");
     }
 

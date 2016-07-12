@@ -57,18 +57,18 @@ public class DrugTypeAdapter extends BaseAdapter {
 
         DrugTypeBean bean = datas.get(position);
 
-        String icon = bean.icon;
+        String icon = bean.IconUrl;
         if (!TextUtils.isEmpty(icon)) {
             Picasso.with(MyApp.getAppContext()).load(MyConstant.URL_BASE + icon).into(holder.iv);
         } else {
-            holder.iv.setImageBitmap(BitmapFactory.decodeResource(MyApp.getAppContext().getResources(), R.mipmap.ic_launcher));
+            holder.iv.setImageBitmap(BitmapFactory.decodeResource(MyApp.getAppContext().getResources(), R.mipmap.pill));
         }
 
-        holder.tv_drug.setText(bean.name);
+        holder.tv_drug.setText(bean.CnName);
 
-        char charNow = PinYinUtils.getPinYin(bean.name).charAt(0);
+        char charNow = PinYinUtils.getPinYin(bean.CnName).charAt(0);
 
-        if (position != 0 && PinYinUtils.getPinYin(datas.get(position - 1).name).charAt(0) == charNow) {
+        if (position != 0 && PinYinUtils.getPinYin(datas.get(position - 1).CnName).charAt(0) == charNow) {
             holder.tv_pinyin.setVisibility(View.GONE);
         } else {
             holder.tv_pinyin.setVisibility(View.VISIBLE);

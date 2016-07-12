@@ -55,7 +55,7 @@ public class WebServiceUtils {
         try {
             final SoapPrimitive result = (SoapPrimitive) envelope.getResponse();
             if (result != null) {
-                MyLog.i("----收到的回复----", result.toString());
+                MyLog.i("webservice", result.toString());
                 return result.toString();
             }
 

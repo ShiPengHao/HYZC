@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/grey"
+    android:background="@color/white"
     android:orientation="vertical">
 
     <RelativeLayout
@@ -30,165 +30,205 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp">
+            android:orientation="vertical">
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="6dp"
+                android:background="@color/grey"
+                android:drawableLeft="@mipmap/appoint"
+                android:drawablePadding="4dp"
+                android:padding="6dp"
                 android:text="@string/appointment_info"
                 android:textColor="@color/black"
                 android:textSize="18dp" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="5dp"
-                android:background="@drawable/shape_transparent_grey"
-                android:orientation="vertical"
-                android:padding="5dp">
-
-                <TextView
-                    android:id="@+id/tv_appointmentId"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="2dp"
-                    android:text="@string/appointment_id"
-                    android:textSize="16dp" />
-
-                <TextView
-                    android:id="@+id/tv_description"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="2dp"
-                    android:text="@string/disease_description"
-                    android:textSize="16dp" />
-
-                <TextView
-                    android:id="@+id/tv_doctor"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="2dp"
-                    android:text="@string/doctor"
-                    android:textSize="16dp" />
-
-                <TextView
-                    android:id="@+id/tv_appointmentTime"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="2dp"
-                    android:text="@string/appointment_time"
-                    android:textSize="16dp" />
-
-                <TextView
-                    android:id="@+id/tv_appointment_add_time"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="2dp"
-                    android:text="@string/appointment_add_time"
-                    android:textSize="16dp" />
-            </LinearLayout>
 
             <TextView
-                android:layout_width="wrap_content"
+                android:id="@+id/tv_appointmentId"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="6dp"
+                android:layout_marginLeft="6dp"
+                android:background="@color/white"
+                android:padding="5dp"
+                android:text="@string/appointment_id"
+                android:textColor="@color/black_item_content"
+                android:textSize="16dp" />
+
+            <include layout="@layout/layout_devider" />
+
+            <TextView
+                android:id="@+id/tv_description"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="6dp"
+                android:background="@color/white"
+                android:padding="5dp"
+                android:text="@string/disease_description"
+                android:textColor="@color/black_item_content"
+                android:textSize="16dp" />
+
+            <include layout="@layout/layout_devider" />
+
+            <TextView
+                android:id="@+id/tv_doctor"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="6dp"
+                android:background="@color/white"
+                android:padding="5dp"
+                android:text="@string/doctor"
+                android:textColor="@color/black_item_content"
+                android:textSize="16dp" />
+
+            <include layout="@layout/layout_devider" />
+
+            <TextView
+                android:id="@+id/tv_appointmentTime"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="6dp"
+                android:background="@color/white"
+                android:padding="5dp"
+                android:text="@string/appointment_time"
+                android:textColor="@color/black_item_content"
+                android:textSize="16dp" />
+
+            <include layout="@layout/layout_devider" />
+
+            <TextView
+                android:id="@+id/tv_appointment_add_time"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="6dp"
+                android:background="@color/white"
+                android:padding="5dp"
+                android:text="@string/appointment_add_time"
+                android:textColor="@color/black_item_content"
+                android:textSize="16dp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/grey"
+                android:drawableLeft="@mipmap/replay"
+                android:drawablePadding="4dp"
+                android:padding="6dp"
                 android:text="@string/response_info"
                 android:textColor="@color/black"
                 android:textSize="18dp" />
 
-            <LinearLayout
+            <TextView
+                android:id="@+id/tv_appointStatus"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="5dp"
-                android:background="@drawable/shape_transparent_grey"
-                android:orientation="vertical"
-                android:padding="5dp">
+                android:layout_marginLeft="6dp"
+                android:background="@color/white"
+                android:padding="5dp"
+                android:text="@string/appointment_status"
+                android:textColor="@color/black_item_content"
+                android:textSize="16dp" />
 
-                <TextView
-                    android:id="@+id/tv_appointStatus"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="2dp"
-                    android:text="@string/appointment_status"
-                    android:textSize="16dp" />
-
-                <TextView
-                    android:id="@+id/tv_response"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="2dp"
-                    android:text="@string/doctor_response"
-                    android:textSize="16dp" />
-
-                <TextView
-                    android:id="@+id/tv_response_time"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="2dp"
-                    android:text="@string/doctor_response_time"
-                    android:textSize="16dp" />
-
-                <TextView
-                    android:id="@+id/tv_response_way"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="2dp"
-                    android:text="@string/doctor_response_way"
-                    android:textSize="16dp" />
-            </LinearLayout>
+            <include layout="@layout/layout_devider" />
 
             <TextView
-                android:layout_width="wrap_content"
+                android:id="@+id/tv_response"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="6dp"
+                android:layout_marginLeft="6dp"
+                android:background="@color/white"
+                android:padding="5dp"
+                android:text="@string/doctor_response"
+                android:textColor="@color/black_item_content"
+                android:textSize="16dp" />
+
+            <include layout="@layout/layout_devider" />
+
+            <TextView
+                android:id="@+id/tv_response_time"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="6dp"
+                android:background="@color/white"
+                android:padding="5dp"
+                android:text="@string/doctor_response_time"
+                android:textColor="@color/black_item_content"
+                android:textSize="16dp" />
+
+            <include layout="@layout/layout_devider" />
+
+            <TextView
+                android:id="@+id/tv_response_way"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="6dp"
+                android:background="@color/white"
+                android:padding="5dp"
+                android:text="@string/doctor_response_way"
+                android:textColor="@color/black_item_content"
+                android:textSize="16dp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/grey"
+                android:drawableLeft="@mipmap/user"
+                android:drawablePadding="4dp"
+                android:padding="6dp"
                 android:text="@string/patient_info"
                 android:textColor="@color/black"
                 android:textSize="18dp" />
 
-            <LinearLayout
+            <TextView
+                android:id="@+id/tv_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="5dp"
-                android:background="@drawable/shape_transparent_grey"
-                android:orientation="vertical"
-                android:padding="5dp">
+                android:layout_marginLeft="6dp"
+                android:background="@color/white"
+                android:padding="5dp"
+                android:text="@string/username"
+                android:textColor="@color/black_item_content"
+                android:textSize="16dp" />
 
-                <TextView
-                    android:id="@+id/tv_name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="2dp"
-                    android:text="@string/username"
-                    android:textSize="16dp" />
+            <include layout="@layout/layout_devider" />
 
-                <TextView
-                    android:id="@+id/tv_sex"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="2dp"
-                    android:text="@string/sex"
-                    android:textSize="16dp" />
+            <TextView
+                android:id="@+id/tv_sex"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="6dp"
+                android:background="@color/white"
+                android:padding="5dp"
+                android:text="@string/sex"
+                android:textColor="@color/black_item_content"
+                android:textSize="16dp" />
 
-                <TextView
-                    android:id="@+id/tv_age"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="2dp"
-                    android:text="@string/age"
-                    android:textSize="16dp" />
+            <include layout="@layout/layout_devider" />
 
-                <TextView
-                    android:id="@+id/tv_phone"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="2dp"
-                    android:text="@string/phone"
-                    android:textSize="16dp" />
-            </LinearLayout>
+            <TextView
+                android:id="@+id/tv_age"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="6dp"
+                android:background="@color/white"
+                android:padding="5dp"
+                android:text="@string/age"
+                android:textColor="@color/black_item_content"
+                android:textSize="16dp" />
 
+            <include layout="@layout/layout_devider" />
+
+            <TextView
+                android:id="@+id/tv_phone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="6dp"
+                android:background="@color/white"
+                android:padding="5dp"
+                android:text="@string/phone"
+                android:textColor="@color/black_item_content"
+                android:textSize="16dp" />
+            <include layout="@layout/layout_devider" />
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

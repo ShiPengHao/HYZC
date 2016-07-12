@@ -1,13 +1,9 @@
 package com.yimeng.hyzc.fragment;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.view.View;
 import android.widget.Button;
-import android.widget.TextView;
 
 import com.yimeng.hyzc.R;
 import com.yimeng.hyzc.activity.BookingActivity;
@@ -15,7 +11,6 @@ import com.yimeng.hyzc.activity.TestActivity;
 import com.yimeng.hyzc.view.AutoRollViewPager;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.util.ArrayList;
 
 /**

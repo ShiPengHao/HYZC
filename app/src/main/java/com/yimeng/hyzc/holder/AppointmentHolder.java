@@ -44,7 +44,7 @@ public class AppointmentHolder extends BaseHolder<AppointmentBean> {
             tv_status.setTextColor(Color.RED);
         }else{
             tv_status.setText(String.format("%s：%s", context.getString(R.string.appointment_status),context.getString(R.string.has_response)));
-            tv_status.setTextColor(Color.BLUE);
+            tv_status.setTextColor(MyApp.getAppContext().getResources().getColor(R.color.colorAccent));
         }
         try {
             String date = bean.add_time.substring(bean.add_time.indexOf("(") + 1, bean.add_time.indexOf(")"));

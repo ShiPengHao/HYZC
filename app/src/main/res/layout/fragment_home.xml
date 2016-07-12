@@ -8,6 +8,7 @@
         style="@style/TextTitle"
         android:text="@string/home" />
 
+
     <com.yimeng.hyzc.view.AutoRollViewPager
         android:id="@+id/vp"
         android:layout_width="match_parent"
@@ -15,20 +16,27 @@
 
     </com.yimeng.hyzc.view.AutoRollViewPager>
 
-    <Button
-        android:layout_marginTop="8dp"
-        android:id="@+id/bt_test"
-        android:text="@string/test"
-        android:background="@drawable/selector_bt_bg_green"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="8dp">
 
-    <Button
-        android:layout_marginTop="8dp"
-        android:id="@+id/bt_booking"
-        android:text="@string/booking"
-        android:background="@drawable/selector_bt_bg_green"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        <Button
+            android:id="@+id/bt_test"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/selector_bt_bg_yellow"
+            android:text="@string/test" />
+
+        <Button
+            android:id="@+id/bt_booking"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/selector_bt_bg_green"
+            android:textColor="@color/white"
+            android:text="@string/booking" />
+    </LinearLayout>
 
 </LinearLayout>

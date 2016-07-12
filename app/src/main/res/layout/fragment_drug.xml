@@ -16,9 +16,9 @@
         android:drawablePadding="8dp"
         android:drawableLeft="@mipmap/menu_search"
         android:drawableRight="@mipmap/delete_xxx"
+        android:paddingRight="12dp"
         android:ellipsize="end"
         android:hint="@string/hint_search"
-        android:background="@color/grey_line"
         android:textColor="@color/colorAccent"
         android:maxLines="1" />
 
@@ -28,6 +28,8 @@
 
         <ListView
             android:id="@+id/lv"
+            android:divider="@color/grey_line"
+            android:dividerHeight="1dp"
             android:layout_width="match_parent"
             android:layout_height="match_parent"></ListView>
 

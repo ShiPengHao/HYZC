@@ -251,7 +251,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
                             MyToast.show(getString(R.string.connet_error));
                         }else{
                             saveAccountInfo(type, id);
-                            goToHome(type);
                         }
                     }
                 });
@@ -275,6 +274,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
             editor.putString(MyConstant.KEY_ACCOUNT_LAST_PASSWORD, "");
         }
         editor.apply();
+        goToHome(type);
     }
 
     /**

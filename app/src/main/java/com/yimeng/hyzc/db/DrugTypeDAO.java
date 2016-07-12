@@ -5,6 +5,7 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
+import android.text.TextUtils;
 
 import com.yimeng.hyzc.bean.DrugTypeBean;
 import com.yimeng.hyzc.utils.MyApp;
@@ -48,16 +49,22 @@ public class DrugTypeDAO {
         SQLiteDatabase db = helper.getWritableDatabase();
         Cursor cursor = db.rawQuery("select * from DrugType where code = ?", new String[]{bean.TypeCode});
         if (cursor.moveToNext()) {
-            if (!cursor.getString(ID_NAME).equals(bean.name) || !cursor.getString(ID_ICON).equals(bean.icon)) {
+            if (null == bean.IconUrl){
+                bean.IconUrl = "";
+            }
+            if (null == bean.CnName){
+                bean.CnName = "";
+            }
+            if (!cursor.getString(ID_NAME).equals(bean.CnName) || !cursor.getString(ID_ICON).equals(bean.IconUrl)) {
                 ContentValues values = new ContentValues();
-                values.put("name", bean.name);
-                values.put("icon", bean.icon);
+                values.put("CnName", bean.CnName);
+                values.put("IconUrl", bean.IconUrl);
                 int count = db.update("DrugType", values, " code = ?", new String[]{bean.TypeCode});
                 if (count > 0) {
                     resolver.notifyChange(DRUG_TYPE_URI, null);
                 }
             }
-        }else {
+        } else {
             insert(bean);
         }
     }
@@ -66,8 +73,8 @@ public class DrugTypeDAO {
         SQLiteDatabase db = helper.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put("code", bean.TypeCode);
-        values.put("name", bean.name);
-        values.put("icon", bean.icon);
+        values.put("CnName", bean.CnName == null ? "" : bean.CnName);
+        values.put("IconUrl", bean.IconUrl == null ? "" : bean.IconUrl);
         int count = (int) db.insert("DrugType", null, values);
         if (count != -1) {
             resolver.notifyChange(DRUG_TYPE_URI, null);

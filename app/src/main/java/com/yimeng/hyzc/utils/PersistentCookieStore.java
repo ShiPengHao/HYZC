@@ -88,7 +88,7 @@ public class PersistentCookieStore implements CookieStore {
 //                back;
 //            }
 //
-//            ((ConcurrentHashMap)this.cookies.get(uri.host())).remove(name);
+//            ((ConcurrentHashMap)this.cookies.get(uri.host())).remove(CnName);
 //        }
 
         Editor prefsWriter = this.cookiePrefs.edit();

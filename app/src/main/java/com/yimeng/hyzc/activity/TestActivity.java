@@ -42,6 +42,7 @@ public class TestActivity extends AppCompatActivity implements View.OnClickListe
     private Button bt_professional;
     private Button bt_spinner_test;
     private Button bt_pick_doctor;
+    private Button bt_Load_Classify;
     //http://192.168.0.108:888/API/ymOR_WebService.asmx?op=GetProvince
 
 
@@ -88,6 +89,8 @@ public class TestActivity extends AppCompatActivity implements View.OnClickListe
         bt_professional.setOnClickListener(this);
         bt_pick_doctor = (Button) findViewById(R.id.bt_pick_doctor);
         bt_pick_doctor.setOnClickListener(this);
+        bt_Load_Classify = (Button) findViewById(R.id.bt_Load_Classify);
+        bt_Load_Classify.setOnClickListener(this);
     }
 
     @Override
@@ -147,7 +150,7 @@ public class TestActivity extends AppCompatActivity implements View.OnClickListe
                 values.put("email", "aaa@34.df");
 
                 values.put("phone", "13345678900");
-                values.put("name", "123456");
+                values.put("CnName", "123456");
                 values.put("sex", 1);
                 values.put("age", "2012-2-15");
                 values.put("province", "aa");
@@ -181,6 +184,9 @@ public class TestActivity extends AppCompatActivity implements View.OnClickListe
                 values.clear();
                 values.put("departments_id", 4);
                 request("Load_Doctor", values);
+                break;
+            case R.id.bt_Load_Classify:
+                request("Load_Classify", null);
                 break;
         }
     }
