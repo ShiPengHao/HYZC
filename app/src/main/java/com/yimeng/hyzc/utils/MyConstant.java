@@ -1,7 +1,7 @@
 package com.yimeng.hyzc.utils;
 
 /**
- * Created by 依萌 on 2016/6/20.
+ * 常量
  */
 public class MyConstant {
     /**
@@ -49,15 +49,7 @@ public class MyConstant {
      * 登录接口
      */
     public static final String URL_LOGIN = URL_BASE + "/login/loginauth";
-    /**
-     * 药品类型接口
-     */
-    public static final String URL_DRUGTYPE = URL_BASE + "/cpw/cpw_drugtype/getlist";//http://192.168.0.168/CPW/CPW_drug/getlist
 
-    /**
-     * 注册接口
-     */
-    public static final String URL_REGISTER = URL_BASE + "";
     /**
      * webservice命名空间
      */

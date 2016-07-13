@@ -35,8 +35,19 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:background="@drawable/selector_bt_bg_green"
-            android:textColor="@color/white"
-            android:text="@string/booking" />
+            android:text="@string/booking"
+            android:textColor="@color/white" />
+
+        <ScrollView
+            android:layout_marginTop="8dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <com.yimeng.hyzc.view.FlowLayout
+                android:id="@+id/flowLayout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"></com.yimeng.hyzc.view.FlowLayout>
+        </ScrollView>
     </LinearLayout>
 
 </LinearLayout>

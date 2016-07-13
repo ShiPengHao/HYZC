@@ -30,6 +30,10 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
     private List<Fragment> fragments = new ArrayList<>();
     private FragmentPagerAdapter adapter;
     private View indicatorLine;
+    private List<Drawable> tabPressedIcons = new ArrayList<>();
+    private List<Drawable> tabNormalIcons = new ArrayList<>();
+    private long preTime = -1l;
+    private int lastPosition;
 
     @Override
     protected int getLayoutResId() {
@@ -108,13 +112,6 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
         tabNormalIcons.add(getResources().getDrawable(R.mipmap.icon_med_normal));
         tabNormalIcons.add(getResources().getDrawable(R.mipmap.icon_user_normal));
     }
-
-    private List<Drawable> tabPressedIcons = new ArrayList<>();
-    private List<Drawable> tabNormalIcons = new ArrayList<>();
-
-    private long preTime = -1l;
-
-    private int lastPosition;
 
     @Override
     public void onClick(View v) {

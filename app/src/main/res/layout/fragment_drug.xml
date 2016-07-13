@@ -13,13 +13,15 @@
         android:id="@+id/cet"
         android:layout_width="match_parent"
         android:layout_height="40dp"
+        android:paddingLeft="8dp"
         android:drawablePadding="8dp"
         android:drawableLeft="@mipmap/menu_search"
         android:drawableRight="@mipmap/delete_xxx"
         android:paddingRight="12dp"
         android:ellipsize="end"
         android:hint="@string/hint_search"
-        android:textColor="@color/colorAccent"
+        android:textColor="@color/white"
+        android:background="@color/colorAccent"
         android:maxLines="1" />
 
     <RelativeLayout

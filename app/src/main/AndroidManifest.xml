@@ -66,6 +66,7 @@
         </activity>
 
 
+
         <service
             android:name="cn.jpush.android.service.PushService"
             android:enabled="true"
