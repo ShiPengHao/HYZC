@@ -51,6 +51,18 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        viewPager.startRoll();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        viewPager.stopRoll();
+    }
+
+    @Override
     protected void initData() {
         datas = new ArrayList<>();
         File file1 = new File(getActivity().getFilesDir(), "/a.png");

@@ -1,5 +1,6 @@
 package com.yimeng.hyzc.adapter;
 
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.text.TextUtils;
 import android.view.View;
@@ -8,6 +9,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.MemoryPolicy;
 import com.squareup.picasso.Picasso;
 import com.yimeng.hyzc.R;
 import com.yimeng.hyzc.bean.DrugTypeBean;
@@ -59,7 +61,13 @@ public class DrugTypeAdapter extends BaseAdapter {
 
         String icon = bean.IconUrl;
         if (!TextUtils.isEmpty(icon)) {
-            Picasso.with(MyApp.getAppContext()).load(MyConstant.URL_BASE + icon).into(holder.iv);
+            Picasso.with(MyApp.getAppContext())
+                    .load(MyConstant.NAMESPACE + icon)
+                    .placeholder(R.mipmap.pill)
+                    .error(R.mipmap.pill)
+                    .config(Bitmap.Config.RGB_565)
+//                    .memoryPolicy(MemoryPolicy.NO_CACHE,MemoryPolicy.NO_STORE)
+                    .into(holder.iv);
         } else {
             holder.iv.setImageBitmap(BitmapFactory.decodeResource(MyApp.getAppContext().getResources(), R.mipmap.pill));
         }

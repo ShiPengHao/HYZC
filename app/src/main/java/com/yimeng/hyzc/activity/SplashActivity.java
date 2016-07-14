@@ -4,22 +4,31 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.text.TextUtils;
 import android.widget.ImageView;
 
 import com.yimeng.hyzc.R;
 import com.yimeng.hyzc.utils.BitmapUtils;
 import com.yimeng.hyzc.utils.DensityUtil;
+import com.yimeng.hyzc.utils.MyApp;
 import com.yimeng.hyzc.utils.MyConstant;
-import com.zhy.http.okhttp.OkHttpUtils;
-import com.zhy.http.okhttp.callback.Callback;
+import com.yimeng.hyzc.utils.MyLog;
+import com.yimeng.hyzc.utils.ThreadUtils;
+import com.yimeng.hyzc.utils.WebServiceUtils;
 
 import org.json.JSONObject;
 
-import okhttp3.Call;
-import okhttp3.Response;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+
+import cn.jpush.android.api.JPushInterface;
+import cn.jpush.android.api.TagAliasCallback;
 
 /**
  * 闪屏界面，处理apk版本更新，自动登陆，页面跳转等逻辑
@@ -54,14 +63,14 @@ public class SplashActivity extends BaseActivity {
             handler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    attempToUpdate();
+                    attemptToUpdate();
                 }
             }, 2000);
         } else if (isAutoLogin()) {
             handler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    attempToLogin();
+                    attemptToLogin();
                 }
             }, 2000);
         } else {
@@ -117,35 +126,86 @@ public class SplashActivity extends BaseActivity {
     /**
      * 自动登陆
      */
-    private void attempToLogin() {
+    private void attemptToLogin() {
         String username = spAccount.getString(MyConstant.KEY_ACCOUNT_LAST_USERNAME, "");
         String pwd = spAccount.getString(MyConstant.KEY_ACCOUNT_LAST_PASSWORD, "");
-        OkHttpUtils.post().url(MyConstant.URL_LOGIN)
-                .addParams("usercode", username).addParams("password", pwd).addParams("expired", "365")
-                .build().execute(new Callback() {
+        String type = spAccount.getString(MyConstant.KEY_ACCOUNT_LAST_TYPE, "");
+        String method = null;
+        if (type.equalsIgnoreCase("patient")){
+            method = "Patient_Login";
+        }else if(type.equalsIgnoreCase("doctor")){
+            method = "Doctor_Login";
+        }else if(type.equalsIgnoreCase("shop")){
+            method = "Shop_Login";
+        }
+        if (TextUtils.isEmpty(method)){
+            goToLogin();
+            return;
+        }
+        HashMap<String ,Object> param = new HashMap<>();
+        param.put("user", username);
+        param.put("pwd", pwd);
+        requestLogin(method,param);
+    }
+
+    /**
+     * 执行异步任务，登录
+     *
+     * @param params 方法名+参数列表（哈希表形式）
+     */
+    public void requestLogin(Object... params) {
+        new AsyncTask<Object, Object, String>() {
             @Override
-            public Object parseNetworkResponse(Response response, int i) throws Exception {
-                String string = response.body().string();
-                JSONObject object = new JSONObject(string);
-                //{"ResultID":0,"ResultMsg":"登录成功","Succeed":true,"ResultData":null,"s":true,"emsg":"登录成功"}
-                // MyToast.show(object.optString("ResultMsg"));
-                if (object.optBoolean("Succeed")) {
-                    goToHome();
-                } else {
+            protected String doInBackground(Object... params) {
+                if (params != null && params.length == 2) {
+                    String result = WebServiceUtils.callWebService(MyConstant.WEB_SERVICE_URL, MyConstant.NAMESPACE, (String) params[0],
+                            (Map<String, Object>) params[1]);
+                    if (result == null){
+                        goToLogin();
+                        return null;
+                    }
+                    try {
+//                      new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
+                        JSONObject object = new JSONObject(result);
+                        if ("ok".equalsIgnoreCase(object.optString("status"))) {
+                            String type = object.optString("type");
+                            String id = object.optString("id");
+                            setJPushAliasAndTag(type, id);
+                        } else {
+                            goToLogin();
+                        }
+                    } catch (Exception e) {
+                        goToLogin();
+                        e.printStackTrace();
+                    }
+                }else {
                     goToLogin();
                 }
                 return null;
             }
+        }.execute(params);
+    }
 
+    /**
+     * 登陆成功后为本应用用户绑定JPush的别名和标签，别名为账号类型+"-"+id，标签为账号类型，设置成功以后跳转到主页
+     */
+    private void setJPushAliasAndTag(final String type, final String id) {
+        final HashSet<String> tags = new HashSet<>();
+        tags.add(type);
+        ThreadUtils.runOnBackThread(new Runnable() {
             @Override
-            public void onError(Call call, Exception e, int i) {
-                e.printStackTrace();
-                goToLogin();
-            }
-
-            @Override
-            public void onResponse(Object o, int i) {
-
+            public void run() {
+                JPushInterface.setAliasAndTags(MyApp.getAppContext(), type + "+" + id, tags, new TagAliasCallback() {
+                    @Override
+                    public void gotResult(int i, String s, Set<String> set) {
+                        if (i != 0) {
+                            MyLog.i("JPush", "set alias and tag error");
+                            goToLogin();
+                        }else{
+                            goToHome(type);
+                        }
+                    }
+                });
             }
         });
     }
@@ -153,7 +213,7 @@ public class SplashActivity extends BaseActivity {
     /**
      * 更新版本
      */
-    private void attempToUpdate() {
+    private void attemptToUpdate() {
     }
 
     /**
@@ -167,8 +227,8 @@ public class SplashActivity extends BaseActivity {
     /**
      * 跳转到主页
      */
-    private void goToHome() {
-        startActivity(new Intent(this, HomeActivity.class));
+    private void goToHome(String type) {
+        startActivity(new Intent(this, HomePatientActivity.class));
         finish();
     }
 

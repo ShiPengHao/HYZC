@@ -41,7 +41,13 @@
             android:name=".activity.RegisterActivity"
             android:windowSoftInputMode="stateHidden" />
         <activity
-            android:name=".activity.HomeActivity"
+            android:name=".activity.HomePatientActivity"
+            android:windowSoftInputMode="stateHidden" />
+        <activity
+            android:name=".activity.HomeDoctorActivity"
+            android:windowSoftInputMode="stateHidden" />
+        <activity
+            android:name=".activity.HomePharmacyActivity"
             android:windowSoftInputMode="stateHidden" />
         <activity android:name=".activity.TestActivity" />
         <activity

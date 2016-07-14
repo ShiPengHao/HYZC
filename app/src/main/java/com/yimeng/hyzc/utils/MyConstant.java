@@ -42,21 +42,12 @@ public class MyConstant {
     public static final String KEY_ACCOUNT_LAST_TYPE = "KEY_ACCOUNT_LAST_TYPE";
 
     /**
-     * 服务器ip
-     */
-    public static final String URL_BASE = "http://192.168.0.168";
-    /**
-     * 登录接口
-     */
-    public static final String URL_LOGIN = URL_BASE + "/login/loginauth";
-
-    /**
      * webservice命名空间
      */
-    public static final String NAMESPACE = "http://192.168.0.108:888/";
+    public static final String NAMESPACE = "http://hyzc.sqall.com/";
     /**
-     * webserviceUrl
+     * webserviceUrl  http://hyzc.sqall.com/API/ymOR_WebService.asmx
      */
-    public static final String WEB_SERVICE_URL = NAMESPACE + "/API/ymOR_WebService.asmx";
+    public static final String WEB_SERVICE_URL = NAMESPACE + "API/ymOR_WebService.asmx";
 
 }

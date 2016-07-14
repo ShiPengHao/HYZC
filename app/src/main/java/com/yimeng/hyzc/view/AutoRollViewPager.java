@@ -1,6 +1,7 @@
 package com.yimeng.hyzc.view;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.os.Handler;
 import android.os.SystemClock;
 import android.support.v4.view.PagerAdapter;
@@ -11,8 +12,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.squareup.picasso.MemoryPolicy;
 import com.squareup.picasso.Picasso;
 import com.yimeng.hyzc.R;
+import com.yimeng.hyzc.utils.BitmapUtils;
+import com.yimeng.hyzc.utils.DensityUtil;
+import com.yimeng.hyzc.utils.MyApp;
 import com.yimeng.hyzc.utils.UiUtils;
 
 import java.util.ArrayList;
@@ -184,6 +189,13 @@ public class AutoRollViewPager extends ViewPager {
     }
 
     private class MyPagerAdapter extends PagerAdapter {
+        private int[] resId = new int[]{
+                R.drawable.a,
+                R.drawable.b,
+                R.drawable.c,
+                R.drawable.a,
+                R.drawable.b,
+        };
 
         @Override
         public int getCount() {
@@ -193,7 +205,13 @@ public class AutoRollViewPager extends ViewPager {
         @Override
         public Object instantiateItem(ViewGroup container, int position) {
             ImageView imageView = (ImageView) UiUtils.inflate(R.layout.layout_imageview);
-            Picasso.with(getContext()).load(datas.get(position)).into(imageView);
+            imageView.setImageBitmap(BitmapUtils.zoomBitmap(BitmapUtils.getResImg(getContext(),resId[position]),DensityUtil.SCREEN_WIDTH
+            ,DensityUtil.dip2px(200)));
+//            Picasso.with(getContext())
+//                    .load(datas.get(position))
+//                    .memoryPolicy(MemoryPolicy.NO_CACHE,MemoryPolicy.NO_STORE)
+//                    .error(R.mipmap.ic_launcher)
+//                    .into(imageView);
             container.addView(imageView);
             return imageView;
         }

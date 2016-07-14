@@ -25,7 +25,7 @@ public class BitmapUtils {
      * @param resId    资源id
      * @return bitmap对象
      */
-    public static Bitmap getResImg(Activity activity, int resId) {
+    public static Bitmap getResImg(Context activity, int resId) {
         // 获得本地图片宽高
         BitmapFactory.Options opts = new BitmapFactory.Options();
         // 设置开关

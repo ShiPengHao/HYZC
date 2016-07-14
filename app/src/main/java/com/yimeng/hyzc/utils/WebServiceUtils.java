@@ -1,7 +1,5 @@
 package com.yimeng.hyzc.utils;
 
-import com.yimeng.hyzc.R;
-
 import org.ksoap2.SoapEnvelope;
 import org.ksoap2.serialization.SoapObject;
 import org.ksoap2.serialization.SoapPrimitive;
@@ -12,7 +10,7 @@ import java.util.Iterator;
 import java.util.Map;
 
 /**
- * Created by 依萌 on 2016/6/23.
+ * 用soap调用webservice方法的工具类
  */
 public class WebServiceUtils {
 
@@ -48,21 +46,13 @@ public class WebServiceUtils {
         // 使用call方法调用WebService方法
         try {
             ht.call(null, envelope);
-        } catch (Exception e) {
-            e.printStackTrace();
-            MyToast.show(MyApp.getAppContext().getString(R.string.connet_error));
-        }
-        try {
             final SoapPrimitive result = (SoapPrimitive) envelope.getResponse();
             if (result != null) {
                 MyLog.i("webservice", result.toString());
                 return result.toString();
             }
-
         } catch (Exception e) {
-//            MyLog.i("----发生错误---", e.getMessage());
             e.printStackTrace();
-            MyToast.show(MyApp.getAppContext().getString(R.string.connet_error));
         }
         return null;
     }

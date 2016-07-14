@@ -4,13 +4,13 @@ import android.animation.ObjectAnimator;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
+import android.os.Message;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioGroup;
 
@@ -21,11 +21,9 @@ import com.yimeng.hyzc.utils.MyLog;
 import com.yimeng.hyzc.utils.MyToast;
 import com.yimeng.hyzc.utils.ThreadUtils;
 import com.yimeng.hyzc.utils.WebServiceUtils;
-import com.zhy.http.okhttp.OkHttpUtils;
 
 import org.json.JSONObject;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -51,7 +49,9 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
     private RadioGroup rg_userType;
     private Map<String, Object> values = new HashMap<>();
     private LinearLayout ll_loading;
-    private ImageView iv_back;
+    private android.os.Handler handler;
+    private static final int WHAT_SHOW_LOADING = 1;
+    private static final int WHAT_DISMISS_LOADING = 2;
 
 
     @Override
@@ -75,6 +75,20 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
         cb_auto.setOnCheckedChangeListener(this);
         bt_register.setOnClickListener(this);
         bt_login.setOnClickListener(this);
+        handler = new android.os.Handler() {
+            @Override
+            public void handleMessage(Message msg) {
+                switch (msg.what) {
+                    case WHAT_SHOW_LOADING:
+                        ll_loading.setVisibility(View.VISIBLE);
+                        break;
+                    case WHAT_DISMISS_LOADING:
+                        handler.removeMessages(WHAT_SHOW_LOADING);
+                        ll_loading.setVisibility(View.GONE);
+                        break;
+                }
+            }
+        };
     }
 
     @Override
@@ -82,39 +96,26 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
         rg_userType.check(R.id.rb_patient);
         ll_loading.setVisibility(View.GONE);
         spAccount = getSharedPreferences(MyConstant.PREFS_ACCOUNT, MODE_PRIVATE);
-        // 回显上次登录账号
+        // 回显账号
         et_username.setText(spAccount.getString(MyConstant.KEY_ACCOUNT_LAST_USERNAME, ""));
-        // 回显上次登录账号密码
+        // 回显密码
         et_pwd.setText(spAccount.getString(MyConstant.KEY_ACCOUNT_LAST_PASSWORD, ""));
-        // 回显上次登录账号记住密码
-        cb_remember.setChecked(spAccount.getBoolean(MyConstant.KEY_ACCOUNT_LAST_REMEMBER, false));
+        // 回显记住密码
+        boolean isRemember = spAccount.getBoolean(MyConstant.KEY_ACCOUNT_LAST_REMEMBER, false);
+        cb_remember.setChecked(isRemember);
 
-        testOldInterface();
-    }
-
-    /**
-     * 用老登陆接口登陆，获得cookie，方便在主页中请求药品数据
-     */
-    private void testOldInterface() {
-        ThreadUtils.runOnBackThread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    OkHttpUtils.post()
-                            .url(MyConstant.URL_LOGIN)
-                            .addParams("usercode", "sysadmin")
-                            .addParams("password", "123")
-                            .addParams("expired", "365")
-                            .build()
-                            .execute()
-                            .close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    MyLog.i("old", "fail");
-                }
+        if (isRemember) {//回显用户类型
+            String type = spAccount.getString(MyConstant.KEY_ACCOUNT_LAST_TYPE, "");
+            if (type.equalsIgnoreCase("patient")) {
+                rg_userType.check(R.id.rb_patient);
+            } else if (type.equalsIgnoreCase("doctor")) {
+                rg_userType.check(R.id.rb_doctor);
+            } else if (type.equalsIgnoreCase("shop")) {
+                rg_userType.check(R.id.rb_pharmacy);
             }
-        });
+        }
     }
+
 
     @Override
     public void onClick(View v) {
@@ -175,48 +176,36 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
      * @param params 方法名+参数列表（哈希表形式）
      */
     public void requestLogin(Object... params) {
-        ll_loading.setVisibility(View.VISIBLE);
+        handler.sendEmptyMessageDelayed(WHAT_SHOW_LOADING, 500);
         new AsyncTask<Object, Object, String>() {
             @Override
             protected String doInBackground(Object... params) {
                 if (params != null && params.length == 2) {
-                    return WebServiceUtils.callWebService(MyConstant.WEB_SERVICE_URL, MyConstant.NAMESPACE, (String) params[0],
+                    String result = WebServiceUtils.callWebService(MyConstant.WEB_SERVICE_URL, MyConstant.NAMESPACE, (String) params[0],
                             (Map<String, Object>) params[1]);
-                } else if (params != null && params.length == 1) {
-                    return WebServiceUtils.callWebService(MyConstant.WEB_SERVICE_URL, MyConstant.NAMESPACE, (String) params[0],
-                            null);
-                } else {
-                    return null;
-                }
-            }
-
-            protected void onPostExecute(final String result) {
-                ThreadUtils.runOnBackThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (result != null) {
-                            try {
-//                                new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
-                                JSONObject object = new JSONObject(result);
-                                if ("ok".equalsIgnoreCase(object.optString("status"))) {
-                                    String type = object.optString("type");
-                                    String id = object.optString("id");
-                                    setJPushAliasAndTag(type, id);
-                                } else {
-                                    MyToast.show(object.optString("msg"));
-                                    dismissLoginDialog();
-                                }
-                            } catch (Exception e) {
-                                MyToast.show(getString(R.string.connet_error));
-                                dismissLoginDialog();
-                                e.printStackTrace();
-                            }
-                        } else {
-                            dismissLoginDialog();
-                            MyToast.show(getString(R.string.connet_error));
-                        }
+                    if (null == result) {
+                        MyToast.show(getString(R.string.connet_error));
+                        dismissLoginDialog();
+                        return null;
                     }
-                });
+                    try {
+//                                new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
+                        JSONObject object = new JSONObject(result);
+                        if ("ok".equalsIgnoreCase(object.optString("status"))) {
+                            String type = object.optString("type");
+                            String id = object.optString("id");
+                            setJPushAliasAndTag(type, id);
+                        } else {
+                            MyToast.show(object.optString("msg"));
+                            dismissLoginDialog();
+                        }
+                    } catch (Exception e) {
+                        MyToast.show(getString(R.string.connet_error));
+                        dismissLoginDialog();
+                        e.printStackTrace();
+                    }
+                }
+                return null;
             }
         }.execute(params);
     }
@@ -225,12 +214,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
      * 让登陆加载对话框消失
      */
     private void dismissLoginDialog() {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                ll_loading.setVisibility(View.GONE);
-            }
-        });
+        handler.sendEmptyMessage(WHAT_DISMISS_LOADING);
     }
 
     /**
@@ -249,7 +233,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
                             MyLog.i("JPush", "set alias and tag error");
                             dismissLoginDialog();
                             MyToast.show(getString(R.string.connet_error));
-                        }else{
+                        } else {
                             saveAccountInfo(type, id);
                         }
                     }
@@ -281,8 +265,14 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
      * 跳转到主页，根据账号类型判断
      */
     private void goToHome(String type) {
-        startActivity(new Intent(this, HomeActivity.class));
         finish();
+        if (type.equalsIgnoreCase("patient")) {
+            startActivity(new Intent(this, HomePatientActivity.class));
+        } else if (type.equalsIgnoreCase("doctor")) {
+            startActivity(new Intent(this, HomeDoctorActivity.class));
+        } else if (type.equalsIgnoreCase("shop")) {
+            startActivity(new Intent(this, HomePharmacyActivity.class));
+        }
     }
 
     @Override

@@ -23,7 +23,7 @@ import com.yimeng.hyzc.utils.MyToast;
 import java.util.ArrayList;
 import java.util.List;
 
-public class HomeActivity extends BaseActivity implements View.OnClickListener {
+public class HomePatientActivity extends BaseActivity implements View.OnClickListener {
 
     private ViewPager vp;
     private LinearLayout ll_tab;
@@ -37,7 +37,7 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
 
     @Override
     protected int getLayoutResId() {
-        return R.layout.activity_home;
+        return R.layout.activity_patient_home;
     }
 
     protected void initView() {

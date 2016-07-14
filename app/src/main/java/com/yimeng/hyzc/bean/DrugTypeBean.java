@@ -23,11 +23,7 @@ public class DrugTypeBean implements Comparable<DrugTypeBean>, Serializable {
 
     @Override
     public String toString() {
-        return "DrugTypeBean{" +
-                "CnName='" + CnName + '\'' +
-                ", IconUrl='" + IconUrl + '\'' +
-                ", TypeCode='" + TypeCode + '\'' +
-                '}';
+        return CnName;
     }
 
     private String getPinYin() {
