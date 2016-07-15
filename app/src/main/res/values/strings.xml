@@ -53,7 +53,7 @@
     <string name="nonghe">农合</string>
     <string name="pharmacy_flag">药店标志</string>
     <string name="booking">开始预约</string>
-    <string name="pick_doctor">请选择期望就诊的医生</string>
+    <string name="pick_doctor">请选择期望问诊的医生</string>
     <string name="introduce_page">引导页面</string>
     <string name="splash_page">闪屏界面</string>
     <string name="skip_introduce">跳过引导，马上体验</string>
@@ -76,7 +76,7 @@
     <string name="appointment_detail">预约详情</string>
     <string name="doctor_response">医生回复</string>
     <string name="doctor_response_time">回复时间</string>
-    <string name="doctor_response_way">医生意见</string>
+    <string name="doctor_response_way">处理方式</string>
     <string name="appointment_info">预约信息</string>
     <string name="response_info">回复信息</string>
     <string name="patient_info">用户信息</string>
@@ -88,4 +88,9 @@
     <string name="doctor_detail">医生详情</string>
     <string name="disease_description_hint">请输入您的病情和治疗历史</string>
     <string name="choose_time">选择预约时间</string>
+    <string name="appointment_score">预约评分</string>
+    <string name="doctor_prescribe">增加药品</string>
+    <string name="submit">确认提交</string>
+    <string name="prescribe">您所开的药方列表如下</string>
+    <string name="can_not_be_null">不能为空</string>
 </resources>

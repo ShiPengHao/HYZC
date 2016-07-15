@@ -10,19 +10,18 @@
         android:text="@string/my" />
 
     <LinearLayout
+        android:layout_marginTop="4dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/grey"
         android:orientation="vertical"
-        android:paddingLeft="8dp"
-        android:paddingRight="8dp"
         >
 
         <RelativeLayout
             android:id="@+id/rl_account_info"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="2dp"
+            android:layout_height="@dimen/finger_width"
+            android:layout_marginBottom="4dp"
             android:background="@color/white"
             android:padding="5dp">
 
@@ -56,8 +55,8 @@
         <RelativeLayout
             android:id="@+id/rl_booking"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="2dp"
+            android:layout_height="@dimen/finger_width"
+            android:layout_marginBottom="4dp"
             android:background="@color/white"
             android:padding="5dp">
 
@@ -91,8 +90,8 @@
         <RelativeLayout
             android:id="@+id/rl_appointment_history"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="2dp"
+            android:layout_height="@dimen/finger_width"
+            android:layout_marginBottom="4dp"
             android:background="@color/white"
             android:padding="5dp">
 
@@ -121,18 +120,9 @@
                 android:layout_centerVertical="true"
                 android:layout_marginRight="6dp"
                 android:scaleType="centerInside"
-                android:src="@mipmap/arrow_down" />
+                android:src="@mipmap/next" />
         </RelativeLayout>
 
-        <com.yimeng.hyzc.view.PullDownToRefreshListView
-            android:id="@+id/lv"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:cacheColorHint="@android:color/transparent"
-            android:divider="@null"
-            android:dividerHeight="1dp"
-            android:listSelector="@android:color/transparent"></com.yimeng.hyzc.view.PullDownToRefreshListView>
     </LinearLayout>
 
 </LinearLayout>

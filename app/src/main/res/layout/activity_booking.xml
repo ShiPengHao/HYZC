@@ -2,8 +2,7 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/grey"
-    >
+    android:background="@color/grey">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -28,148 +27,152 @@
                 android:src="@mipmap/back" />
         </RelativeLayout>
 
-
-        <LinearLayout
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            >
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="4dp"
-                android:gravity="center"
-                android:ellipsize="marquee"
-                android:focusable="true"
-                android:focusableInTouchMode="true"
-                android:text="@string/pick_doctor"
-                android:textColor="@color/colorAccent"
-                android:textSize="20dp" />
-
-            <include layout="@layout/layout_devider" />
+            android:layout_height="match_parent">
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp">
 
                 <TextView
-                    style="@style/TextAddress"
-                    android:text="@string/province" />
-
-                <Spinner
-                    android:id="@+id/spinner_province"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/finger_width" />
-            </LinearLayout>
+                    android:layout_height="wrap_content"
+                    android:ellipsize="marquee"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:gravity="center"
+                    android:padding="4dp"
+                    android:text="@string/pick_doctor"
+                    android:textColor="@color/colorAccent"
+                    android:textSize="20dp" />
 
-            <include layout="@layout/layout_devider" />
+                <include layout="@layout/layout_devider" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
-
-                <TextView
-                    style="@style/TextAddress"
-                    android:text="@string/city" />
-
-                <Spinner
-                    android:id="@+id/spinner_city"
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/finger_width" />
-            </LinearLayout>
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
 
-            <include layout="@layout/layout_devider" />
+                    <TextView
+                        style="@style/TextAddress"
+                        android:text="@string/province" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
+                    <Spinner
+                        android:id="@+id/spinner_province"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/finger_width" />
+                </LinearLayout>
 
-                <TextView
-                    style="@style/TextAddress"
-                    android:text="@string/area" />
-                <Spinner
-                    android:id="@+id/spinner_area"
+                <include layout="@layout/layout_devider" />
+
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/finger_width" />
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
 
-            </LinearLayout>
+                    <TextView
+                        style="@style/TextAddress"
+                        android:text="@string/city" />
 
-            <include layout="@layout/layout_devider" />
+                    <Spinner
+                        android:id="@+id/spinner_city"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/finger_width" />
+                </LinearLayout>
 
+                <include layout="@layout/layout_devider" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
-
-                <TextView
-                    style="@style/TextAddress"
-                    android:text="@string/hospital" />
-
-                <Spinner
-                    android:id="@+id/spinner_hospital"
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/finger_width" />
-            </LinearLayout>
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
 
-            <include layout="@layout/layout_devider" />
+                    <TextView
+                        style="@style/TextAddress"
+                        android:text="@string/area" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
+                    <Spinner
+                        android:id="@+id/spinner_area"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/finger_width" />
 
-                <TextView
-                    style="@style/TextAddress"
-                    android:text="@string/department" />
+                </LinearLayout>
 
-                <Spinner
-                    android:id="@+id/spinner_department"
+                <include layout="@layout/layout_devider" />
+
+
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/finger_width" />
-            </LinearLayout>
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
 
-            <include layout="@layout/layout_devider" />
+                    <TextView
+                        style="@style/TextAddress"
+                        android:text="@string/hospital" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
+                    <Spinner
+                        android:id="@+id/spinner_hospital"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/finger_width" />
+                </LinearLayout>
 
-                <TextView
-                    style="@style/TextAddress"
-                    android:text="@string/professional" />
+                <include layout="@layout/layout_devider" />
 
-                <Spinner
-                    android:id="@+id/spinner_professional"
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/finger_width" />
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        style="@style/TextAddress"
+                        android:text="@string/department" />
+
+                    <Spinner
+                        android:id="@+id/spinner_department"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/finger_width" />
+                </LinearLayout>
+
+                <include layout="@layout/layout_devider" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        style="@style/TextAddress"
+                        android:text="@string/professional" />
+
+                    <Spinner
+                        android:id="@+id/spinner_professional"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/finger_width" />
+
+                </LinearLayout>
+
+                <include layout="@layout/layout_devider" />
+
+                <GridView
+                    android:id="@+id/gv"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    android:layout_marginTop="10dp"
+                    android:numColumns="3"
+                    android:verticalSpacing="10dp"></GridView>
 
             </LinearLayout>
-
-            <include layout="@layout/layout_devider" />
-
-            <GridView
-                android:id="@+id/gv"
-                android:layout_width="match_parent"
-                android:layout_height="200dp"
-                android:layout_marginTop="10dp"
-                android:numColumns="3"
-                android:verticalSpacing="10dp"></GridView>
-
-        </LinearLayout>
+        </ScrollView>
     </LinearLayout>
 
 </FrameLayout>

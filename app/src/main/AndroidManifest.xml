@@ -26,7 +26,9 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activity.SplashActivity">
+        <activity
+            android:name=".activity.SplashActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -36,29 +38,48 @@
         <activity android:name=".activity.IntroduceActivity" />
         <activity
             android:name=".activity.LoginActivity"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".activity.RegisterActivity"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".activity.HomePatientActivity"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".activity.HomeDoctorActivity"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".activity.HomePharmacyActivity"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />
         <activity android:name=".activity.TestActivity" />
         <activity
             android:name=".activity.BookingActivity"
-            android:windowSoftInputMode="adjustResize" />
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity
             android:name=".activity.DoctorDetailActivity"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity
             android:name=".activity.AccountInfoActivity"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity
+            android:name=".activity.AppointDetailActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity
+            android:name=".activity.AppointHistoryActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.DoctorResponseActivity"
+            android:windowSoftInputMode="stateHidden|adjustResize"
+            android:screenOrientation="portrait" />
         <activity
             android:name="cn.jpush.android.ui.PushActivity"
             android:configChanges="orientation|keyboardHidden"
@@ -70,7 +91,6 @@
                 <category android:name="${applicationId}" />
             </intent-filter>
         </activity>
-
 
 
         <service

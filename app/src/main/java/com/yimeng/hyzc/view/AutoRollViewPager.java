@@ -190,11 +190,11 @@ public class AutoRollViewPager extends ViewPager {
 
     private class MyPagerAdapter extends PagerAdapter {
         private int[] resId = new int[]{
-                R.drawable.a,
-                R.drawable.b,
-                R.drawable.c,
-                R.drawable.a,
-                R.drawable.b,
+                R.mipmap.app_logo,
+                R.mipmap.ic_launcher,
+                R.mipmap.icon_user_check,
+                R.mipmap.app_logo,
+                R.mipmap.ic_launcher,
         };
 
         @Override
@@ -205,9 +205,9 @@ public class AutoRollViewPager extends ViewPager {
         @Override
         public Object instantiateItem(ViewGroup container, int position) {
             ImageView imageView = (ImageView) UiUtils.inflate(R.layout.layout_imageview);
-            imageView.setImageBitmap(BitmapUtils.zoomBitmap(BitmapUtils.getResImg(getContext(),resId[position]),DensityUtil.SCREEN_WIDTH
-            ,DensityUtil.dip2px(200)));
-//            Picasso.with(getContext())
+            imageView.setImageBitmap(BitmapUtils.getResImg(getContext(),resId[position]));
+            imageView.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
+//            Picasso.with(getContext())//// TODO: 2016/7/14 轮播图数据源为模拟
 //                    .load(datas.get(position))
 //                    .memoryPolicy(MemoryPolicy.NO_CACHE,MemoryPolicy.NO_STORE)
 //                    .error(R.mipmap.ic_launcher)

@@ -113,6 +113,29 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="药品分类" />
+        <Button
+            android:id="@+id/bt_Search_Medicine"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="搜索药品" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/bt_Load_Usage"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ellipsize="middle"
+            android:maxLines="1"
+            android:text="药品用法" />
+
 
     </LinearLayout>
 

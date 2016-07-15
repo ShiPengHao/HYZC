@@ -17,10 +17,14 @@ import cn.jpush.android.api.JPushInterface;
 
 public abstract class BaseActivity extends AppCompatActivity {
     private View mStatusBarView;
+    protected Context context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (context == null){
+            context = this;
+        }
         setContentView(getLayoutResId());
         initView();
         setListener();

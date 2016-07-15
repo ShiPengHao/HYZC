@@ -2,10 +2,45 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/grey"
     android:orientation="vertical">
 
     <TextView
         style="@style/TextTitle"
-        android:text="医生主页"/>
+        android:text="医生主页" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="8dp">
+
+        <Button
+            android:id="@+id/bt_appoint"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:background="@drawable/selector_bt_bg_green"
+            android:text="@string/my_appointment"
+            android:textColor="@color/white" />
+
+        <Button
+            android:id="@+id/bt_personal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:background="@drawable/selector_bt_bg_yellow"
+            android:text="@string/personal"
+            android:textColor="@color/white" />
+
+        <Button
+            android:id="@+id/bt_test"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:background="@drawable/selector_bt_bg_green"
+            android:text="@string/test"
+            android:textColor="@color/white" />
+    </LinearLayout>
 
 </LinearLayout>

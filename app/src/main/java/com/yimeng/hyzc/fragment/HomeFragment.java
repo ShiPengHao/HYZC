@@ -65,12 +65,9 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
     @Override
     protected void initData() {
         datas = new ArrayList<>();
-        File file1 = new File(getActivity().getFilesDir(), "/a.png");
-        File file2 = new File(getActivity().getFilesDir(), "/b.jpg");
-        File file3 = new File(getActivity().getFilesDir(), "/c.jpg");
-        datas.add(Uri.fromFile(file1).toString());
-        datas.add(Uri.fromFile(file2).toString());
-        datas.add(Uri.fromFile(file3).toString());
+        datas.add(null);
+        datas.add(null);
+        datas.add(null);
         viewPager.setData(datas);
         TextView tv;
         Random random = new Random();

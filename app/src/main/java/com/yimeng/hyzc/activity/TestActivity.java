@@ -1,6 +1,5 @@
 package com.yimeng.hyzc.activity;
 
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
@@ -13,6 +12,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.yimeng.hyzc.R;
+import com.yimeng.hyzc.utils.MyConstant;
 import com.yimeng.hyzc.utils.MyToast;
 import com.yimeng.hyzc.utils.WebServiceUtils;
 
@@ -30,8 +30,6 @@ public class TestActivity extends AppCompatActivity implements View.OnClickListe
     private Button bt_area;
     private Button bt_province;
     private Map<String, Object> values = new HashMap<>();
-    private final String NAMESPACE = "http://192.168.0.108:888/";
-    private final String WEB_SERVICE_URL = "http://192.168.0.108:888/API/ymOR_WebService.asmx";
     private Button bt_login;
     private Button bt_register;
     private Button bt_upload_img;
@@ -43,6 +41,8 @@ public class TestActivity extends AppCompatActivity implements View.OnClickListe
     private Button bt_spinner_test;
     private Button bt_pick_doctor;
     private Button bt_Load_Classify;
+    private Button bt_Search_Medicine;
+    private Button bt_Load_Usage;
     //http://192.168.0.108:888/API/ymOR_WebService.asmx?op=GetProvince
 
 
@@ -91,6 +91,10 @@ public class TestActivity extends AppCompatActivity implements View.OnClickListe
         bt_pick_doctor.setOnClickListener(this);
         bt_Load_Classify = (Button) findViewById(R.id.bt_Load_Classify);
         bt_Load_Classify.setOnClickListener(this);
+        bt_Search_Medicine = (Button) findViewById(R.id.bt_Search_Medicine);
+        bt_Search_Medicine.setOnClickListener(this);
+        bt_Load_Usage = (Button) findViewById(R.id.bt_Load_Usage);
+        bt_Load_Usage.setOnClickListener(this);
     }
 
     @Override
@@ -110,7 +114,7 @@ public class TestActivity extends AppCompatActivity implements View.OnClickListe
                 request("GetArea", values);
                 break;
             case R.id.bt_upload_img:
-                Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.b);
+                Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.app_logo);
                 if (bitmap == null) {
                     return;
                 }
@@ -188,6 +192,14 @@ public class TestActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.bt_Load_Classify:
                 request("Load_Classify", null);
                 break;
+            case R.id.bt_Load_Usage:
+                request("Load_Usage", null);
+                break;
+            case R.id.bt_Search_Medicine:
+                values.clear();
+                values.put("keyword","ad");
+                request("Search_Medicine", values);
+                break;
         }
     }
 
@@ -201,10 +213,10 @@ public class TestActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             protected String doInBackground(Object... params) {
                 if (params != null && params.length >= 2) {
-                    return WebServiceUtils.callWebService(WEB_SERVICE_URL, NAMESPACE, (String) params[0],
+                    return WebServiceUtils.callWebService(MyConstant.WEB_SERVICE_URL, MyConstant.NAMESPACE, (String) params[0],
                             (Map<String, Object>) params[1]);
                 } else if (params != null && params.length == 1) {
-                    return WebServiceUtils.callWebService(WEB_SERVICE_URL, NAMESPACE, (String) params[0],
+                    return WebServiceUtils.callWebService(MyConstant.WEB_SERVICE_URL, MyConstant.NAMESPACE, (String) params[0],
                             null);
                 } else {
                     return null;
