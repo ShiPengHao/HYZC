@@ -256,7 +256,7 @@
         android:id="@+id/bt_response"
         android:text="@string/doctor_response"
         android:textColor="@color/white"
-        android:background="@color/bt_yellow"
+        android:background="@color/colorAccent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 </LinearLayout>

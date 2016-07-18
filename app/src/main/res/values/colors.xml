@@ -11,6 +11,7 @@
     <color name="black_item_title">#333</color>
     <color name="black_item_content">#666</color>
     <color name="bg_light_green">#0aa880</color>
+    <color name="bg_light_green_66">#aa0aa880</color>
     <color name="bt_yellow">#fb7e00</color>
     <color name="bt_yellow_dark">#ac6926</color>
     <color name="bg_grey_aaa">#aaa</color>

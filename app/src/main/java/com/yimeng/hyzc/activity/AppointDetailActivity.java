@@ -50,7 +50,7 @@ public class AppointDetailActivity extends BaseActivity implements View.OnClickL
     private String type;
     private Button bt_score;
     private Button bt_response;
-    private static final int REQUEST_CODE_DOCTOR_RESPONSE = 100;
+    public static final int REQUEST_CODE_DOCTOR_RESPONSE = 100;
 
     @Override
     protected int getLayoutResId() {

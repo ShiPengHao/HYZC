@@ -15,7 +15,7 @@
     <string name="drug">药品</string>
     <string name="health">健康教育</string>
     <string name="connet_error">网络连接异常，请检查网络设置或者稍后再试</string>
-    <string name="hint_search">输入关键字搜索</string>
+    <string name="hint_search">输入关键字拼音搜索</string>
     <string name="loading">努力加载中，请稍侯</string>
     <string name="province">省份</string>
     <string name="city">地市</string>
@@ -90,7 +90,20 @@
     <string name="choose_time">选择预约时间</string>
     <string name="appointment_score">预约评分</string>
     <string name="doctor_prescribe">增加药品</string>
-    <string name="submit">确认提交</string>
-    <string name="prescribe">您所开的药方列表如下</string>
+    <string name="submit">确认</string>
+    <string name="prescribe">药品列表</string>
     <string name="can_not_be_null">不能为空</string>
+    <string name="cancel">取消</string>
+    <string name="medicine_name">药品名称</string>
+    <string name="medicine_specification">药品规格</string>
+    <string name="medicine_unit">药品单位</string>
+    <string name="medicine_common_name">通用名称</string>
+    <string name="medicine_origin">药品产地</string>
+    <string name="medicine_care">医保类型</string>
+    <string name="medicine_number">药品数量</string>
+    <string name="medicine_remark">医嘱</string>
+    <string name="clear">清除</string>
+    <string name="hint_search_pinyin">请输入药品的拼音（最少2个字母）</string>
+    <string name="medicine_usage">药品用法</string>
+    <string name="medicine_usage_select">选择药品用法</string>
 </resources>

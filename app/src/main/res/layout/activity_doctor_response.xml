@@ -27,7 +27,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
+        android:layout_marginBottom="4dp"
         android:background="@color/white"
         android:gravity="center_vertical"
         android:orientation="horizontal"
@@ -53,7 +53,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
+        android:layout_marginBottom="4dp"
         android:background="@color/white"
         android:gravity="center_vertical"
         android:orientation="horizontal"
@@ -76,26 +76,55 @@
             android:textSize="16dp" />
     </LinearLayout>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:padding="4dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/medicine_remark"
+            android:textColor="@color/black_item_title"
+            android:textSize="16dp" />
+
+        <EditText
+            android:id="@+id/et_medicine_remark"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:hint="@string/medicine_remark"
+            android:textColor="@color/black_item_content"
+            android:textSize="16dp" />
+    </LinearLayout>
+
     <TextView
         android:id="@+id/tv_prescribe"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/white"
+        android:background="@color/colorAccent"
         android:gravity="center"
         android:padding="4dp"
         android:text="@string/prescribe"
-        android:textColor="@color/black_item_content"
+        android:textColor="@color/white"
         android:textSize="16dp" />
+
 
     <ListView
         android:id="@+id/lv"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1">
+        android:layout_weight="1"
+        android:background="@color/white"
+        android:cacheColorHint="@null"
+        android:divider="@color/grey_line"
+        android:dividerHeight="1dp"
+        android:listSelector="@android:color/transparent">
 
     </ListView>
-
-    <include layout="@layout/layout_devider" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -107,7 +136,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="@color/colorAccent"
+            android:background="@color/bt_yellow"
             android:text="@string/doctor_prescribe"
             android:textColor="@color/white" />
 
@@ -116,7 +145,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="@color/bt_yellow"
+            android:background="@color/colorAccent"
             android:text="@string/submit"
             android:textColor="@color/white" />
 

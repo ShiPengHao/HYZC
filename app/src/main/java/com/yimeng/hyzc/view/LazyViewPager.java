@@ -385,7 +385,7 @@ public class LazyViewPager extends ViewGroup {
     }
 
     /**
-     * Returns the number of pages that will be retained to either side of the
+     * Returns the medicines_quantity of pages that will be retained to either side of the
      * current page in the view hierarchy in an idle state. Defaults to 1.
      *
      * @return How many pages will be kept offscreen on either side
@@ -396,14 +396,14 @@ public class LazyViewPager extends ViewGroup {
     }
 
     /**
-     * Set the number of pages that should be retained to either side of the
+     * Set the medicines_quantity of pages that should be retained to either side of the
      * current page in the view hierarchy in an idle state. Pages beyond this
      * limit will be recreated from the adapter when needed.
      *
-     * <p>This is offered as an optimization. If you know in advance the number
+     * <p>This is offered as an optimization. If you know in advance the medicines_quantity
      * of pages you will need to support or have lazy-loading mechanisms in place
      * on your pages, tweaking this setting can have benefits in perceived smoothness
-     * of paging animations and interaction. If you have a small number of pages (3-4)
+     * of paging animations and interaction. If you have a small medicines_quantity of pages (3-4)
      * that you can keep active all at once, less time will be spent in layout for
      * newly created view subtrees as the user pages back and forth.</p>
      *
@@ -499,8 +499,8 @@ public class LazyViewPager extends ViewGroup {
     /**
      * Like {@link View#scrollBy}, but scroll smoothly instead of immediately.
      *
-     * @param x the number of pixels to scroll by on the X axis
-     * @param y the number of pixels to scroll by on the Y axis
+     * @param x the medicines_quantity of pixels to scroll by on the X axis
+     * @param y the medicines_quantity of pixels to scroll by on the Y axis
      */
     void smoothScrollTo(int x, int y) {
         smoothScrollTo(x, y, 0);
@@ -509,8 +509,8 @@ public class LazyViewPager extends ViewGroup {
     /**
      * Like {@link View#scrollBy}, but scroll smoothly instead of immediately.
      *
-     * @param x the number of pixels to scroll by on the X axis
-     * @param y the number of pixels to scroll by on the Y axis
+     * @param x the medicines_quantity of pixels to scroll by on the X axis
+     * @param y the medicines_quantity of pixels to scroll by on the Y axis
      * @param velocity the velocity associated with a fling, if applicable. (0 otherwise)
      */
     void smoothScrollTo(int x, int y, int velocity) {
