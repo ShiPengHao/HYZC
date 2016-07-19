@@ -58,6 +58,7 @@ public class DoctorPrescribeActivity extends BaseActivity implements View.OnClic
     private ListView lv;
     private ArrayList<MedicineUsageBean> usages = new ArrayList<>();
     private MedicineUsageBean usage;
+    private Button bt_select;
 
 
     @Override
@@ -79,6 +80,7 @@ public class DoctorPrescribeActivity extends BaseActivity implements View.OnClic
         et_medicine_number = (EditText) findViewById(R.id.et_medicine_number);
         bt_submit = (Button) findViewById(R.id.bt_submit);
         bt_cancel = (Button) findViewById(R.id.bt_cancel);
+        bt_select = (Button) findViewById(R.id.bt_select);
         lv = (ListView) findViewById(R.id.lv);
     }
 
@@ -87,7 +89,7 @@ public class DoctorPrescribeActivity extends BaseActivity implements View.OnClic
         iv_back.setOnClickListener(this);
         bt_submit.setOnClickListener(this);
         bt_cancel.setOnClickListener(this);
-        tv_medicine_usage.setOnClickListener(this);
+        bt_select.setOnClickListener(this);
         cet.addTextChangedListener(new ClearEditText.SimpleTextChangedListener() {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
@@ -203,7 +205,7 @@ public class DoctorPrescribeActivity extends BaseActivity implements View.OnClic
             case R.id.bt_cancel:
                 clearText();
                 break;
-            case R.id.tv_medicine_usage:
+            case R.id.bt_select:
                 showUsageDialog();
                 break;
         }
@@ -286,7 +288,7 @@ public class DoctorPrescribeActivity extends BaseActivity implements View.OnClic
         tv_medicine_name.setText(medicineBean.CnName);
         tv_medicine_unit.setText(medicineBean.Unit);
         tv_medicine_common_name.setText(medicineBean.CommonName);
-        tv_medicine_specification.setText(medicineBean.Specification);
+        tv_medicine_specification.setText(null == medicineBean.Specification ? "无" : medicineBean.Specification);
         tv_medicine_care.setText(medicineBean.HealthCare);
         tv_medicine_origin.setText(medicineBean.Origin);
         hideMedicineList();

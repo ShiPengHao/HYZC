@@ -225,11 +225,17 @@ public class SplashActivity extends BaseActivity {
     }
 
     /**
-     * 跳转到主页
+     * 跳转到主页，根据账号类型判断
      */
     private void goToHome(String type) {
-        startActivity(new Intent(this, HomePatientActivity.class));
         finish();
+        if (type.equalsIgnoreCase("patient")) {
+            startActivity(new Intent(this, HomePatientActivity.class));
+        } else if (type.equalsIgnoreCase("doctor")) {
+            startActivity(new Intent(this, HomeDoctorActivity.class));
+        } else if (type.equalsIgnoreCase("shop")) {
+            startActivity(new Intent(this, HomePharmacyActivity.class));
+        }
     }
 
     /**

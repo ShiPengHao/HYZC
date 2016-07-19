@@ -38,6 +38,7 @@ public class AppointHistoryActivity extends BaseActivity implements View.OnClick
     private int itemsCount;
     private String type;
     private ImageView iv_back;
+    public static final int REQUEST_CODE_FOR_APPOINT_DETAIL = 100;
 
     @Override
     protected int getLayoutResId() {
@@ -82,12 +83,13 @@ public class AppointHistoryActivity extends BaseActivity implements View.OnClick
      */
     private void requestAppointmentList() {
         params.clear();
+        params.put("orderby", "add_time desc");// 默认按时间倒序
         String where = String.format("%s_id=%s", type, userId);
-        if (type.equalsIgnoreCase("doctor")){
+        if (type.equalsIgnoreCase("doctor")) {
             where = "select_" + where;
+            params.put("orderby", "doctor_dispose asc, add_time desc");// 医生按处理标志升序，时间倒序
         }
         params.put("where", where);
-        params.put("orderby", "add_time desc");
         if (listView.isRefreshing()) {
             params.put("startIndex", 1);
             params.put("endIndex", Math.max(20, itemsCount));
@@ -167,9 +169,21 @@ public class AppointHistoryActivity extends BaseActivity implements View.OnClick
      * @param id 预约单id
      */
     private void goToDetail(int id) {
-        startActivity(new Intent(this, AppointDetailActivity.class).putExtra("id", id).putExtra("type",type));
+        startActivityForResult(new Intent(this, AppointDetailActivity.class).putExtra("id", id).putExtra("type", type)
+                , REQUEST_CODE_FOR_APPOINT_DETAIL);
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (null == data){
+            return;
+        }
+        switch (requestCode){
+            case REQUEST_CODE_FOR_APPOINT_DETAIL:
+                MyToast.show("列表数据已更新，请刷新查看");
+                break;
+        }
+    }
 
     @Override
     public void onClick(View v) {

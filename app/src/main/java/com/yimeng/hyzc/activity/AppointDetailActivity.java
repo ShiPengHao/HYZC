@@ -51,6 +51,7 @@ public class AppointDetailActivity extends BaseActivity implements View.OnClickL
     private Button bt_score;
     private Button bt_response;
     public static final int REQUEST_CODE_DOCTOR_RESPONSE = 100;
+    private boolean updateFlag;
 
     @Override
     protected int getLayoutResId() {
@@ -142,6 +143,7 @@ public class AppointDetailActivity extends BaseActivity implements View.OnClickL
         if (bean.doctor_dispose == 0) {
             tv_appointStatus.setText(String.format("%s：%s", getString(R.string.appointment_status), getString(R.string.no_response)));
             tv_appointStatus.setTextColor(Color.RED);
+            bt_score.setVisibility(View.GONE);
         } else {
             bt_response.setVisibility(View.GONE);
             tv_appointStatus.setText(String.format("%s：%s", getString(R.string.appointment_status), getString(R.string.has_response)));
@@ -175,7 +177,7 @@ public class AppointDetailActivity extends BaseActivity implements View.OnClickL
     /**
      * 解析预约详情数据
      *
-     * @param result
+     * @param result json数据
      */
     private void parseAppointDetail(String result) {
         if (result == null) {
@@ -211,6 +213,9 @@ public class AppointDetailActivity extends BaseActivity implements View.OnClickL
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.iv_back:
+                if (updateFlag){
+                    setResult(100,new Intent());
+                }
                 finish();
                 break;
             case R.id.bt_response:
@@ -223,6 +228,7 @@ public class AppointDetailActivity extends BaseActivity implements View.OnClickL
         }
     }
 
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(null == data){
@@ -231,6 +237,7 @@ public class AppointDetailActivity extends BaseActivity implements View.OnClickL
         switch (requestCode){
             case REQUEST_CODE_DOCTOR_RESPONSE:
                 requestAppointmentDetail();
+                updateFlag = true;
                 break;
         }
 

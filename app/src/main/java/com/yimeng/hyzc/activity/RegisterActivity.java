@@ -195,10 +195,9 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
         uploadImgBuilder.setTitle("图片上传");
         uploadImgTextView = new TextView(this);
         uploadImgTextView.setTextSize(18);
-        uploadImgTextView.setGravity(Gravity.CENTER_HORIZONTAL);
         uploadImgTextView.setTextColor(Color.BLACK);
         uploadImgTextView.setPadding(20, 10, 0, 0);
-        uploadImgTextView.setGravity(Gravity.CENTER_VERTICAL);
+        uploadImgTextView.setGravity(Gravity.CENTER);
         uploadImgBuilder.setView(uploadImgTextView);
         uploadImgBuilder.setCancelable(false);
         alertDialog = uploadImgBuilder.create();

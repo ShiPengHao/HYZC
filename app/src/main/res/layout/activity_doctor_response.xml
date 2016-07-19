@@ -26,7 +26,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="48dp"
         android:layout_marginBottom="4dp"
         android:background="@color/white"
         android:gravity="center_vertical"
@@ -52,7 +52,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="48dp"
         android:layout_marginBottom="4dp"
         android:background="@color/white"
         android:gravity="center_vertical"
@@ -65,18 +65,31 @@
             android:text="@string/doctor_response_way"
             android:textColor="@color/black_item_title"
             android:textSize="16dp" />
-
-        <EditText
-            android:id="@+id/et_doctor_way"
-            android:layout_width="match_parent"
+        <TextView
+            android:id="@+id/tv_doctor_way"
+            android:layout_width="0dp"
+            android:layout_weight="1"
             android:layout_height="wrap_content"
+            android:gravity="center_vertical"
             android:layout_marginLeft="10dp"
+            android:paddingLeft="10dp"
             android:hint="@string/doctor_response_way"
             android:textColor="@color/black_item_content"
+            android:textSize="16dp" />
+
+        <Button
+            android:id="@+id/bt_select"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/selector_bt_bg_green"
+            android:padding="3dp"
+            android:text="@string/select"
+            android:textColor="@color/white"
             android:textSize="16dp" />
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/ll_remark"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/white"
@@ -136,7 +149,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="@color/bt_yellow"
+            android:background="@drawable/selector_color_yellow_grey"
             android:text="@string/doctor_prescribe"
             android:textColor="@color/white" />
 

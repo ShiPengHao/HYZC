@@ -280,14 +280,23 @@
 
                     <TextView
                         android:id="@+id/tv_medicine_usage"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:paddingLeft="8dp"
+                        android:text="@string/medicine_usage"
+                        android:textColor="@color/black_item_content"
+                        android:textSize="16dp" />
+
+                    <Button
+                        android:id="@+id/bt_select"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:layout_margin="5dp"
                         android:background="@drawable/selector_bt_bg_green"
-                        android:gravity="center"
-                        android:paddingBottom="3dp"
-                        android:paddingTop="3dp"
-                        android:text="@string/medicine_usage_select"
+                        android:padding="3dp"
+                        android:text="@string/select"
                         android:textColor="@color/white"
                         android:textSize="16dp" />
                 </LinearLayout>

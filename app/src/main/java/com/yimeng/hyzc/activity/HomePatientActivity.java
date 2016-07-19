@@ -35,6 +35,36 @@ public class HomePatientActivity extends BaseActivity implements View.OnClickLis
     private long preTime = -1l;
     private int lastPosition;
 
+    private class MyOnPageChangeListener extends ViewPager.SimpleOnPageChangeListener{
+        @Override
+        public void onPageScrolled(int position, float positionOffset,
+                                   int positionOffsetPixels) {
+            float endPosition = indicatorLine.getWidth() * (position + positionOffset);
+            ViewHelper.setTranslationX(indicatorLine, endPosition);
+//			ViewPropertyAnimator.animate(indicatorLine).translationX(endPosition );
+        }
+
+        @Override
+        public void onPageSelected(int position) {
+            TextView currentView = (TextView) ll_tab.getChildAt(position);
+            currentView.setTextColor(getResources().getColor(R.color.colorAccent));
+            Drawable nowDrawable = tabPressedIcons.get(position);
+            nowDrawable.setBounds(0, 0, nowDrawable.getMinimumWidth(), nowDrawable.getMinimumHeight());
+            currentView.setCompoundDrawables(null, nowDrawable, null, null);
+            ViewPropertyAnimator.animate(currentView).scaleX(1.1f).scaleY(1.1f);
+
+
+            TextView lastView = (TextView) ll_tab.getChildAt(lastPosition);
+            lastView.setTextColor(getResources().getColor(R.color.black));
+            Drawable lastDrawable = tabNormalIcons.get(lastPosition);
+            lastDrawable.setBounds(0, 0, lastDrawable.getMinimumWidth(), lastDrawable.getMinimumHeight());
+            lastView.setCompoundDrawables(null, lastDrawable, null, null);
+            ViewPropertyAnimator.animate(lastView).scaleX(1.0f).scaleY(1.0f);
+
+            lastPosition = position;
+        }
+    }
+
     @Override
     protected int getLayoutResId() {
         return R.layout.activity_patient_home;
@@ -64,35 +94,7 @@ public class HomePatientActivity extends BaseActivity implements View.OnClickLis
         adapter = new BaseFragmentPagerAdapter(getSupportFragmentManager(), fragments);
         vp.setAdapter(adapter);
         vp.setCurrentItem(0);
-        vp.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset,
-                                       int positionOffsetPixels) {
-                float endPosition = indicatorLine.getWidth() * (position + positionOffset);
-                ViewHelper.setTranslationX(indicatorLine, endPosition);
-//			ViewPropertyAnimator.animate(indicatorLine).translationX(endPosition );
-            }
-
-            @Override
-            public void onPageSelected(int position) {
-                TextView currentView = (TextView) ll_tab.getChildAt(position);
-                currentView.setTextColor(getResources().getColor(R.color.colorAccent));
-                Drawable nowDrawable = tabPressedIcons.get(position);
-                nowDrawable.setBounds(0, 0, nowDrawable.getMinimumWidth(),nowDrawable.getMinimumHeight());
-                currentView.setCompoundDrawables(null, nowDrawable, null, null);
-                ViewPropertyAnimator.animate(currentView).scaleX(1.1f).scaleY(1.1f);
-
-
-                TextView lastView = (TextView) ll_tab.getChildAt(lastPosition);
-                lastView.setTextColor(getResources().getColor(R.color.black));
-                Drawable lastDrawable = tabNormalIcons.get(lastPosition);
-                lastDrawable.setBounds(0, 0, lastDrawable.getMinimumWidth(),lastDrawable.getMinimumHeight());
-                lastView.setCompoundDrawables(null, lastDrawable, null, null);
-                ViewPropertyAnimator.animate(lastView).scaleX(1.0f).scaleY(1.0f);
-
-                lastPosition = position;
-            }
-        });
+        vp.addOnPageChangeListener(new MyOnPageChangeListener());
     }
 
     protected void initData() {
