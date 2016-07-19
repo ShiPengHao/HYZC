@@ -34,7 +34,6 @@ public class IntroduceActivity extends BaseActivity implements View.OnClickListe
     private boolean isRunning = true;
     private Button bt_login;
     private LinearLayout ll_points;
-    private SharedPreferences spAccount;
 
     /**
      * 实现：1.去黑边 2.改变页码指示器 3.检测最后一张图片的检测
@@ -116,7 +115,6 @@ public class IntroduceActivity extends BaseActivity implements View.OnClickListe
     }
 
     protected void initData() {
-        spAccount = getSharedPreferences(MyConstant.PREFS_ACCOUNT, MODE_PRIVATE);
         Fragment fragment1 = new IntroduceFragment();
         Bundle bundle1 = new Bundle();
         bundle1.putInt("resId", R.drawable.welcome1);
@@ -170,8 +168,6 @@ public class IntroduceActivity extends BaseActivity implements View.OnClickListe
      * 去登陆页面
      */
     private void goToLogin() {
-        // 更新首次运行标志
-        spAccount.edit().putBoolean(MyConstant.KEY_ACCOUNT_FIRSTRUNNING, false).apply();
         // 去登录页面
         startActivity(new Intent(IntroduceActivity.this, LoginActivity.class));
         finish();

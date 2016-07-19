@@ -28,8 +28,6 @@ public class ThreadPoolManager {
     /**
      * 1. 联网
      * 2. 文件操作 耗时较少
-     * <p/>
-     * <p/>
      * cpu * 2 + 1
      *
      * @return

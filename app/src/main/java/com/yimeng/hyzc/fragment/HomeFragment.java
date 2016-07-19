@@ -72,7 +72,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
         TextView tv;
         Random random = new Random();
         int padding = DensityUtil.dip2px(4);
-        for (int i = 0; i < 20; i++) {
+        for (int i = 0; i < 5; i++) {
             tv = new TextView(context);
             tv.setBackgroundColor(Color.argb(200, random.nextInt(200) + 10, random.nextInt(200) + 10, random.nextInt(200) + 10));
             tv.setPadding(padding, padding, padding, padding);

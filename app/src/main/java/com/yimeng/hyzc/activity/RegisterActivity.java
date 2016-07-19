@@ -191,17 +191,21 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
         tv_remark = (TextView) findViewById(R.id.tv_remark);
 
 
+        initUploadDialog();
+
+    }
+
+    private void initUploadDialog() {
         uploadImgBuilder = new android.support.v7.app.AlertDialog.Builder(this);
         uploadImgBuilder.setTitle("图片上传");
         uploadImgTextView = new TextView(this);
         uploadImgTextView.setTextSize(18);
         uploadImgTextView.setTextColor(Color.BLACK);
-        uploadImgTextView.setPadding(20, 10, 0, 0);
+        uploadImgTextView.setPadding(10, 10, 0, 0);
         uploadImgTextView.setGravity(Gravity.CENTER);
         uploadImgBuilder.setView(uploadImgTextView);
         uploadImgBuilder.setCancelable(false);
         alertDialog = uploadImgBuilder.create();
-
     }
 
     protected void setListener() {
@@ -775,7 +779,12 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
 
                     } catch (JSONException e) {
                         e.printStackTrace();
+                        MyToast.show(getString(R.string.connet_error));
+                        alertDialog.dismiss();
                     }
+                }else{
+                    alertDialog.dismiss();
+                    MyToast.show(getString(R.string.connet_error));
                 }
             }
 

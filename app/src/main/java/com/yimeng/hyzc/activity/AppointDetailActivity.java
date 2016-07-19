@@ -222,8 +222,7 @@ public class AppointDetailActivity extends BaseActivity implements View.OnClickL
                 startActivityForResult(new Intent(this,DoctorResponseActivity.class).putExtra("id",appointment_id), REQUEST_CODE_DOCTOR_RESPONSE);
                 break;
             case R.id.bt_score:
-                MyToast.show("score");
-                finish();
+                MyToast.show(String.format("%s%s",getString(R.string.appointment_score),getString(R.string.fun_undo)));
                 break;
         }
     }

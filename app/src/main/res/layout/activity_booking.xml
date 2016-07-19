@@ -50,7 +50,7 @@
                     android:textColor="@color/colorAccent"
                     android:textSize="20dp" />
 
-                <include layout="@layout/layout_devider" />
+                <include layout="@layout/layout_divider" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -68,7 +68,7 @@
                         android:layout_height="@dimen/finger_width" />
                 </LinearLayout>
 
-                <include layout="@layout/layout_devider" />
+                <include layout="@layout/layout_divider" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -86,7 +86,7 @@
                         android:layout_height="@dimen/finger_width" />
                 </LinearLayout>
 
-                <include layout="@layout/layout_devider" />
+                <include layout="@layout/layout_divider" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -105,7 +105,7 @@
 
                 </LinearLayout>
 
-                <include layout="@layout/layout_devider" />
+                <include layout="@layout/layout_divider" />
 
 
                 <LinearLayout
@@ -124,7 +124,7 @@
                         android:layout_height="@dimen/finger_width" />
                 </LinearLayout>
 
-                <include layout="@layout/layout_devider" />
+                <include layout="@layout/layout_divider" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -142,7 +142,7 @@
                         android:layout_height="@dimen/finger_width" />
                 </LinearLayout>
 
-                <include layout="@layout/layout_devider" />
+                <include layout="@layout/layout_divider" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -161,7 +161,7 @@
 
                 </LinearLayout>
 
-                <include layout="@layout/layout_devider" />
+                <include layout="@layout/layout_divider" />
 
                 <GridView
                     android:id="@+id/gv"

@@ -137,7 +137,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
     }
 
     /**
-     * 登陆信息核对无误后登陆//TODO 线程阻塞
+     * 登陆信息核对无误后登陆
      */
     private void login() {
         username = et_username.getText().toString().trim();
@@ -223,21 +223,16 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
     private void setJPushAliasAndTag(final String type, final String id) {
         final HashSet<String> tags = new HashSet<>();
         tags.add(type);
-        ThreadUtils.runOnBackThread(new Runnable() {
+        JPushInterface.setAliasAndTags(MyApp.getAppContext(), type + "+" + id, tags, new TagAliasCallback() {
             @Override
-            public void run() {
-                JPushInterface.setAliasAndTags(MyApp.getAppContext(), type + "+" + id, tags, new TagAliasCallback() {
-                    @Override
-                    public void gotResult(int i, String s, Set<String> set) {
-                        if (i != 0) {
-                            MyLog.i("JPush", "set alias and tag error");
-                            dismissLoginDialog();
-                            MyToast.show(getString(R.string.connet_error));
-                        } else {
-                            saveAccountInfo(type, id);
-                        }
-                    }
-                });
+            public void gotResult(int i, String s, Set<String> set) {
+                if (i != 0) {
+                    MyLog.i("JPush", "set alias and tag error");
+                    dismissLoginDialog();
+                    MyToast.show(getString(R.string.connet_error));
+                } else {
+                    saveAccountInfo(type, id);
+                }
             }
         });
     }

@@ -67,7 +67,7 @@
                     android:textColor="@color/black_item_content"
                     android:textSize="18dp" />
 
-                <include layout="@layout/layout_devider" />
+                <include layout="@layout/layout_divider" />
 
                 <TextView
                     android:id="@+id/tv_sex"
@@ -79,7 +79,7 @@
                     android:textColor="@color/black_item_content"
                     android:textSize="18dp" />
 
-                <include layout="@layout/layout_devider" />
+                <include layout="@layout/layout_divider" />
 
                 <TextView
                     android:id="@+id/tv_age"
@@ -91,7 +91,7 @@
                     android:textColor="@color/black_item_content"
                     android:textSize="18dp" />
 
-                <include layout="@layout/layout_devider" />
+                <include layout="@layout/layout_divider" />
 
                 <TextView
                     android:id="@+id/tv_email"
@@ -156,7 +156,7 @@
                     android:textColor="@color/white" />
             </RelativeLayout>
 
-            <include layout="@layout/layout_devider" />
+            <include layout="@layout/layout_divider" />
 
             <TextView
                 android:layout_width="wrap_content"

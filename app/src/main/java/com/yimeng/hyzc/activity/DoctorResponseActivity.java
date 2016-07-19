@@ -55,6 +55,8 @@ public class DoctorResponseActivity extends BaseActivity implements View.OnClick
     private AlertDialog uploadDialog;
     private LinearLayout ll_remark;
     private ArrayList<String> ways = new ArrayList<>();
+    private String response;
+    private String way;
 
     @Override
     protected int getLayoutResId() {
@@ -169,7 +171,8 @@ public class DoctorResponseActivity extends BaseActivity implements View.OnClick
         tv_prescribe.setVisibility(View.GONE);
         ll_remark.setVisibility(View.GONE);
         medicines.clear();
-        et_medicine_remark.setText(getString(R.string.medicine_remark));
+        et_medicine_remark.setText("");
+        et_medicine_remark.setHint(getString(R.string.medicine_remark));
     }
 
     @Override
@@ -213,6 +216,23 @@ public class DoctorResponseActivity extends BaseActivity implements View.OnClick
      * 提交药方，如果没有开药品，则直接提交回应；如果开药品，先上传药品，成功后再提交回应
      */
     private void requestMedicines() {
+        response = et_doctor_response.getText().toString().trim();
+        if (TextUtils.isEmpty(response)) {
+            MyToast.show(String.format("%s%s", getString(R.string.doctor_response), getString(R.string.can_not_be_null)));
+            ObjectAnimator.ofFloat(et_doctor_response, "translationX", 15, -15, 15, -15, 0).setDuration(300).start();
+            return;
+        }
+        way = tv_doctor_way.getText().toString().trim();
+        if (TextUtils.isEmpty(way)) {
+            MyToast.show(String.format("%s%s", getString(R.string.doctor_response_way), getString(R.string.can_not_be_null)));
+            ObjectAnimator.ofFloat(bt_select, "translationX", 15, -15, 15, -15, 0).setDuration(300).start();
+
+            return;
+        }
+        if (id == 0) {
+            MyToast.show("未知错误，请重新登陆应用再试");
+            return;
+        }
         if (medicines.size() == 0) {
             requestResponse(0);
             return;
@@ -221,10 +241,6 @@ public class DoctorResponseActivity extends BaseActivity implements View.OnClick
         if (TextUtils.isEmpty(remark)) {
             MyToast.show(String.format("%s%s", getString(R.string.medicine_remark), getString(R.string.can_not_be_null)));
             ObjectAnimator.ofFloat(et_medicine_remark, "translationX", 15, -15, 15, -15, 0).setDuration(300).start();
-            return;
-        }
-        if (id == 0) {
-            MyToast.show("未知错误，请重新登陆应用再试");
             return;
         }
         if (null == map) {
@@ -262,7 +278,6 @@ public class DoctorResponseActivity extends BaseActivity implements View.OnClick
                 } else {
                     try {
                         JSONObject object = new JSONObject(result);
-                        MyToast.show(object.optString("msg"));
                         if ("ok".equalsIgnoreCase(object.optString("status"))) {
                             requestResponse(1);
                         }else{
@@ -283,22 +298,6 @@ public class DoctorResponseActivity extends BaseActivity implements View.OnClick
      * 提交医生回应
      */
     private void requestResponse(int hasMedicines) {
-        String response = et_doctor_response.getText().toString().trim();
-        if (TextUtils.isEmpty(response)) {
-            MyToast.show(String.format("%s%s", getString(R.string.doctor_response), getString(R.string.can_not_be_null)));
-            ObjectAnimator.ofFloat(et_doctor_response, "translationX", 15, -15, 15, -15, 0).setDuration(300).start();
-            return;
-        }
-        String way = tv_doctor_way.getText().toString().trim();
-        if (TextUtils.isEmpty(way)) {
-            MyToast.show(String.format("%s%s", getString(R.string.doctor_response_way), getString(R.string.can_not_be_null)));
-            ObjectAnimator.ofFloat(bt_select, "translationX", 15, -15, 15, -15, 0).setDuration(300).start();
-            return;
-        }
-        if (id == 0) {
-            MyToast.show("未知错误，请重新登陆应用再试");
-            return;
-        }
         if (null == map) {
             map = new HashMap<>();
         }

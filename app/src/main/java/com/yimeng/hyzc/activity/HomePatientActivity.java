@@ -1,5 +1,6 @@
 package com.yimeng.hyzc.activity;
 
+import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.os.SystemClock;
 import android.support.v4.app.Fragment;
@@ -18,6 +19,7 @@ import com.yimeng.hyzc.adapter.BaseFragmentPagerAdapter;
 import com.yimeng.hyzc.fragment.DrugFragment;
 import com.yimeng.hyzc.fragment.HomeFragment;
 import com.yimeng.hyzc.fragment.MyFragment;
+import com.yimeng.hyzc.utils.MyConstant;
 import com.yimeng.hyzc.utils.MyToast;
 
 import java.util.ArrayList;
@@ -98,6 +100,13 @@ public class HomePatientActivity extends BaseActivity implements View.OnClickLis
     }
 
     protected void initData() {
+        // 更新首次运行标志
+        SharedPreferences spAccount = getSharedPreferences(MyConstant.PREFS_ACCOUNT, MODE_PRIVATE);
+        if(spAccount.getBoolean(MyConstant.KEY_ACCOUNT_FIRSTRUNNING,true)) {
+            //TODO 首次运行提示
+            spAccount.edit().putBoolean(MyConstant.KEY_ACCOUNT_FIRSTRUNNING, false).apply();
+        }
+
         fragments.clear();
         fragments.add(new HomeFragment());
         fragments.add(new DrugFragment());

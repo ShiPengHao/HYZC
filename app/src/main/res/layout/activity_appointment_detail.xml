@@ -56,7 +56,7 @@
                 android:textColor="@color/black_item_content"
                 android:textSize="16dp" />
 
-            <include layout="@layout/layout_devider" />
+            <include layout="@layout/layout_divider" />
 
             <TextView
                 android:id="@+id/tv_description"
@@ -69,7 +69,7 @@
                 android:textColor="@color/black_item_content"
                 android:textSize="16dp" />
 
-            <include layout="@layout/layout_devider" />
+            <include layout="@layout/layout_divider" />
 
             <TextView
                 android:id="@+id/tv_doctor"
@@ -82,7 +82,7 @@
                 android:textColor="@color/black_item_content"
                 android:textSize="16dp" />
 
-            <include layout="@layout/layout_devider" />
+            <include layout="@layout/layout_divider" />
 
             <TextView
                 android:id="@+id/tv_appointmentTime"
@@ -95,7 +95,7 @@
                 android:textColor="@color/black_item_content"
                 android:textSize="16dp" />
 
-            <include layout="@layout/layout_devider" />
+            <include layout="@layout/layout_divider" />
 
             <TextView
                 android:id="@+id/tv_appointment_add_time"
@@ -108,7 +108,7 @@
                 android:textColor="@color/black_item_content"
                 android:textSize="16dp" />
 
-            <include layout="@layout/layout_devider" />
+            <include layout="@layout/layout_divider" />
 
             <TextView
                 android:id="@+id/tv_appointment_score"
@@ -143,7 +143,7 @@
                 android:textColor="@color/black_item_content"
                 android:textSize="16dp" />
 
-            <include layout="@layout/layout_devider" />
+            <include layout="@layout/layout_divider" />
 
             <TextView
                 android:id="@+id/tv_response"
@@ -156,7 +156,7 @@
                 android:textColor="@color/black_item_content"
                 android:textSize="16dp" />
 
-            <include layout="@layout/layout_devider" />
+            <include layout="@layout/layout_divider" />
 
             <TextView
                 android:id="@+id/tv_response_time"
@@ -169,7 +169,7 @@
                 android:textColor="@color/black_item_content"
                 android:textSize="16dp" />
 
-            <include layout="@layout/layout_devider" />
+            <include layout="@layout/layout_divider" />
 
             <TextView
                 android:id="@+id/tv_response_way"
@@ -204,7 +204,7 @@
                 android:textColor="@color/black_item_content"
                 android:textSize="16dp" />
 
-            <include layout="@layout/layout_devider" />
+            <include layout="@layout/layout_divider" />
 
             <TextView
                 android:id="@+id/tv_sex"
@@ -217,7 +217,7 @@
                 android:textColor="@color/black_item_content"
                 android:textSize="16dp" />
 
-            <include layout="@layout/layout_devider" />
+            <include layout="@layout/layout_divider" />
 
             <TextView
                 android:id="@+id/tv_age"
@@ -230,7 +230,7 @@
                 android:textColor="@color/black_item_content"
                 android:textSize="16dp" />
 
-            <include layout="@layout/layout_devider" />
+            <include layout="@layout/layout_divider" />
 
             <TextView
                 android:id="@+id/tv_phone"
@@ -242,7 +242,7 @@
                 android:text="@string/phone"
                 android:textColor="@color/black_item_content"
                 android:textSize="16dp" />
-            <include layout="@layout/layout_devider" />
+            <include layout="@layout/layout_divider" />
         </LinearLayout>
     </ScrollView>
     <Button
