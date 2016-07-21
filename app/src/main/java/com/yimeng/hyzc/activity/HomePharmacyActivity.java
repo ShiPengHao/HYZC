@@ -29,7 +29,6 @@ public class HomePharmacyActivity extends BaseActivity {
         // 更新首次运行标志
         SharedPreferences spAccount = getSharedPreferences(MyConstant.PREFS_ACCOUNT, MODE_PRIVATE);
         if (spAccount.getBoolean(MyConstant.KEY_ACCOUNT_FIRSTRUNNING, true)) {
-            //TODO 首次运行提示
             spAccount.edit().putBoolean(MyConstant.KEY_ACCOUNT_FIRSTRUNNING, false).apply();
         }
     }

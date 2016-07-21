@@ -26,11 +26,11 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:minHeight="48dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="4dp"
         android:background="@color/white"
         android:gravity="center_vertical"
+        android:minHeight="48dp"
         android:orientation="horizontal"
         android:padding="4dp">
 
@@ -66,15 +66,16 @@
             android:text="@string/doctor_response_way"
             android:textColor="@color/black_item_title"
             android:textSize="16dp" />
+
         <TextView
             android:id="@+id/tv_doctor_way"
             android:layout_width="0dp"
-            android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:gravity="center_vertical"
             android:layout_marginLeft="10dp"
-            android:paddingLeft="10dp"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
             android:hint="@string/doctor_response_way"
+            android:paddingLeft="10dp"
             android:textColor="@color/black_item_content"
             android:textSize="16dp" />
 
@@ -152,6 +153,7 @@
             android:layout_weight="1"
             android:background="@drawable/selector_color_yellow_grey"
             android:text="@string/doctor_prescribe"
+            android:textSize="18dp"
             android:textColor="@color/white" />
 
         <Button
@@ -161,6 +163,7 @@
             android:layout_weight="1"
             android:background="@color/colorAccent"
             android:text="@string/submit"
+            android:textSize="18dp"
             android:textColor="@color/white" />
 
     </LinearLayout>

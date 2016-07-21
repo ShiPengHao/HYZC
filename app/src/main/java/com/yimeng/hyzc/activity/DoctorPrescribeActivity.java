@@ -4,14 +4,13 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
-import android.text.TextUtils;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.NumberPicker;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
@@ -46,7 +45,6 @@ public class DoctorPrescribeActivity extends BaseActivity implements View.OnClic
     private TextView tv_medicine_origin;
     private TextView tv_medicine_care;
     private TextView tv_medicine_usage;
-    private EditText et_medicine_number;
     private Button bt_submit;
     private Button bt_cancel;
 
@@ -59,6 +57,7 @@ public class DoctorPrescribeActivity extends BaseActivity implements View.OnClic
     private ArrayList<MedicineUsageBean> usages = new ArrayList<>();
     private MedicineUsageBean usage;
     private Button bt_select;
+    private NumberPicker medicineNumberPicker;
 
 
     @Override
@@ -77,11 +76,15 @@ public class DoctorPrescribeActivity extends BaseActivity implements View.OnClic
         tv_medicine_origin = (TextView) findViewById(R.id.tv_medicine_origin);
         tv_medicine_care = (TextView) findViewById(R.id.tv_medicine_care);
         tv_medicine_usage = (TextView) findViewById(R.id.tv_medicine_usage);
-        et_medicine_number = (EditText) findViewById(R.id.et_medicine_number);
         bt_submit = (Button) findViewById(R.id.bt_submit);
         bt_cancel = (Button) findViewById(R.id.bt_cancel);
         bt_select = (Button) findViewById(R.id.bt_select);
         lv = (ListView) findViewById(R.id.lv);
+
+        medicineNumberPicker = (NumberPicker) findViewById(R.id.np);
+        medicineNumberPicker.setMaxValue(100);
+        medicineNumberPicker.setMinValue(1);
+        medicineNumberPicker.setValue(1);
     }
 
     @Override
@@ -241,7 +244,7 @@ public class DoctorPrescribeActivity extends BaseActivity implements View.OnClic
         tv_medicine_origin.setText("");
         tv_medicine_specification.setText("");
         tv_medicine_unit.setText("");
-        et_medicine_number.setText("");
+        medicineNumberPicker.setValue(1);
         medicineBean = null;
         usage = null;
         tv_medicine_usage.setText(getString(R.string.medicine_usage_select));
@@ -264,18 +267,13 @@ public class DoctorPrescribeActivity extends BaseActivity implements View.OnClic
             MyToast.show("您还未选择任何药品");
             return;
         }
-        String number = et_medicine_number.getText().toString().trim();
-        if (TextUtils.isEmpty(number)) {
-            MyToast.show("请填写药品数量");
-            ObjectAnimator.ofFloat(et_medicine_number, "translationX", 15, -15, 15, -15, 0).setDuration(300).start();
-            return;
-        }
-        medicineBean.medicines_quantity = number;
+
         if (null == usage) {
             MyToast.show(getString(R.string.medicine_usage_select));
             ObjectAnimator.ofFloat(tv_medicine_usage, "translationX", 15, -15, 15, -15, 0).setDuration(300).start();
             return;
         }
+        medicineBean.medicines_quantity = String.valueOf(medicineNumberPicker.getValue());
         medicineBean.medicines_usage = usage.usage_code;
         hideMedicineList();
         setResult(100, new Intent().putExtra("medicine", medicineBean));

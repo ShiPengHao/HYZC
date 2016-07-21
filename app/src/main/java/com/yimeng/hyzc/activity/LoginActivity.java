@@ -19,7 +19,6 @@ import com.yimeng.hyzc.utils.MyApp;
 import com.yimeng.hyzc.utils.MyConstant;
 import com.yimeng.hyzc.utils.MyLog;
 import com.yimeng.hyzc.utils.MyToast;
-import com.yimeng.hyzc.utils.ThreadUtils;
 import com.yimeng.hyzc.utils.WebServiceUtils;
 
 import org.json.JSONObject;
@@ -115,7 +114,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
             }
         }
     }
-
 
     @Override
     public void onClick(View v) {

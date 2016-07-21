@@ -4,25 +4,33 @@
     android:layout_height="match_parent"
     android:gravity="center_horizontal"
     android:orientation="vertical">
+
     <TextView
         android:id="@+id/tv_title"
         style="@style/TextTitle"
         android:text="@string/drug" />
 
-    <com.yimeng.hyzc.view.ClearEditText
-        android:id="@+id/cet"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:paddingLeft="8dp"
-        android:drawablePadding="8dp"
-        android:drawableLeft="@mipmap/menu_search"
-        android:drawableRight="@mipmap/delete_xxx"
-        android:paddingRight="12dp"
-        android:ellipsize="end"
-        android:hint="@string/hint_search"
-        android:textColor="@color/white"
-        android:background="@color/colorAccent"
-        android:maxLines="1" />
+        android:layout_height="wrap_content"
+        android:background="@color/grey"
+        android:padding="8dp">
+
+        <com.yimeng.hyzc.view.ClearEditText
+            android:id="@+id/cet"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:background="@color/white"
+            android:drawableLeft="@mipmap/menu_search"
+            android:drawablePadding="8dp"
+            android:drawableRight="@mipmap/delete_xxx"
+            android:ellipsize="end"
+            android:hint="@string/hint_search"
+            android:maxLines="1"
+            android:paddingLeft="8dp"
+            android:paddingRight="12dp"
+            android:textColor="@color/black_item_content" />
+    </LinearLayout>
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -30,17 +38,16 @@
 
         <ListView
             android:id="@+id/lv"
-            android:divider="@color/grey_line"
-            android:dividerHeight="1dp"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"></ListView>
+            android:layout_height="match_parent"
+            android:divider="@color/grey_line"
+            android:dividerHeight="1dp"></ListView>
 
         <com.yimeng.hyzc.view.QuickIndexBar
             android:id="@+id/quickindexbar"
             android:layout_width="48dp"
             android:layout_height="match_parent"
-            android:layout_alignParentRight="true"
-             />
+            android:layout_alignParentRight="true" />
 
         <include layout="@layout/layout_loading" />
 

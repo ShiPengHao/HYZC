@@ -6,6 +6,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.util.Base64;
 import android.view.View;
 import android.widget.Button;
@@ -235,7 +236,10 @@ public class TestActivity extends AppCompatActivity implements View.OnClickListe
                             }
                             lastPath = object.optString("data");
                         } else {
-                            MyToast.show(object.optString("status"));
+                            String string = object.optString("status");
+                            if (!TextUtils.isEmpty(string)) {
+                                MyToast.show(string);
+                            }
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();

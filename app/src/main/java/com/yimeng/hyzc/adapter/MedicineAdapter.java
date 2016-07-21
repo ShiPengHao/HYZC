@@ -1,5 +1,7 @@
 package com.yimeng.hyzc.adapter;
 
+import android.widget.ListView;
+
 import com.yimeng.hyzc.bean.MedicineBean;
 import com.yimeng.hyzc.holder.BaseHolder;
 import com.yimeng.hyzc.holder.MedicineHolder;
@@ -11,11 +13,13 @@ import java.util.List;
  */
 public class MedicineAdapter extends DefaultAdapter<MedicineBean> {
 
-    public MedicineAdapter(List<MedicineBean> data){
+
+    public MedicineAdapter(List<MedicineBean> data) {
         super(data);
     }
+
     @Override
     protected BaseHolder getHolder() {
-        return new MedicineHolder();
+        return new MedicineHolder(data, this);
     }
 }

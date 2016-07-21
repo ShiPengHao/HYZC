@@ -226,11 +226,15 @@ public class DoctorResponseActivity extends BaseActivity implements View.OnClick
         if (TextUtils.isEmpty(way)) {
             MyToast.show(String.format("%s%s", getString(R.string.doctor_response_way), getString(R.string.can_not_be_null)));
             ObjectAnimator.ofFloat(bt_select, "translationX", 15, -15, 15, -15, 0).setDuration(300).start();
-
             return;
         }
         if (id == 0) {
             MyToast.show("未知错误，请重新登陆应用再试");
+            return;
+        }
+        if (medicines.size() == 0 && ways.get(0).equalsIgnoreCase(tv_doctor_way.getText().toString().trim())){
+            MyToast.show("您还未开处方");
+            ObjectAnimator.ofFloat(bt_prescribe, "translationX", 15, -15, 15, -15, 0).setDuration(300).start();
             return;
         }
         if (medicines.size() == 0) {

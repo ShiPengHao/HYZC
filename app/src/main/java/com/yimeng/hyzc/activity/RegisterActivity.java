@@ -958,7 +958,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
         values.put("phone", phone);
 
         if (rg_type.getCheckedRadioButtonId() != R.id.rb_pharmacy) {
-            values.put("CnName", name);
+            values.put("name", name);
             int sexCode = 0;
             if (rg_sex.getCheckedRadioButtonId() == R.id.rb_male) {
                 sexCode = 1;

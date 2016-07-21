@@ -87,13 +87,14 @@ public class AppointDetailActivity extends BaseActivity implements View.OnClickL
 
     @Override
     protected void initData() {
-        if (null == getIntent() || 0 == (appointment_id = getIntent().getIntExtra("id", 0))) {
+        if (null == getIntent()) {
             return;
         }
+        appointment_id = getIntent().getIntExtra("id", 0);
         type = getIntent().getStringExtra("type");
-        if ("doctor".equalsIgnoreCase(type)){
+        if ("doctor".equalsIgnoreCase(type)) {
             bt_score.setVisibility(View.GONE);
-        }else if ("patient".equalsIgnoreCase(type)){
+        } else if ("patient".equalsIgnoreCase(type)) {
             bt_response.setVisibility(View.GONE);
         }
         requestAppointmentDetail();
@@ -213,16 +214,16 @@ public class AppointDetailActivity extends BaseActivity implements View.OnClickL
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.iv_back:
-                if (updateFlag){
-                    setResult(100,new Intent());
+                if (updateFlag) {
+                    setResult(100, new Intent());
                 }
                 finish();
                 break;
             case R.id.bt_response:
-                startActivityForResult(new Intent(this,DoctorResponseActivity.class).putExtra("id",appointment_id), REQUEST_CODE_DOCTOR_RESPONSE);
+                startActivityForResult(new Intent(this, DoctorResponseActivity.class).putExtra("id", appointment_id), REQUEST_CODE_DOCTOR_RESPONSE);
                 break;
             case R.id.bt_score:
-                MyToast.show(String.format("%s%s",getString(R.string.appointment_score),getString(R.string.fun_undo)));
+                MyToast.show(String.format("%s%s", getString(R.string.appointment_score), getString(R.string.fun_undo)));
                 break;
         }
     }
@@ -230,10 +231,10 @@ public class AppointDetailActivity extends BaseActivity implements View.OnClickL
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(null == data){
+        if (null == data) {
             return;
         }
-        switch (requestCode){
+        switch (requestCode) {
             case REQUEST_CODE_DOCTOR_RESPONSE:
                 requestAppointmentDetail();
                 updateFlag = true;

@@ -1,7 +1,11 @@
 package com.yimeng.hyzc.activity;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
+import android.os.Handler;
+import android.os.Message;
 import android.os.SystemClock;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -36,8 +40,12 @@ public class HomePatientActivity extends BaseActivity implements View.OnClickLis
     private List<Drawable> tabNormalIcons = new ArrayList<>();
     private long preTime = -1l;
     private int lastPosition;
+    private Handler handler;
+    private AlertDialog alertDialog;
+    private static final int WHAT_SHOW_TIP_DIALOG = 100;
+    private static final int WHAT_DISMISS_TIP_DIALOG = 101;
 
-    private class MyOnPageChangeListener extends ViewPager.SimpleOnPageChangeListener{
+    private class MyOnPageChangeListener extends ViewPager.SimpleOnPageChangeListener {
         @Override
         public void onPageScrolled(int position, float positionOffset,
                                    int positionOffsetPixels) {
@@ -102,8 +110,8 @@ public class HomePatientActivity extends BaseActivity implements View.OnClickLis
     protected void initData() {
         // 更新首次运行标志
         SharedPreferences spAccount = getSharedPreferences(MyConstant.PREFS_ACCOUNT, MODE_PRIVATE);
-        if(spAccount.getBoolean(MyConstant.KEY_ACCOUNT_FIRSTRUNNING,true)) {
-            //TODO 首次运行提示
+        if (spAccount.getBoolean(MyConstant.KEY_ACCOUNT_FIRSTRUNNING, true)) {
+            dealFirstRunningTip();
             spAccount.edit().putBoolean(MyConstant.KEY_ACCOUNT_FIRSTRUNNING, false).apply();
         }
 
@@ -123,6 +131,53 @@ public class HomePatientActivity extends BaseActivity implements View.OnClickLis
         tabNormalIcons.add(getResources().getDrawable(R.mipmap.icon_med_normal));
         tabNormalIcons.add(getResources().getDrawable(R.mipmap.icon_user_normal));
     }
+
+    private void dealFirstRunningTip() {
+        handler = new Handler() {
+            @Override
+            public void handleMessage(Message msg) {
+                switch (msg.what) {
+                    case WHAT_SHOW_TIP_DIALOG:
+                        showTipDialog();
+                        handler.sendEmptyMessageDelayed(WHAT_DISMISS_TIP_DIALOG, 5000);
+                        break;
+                    case WHAT_DISMISS_TIP_DIALOG:
+                        dismissTipDialog();
+                }
+            }
+        };
+        handler.sendEmptyMessageDelayed(WHAT_SHOW_TIP_DIALOG, 500);
+    }
+
+    private void showTipDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        alertDialog = builder.setTitle("欢迎使用华医之春互联网医院")
+                .setMessage("为了节省您的流量，首次运行应用时需要缓存部分必须数据，可能造成微小卡顿，请耐心等待几秒钟或者重试即可")
+                .setPositiveButton("知道了", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dismissTipDialog();
+                    }
+                })
+                .create();
+        alertDialog.show();
+    }
+
+    private void dismissTipDialog() {
+        if (null != handler) {
+            handler.removeMessages(WHAT_DISMISS_TIP_DIALOG);
+        }
+        if (null != alertDialog && alertDialog.isShowing()){
+            alertDialog.dismiss();
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        dismissTipDialog();
+    }
+
 
     @Override
     public void onClick(View v) {

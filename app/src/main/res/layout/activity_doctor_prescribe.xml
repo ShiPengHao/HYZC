@@ -22,21 +22,28 @@
             android:src="@mipmap/back" />
     </RelativeLayout>
 
-    <com.yimeng.hyzc.view.ClearEditText
-        android:id="@+id/cet"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:background="@color/colorAccent"
-        android:drawableLeft="@mipmap/menu_search"
-        android:drawablePadding="8dp"
-        android:drawableRight="@mipmap/delete_xxx"
-        android:ellipsize="end"
-        android:hint="@string/hint_search_pinyin"
-        android:maxLines="1"
-        android:paddingLeft="8dp"
-        android:paddingRight="12dp"
-        android:textColor="@color/white"
-        android:textColorHint="@color/white" />
+        android:layout_height="wrap_content"
+        android:background="@color/grey"
+        android:padding="8dp">
+
+        <com.yimeng.hyzc.view.ClearEditText
+            android:id="@+id/cet"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:background="@color/white"
+            android:drawableLeft="@mipmap/menu_search"
+            android:drawablePadding="8dp"
+            android:drawableRight="@mipmap/delete_xxx"
+            android:ellipsize="end"
+            android:hint="@string/hint_search_pinyin"
+            android:maxLines="1"
+            android:paddingLeft="8dp"
+            android:paddingRight="12dp"
+            android:textColor="@color/black_item_content"
+            android:textColorHint="@color/black_item_content" />
+    </LinearLayout>
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -47,8 +54,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@color/grey"
-            android:fillViewport="true"
-            android:paddingTop="8dp">
+            android:fillViewport="true">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -231,37 +237,6 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="4dp"
-                    android:layout_marginTop="6dp"
-                    android:background="@color/white"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal"
-                    android:paddingLeft="8dp"
-                    android:paddingRight="8dp">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:text="@string/medicine_number"
-                        android:textColor="@color/black_item_title"
-                        android:textSize="16dp" />
-
-                    <EditText
-                        android:id="@+id/et_medicine_number"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center_vertical"
-                        android:hint="@string/medicine_number"
-                        android:inputType="number"
-                        android:paddingLeft="10dp"
-                        android:textColor="@color/black_item_content"
-                        android:textSize="16dp" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
                     android:layout_height="48dp"
                     android:layout_marginBottom="4dp"
                     android:background="@color/white"
@@ -281,8 +256,8 @@
                     <TextView
                         android:id="@+id/tv_medicine_usage"
                         android:layout_width="0dp"
-                        android:layout_weight="1"
                         android:layout_height="wrap_content"
+                        android:layout_weight="1"
                         android:gravity="center_vertical"
                         android:paddingLeft="8dp"
                         android:text="@string/medicine_usage"
@@ -300,6 +275,35 @@
                         android:textColor="@color/white"
                         android:textSize="16dp" />
                 </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="4dp"
+                    android:background="@color/white"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingLeft="8dp"
+                    android:paddingRight="8dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="@string/medicine_number"
+                        android:textColor="@color/black_item_title"
+                        android:textSize="16dp" />
+
+                    <NumberPicker
+                        android:id="@+id/np"
+                        android:layout_width="wrap_content"
+                        android:layout_height="96dp"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="8dp"
+                        android:gravity="center_vertical" />
+
+                </LinearLayout>
+
             </LinearLayout>
 
         </ScrollView>
@@ -308,11 +312,13 @@
             android:id="@+id/lv"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/bg_light_green"
+            android:background="@color/white"
             android:cacheColorHint="@null"
             android:divider="@color/grey_line"
             android:dividerHeight="1dp"
             android:listSelector="@null"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
             android:visibility="gone"></ListView>
     </RelativeLayout>
 
@@ -322,21 +328,23 @@
         android:orientation="horizontal">
 
         <Button
-            android:id="@+id/bt_submit"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@color/colorAccent"
-            android:text="@string/submit"
-            android:textColor="@color/white" />
-
-        <Button
             android:id="@+id/bt_cancel"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:background="@color/bt_yellow"
             android:text="@string/clear"
-            android:textColor="@color/white" />
+            android:textColor="@color/white"
+            android:textSize="18dp" />
+
+        <Button
+            android:id="@+id/bt_submit"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@color/colorAccent"
+            android:text="@string/submit"
+            android:textColor="@color/white"
+            android:textSize="18dp" />
     </LinearLayout>
 </LinearLayout>
