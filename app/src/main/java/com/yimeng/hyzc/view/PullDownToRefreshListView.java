@@ -20,7 +20,7 @@ import com.yimeng.hyzc.R;
 
 /**
  * 可以下拉刷新的ListView。
- * 使用时不需要调用addHeaderView()和addRooterView()方法
+ * 调用addHeaderView()和addRooterView()方法无效，要添加头布局，使用appendHeaderView()方法
  */
 public class PullDownToRefreshListView extends ListView {
     private LinearLayout headerRoot;
@@ -62,12 +62,16 @@ public class PullDownToRefreshListView extends ListView {
 
         @Override
         public void onScrollStateChanged(AbsListView view, int scrollState) {
-            if (scrollState == SCROLL_STATE_IDLE
-                    && getLastVisiblePosition() == getCount() - 1
-                    && onRefreshListener != null && !isLoadingMore && !isRefreshing) {
-                isLoadingMore = true;
-                displayFooter();
-                onRefreshListener.onLoadMore();
+            if (scrollState == SCROLL_STATE_IDLE//停止滑动状态
+                    && getLastVisiblePosition() == getCount() - 1//可见条目是加载的最后一个条目
+                    && onRefreshListener != null//有监听
+                    && !isLoadingMore//非加载状态
+                    && !isRefreshing//非刷新状态
+                    ) {
+                isLoadingMore = true;//更改加载状态
+                displayFooter();//显示脚布局
+                handler.sendEmptyMessageDelayed(1, 2000);//2s后隐藏脚布局
+                onRefreshListener.onLoadMore();//调用监听方法
             }
             if (onScrollListener != null) {
                 onScrollListener.onScrollStateChanged(view, scrollState);
@@ -82,8 +86,7 @@ public class PullDownToRefreshListView extends ListView {
         }
     }
 
-    public PullDownToRefreshListView(Context context, AttributeSet attrs,
-                                     int defStyle) {
+    public PullDownToRefreshListView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         initView();
     }
@@ -149,6 +152,16 @@ public class PullDownToRefreshListView extends ListView {
         addFooterView(view);
     }
 
+    private boolean footerViewLimit;
+    @Override
+    public void addFooterView(View v, Object data, boolean isSelectable) {
+        if (footerViewLimit){
+            return;
+        }
+        super.addFooterView(v, data, isSelectable);
+        footerViewLimit = true;
+    }
+
     private void initHeaderView() {
         View view = View.inflate(getContext(), R.layout.layout_refresh_header,
                 null);
@@ -165,6 +178,16 @@ public class PullDownToRefreshListView extends ListView {
         addHeaderView(view);
     }
 
+    private boolean headerViewLimit;
+    @Override
+    public void addHeaderView(View v, Object data, boolean isSelectable) {
+        if (headerViewLimit){
+            return;
+        }
+        headerViewLimit = true;
+        super.addHeaderView(v, data, isSelectable);
+    }
+
     private void initAnimation() {
         downToUp = new RotateAnimation(0, 180, Animation.RELATIVE_TO_SELF,
                 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
@@ -178,9 +201,9 @@ public class PullDownToRefreshListView extends ListView {
     }
 
     /**
-     * 向刷新头下增加一个view布局
+     * 向刷新头下增加一个view
      *
-     * @param view
+     * @param view 要增加的view
      */
     public void appendHeaderView(View view) {
         if (appendedHeaderView == null) {
@@ -234,7 +257,7 @@ public class PullDownToRefreshListView extends ListView {
                 }
                 startY = DEFAULT_Y;
                 downY = DEFAULT_Y;
-                if (!isClick){
+                if (!isClick) {
                     return true;
                 }
                 break;
@@ -305,12 +328,19 @@ public class PullDownToRefreshListView extends ListView {
 
     private Handler handler = new Handler() {
         public void handleMessage(Message msg) {
-            initHeaderRootState();
+            switch (msg.what) {
+                case 0:
+                    initHeaderRootState();
+                    break;
+                case 1:
+                    hideFooter();
+                    break;
+            }
         }
     };
 
     /**
-     * 初始化listview头的状态
+     * 初始化ListView头的状态
      */
     public void initHeaderRootState() {
         state = STATE_DOWN;

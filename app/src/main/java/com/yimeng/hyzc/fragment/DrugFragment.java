@@ -268,6 +268,6 @@ public class DrugFragment extends BaseFragment implements AdapterView.OnItemClic
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         DrugTypeBean bean = datas.get(position - listView.getHeaderViewsCount());
         MyToast.show(bean.toString());
-        requestDrugByType(bean.TypeCode);
+//        requestDrugByType(bean.TypeCode);
     }
 }

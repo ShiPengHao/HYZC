@@ -39,6 +39,8 @@ public class AppointHistoryActivity extends BaseActivity implements View.OnClick
     private String type;
     private ImageView iv_back;
     public static final int REQUEST_CODE_FOR_APPOINT_DETAIL = 100;
+    private static final int ITEM_NUMBER_PER_PAGE = 20;
+
 
     @Override
     protected int getLayoutResId() {
@@ -58,6 +60,7 @@ public class AppointHistoryActivity extends BaseActivity implements View.OnClick
         listView.setAdapter(appointmentAdapter);
         listView.setOnItemClickListener(this);
         listView.setOnRefreshListener(this);
+        listView.hideFooter();
     }
 
     @Override
@@ -92,10 +95,10 @@ public class AppointHistoryActivity extends BaseActivity implements View.OnClick
         params.put("where", where);
         if (listView.isRefreshing()) {
             params.put("startIndex", 1);
-            params.put("endIndex", Math.max(20, itemsCount));
+            params.put("endIndex", Math.max(ITEM_NUMBER_PER_PAGE, itemsCount));
         } else {
             params.put("startIndex", itemsCount + 1);
-            params.put("endIndex", itemsCount + 20);
+            params.put("endIndex", itemsCount + ITEM_NUMBER_PER_PAGE);
         }
         new AsyncTask<Object, Object, String>() {
             @Override
@@ -201,6 +204,8 @@ public class AppointHistoryActivity extends BaseActivity implements View.OnClick
 
     @Override
     public void onLoadMore() {
-        requestAppointmentList();
+        if (itemsCount >= ITEM_NUMBER_PER_PAGE) {
+            requestAppointmentList();
+        }
     }
 }

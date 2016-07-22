@@ -782,7 +782,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
                         MyToast.show(getString(R.string.connet_error));
                         alertDialog.dismiss();
                     }
-                }else{
+                } else {
                     alertDialog.dismiss();
                     MyToast.show(getString(R.string.connet_error));
                 }
@@ -1105,6 +1105,12 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
                 .setPositiveButton("开始体验", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+                        setResult(100,
+                                new Intent()
+                                        .putExtra("username", username)
+                                        .putExtra("pwd", pwd)
+                                        .putExtra("type", rg_type.getCheckedRadioButtonId())
+                        );
                         finish();
                     }
                 })
