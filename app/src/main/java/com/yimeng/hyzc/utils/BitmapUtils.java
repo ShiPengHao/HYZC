@@ -10,6 +10,7 @@ import android.graphics.Matrix;
 import android.graphics.PixelFormat;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.util.Base64;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -185,6 +186,30 @@ public class BitmapUtils {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         bm.compress(Bitmap.CompressFormat.PNG, 100, baos);
         return baos.toByteArray();
+    }
+
+    /**
+     * 将图片对象压缩为不大于2M的string
+     *
+     * @param bitmap      图片对象
+     * @return 压缩成功返回string，否则null
+     */
+    public static String compressBitmap2Base64String(Bitmap bitmap) {
+        if (bitmap == null){
+            return null;
+        }
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        byte[] bytes;
+        int quality = 100;
+        while (quality > 0) {
+            if (bitmap.compress(Bitmap.CompressFormat.JPEG, quality, baos)
+                    && (bytes = baos.toByteArray()).length < 2 * 1024 * 1024) {
+
+                return Base64.encodeToString(bytes, Base64.DEFAULT);
+            }
+            quality -= 10;
+        }
+        return null;
     }
 
 }

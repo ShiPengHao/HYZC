@@ -31,8 +31,8 @@ import com.yimeng.hyzc.utils.MyApp;
 import com.yimeng.hyzc.utils.MyConstant;
 import com.yimeng.hyzc.utils.MyLog;
 import com.yimeng.hyzc.utils.MyToast;
-import com.yimeng.hyzc.utils.NetUtils;
 import com.yimeng.hyzc.utils.WebServiceUtils;
+import com.yimeng.hyzc.view.ClearEditText;
 
 import org.json.JSONObject;
 
@@ -91,6 +91,12 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
         cb_auto.setOnCheckedChangeListener(this);
         bt_register.setOnClickListener(this);
         bt_login.setOnClickListener(this);
+        et_username.addTextChangedListener(new ClearEditText.SimpleTextChangedListener() {
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                et_pwd.setText("");
+            }
+        });
         handler = new android.os.Handler() {
             @Override
             public void handleMessage(Message msg) {
@@ -190,6 +196,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
         spAccount = getSharedPreferences(MyConstant.PREFS_ACCOUNT, MODE_PRIVATE);
         // 回显账号
         et_username.setText(spAccount.getString(MyConstant.KEY_ACCOUNT_LAST_USERNAME, ""));
+        et_username.setSelection(et_username.getText().length());
         // 回显密码
         et_pwd.setText(spAccount.getString(MyConstant.KEY_ACCOUNT_LAST_PASSWORD, ""));
         // 回显记住密码
@@ -224,7 +231,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
      * 去注册，意图对象携带选择的注册类型信息，默认是普通病人
      */
     private void goToRegister() {
-        startActivityForResult(new Intent(this, RegisterActivity.class).putExtra("checdId", rg_userType.getCheckedRadioButtonId()), 100);
+        startActivityForResult(new Intent(this, RegisterActivity.class).putExtra("checkedId", rg_userType.getCheckedRadioButtonId()), 100);
     }
 
     @Override
@@ -261,6 +268,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
         values.clear();
         values.put("user", username);
         values.put("pwd", pwd);
+        values.put("hospital_id", MyConstant.HOSPITAL_ID);
+        values.put("departments_id", MyConstant.DEPARTMENTS_ID);
         switch (rg_userType.getCheckedRadioButtonId()) {
             case R.id.rb_patient:
                 requestLogin("Patient_Login", values);
@@ -289,12 +298,12 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
                     String result = WebServiceUtils.callWebService(MyConstant.WEB_SERVICE_URL, MyConstant.NAMESPACE, (String) params[0],
                             (Map<String, Object>) params[1]);
                     if (null == result) {
-                        MyToast.show(getString(R.string.connet_error));
+                        MyToast.show(getString(R.string.connect_error));
                         dismissLoginDialog();
                         return null;
                     }
                     try {
-//                                new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
+//                        new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
                         JSONObject object = new JSONObject(result);
                         if ("ok".equalsIgnoreCase(object.optString("status"))) {
                             String type = object.optString("type");
@@ -305,7 +314,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
                             dismissLoginDialog();
                         }
                     } catch (Exception e) {
-                        MyToast.show(getString(R.string.connet_error));
+                        MyToast.show(getString(R.string.connect_error));
                         dismissLoginDialog();
                         e.printStackTrace();
                     }
@@ -334,7 +343,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
                 if (i != 0) {
                     MyLog.i("JPush", "set alias and tag error");
                     dismissLoginDialog();
-                    MyToast.show(getString(R.string.connet_error));
+                    MyToast.show(getString(R.string.connect_error));
                 } else {
                     saveAccountInfo(type, id);
                 }

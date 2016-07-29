@@ -15,22 +15,15 @@ import android.util.Base64;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioGroup;
-import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.yimeng.hyzc.R;
-import com.yimeng.hyzc.bean.AddressBean;
-import com.yimeng.hyzc.bean.DepartmentBean;
-import com.yimeng.hyzc.bean.HospitalBean;
 import com.yimeng.hyzc.utils.BitmapUtils;
 import com.yimeng.hyzc.utils.DensityUtil;
 import com.yimeng.hyzc.utils.MyConstant;
@@ -43,8 +36,6 @@ import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
-import java.lang.reflect.Type;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -56,67 +47,42 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
     private static final int REQUEST_GALLERY_FOR_PHARMACY_LICENSE_CERT = 104;
     private static final int REQUEST_GALLERY_FOR_PHARMACY_PERMIT_CERT = 105;
     private static final int PHOTO_REQUEST_CUT = 2;
-    private EditText et_username;
+    private static final int DEPARTMENT_ID = 2;
     private EditText et_pwd;
     private EditText et_pwd_confirm;
     private EditText et_phone;
     private Button bt_register;
-    private EditText et_email;
     private EditText et_id;
-    private RadioGroup rg_sex;
-    private Spinner spinner_province;
-    private Spinner spinner_city;
-    private Spinner spinner_area;
     private EditText et_address_detail;
     private RadioGroup rg_type;
     private Button bt_doctor_cert;
     private ImageView iv_doctor_cert;
-    private LinearLayout ll_cert_info;
+    private LinearLayout ll_cert_info;// 证书信息，包含医生资格证和药店资格证
     private EditText et_name;
-    private LinearLayout ll_addressDetail;
+    private LinearLayout ll_address_detail;// 详细地址
     private Button bt_doctor_signature;
     private ImageView iv_doctor_signature;
 
 
     private Map<String, Object> values = new HashMap<>();
-    private ArrayList<AddressBean> province = new ArrayList<>();
-    private ArrayAdapter<AddressBean> provinceAdapter;
-    private ArrayList<AddressBean> city = new ArrayList<>();
-    private ArrayAdapter<AddressBean> cityAdapter;
-    private ArrayList<AddressBean> area = new ArrayList<>();
-    private ArrayAdapter<AddressBean> areaAdapter;
-    private ArrayList<HospitalBean> hospital = new ArrayList<>();
-    private ArrayAdapter<HospitalBean> hospitalAdapter;
-    private ArrayList<DepartmentBean> department = new ArrayList<>();
-    private ArrayAdapter<DepartmentBean> departmentAdapter;
-    private ArrayList<DepartmentBean> professional = new ArrayList<>();
-    private ArrayAdapter<DepartmentBean> professionalAdapter;
 
-    private boolean isIniting;
 
-    private android.support.v7.app.AlertDialog alertDialog;
-    private android.support.v7.app.AlertDialog.Builder uploadImgBuilder;
+    private android.support.v7.app.AlertDialog uploadImageDialog;
     private String lastDoctorSignPath;
     private String lastDoctorCertPath;
-    private String lastPharmaryOrganizationPath;
-    private String lastPharmaryLicensePath;
-    private String lastPharmaryPermitPath;
-    private String username;
+    private String lastPharmacyOrganizationPath;
+    private String lastPharmacyLicensePath;
+    private String lastPharmacyPermitPath;
+    private String user;
     private String pwd;
-    private String email;
     private String name;
     private String phone;
     private String identify;
-    private String sbBirth;
     private TextView uploadImgTextView;
     private LinearLayout ll_remark;
     private EditText et_remark;
-    private Spinner spinner_hospital;
-    private Spinner spinner_department;
-    private Spinner spinner_professional;
-    private LinearLayout ll_hospital;
-    private LinearLayout ll_doctor_cert;
-    private LinearLayout ll_pharmacy_cert;
+    private LinearLayout ll_doctor_cert;// 医生资格证
+    private LinearLayout ll_pharmacy_cert;// 药店资格证
     private Button bt_organization_cert;
     private ImageView iv_organization_cert;
     private Button bt_license_cert;
@@ -125,13 +91,15 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
     private ImageView iv_permit_cert;
     private EditText et_pharmacy_name;
     private EditText et_pharmacy_corporation;
-    private LinearLayout ll_personal_info;
-    private Button bt_float_register;
+    private LinearLayout ll_personal_info;// 身份证号
     private TextView tv_remark;
     private CheckBox cb_work;
     private CheckBox cb_home;
     private CheckBox cb_farm;
     private ImageView iv_back;
+
+    private String detail;
+    private AlertDialog okDialog;
 
 
     @Override
@@ -140,11 +108,9 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
     }
 
     protected void initView() {
-        et_username = (EditText) findViewById(R.id.et_username);
         et_pwd = (EditText) findViewById(R.id.et_pwd);
         et_pwd_confirm = (EditText) findViewById(R.id.et_pwd_confirm);
         et_phone = (EditText) findViewById(R.id.et_phone);
-        et_email = (EditText) findViewById(R.id.et_email);
         et_name = (EditText) findViewById(R.id.et_name);
         et_id = (EditText) findViewById(R.id.et_id);
         et_address_detail = (EditText) findViewById(R.id.et_address_detail);
@@ -152,18 +118,10 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
         et_pharmacy_name = (EditText) findViewById(R.id.et_pharmacy_name);
         et_pharmacy_corporation = (EditText) findViewById(R.id.et_pharmacy_corporation);
 
-        rg_sex = (RadioGroup) findViewById(R.id.rg_sex);
         rg_type = (RadioGroup) findViewById(R.id.rg_type);
         cb_work = (CheckBox) findViewById(R.id.cb_work);
         cb_home = (CheckBox) findViewById(R.id.cb_home);
         cb_farm = (CheckBox) findViewById(R.id.cb_farm);
-
-        spinner_province = (Spinner) findViewById(R.id.spinner_province);
-        spinner_city = (Spinner) findViewById(R.id.spinner_city);
-        spinner_area = (Spinner) findViewById(R.id.spinner_area);
-        spinner_hospital = (Spinner) findViewById(R.id.spinner_hospital);
-        spinner_department = (Spinner) findViewById(R.id.spinner_department);
-        spinner_professional = (Spinner) findViewById(R.id.spinner_professional);
 
         bt_register = (Button) findViewById(R.id.bt_register);
         bt_doctor_cert = (Button) findViewById(R.id.bt_doctor_cert);
@@ -171,7 +129,6 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
         bt_organization_cert = (Button) findViewById(R.id.bt_organization_cert);
         bt_license_cert = (Button) findViewById(R.id.bt_license_cert);
         bt_permit_cert = (Button) findViewById(R.id.bt_permit_cert);
-        bt_float_register = (Button) findViewById(R.id.bt_float_register);
 
         iv_doctor_cert = (ImageView) findViewById(R.id.iv_doctor_cert);
         iv_doctor_signature = (ImageView) findViewById(R.id.iv_doctor_signature);
@@ -181,31 +138,29 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
         iv_back = (ImageView) findViewById(R.id.iv_back);
 
         ll_cert_info = (LinearLayout) findViewById(R.id.ll_cert_info);
-        ll_addressDetail = (LinearLayout) findViewById(R.id.ll_address_detail);
+        ll_address_detail = (LinearLayout) findViewById(R.id.ll_address_detail);
         ll_remark = (LinearLayout) findViewById(R.id.ll_remark);
-        ll_hospital = (LinearLayout) findViewById(R.id.ll_hospital);
         ll_doctor_cert = (LinearLayout) findViewById(R.id.ll_doctor_cert);
         ll_pharmacy_cert = (LinearLayout) findViewById(R.id.ll_pharmacy_cert);
         ll_personal_info = (LinearLayout) findViewById(R.id.ll_personal_info);
 
         tv_remark = (TextView) findViewById(R.id.tv_remark);
 
-
         initUploadDialog();
 
     }
 
     private void initUploadDialog() {
-        uploadImgBuilder = new android.support.v7.app.AlertDialog.Builder(this);
+        android.support.v7.app.AlertDialog.Builder uploadImgBuilder = new android.support.v7.app.AlertDialog.Builder(this);
         uploadImgBuilder.setTitle("图片上传");
         uploadImgTextView = new TextView(this);
         uploadImgTextView.setTextSize(18);
         uploadImgTextView.setTextColor(Color.BLACK);
-        uploadImgTextView.setPadding(10, 10, 0, 0);
+        uploadImgTextView.setPadding(0, 10, 0, 0);
         uploadImgTextView.setGravity(Gravity.CENTER);
         uploadImgBuilder.setView(uploadImgTextView);
         uploadImgBuilder.setCancelable(false);
-        alertDialog = uploadImgBuilder.create();
+        uploadImageDialog = uploadImgBuilder.create();
     }
 
     protected void setListener() {
@@ -215,346 +170,43 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
         bt_organization_cert.setOnClickListener(this);
         bt_license_cert.setOnClickListener(this);
         bt_permit_cert.setOnClickListener(this);
-        bt_float_register.setOnClickListener(this);
         iv_back.setOnClickListener(this);
 
 
-        provinceAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, province);
-        provinceAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner_province.setAdapter(provinceAdapter);
-        spinner_province.setOnItemSelectedListener(this);
+//        departmentAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, department);
+//        departmentAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+//        spinner_department.setAdapter(departmentAdapter);
+//        spinner_department.setOnItemSelectedListener(this);
 
-        cityAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, city);
-        cityAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner_city.setAdapter(cityAdapter);
-        spinner_city.setOnItemSelectedListener(this);
 
-        areaAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, area);
-        areaAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner_area.setAdapter(areaAdapter);
-        spinner_area.setOnItemSelectedListener(this);
-
-        hospitalAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, hospital);
-        hospitalAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner_hospital.setAdapter(hospitalAdapter);
-        spinner_hospital.setOnItemSelectedListener(this);
-
-        departmentAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, department);
-        departmentAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner_department.setAdapter(departmentAdapter);
-        spinner_department.setOnItemSelectedListener(this);
-
-        professionalAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, professional);
-        professionalAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner_professional.setAdapter(professionalAdapter);
-        spinner_professional.setOnItemSelectedListener(this);
-
-        rg_sex.check(R.id.rb_male);
         rg_type.setOnCheckedChangeListener(this);
-        rg_type.check(getIntent().getIntExtra("checdId", R.id.rb_patient));
+        rg_type.check(getIntent().getIntExtra("checkedId", R.id.rb_patient));
     }
 
     protected void initData() {
-        isIniting = true;
-        requestAddress("GetProvince");
-    }
-
-    /**
-     * 执行异步任务，请求省市区3级地址
-     *
-     * @param params 方法名+参数列表（哈希表形式）+flag标志
-     */
-    public void requestAddress(final Object... params) {
-        new AsyncTask<Object, Object, String>() {
-            @Override
-            protected String doInBackground(Object... params) {
-                if (params != null && params.length >= 2) {
-                    return WebServiceUtils.callWebService(MyConstant.WEB_SERVICE_URL, MyConstant.NAMESPACE, (String) params[0],
-                            (Map<String, Object>) params[1]);
-                } else if (params != null && params.length == 1) {
-                    return WebServiceUtils.callWebService(MyConstant.WEB_SERVICE_URL, MyConstant.NAMESPACE, (String) params[0],
-                            null);
-                } else {
-                    return null;
-                }
-            }
-
-            protected void onPostExecute(String result) {
-                int flag = 0;
-                if (params != null && params.length == 3) {
-                    flag = (int) params[2];
-                }
-                if (result != null) {
-                    parseAddressJson(result, flag);
-                }
-            }
-
-        }.execute(params);
-    }
-
-    /**
-     * 解析地址json数据
-     *
-     * @param flag   省市区的标志，分别为0，1，2
-     * @param result json数据
-     */
-    private void parseAddressJson(String result, int flag) {
-        try {
-            JSONObject object = new JSONObject(result);
-            Gson gson = new Gson();
-            Type type = new TypeToken<ArrayList<AddressBean>>() {
-            }.getType();
-            ArrayList<AddressBean> datas = gson.fromJson(object.optString("data"), type);
-            updateAddress(flag, datas);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-    }
-
-    /**
-     * 更新地址数据和spinner适配器
-     *
-     * @param flag  省市区的标志，分别为0，1，2
-     * @param datas 数据源
-     */
-    private void updateAddress(int flag, ArrayList<AddressBean> datas) {
-        switch (flag) {
-            case 0:// 更新省份数据
-                province.clear();
-                province.addAll(datas);
-                provinceAdapter.notifyDataSetChanged();
-                if (province.size() > 0) {
-                    int i = province.size() - 1;
-                    while (i >= 0) {//默认选择河南省
-                        if ("410000".equalsIgnoreCase(province.get(i).code)) {
-                            break;
-                        }
-                        i--;
-                    }
-                    spinner_province.setSelection(i);
-                }
-                break;
-            case 1:// 更新市，并且手动请求对应区的数据
-                city.clear();
-                city.addAll(datas);
-                cityAdapter.notifyDataSetChanged();
-                if (city.size() > 0) {
-                    spinner_city.setSelection(0);
-                    values.clear();
-                    values.put("citycode", city.get(0).code);
-                    requestAddress("GetArea", values, 2);
-                }
-                break;
-            case 2:// 更新区，并且请求对应医院的信息
-                area.clear();
-                area.addAll(datas);
-                areaAdapter.notifyDataSetChanged();
-                if (area.size() > 0) {
-                    spinner_area.setSelection(0);
-                    if (ll_hospital.getVisibility() == View.VISIBLE && !isIniting) {
-                        values.put("province", province.get(spinner_province.getSelectedItemPosition()).code);
-                        values.put("city", city.get(spinner_city.getSelectedItemPosition()).code);
-                        values.put("area", area.get(0).code);// 二七区 410103
-                        requestHospital("Load_Hospital", values);
-                    }
-                }
-                break;
-        }
 
     }
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        values.clear();
-        AddressBean bean;
-        switch (parent.getId()) {
-            case R.id.spinner_province:
-                bean = province.get(position);
-                values.put("provincecode", bean.code);// 河南 410000
-                requestAddress("GetCity", values, 1);
-                break;
-            case R.id.spinner_city:
-                bean = city.get(position);
-                values.put("citycode", bean.code);// 郑州 410100
-                requestAddress("GetArea", values, 2);
-                break;
-            case R.id.spinner_area:
-                if (ll_hospital.getVisibility() == View.VISIBLE) {
-                    bean = area.get(position);
-                    values.put("province", province.get(spinner_province.getSelectedItemPosition()).code);
-                    values.put("city", city.get(spinner_city.getSelectedItemPosition()).code);
-                    values.put("area", bean.code);// 二七区 410103
-                    requestHospital("Load_Hospital", values);
-                } else if (isIniting) {
-                    isIniting = false;
-                }
-                break;
-            case R.id.spinner_hospital:
-                values.clear();
-                values.put("hospital_id", hospital.get(spinner_hospital.getSelectedItemPosition()).hospital_id);
-                values.put("parentid", 0);
-                requestDepartment("Load_KS", values, 0);
-                break;
-            case R.id.spinner_department:
-                values.clear();
-                values.put("hospital_id", department.get(spinner_department.getSelectedItemPosition()).hospital_id);
-                values.put("parentid", department.get(spinner_department.getSelectedItemPosition()).departments_id);
-                requestDepartment("Load_KS", values, 1);
-                break;
-            case R.id.spinner_professional:
-                if (isIniting) {
-                    isIniting = false;
-                }
-                break;
-        }
-    }
-
-    /**
-     * 根据选择的省市区，选择医院，解析成功后刷新界面，并请求科室信息
-     *
-     * @param params 方法名+参数列表
-     */
-    public void requestHospital(final Object... params) {
-        new AsyncTask<Object, Object, String>() {
-            @Override
-            protected String doInBackground(Object... params) {
-                if (params != null && params.length >= 2) {
-                    return WebServiceUtils.callWebService(MyConstant.WEB_SERVICE_URL, MyConstant.NAMESPACE, (String) params[0],
-                            (Map<String, Object>) params[1]);
-                } else if (params != null && params.length == 1) {
-                    return WebServiceUtils.callWebService(MyConstant.WEB_SERVICE_URL, MyConstant.NAMESPACE, (String) params[0],
-                            null);
-                } else {
-                    return null;
-                }
-            }
-
-            protected void onPostExecute(String result) {
-                if (result != null) {
-                    try {
-                        hospital.clear();
-                        JSONObject object = new JSONObject(result);
-                        Gson gson = new Gson();
-                        Type type = new TypeToken<ArrayList<HospitalBean>>() {
-                        }.getType();
-                        ArrayList<HospitalBean> datas = gson.fromJson(object.optString("data"), type);
-                        hospital.addAll(datas);
-                        hospitalAdapter.notifyDataSetChanged();
-                        if (isIniting) {
-                            return;
-                        }
-                        if (hospital.size() > 0) {
-                            spinner_hospital.setSelection(0);
-                            values.clear();
-                            values.put("hospital_id", hospital.get(0).hospital_id);
-                            values.put("parentid", 0);
-                            requestDepartment("Load_KS", values, 0);
-                        } else {
-                            department.clear();
-                            departmentAdapter.notifyDataSetChanged();
-
-                            professional.clear();
-                            professionalAdapter.notifyDataSetChanged();
-                        }
-
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-
-        }.execute(params);
     }
 
     /**
      * 根据选择的医院请求科室数据
-     *
-     * @param params 方法名+参数列表+标志，0表示科室，1表示2级科室即专业
      */
-    public void requestDepartment(final Object... params) {
-        new AsyncTask<Object, Object, String>() {
-            @Override
-            protected String doInBackground(Object... params) {
-                if (params != null && params.length >= 2) {
-                    return WebServiceUtils.callWebService(MyConstant.WEB_SERVICE_URL, MyConstant.NAMESPACE, (String) params[0],
-                            (Map<String, Object>) params[1]);
-                } else if (params != null && params.length == 1) {
-                    return WebServiceUtils.callWebService(MyConstant.WEB_SERVICE_URL, MyConstant.NAMESPACE, (String) params[0],
-                            null);
-                } else {
-                    return null;
-                }
-            }
-
-            protected void onPostExecute(String result) {
-                if (result != null && params.length == 3) {
-                    switch ((int) params[2]) {
-                        case 0:
-                            parseDepartmentResult(result);
-                            break;
-                        case 1:
-                            parseProfessionalResult(result);
-                            break;
-                    }
-                }
-            }
-        }.execute(params);
-    }
-
-    /**
-     * 解析科室信息
-     *
-     * @param result 科室信息json
-     */
-    private void parseDepartmentResult(String result) {
-        try {
-            department.clear();
-            JSONObject object = new JSONObject(result);
-            Gson gson = new Gson();
-            Type type = new TypeToken<ArrayList<DepartmentBean>>() {
-            }.getType();
-            ArrayList<DepartmentBean> datas = gson.fromJson(object.optString("data"), type);
-            department.addAll(datas);
-            departmentAdapter.notifyDataSetChanged();
-            if (isIniting) {
-                return;
-            }
-            if (department.size() > 0) {
-                spinner_department.setSelection(0);
-                values.clear();
-                values.put("hospital_id", department.get(0).hospital_id);
-                values.put("parentid", department.get(0).departments_id);
-                requestDepartment("Load_KS", values, 1);
-            } else {
-                professional.clear();
-                professionalAdapter.notifyDataSetChanged();
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    /**
-     * 解析专业信息
-     *
-     * @param result 专业信息json
-     */
-    private void parseProfessionalResult(String result) {
-        try {
-            professional.clear();
-            JSONObject object = new JSONObject(result);
-            Gson gson = new Gson();
-            Type type = new TypeToken<ArrayList<DepartmentBean>>() {
-            }.getType();
-            ArrayList<DepartmentBean> datas = gson.fromJson(object.optString("data"), type);
-            professional.addAll(datas);
-            professionalAdapter.notifyDataSetChanged();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
+//    public void requestDepartment(Object... params) {
+//        new SoapAsyncTask(){
+//            protected void onPostExecute(String result) {
+//                if (result != null) {
+//                    parseListResult(department, result);
+//                    if (department.size() > 0) {
+//                        spinner_department.setSelection(0);
+//                    }
+//                    departmentAdapter.notifyDataSetChanged();
+//                }
+//            }
+//        }.execute(params);
+//    }
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
 
@@ -564,7 +216,6 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.bt_register:
-            case R.id.bt_float_register:
                 checkInfo();
                 break;
             case R.id.bt_doctor_cert:
@@ -657,15 +308,15 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
                 iv = iv_doctor_signature;
                 break;
             case REQUEST_GALLERY_FOR_PHARMACY_ORGANIZATION_CERT:
-                path = lastPharmaryOrganizationPath;
+                path = lastPharmacyOrganizationPath;
                 iv = iv_organization_cert;
                 break;
             case REQUEST_GALLERY_FOR_PHARMACY_LICENSE_CERT:
-                path = lastPharmaryLicensePath;
+                path = lastPharmacyLicensePath;
                 iv = iv_license_cert;
                 break;
             case REQUEST_GALLERY_FOR_PHARMACY_PERMIT_CERT:
-                path = lastPharmaryPermitPath;
+                path = lastPharmacyPermitPath;
                 iv = iv_permit_cert;
                 break;
         }
@@ -699,11 +350,11 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
             if (bitmap.compress(Bitmap.CompressFormat.JPEG, quality, baos)
                     && (bytes = baos.toByteArray()).length < 2 * 1024 * 1024) {
 
-                if (alertDialog != null) {
+                if (uploadImageDialog != null) {
                     ThreadUtils.runOnUIThread(new Runnable() {
                         @Override
                         public void run() {
-                            alertDialog.show();
+                            uploadImageDialog.show();
                             uploadImgTextView.setText("正在上传，请稍后。。。");
                         }
                     });
@@ -725,20 +376,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
      * @param params 方法名+参数列表（哈希表形式）+flag标志
      */
     public void requestUploadImg(final Object... params) {
-        new AsyncTask<Object, Object, String>() {
-            @Override
-            protected String doInBackground(Object... params) {
-                if (params != null && params.length >= 2) {
-                    return WebServiceUtils.callWebService(MyConstant.WEB_SERVICE_URL, MyConstant.NAMESPACE, (String) params[0],
-                            (Map<String, Object>) params[1]);
-                } else if (params != null && params.length == 1) {
-                    return WebServiceUtils.callWebService(MyConstant.WEB_SERVICE_URL, MyConstant.NAMESPACE, (String) params[0],
-                            null);
-                } else {
-                    return null;
-                }
-            }
-
+        new SoapAsyncTask() {
             protected void onPostExecute(String result) {
                 if (result != null) {
                     try {
@@ -755,13 +393,13 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
                                         lastDoctorSignPath = object.optString("data");
                                         break;
                                     case REQUEST_GALLERY_FOR_PHARMACY_ORGANIZATION_CERT:
-                                        lastPharmaryOrganizationPath = object.optString("data");
+                                        lastPharmacyOrganizationPath = object.optString("data");
                                         break;
                                     case REQUEST_GALLERY_FOR_PHARMACY_LICENSE_CERT:
-                                        lastPharmaryLicensePath = object.optString("data");
+                                        lastPharmacyLicensePath = object.optString("data");
                                         break;
                                     case REQUEST_GALLERY_FOR_PHARMACY_PERMIT_CERT:
-                                        lastPharmaryPermitPath = object.optString("data");
+                                        lastPharmacyPermitPath = object.optString("data");
                                         break;
                                 }
                             }
@@ -773,18 +411,18 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
                         iv_doctor_cert.postDelayed(new Runnable() {
                             @Override
                             public void run() {
-                                alertDialog.dismiss();
+                                uploadImageDialog.dismiss();
                             }
                         }, 500);
 
                     } catch (JSONException e) {
                         e.printStackTrace();
-                        MyToast.show(getString(R.string.connet_error));
-                        alertDialog.dismiss();
+                        MyToast.show(getString(R.string.connect_error));
+                        uploadImageDialog.dismiss();
                     }
                 } else {
-                    alertDialog.dismiss();
-                    MyToast.show(getString(R.string.connet_error));
+                    uploadImageDialog.dismiss();
+                    MyToast.show(getString(R.string.connect_error));
                 }
             }
 
@@ -845,16 +483,6 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
         String method = null;
         switch (rg_type.getCheckedRadioButtonId()) {
             case R.id.rb_patient:
-                String detail = et_address_detail.getText().toString().trim();
-                if (TextUtils.isEmpty(detail)) {
-                    MyToast.show("详细地址不能为空");
-                    return;
-                }
-                values.put("address", detail);
-                values.put("province", province.get(spinner_province.getSelectedItemPosition()).code);
-                values.put("city", city.get(spinner_city.getSelectedItemPosition()).code);
-                values.put("area", area.get(spinner_area.getSelectedItemPosition()).code);
-
                 method = "Patient_Register";
                 break;
             case R.id.rb_pharmacy:
@@ -868,15 +496,15 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
                     MyToast.show("药店法人不能为空");
                     return;
                 }
-                if (lastPharmaryOrganizationPath == null) {
+                if (lastPharmacyOrganizationPath == null) {
                     MyToast.show("请上传药店机构代码证");
                     return;
                 }
-                if (lastPharmaryLicensePath == null) {
+                if (lastPharmacyLicensePath == null) {
                     MyToast.show("请上传药店营业执照");
                     return;
                 }
-                if (lastPharmaryPermitPath == null) {
+                if (lastPharmacyPermitPath == null) {
                     MyToast.show("请上传药店经营许可证");
                     return;
                 }
@@ -888,13 +516,9 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
                 values.put("address", detail);
                 values.put("shopname", pharmacy_name);
                 values.put("corporate", pharmacy_corporation);
-                values.put("organization", lastPharmaryOrganizationPath);
-                values.put("license", lastPharmaryLicensePath);
-                values.put("businesspermit", lastPharmaryPermitPath);
-                values.put("province", province.get(spinner_province.getSelectedItemPosition()).code);
-                values.put("province", province.get(spinner_province.getSelectedItemPosition()).code);
-                values.put("city", city.get(spinner_city.getSelectedItemPosition()).code);
-                values.put("area", area.get(spinner_area.getSelectedItemPosition()).code);
+                values.put("organization", lastPharmacyOrganizationPath);
+                values.put("license", lastPharmacyLicensePath);
+                values.put("businesspermit", lastPharmacyPermitPath);
                 values.put("remark", et_remark.getText().toString().trim());// 备注无需校验
                 StringBuilder sb = new StringBuilder();
                 boolean hasChecked = false;
@@ -922,27 +546,22 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
             case R.id.rb_doctor:
                 if (lastDoctorCertPath == null) {
                     MyToast.show("请上传医生资格证");
+                    ObjectAnimator.ofFloat(bt_doctor_cert, "translationX", 15f, -15f, 20f, -20f, 0).setDuration(300).start();
                     return;
                 }
                 if (lastDoctorSignPath == null) {
                     MyToast.show("请上传医生电子签名");
+                    ObjectAnimator.ofFloat(bt_doctor_signature, "translationX", 15f, -15f, 20f, -20f, 0).setDuration(300).start();
                     return;
                 }
                 values.put("qualification", lastDoctorCertPath);
                 values.put("E_signature", lastDoctorSignPath);
                 values.put("remark", et_remark.getText().toString().trim());// 备注无需校验
-                int departments_id = 0;
-                if (professional.size() > 0) {
-                    departments_id = professional.get(spinner_professional.getSelectedItemPosition()).departments_id;
-                } else if (department.size() > 0) {
-                    departments_id = department.get(spinner_department.getSelectedItemPosition()).departments_id;
-                }
-                values.put("departments_id", departments_id);
                 method = "Doctor_Register";
                 break;
         }
 
-        if (method != null) {
+        if (null != method) {
             register(method, values);
         }
     }
@@ -952,20 +571,14 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
      */
     private void mapGeneralInfo() {
         values.clear();
-        values.put("user", username);
         values.put("pwd", pwd);
-        values.put("email", email);
-        values.put("phone", phone);
+        values.put("user", user);
 
         if (rg_type.getCheckedRadioButtonId() != R.id.rb_pharmacy) {
             values.put("name", name);
-            int sexCode = 0;
-            if (rg_sex.getCheckedRadioButtonId() == R.id.rb_male) {
-                sexCode = 1;
-            }
-            values.put("sex", sexCode);
-            values.put("age", sbBirth);
             values.put("identification", identify);
+            values.put("hospital_id", MyConstant.HOSPITAL_ID);
+            values.put("departments_id", MyConstant.DEPARTMENTS_ID);
         } else {
             values.put("contacts", name);
         }
@@ -977,10 +590,15 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
      * @return 有错误提示用户并返回true，全部符合格式规范返回false
      */
     private boolean checkGeneralInfoError() {
-        username = et_username.getText().toString().trim();
-        if (TextUtils.isEmpty(username)) {
-            MyToast.show("用户名不能为空");
-            ObjectAnimator.ofFloat(et_username, "translationX", 15f, -15f, 20f, -20f, 0).setDuration(300).start();
+        user = et_phone.getText().toString().trim();
+        if (TextUtils.isEmpty(user)) {
+            MyToast.show("手机号不能为空");
+            ObjectAnimator.ofFloat(et_phone, "translationX", 15f, -15f, 20f, -20f, 0).setDuration(300).start();
+            return true;
+        }
+        if (!user.matches("[1][358]\\d{9}")) {
+            MyToast.show("手机号格式不正确");
+            ObjectAnimator.ofFloat(et_phone, "translationX", 15f, -15f, 20f, -20f, 0).setDuration(300).start();
             return true;
         }
 
@@ -1003,18 +621,6 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
             return true;
         }
 
-        email = et_email.getText().toString().trim();
-        if (TextUtils.isEmpty(email)) {
-            MyToast.show("邮箱不能为空");
-            ObjectAnimator.ofFloat(et_email, "translationX", 15f, -15f, 20f, -20f, 0).setDuration(300).start();
-            return true;
-        }
-        if (!email.matches("\\w+([-+.]\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*")) {
-            MyToast.show("邮箱格式不正确");
-            ObjectAnimator.ofFloat(et_email, "translationX", 15f, -15f, 20f, -20f, 0).setDuration(300).start();
-            return true;
-        }
-
 
         name = et_name.getText().toString().trim();
         if (TextUtils.isEmpty(name)) {
@@ -1023,17 +629,6 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
             return true;
         }
 
-        phone = et_phone.getText().toString().trim();
-        if (TextUtils.isEmpty(phone)) {
-            MyToast.show("手机号不能为空");
-            ObjectAnimator.ofFloat(et_phone, "translationX", 15f, -15f, 20f, -20f, 0).setDuration(300).start();
-            return true;
-        }
-        if (!phone.matches("[1][358]\\d{9}")) {
-            MyToast.show("手机号格式不正确");
-            ObjectAnimator.ofFloat(et_phone, "translationX", 15f, -15f, 20f, -20f, 0).setDuration(300).start();
-            return true;
-        }
 
         if (rg_type.getCheckedRadioButtonId() != R.id.rb_pharmacy) {
             identify = et_id.getText().toString().trim();
@@ -1047,12 +642,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
                 ObjectAnimator.ofFloat(et_id, "translationX", 15f, -15f, 20f, -20f, 0).setDuration(300).start();
                 return true;
             }
-            sbBirth = identify.substring(6, 10) + "-" +
-                    identify.substring(10, 12) + "-" +
-                    identify.substring(12, 14);
         }
-
-
         mapGeneralInfo();
         return false;
     }
@@ -1080,12 +670,13 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
                     try {
                         JSONObject object = new JSONObject(result);
                         if ("ok".equalsIgnoreCase(object.optString("status"))) {
-                            showOkTips();
+                            bt_register.setEnabled(false);
+                            showOkTips(object.optString("type"),object.optString("msg"));
                         } else {
                             MyToast.show(object.optString("msg"));
                         }
                     } catch (JSONException e) {
-                        MyToast.show(getString(R.string.connet_error));
+                        MyToast.show(getString(R.string.connect_error));
                         e.printStackTrace();
                     }
                 }
@@ -1097,25 +688,46 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
     /**
      * 显示注册成功的提示对话框
      */
-    private void showOkTips() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(RegisterActivity.this)
-                .setTitle("注册成功！")
-                .setMessage("欢迎你：" + username + "，祝你健康！")
-                .setCancelable(true)
-                .setPositiveButton("开始体验", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        setResult(100,
-                                new Intent()
-                                        .putExtra("username", username)
-                                        .putExtra("pwd", pwd)
-                                        .putExtra("type", rg_type.getCheckedRadioButtonId())
-                        );
-                        finish();
-                    }
-                })
-                .setNegativeButton("稍作镇定", null);
-        builder.show();
+    private void showOkTips(final String type,String msg) {
+        if (type.length() == 0){
+            return;
+        }
+        if (null == okDialog) {
+            okDialog = new AlertDialog.Builder(RegisterActivity.this)
+                    .setTitle("注册成功！")
+                    .setCancelable(true)
+                    .create();
+        }
+        okDialog.setMessage("恭喜" + name + msg);
+        okDialog.setButton(AlertDialog.BUTTON_POSITIVE, "知道了", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if (type.equalsIgnoreCase("patient")) {
+                    setResult(100,
+                            new Intent()
+                                    .putExtra("username", user)
+                                    .putExtra("pwd", pwd)
+                                    .putExtra("type", rg_type.getCheckedRadioButtonId())
+                    );
+                    finish();
+                }else{
+                    okDialog.dismiss();
+                }
+            }
+        });
+        okDialog.show();
+    }
+
+    @Override
+    protected void onDestroy() {
+        if (null != okDialog && okDialog.isShowing()){
+            okDialog.dismiss();
+        }
+
+        if (null != uploadImageDialog && uploadImageDialog.isShowing()){
+            uploadImageDialog.dismiss();
+        }
+        super.onDestroy();
     }
 
     @Override
@@ -1126,37 +738,27 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
         if (group.getId() == R.id.rg_type) {
             switch (checkedId) {
                 case R.id.rb_patient:
-                    ll_addressDetail.setVisibility(View.VISIBLE);
+                    ll_address_detail.setVisibility(View.GONE);
                     ll_cert_info.setVisibility(View.GONE);
                     ll_remark.setVisibility(View.GONE);
-                    ll_hospital.setVisibility(View.GONE);
                     ll_personal_info.setVisibility(View.VISIBLE);
                     break;
                 case R.id.rb_doctor:
                     tv_remark.setText(R.string.doctor_introduce);
-                    isIniting = true;
-                    if (province.size() > 0 && city.size() > 0 && area.size() > 0) {
-                        values.put("province", province.get(spinner_province.getSelectedItemPosition()).code);
-                        values.put("city", city.get(spinner_city.getSelectedItemPosition()).code);
-                        values.put("area", area.get(spinner_area.getSelectedItemPosition()).code);// 二七区 410103
-                        requestHospital("Load_Hospital", values);
-                    }
-                    ll_addressDetail.setVisibility(View.GONE);
+                    ll_address_detail.setVisibility(View.GONE);
                     ll_pharmacy_cert.setVisibility(View.GONE);
                     ll_doctor_cert.setVisibility(View.VISIBLE);
                     ll_cert_info.setVisibility(View.VISIBLE);
                     ll_remark.setVisibility(View.VISIBLE);
-                    ll_hospital.setVisibility(View.VISIBLE);
                     ll_personal_info.setVisibility(View.VISIBLE);
                     break;
                 case R.id.rb_pharmacy:
                     tv_remark.setText(R.string.pharmacy_introduce);
                     ll_doctor_cert.setVisibility(View.GONE);
-                    ll_addressDetail.setVisibility(View.VISIBLE);
+                    ll_address_detail.setVisibility(View.VISIBLE);
                     ll_pharmacy_cert.setVisibility(View.VISIBLE);
                     ll_cert_info.setVisibility(View.VISIBLE);
                     ll_remark.setVisibility(View.VISIBLE);
-                    ll_hospital.setVisibility(View.GONE);
                     ll_personal_info.setVisibility(View.GONE);
                     break;
             }

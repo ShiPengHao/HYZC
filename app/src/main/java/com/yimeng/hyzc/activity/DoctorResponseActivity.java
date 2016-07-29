@@ -277,7 +277,7 @@ public class DoctorResponseActivity extends BaseActivity implements View.OnClick
             @Override
             protected void onPostExecute(String result) {
                 if (null == result) {
-                    MyToast.show(getString(R.string.connet_error));
+                    MyToast.show(getString(R.string.connect_error));
                     uploadDialog.dismiss();
                 } else {
                     try {
@@ -285,11 +285,11 @@ public class DoctorResponseActivity extends BaseActivity implements View.OnClick
                         if ("ok".equalsIgnoreCase(object.optString("status"))) {
                             requestResponse(1);
                         }else{
-                            MyToast.show(getString(R.string.connet_error));
+                            MyToast.show(getString(R.string.connect_error));
                             uploadDialog.dismiss();
                         }
                     } catch (Exception e) {
-                        MyToast.show(getString(R.string.connet_error));
+                        MyToast.show(getString(R.string.connect_error));
                         uploadDialog.dismiss();
                         e.printStackTrace();
                     }
@@ -327,7 +327,7 @@ public class DoctorResponseActivity extends BaseActivity implements View.OnClick
                         (String) params[0], (HashMap<String, Object>) params[1]);
                 uploadDialog.dismiss();
                 if (null == result) {
-                    MyToast.show(getString(R.string.connet_error));
+                    MyToast.show(getString(R.string.connect_error));
                 } else {
                     try {
                         JSONObject object = new JSONObject(result);
@@ -338,7 +338,7 @@ public class DoctorResponseActivity extends BaseActivity implements View.OnClick
                             finish();
                         }
                     } catch (Exception e) {
-                        MyToast.show(getString(R.string.connet_error));
+                        MyToast.show(getString(R.string.connect_error));
                         e.printStackTrace();
                     }
                 }

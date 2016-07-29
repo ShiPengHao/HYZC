@@ -113,7 +113,7 @@ public class AppointHistoryActivity extends BaseActivity implements View.OnClick
 
             protected void onPostExecute(String result) {
                 if (result == null) {
-                    MyToast.show(getString(R.string.connet_error));
+                    MyToast.show(getString(R.string.connect_error));
                     if (listView.isRefreshing()) {
                         listView.refreshCompleted(false);
                     } else if (listView.isLoadingMore()) {
@@ -150,7 +150,7 @@ public class AppointHistoryActivity extends BaseActivity implements View.OnClick
             }
         } catch (Exception e) {
             e.printStackTrace();
-            MyToast.show(getString(R.string.connet_error));
+            MyToast.show(getString(R.string.connect_error));
             if (listView.isRefreshing()) {
                 listView.refreshCompleted(false);
             }

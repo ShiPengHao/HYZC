@@ -63,7 +63,6 @@ public class HomePatientActivity extends BaseActivity implements View.OnClickLis
             currentView.setCompoundDrawables(null, nowDrawable, null, null);
             ViewPropertyAnimator.animate(currentView).scaleX(1.1f).scaleY(1.1f);
 
-
             TextView lastView = (TextView) ll_tab.getChildAt(lastPosition);
             lastView.setTextColor(getResources().getColor(R.color.black));
             Drawable lastDrawable = tabNormalIcons.get(lastPosition);
@@ -150,8 +149,7 @@ public class HomePatientActivity extends BaseActivity implements View.OnClickLis
     }
 
     private void showTipDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        alertDialog = builder.setTitle("欢迎使用华医之春互联网医院")
+        alertDialog = new AlertDialog.Builder(this).setTitle("欢迎使用华医之春互联网医院")
                 .setMessage("为了节省您的流量，首次运行应用时需要缓存部分必须数据，可能造成微小卡顿，请耐心等待几秒钟或者重试即可")
                 .setPositiveButton("知道了", new DialogInterface.OnClickListener() {
                     @Override

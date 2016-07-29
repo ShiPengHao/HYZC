@@ -46,11 +46,11 @@ public class DrugFragment extends BaseFragment implements AdapterView.OnItemClic
     private DrugTypeAdapter adapter;
     private ClearEditText clearEditText;
 
-    private List<DrugTypeBean> datas = new ArrayList<>();
+    private List<DrugTypeBean> data = new ArrayList<>();
     private boolean isFlushing = false;
     private LinearLayout ll_loading;
     private Handler handler;
-    private static final int WAHT_FLUSH_DATA = 1;
+    private static final int WHAT_FLUSH_DATA = 1;
     private HashMap<String,Object> paramsMap = new HashMap<>();
 
     @Override
@@ -69,7 +69,7 @@ public class DrugFragment extends BaseFragment implements AdapterView.OnItemClic
      * 设置适配器和监听
      */
     protected void setListener() {
-        adapter = new DrugTypeAdapter(datas);
+        adapter = new DrugTypeAdapter(data);
         listView.setAdapter(adapter);
         listView.setOnItemClickListener(this);
         clearEditText.addTextChangedListener(this);
@@ -78,7 +78,7 @@ public class DrugFragment extends BaseFragment implements AdapterView.OnItemClic
             @Override
             public void handleMessage(Message msg) {
                 switch (msg.what) {
-                    case WAHT_FLUSH_DATA:
+                    case WHAT_FLUSH_DATA:
                         if (!isFlushing) {
                             ll_loading.setVisibility(View.VISIBLE);
                             flushData();
@@ -90,8 +90,8 @@ public class DrugFragment extends BaseFragment implements AdapterView.OnItemClic
         getActivity().getContentResolver().registerContentObserver(DrugTypeDAO.DRUG_TYPE_URI, true, new ContentObserver(new Handler()) {
             @Override
             public void onChange(boolean selfChange) {
-                handler.removeMessages(WAHT_FLUSH_DATA);
-                handler.sendEmptyMessageDelayed(WAHT_FLUSH_DATA, 2000);
+                handler.removeMessages(WHAT_FLUSH_DATA);
+                handler.sendEmptyMessageDelayed(WHAT_FLUSH_DATA, 2000);
             }
         });
     }
@@ -114,21 +114,21 @@ public class DrugFragment extends BaseFragment implements AdapterView.OnItemClic
 
                 isFlushing = true;
                 Cursor cursor = DrugTypeDAO.getInstance().getAllCursor();
-                datas.clear();
+                data.clear();
                 while (cursor.moveToNext()) {
                     DrugTypeBean bean = new DrugTypeBean();
                     bean.CnName = cursor.getString(DrugTypeDAO.ID_NAME);
                     bean.IconUrl = cursor.getString(DrugTypeDAO.ID_ICON);
                     bean.TypeCode = cursor.getString(DrugTypeDAO.ID_CODE);
-                    datas.add(bean);
+                    data.add(bean);
                 }
-                Collections.sort(datas);
+                Collections.sort(data);
 
                 ThreadUtils.runOnUIThread(new Runnable() {
                     @Override
                     public void run() {
                         adapter.notifyDataSetChanged();
-                        if (datas.size() > 0) {
+                        if (data.size() > 0) {
                             ll_loading.setVisibility(View.GONE);
                         } else {
                             ll_loading.setVisibility(View.VISIBLE);
@@ -197,14 +197,14 @@ public class DrugFragment extends BaseFragment implements AdapterView.OnItemClic
      * @param json 药品json数据
      */
     private void parseDrugJson(String json) {
-//        if (json == null) {
-//            return;
-//        }
-//        ArrayList<DrugTypeBean> beans = new Gson().fromJson(json, new TypeToken<ArrayList<DrugTypeBean>>() {
-//        }.getType());
-//        for (int i = 0; i < beans.size(); i++) {
-//            DrugTypeDAO.getInstance().update(beans.get(i));
-//        }
+        if (json == null) {
+            return;
+        }
+        ArrayList<DrugTypeBean> beans = new Gson().fromJson(json, new TypeToken<ArrayList<DrugTypeBean>>() {
+        }.getType());
+        for (int i = 0; i < beans.size(); i++) {
+            DrugTypeDAO.getInstance().update(beans.get(i));
+        }
     }
 
     /**
@@ -230,8 +230,8 @@ public class DrugFragment extends BaseFragment implements AdapterView.OnItemClic
      */
     private void scrollListTo(CharSequence s) {
         String pinYin;
-        for (int i = 0; i < datas.size(); i++) {
-            pinYin = PinYinUtils.getPinYin(datas.get(i).CnName);
+        for (int i = 0; i < data.size(); i++) {
+            pinYin = PinYinUtils.getPinYin(data.get(i).CnName);
             if (pinYin.startsWith(String.valueOf(s).toUpperCase())) {
                 listView.setSelection(i + listView.getHeaderViewsCount());
                 break;
@@ -266,7 +266,7 @@ public class DrugFragment extends BaseFragment implements AdapterView.OnItemClic
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        DrugTypeBean bean = datas.get(position - listView.getHeaderViewsCount());
+        DrugTypeBean bean = data.get(position - listView.getHeaderViewsCount());
         MyToast.show(bean.toString());
 //        requestDrugByType(bean.TypeCode);
     }

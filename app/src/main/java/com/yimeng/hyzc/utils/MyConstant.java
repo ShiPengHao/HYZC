@@ -44,10 +44,20 @@ public class MyConstant {
     /**
      * webservice命名空间
      */
-    public static final String NAMESPACE = "http://hyzc.sqall.com/";
+    public static final String NAMESPACE = "http://192.168.0.108:888/";
     /**
      * webserviceUrl  http://hyzc.sqall.com/API/ymOR_WebService.asmx
      */
     public static final String WEB_SERVICE_URL = NAMESPACE + "API/ymOR_WebService.asmx";
+
+    /**
+     * 医院id
+     */
+    public static final String HOSPITAL_ID = "1";
+
+    /**
+     * 科室id
+     */
+    public static final String DEPARTMENTS_ID = "1";
 
 }

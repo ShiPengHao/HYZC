@@ -15,8 +15,6 @@ import okhttp3.OkHttpClient;
  */
 public class MyApp extends Application {
 
-    private static OkHttpClient okHttpClient;
-
     @Override
     public void onCreate() {
         super.onCreate();
@@ -41,7 +39,7 @@ public class MyApp extends Application {
     private void initHttpUtils() {
         CookieJarImpl cookieJar = new CookieJarImpl(new PersistentCookieStore(getApplicationContext()));
 
-        okHttpClient = new OkHttpClient.Builder()
+        OkHttpClient okHttpClient = new OkHttpClient.Builder()
 //                .addInterceptor(new LoggerInterceptor("TAG"))
                 .connectTimeout(10000L, TimeUnit.MILLISECONDS)
                 .readTimeout(10000L, TimeUnit.MILLISECONDS)
@@ -57,9 +55,6 @@ public class MyApp extends Application {
         return instance;
     }
 
-    public static OkHttpClient getHttpClient() {
-        return okHttpClient;
-    }
 
 
 }

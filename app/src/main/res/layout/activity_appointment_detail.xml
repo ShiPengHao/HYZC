@@ -108,19 +108,6 @@
                 android:textColor="@color/black_item_content"
                 android:textSize="16dp" />
 
-            <include layout="@layout/layout_divider" />
-
-            <TextView
-                android:id="@+id/tv_appointment_score"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="6dp"
-                android:background="@color/white"
-                android:padding="5dp"
-                android:text="@string/appointment_score"
-                android:textColor="@color/black_item_content"
-                android:textSize="16dp" />
-
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -245,14 +232,6 @@
             <include layout="@layout/layout_divider" />
         </LinearLayout>
     </ScrollView>
-    <Button
-        android:id="@+id/bt_score"
-        android:text="@string/appointment_score"
-        android:textSize="18dp"
-        android:textColor="@color/white"
-        android:background="@color/colorAccent"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
     <Button
         android:id="@+id/bt_response"
         android:text="@string/doctor_response"

@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/grey"
-    android:orientation="vertical"
-    tools:context="com.yimeng.hyzc.activity.LoginActivity">
+    android:orientation="vertical">
 
     <android.support.v4.view.ViewPager
         android:id="@+id/vp"
@@ -19,43 +17,44 @@
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="@color/grey_line"></View>
+
     <LinearLayout
         android:id="@+id/ll_tab"
-        android:background="@color/white"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@color/white"
         android:orientation="horizontal"
         android:padding="3dp">
 
         <TextView
-            android:paddingTop="3dp"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:drawableTop="@mipmap/icon_home_check"
             android:gravity="center"
+            android:paddingTop="3dp"
             android:text="@string/home"
             android:textColor="@color/colorAccent"
             android:textSize="14dp" />
 
 
         <TextView
-            android:paddingTop="3dp"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:drawableTop="@mipmap/icon_med_normal"
             android:gravity="center"
+            android:paddingTop="3dp"
             android:text="@string/drug"
             android:textSize="14dp" />
 
         <TextView
-            android:paddingTop="3dp"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:drawableTop="@mipmap/icon_user_normal"
             android:gravity="center"
+            android:paddingTop="3dp"
             android:text="@string/my"
             android:textSize="14dp" />
 
@@ -63,10 +62,9 @@
 
     <View
         android:id="@+id/main_indicate_line"
-        android:layout_marginBottom="1dp"
         android:layout_width="50dp"
         android:layout_height="2dp"
+        android:layout_marginBottom="1dp"
         android:background="@color/colorAccent" />
-
 
 </LinearLayout>

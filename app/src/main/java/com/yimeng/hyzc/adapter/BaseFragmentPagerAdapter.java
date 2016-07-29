@@ -4,6 +4,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
+import com.yimeng.hyzc.utils.MyLog;
+
 import java.util.List;
 
 /**

@@ -48,7 +48,6 @@ public class AppointDetailActivity extends BaseActivity implements View.OnClickL
     private int appointment_id;
     private HashMap<String, Object> params;
     private String type;
-    private Button bt_score;
     private Button bt_response;
     public static final int REQUEST_CODE_DOCTOR_RESPONSE = 100;
     private boolean updateFlag;
@@ -74,7 +73,6 @@ public class AppointDetailActivity extends BaseActivity implements View.OnClickL
         tv_response_way = (TextView) findViewById(R.id.tv_response_way);
         tv_appointment_add_time = (TextView) findViewById(R.id.tv_appointment_add_time);
         iv_back = (ImageView) findViewById(R.id.iv_back);
-        bt_score = (Button) findViewById(R.id.bt_score);
         bt_response = (Button) findViewById(R.id.bt_response);
     }
 
@@ -82,7 +80,6 @@ public class AppointDetailActivity extends BaseActivity implements View.OnClickL
     protected void setListener() {
         iv_back.setOnClickListener(this);
         bt_response.setOnClickListener(this);
-        bt_score.setOnClickListener(this);
     }
 
     @Override
@@ -93,8 +90,8 @@ public class AppointDetailActivity extends BaseActivity implements View.OnClickL
         appointment_id = getIntent().getIntExtra("id", 0);
         type = getIntent().getStringExtra("type");
         if ("doctor".equalsIgnoreCase(type)) {
-            bt_score.setVisibility(View.GONE);
-        } else if ("patient".equalsIgnoreCase(type)) {
+            bt_response.setVisibility(View.VISIBLE);
+        } else {
             bt_response.setVisibility(View.GONE);
         }
         requestAppointmentDetail();
@@ -102,9 +99,12 @@ public class AppointDetailActivity extends BaseActivity implements View.OnClickL
 
     private void bindData() {
         tv_appointmentId.setText(String.format("%s：%s", getString(R.string.appointment_id), bean.appointment_id));
-        tv_description.setText(String.format("%s：%s", getString(R.string.disease_description), bean.disease_description == null ? "" : bean.disease_description));
-        tv_doctor.setText(String.format("%s：%s", getString(R.string.doctor), bean.doctor_name == null ? "" : bean.doctor_name));
-        tv_response.setText(String.format("%s：%s", getString(R.string.doctor_response), bean.doctor_Responses == null ? "" : bean.doctor_Responses));
+        tv_description.setText(String.format("%s：%s", getString(R.string.disease_description),
+                isEmpty(bean.disease_description) ? getString(R.string.empty_content) : bean.disease_description));
+        tv_doctor.setText(String.format("%s：%s", getString(R.string.doctor),
+                isEmpty(bean.doctor_name) ? getString(R.string.empty_content) : bean.doctor_name));
+        tv_response.setText(String.format("%s：%s", getString(R.string.doctor_response),
+                isEmpty(bean.doctor_Responses) ? getString(R.string.empty_content) : bean.doctor_Responses));
         try {
             String date = bean.registration_time.substring(bean.registration_time.indexOf("(") + 1, bean.registration_time.indexOf(")"));
             date = new SimpleDateFormat("yyyy-MM-dd").format(new Date(Long.parseLong(date)));
@@ -127,24 +127,20 @@ public class AppointDetailActivity extends BaseActivity implements View.OnClickL
             tv_response_time.setText(String.format("%s：%s", MyApp.getAppContext().getString(R.string.doctor_response_time),
                     date));
         } catch (Exception e) {
-            tv_response_time.setText(MyApp.getAppContext().getString(R.string.doctor_response_time));
+            tv_response_time.setText(String.format("%s：%s",MyApp.getAppContext().getString(R.string.doctor_response_time),
+                    getString(R.string.empty_content)));
         }
-        try {
-            String birth = bean.patient_age.substring(bean.patient_age.indexOf("(") + 1, bean.patient_age.indexOf(")"));
-            tv_patient_age.setText(String.format("%s：%s", getString(R.string.age),
-                    new Date().getYear() - new Date(Long.parseLong(birth)).getYear()));
-        } catch (Exception e) {
-            tv_patient_age.setText(getString(R.string.age));
-        }
-        tv_patient_name.setText(String.format("%s：%s", getString(R.string.username), bean.patient_name == null ? "" : bean.patient_name));
-        tv_response_way.setText(String.format("%s：%s", getString(R.string.doctor_response_way), bean.doctor_Way == null ? "" : bean.doctor_Way));
-        tv_patient_phone.setText(String.format("%s：%s", getString(R.string.phone), bean.patient_phone == null ? "" : bean.patient_phone));
-        tv_patient_sex.setText(String.format("%s：%s", getString(R.string.sex),
-                bean.patient_sex == 1 ? getString(R.string.male) : getString(R.string.female)));
+        tv_patient_age.setText(String.format("%s：%s", getString(R.string.age), bean.patient_age));
+        tv_patient_name.setText(String.format("%s：%s", getString(R.string.username),
+                isEmpty(bean.patient_name) ? getString(R.string.empty_content) : bean.patient_name));
+        tv_response_way.setText(String.format("%s：%s", getString(R.string.doctor_response_way),
+                isEmpty(bean.doctor_Way) ? getString(R.string.empty_content) : bean.doctor_Way));
+        tv_patient_phone.setText(String.format("%s：%s", getString(R.string.phone),
+                isEmpty(bean.patient_phone) ? getString(R.string.empty_content) : bean.patient_phone));
+        tv_patient_sex.setText(String.format("%s：%s", getString(R.string.sex), bean.patient_sex));
         if (bean.doctor_dispose == 0) {
             tv_appointStatus.setText(String.format("%s：%s", getString(R.string.appointment_status), getString(R.string.no_response)));
             tv_appointStatus.setTextColor(Color.RED);
-            bt_score.setVisibility(View.GONE);
         } else {
             bt_response.setVisibility(View.GONE);
             tv_appointStatus.setText(String.format("%s：%s", getString(R.string.appointment_status), getString(R.string.has_response)));
@@ -182,7 +178,7 @@ public class AppointDetailActivity extends BaseActivity implements View.OnClickL
      */
     private void parseAppointDetail(String result) {
         if (result == null) {
-            MyToast.show(getString(R.string.connet_error));
+            MyToast.show(getString(R.string.connect_error));
             return;
         }
         try {
@@ -200,10 +196,10 @@ public class AppointDetailActivity extends BaseActivity implements View.OnClickL
                         }
                     });
                 } else {
-                    MyToast.show(context.getString(R.string.connet_error));
+                    MyToast.show(context.getString(R.string.connect_error));
                 }
             } else {
-                MyToast.show(context.getString(R.string.connet_error));
+                MyToast.show(context.getString(R.string.connect_error));
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -221,9 +217,6 @@ public class AppointDetailActivity extends BaseActivity implements View.OnClickL
                 break;
             case R.id.bt_response:
                 startActivityForResult(new Intent(this, DoctorResponseActivity.class).putExtra("id", appointment_id), REQUEST_CODE_DOCTOR_RESPONSE);
-                break;
-            case R.id.bt_score:
-                MyToast.show(String.format("%s%s", getString(R.string.appointment_score), getString(R.string.fun_undo)));
                 break;
         }
     }

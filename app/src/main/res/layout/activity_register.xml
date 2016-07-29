@@ -1,703 +1,486 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/grey"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
     tools:context="com.yimeng.hyzc.activity.LoginActivity">
 
-    <LinearLayout
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            style="@style/TextTitle"
+            android:text="@string/register" />
+
+        <ImageView
+            android:id="@+id/iv_back"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="20dp"
+            android:src="@mipmap/back" />
+    </RelativeLayout>
+
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="center_horizontal"
-        android:orientation="vertical">
+        android:padding="5dp">
 
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <TextView
-                style="@style/TextTitle"
-                android:text="@string/register" />
-
-            <ImageView
-                android:id="@+id/iv_back"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="20dp"
-                android:src="@mipmap/back" />
-        </RelativeLayout>
-
-        <ScrollView
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:padding="5dp">
+            android:orientation="vertical">
+
+            <include layout="@layout/layout_user_type" />
+
+            <LinearLayout
+                android:id="@+id/ll_cert_info"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="5dp"
+                android:visibility="gone">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:text="@string/cert_info"
+                    android:textColor="@color/black"
+                    android:textSize="18dp" />
+
+                <LinearLayout
+                    android:id="@+id/ll_doctor_cert"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="vertical">
+
+                        <Button
+                            android:id="@+id/bt_doctor_cert"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/selector_bt_bg_green"
+                            android:gravity="center"
+                            android:padding="10dp"
+                            android:text="@string/doctor_cert"
+                            android:textSize="18dp" />
+
+                        <ImageView
+                            android:id="@+id/iv_doctor_cert"
+                            android:layout_width="match_parent"
+                            android:layout_height="150dp"
+                            android:scaleType="centerInside"
+                            android:visibility="gone" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="vertical">
+
+                        <Button
+                            android:id="@+id/bt_doctor_signature"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/selector_bt_bg_green"
+                            android:gravity="center"
+                            android:padding="10dp"
+                            android:text="@string/doctor_signature"
+                            android:textSize="18dp" />
+
+                        <ImageView
+                            android:id="@+id/iv_doctor_signature"
+                            android:layout_width="match_parent"
+                            android:layout_height="150dp"
+                            android:scaleType="centerInside"
+                            android:visibility="gone" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/ll_pharmacy_cert"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="vertical">
+
+                        <Button
+                            android:id="@+id/bt_organization_cert"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/selector_bt_bg_green"
+                            android:gravity="center"
+                            android:padding="10dp"
+                            android:text="@string/organization_cert"
+                            android:textSize="18dp" />
+
+                        <ImageView
+                            android:id="@+id/iv_organization_cert"
+                            android:layout_width="match_parent"
+                            android:layout_height="150dp"
+                            android:scaleType="centerInside"
+                            android:visibility="gone" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="vertical">
+
+                        <Button
+                            android:id="@+id/bt_license_cert"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/selector_bt_bg_green"
+                            android:gravity="center"
+                            android:padding="10dp"
+                            android:text="@string/license_cert"
+                            android:textSize="18dp" />
+
+                        <ImageView
+                            android:id="@+id/iv_license_cert"
+                            android:layout_width="match_parent"
+                            android:layout_height="150dp"
+                            android:scaleType="centerInside"
+                            android:src="@mipmap/ic_launcher"
+                            android:visibility="gone" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="vertical">
+
+                        <Button
+                            android:id="@+id/bt_permit_cert"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/selector_bt_bg_green"
+                            android:gravity="center"
+                            android:padding="10dp"
+                            android:text="@string/permit_cert"
+                            android:textSize="18dp" />
+
+                        <ImageView
+                            android:id="@+id/iv_permit_cert"
+                            android:layout_width="match_parent"
+                            android:layout_height="150dp"
+                            android:scaleType="centerInside"
+                            android:src="@mipmap/ic_launcher"
+                            android:visibility="gone" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:padding="6dp"
+                            android:text="@string/pharmacy_name"
+                            android:textSize="18dp" />
+
+                        <EditText
+                            android:id="@+id/et_pharmacy_name"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/pharmacy_name"
+                            android:padding="6dp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:padding="6dp"
+                            android:text="@string/pharmacy_corporation"
+                            android:textSize="18dp" />
+
+                        <EditText
+                            android:id="@+id/et_pharmacy_corporation"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/pharmacy_name"
+                            android:padding="6dp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:padding="6dp"
+                            android:text="@string/pharmacy_flag"
+                            android:textSize="18dp" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+
+                            <CheckBox
+                                android:id="@+id/cb_work"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="10dp"
+                                android:text="@string/yibao" />
+
+                            <CheckBox
+                                android:id="@+id/cb_home"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="30dp"
+                                android:text="@string/chengzhen" />
+
+                            <CheckBox
+                                android:id="@+id/cb_farm"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="30dp"
+                                android:text="@string/nonghe" />
+                        </LinearLayout>
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:padding="5dp"
+                android:text="@string/account_info"
+                android:textColor="@color/black"
+                android:textSize="18dp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
-
-                <include layout="@layout/layout_user_type" />
-
-                <LinearLayout
-                    android:id="@+id/ll_cert_info"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:padding="5dp"
-                    android:visibility="gone">
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="5dp"
-                        android:text="@string/cert_info"
-                        android:textColor="@color/black"
-                        android:textSize="18dp" />
-
-                    <LinearLayout
-                        android:id="@+id/ll_doctor_cert"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical">
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:gravity="center_vertical"
-                            android:orientation="vertical">
-
-                            <Button
-                                android:id="@+id/bt_doctor_cert"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:background="@drawable/selector_bt_bg_green"
-                                android:gravity="center"
-                                android:padding="10dp"
-                                android:text="@string/doctor_cert"
-                                android:textSize="18dp" />
-
-                            <ImageView
-                                android:id="@+id/iv_doctor_cert"
-                                android:layout_width="match_parent"
-                                android:layout_height="150dp"
-                                android:scaleType="centerInside"
-                                android:visibility="gone" />
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:gravity="center_vertical"
-                            android:orientation="vertical">
-
-                            <Button
-                                android:id="@+id/bt_doctor_signature"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:background="@drawable/selector_bt_bg_green"
-                                android:gravity="center"
-                                android:padding="10dp"
-                                android:text="@string/doctor_signature"
-                                android:textSize="18dp" />
-
-                            <ImageView
-                                android:id="@+id/iv_doctor_signature"
-                                android:layout_width="match_parent"
-                                android:layout_height="150dp"
-                                android:scaleType="centerInside"
-                                android:visibility="gone" />
-                        </LinearLayout>
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:id="@+id/ll_pharmacy_cert"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical">
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:gravity="center_vertical"
-                            android:orientation="vertical">
-
-                            <Button
-                                android:id="@+id/bt_organization_cert"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:background="@drawable/selector_bt_bg_green"
-                                android:gravity="center"
-                                android:padding="10dp"
-                                android:text="@string/organization_cert"
-                                android:textSize="18dp" />
-
-                            <ImageView
-                                android:id="@+id/iv_organization_cert"
-                                android:layout_width="match_parent"
-                                android:layout_height="150dp"
-                                android:scaleType="centerInside"
-                                android:visibility="gone" />
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:gravity="center_vertical"
-                            android:orientation="vertical">
-
-                            <Button
-                                android:id="@+id/bt_license_cert"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:background="@drawable/selector_bt_bg_green"
-                                android:gravity="center"
-                                android:padding="10dp"
-                                android:text="@string/license_cert"
-                                android:textSize="18dp" />
-
-                            <ImageView
-                                android:id="@+id/iv_license_cert"
-                                android:layout_width="match_parent"
-                                android:layout_height="150dp"
-                                android:scaleType="centerInside"
-                                android:src="@mipmap/ic_launcher"
-                                android:visibility="gone" />
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:gravity="center_vertical"
-                            android:orientation="vertical">
-
-                            <Button
-                                android:id="@+id/bt_permit_cert"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:background="@drawable/selector_bt_bg_green"
-                                android:gravity="center"
-                                android:padding="10dp"
-                                android:text="@string/permit_cert"
-                                android:textSize="18dp" />
-
-                            <ImageView
-                                android:id="@+id/iv_permit_cert"
-                                android:layout_width="match_parent"
-                                android:layout_height="150dp"
-                                android:scaleType="centerInside"
-                                android:src="@mipmap/ic_launcher"
-                                android:visibility="gone" />
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:gravity="center_vertical"
-                            android:orientation="horizontal">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:padding="6dp"
-                                android:text="@string/pharmacy_name"
-                                android:textSize="18dp" />
-
-                            <EditText
-                                android:id="@+id/et_pharmacy_name"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:hint="@string/pharmacy_name"
-                                android:padding="6dp" />
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:gravity="center_vertical"
-                            android:orientation="horizontal">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:padding="6dp"
-                                android:text="@string/pharmacy_corporation"
-                                android:textSize="18dp" />
-
-                            <EditText
-                                android:id="@+id/et_pharmacy_corporation"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:hint="@string/pharmacy_name"
-                                android:padding="6dp" />
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:gravity="center_vertical"
-                            android:orientation="horizontal">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:padding="6dp"
-                                android:text="@string/pharmacy_flag"
-                                android:textSize="18dp" />
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:gravity="center_vertical"
-                                android:orientation="horizontal">
-
-                                <CheckBox
-                                    android:id="@+id/cb_work"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginLeft="10dp"
-                                    android:text="@string/yibao" />
-
-                                <CheckBox
-                                    android:id="@+id/cb_home"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginLeft="30dp"
-                                    android:text="@string/chengzhen" />
-
-                                <CheckBox
-                                    android:id="@+id/cb_farm"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginLeft="30dp"
-                                    android:text="@string/nonghe" />
-                            </LinearLayout>
-                        </LinearLayout>
-                    </LinearLayout>
-                </LinearLayout>
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="5dp"
-                    android:padding="5dp"
-                    android:text="@string/account_info"
-                    android:textColor="@color/black"
-                    android:textSize="18dp" />
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="5dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:padding="5dp">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:padding="6dp"
-                            android:text="@string/username"
-                            android:textSize="18dp" />
-
-                        <EditText
-                            android:id="@+id/et_username"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:hint="@string/username"
-                            android:padding="6dp" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:padding="6dp"
-                            android:text="@string/pwd"
-                            android:textSize="18dp" />
-
-                        <EditText
-                            android:id="@+id/et_pwd"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:hint="@string/pwd"
-                            android:inputType="textPassword"
-                            android:padding="6dp" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:padding="6dp"
-                            android:text="@string/pwd_confirm"
-                            android:textSize="18dp" />
-
-                        <EditText
-                            android:id="@+id/et_pwd_confirm"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:hint="@string/pwd_confirm"
-                            android:inputType="textPassword"
-                            android:padding="6dp" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:padding="6dp"
-                            android:text="@string/email"
-                            android:textSize="18dp" />
-
-                        <EditText
-                            android:id="@+id/et_email"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:hint="@string/hint_email"
-                            android:padding="6dp" />
-                    </LinearLayout>
-                </LinearLayout>
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="5dp"
-                    android:padding="5dp"
-                    android:text="@string/id_info"
-                    android:textColor="@color/black"
-                    android:textSize="18dp" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:padding="5dp">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:padding="6dp"
-                            android:text="@string/name"
-                            android:textSize="18dp" />
-
-                        <EditText
-                            android:id="@+id/et_name"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:hint="@string/name"
-                            android:padding="6dp" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:padding="6dp"
-                            android:text="@string/phone"
-                            android:textSize="18dp" />
-
-                        <EditText
-                            android:id="@+id/et_phone"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:hint="@string/phone"
-                            android:inputType="number"
-                            android:padding="6dp" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:id="@+id/ll_personal_info"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical">
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:gravity="center_vertical"
-                            android:orientation="horizontal">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:padding="6dp"
-                                android:text="@string/id_number"
-                                android:textSize="18dp" />
-
-                            <EditText
-                                android:id="@+id/et_id"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:hint="@string/id_number"
-                                android:padding="6dp" />
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:gravity="center_vertical"
-                            android:orientation="horizontal">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:padding="6dp"
-                                android:text="@string/sex"
-                                android:textSize="18dp" />
-
-                            <RadioGroup
-                                android:id="@+id/rg_sex"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:gravity="center_vertical"
-                                android:orientation="horizontal">
-
-                                <RadioButton
-                                    android:id="@+id/rb_male"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginLeft="10dp"
-                                    android:text="@string/male" />
-
-                                <RadioButton
-                                    android:id="@+id/rb_female"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginLeft="30dp"
-                                    android:text="@string/female" />
-                            </RadioGroup>
-                        </LinearLayout>
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:padding="6dp"
-                            android:text="@string/province"
-                            android:textSize="18dp" />
-
-                        <Spinner
-                            android:id="@+id/spinner_province"
-                            android:layout_width="wrap_content"
-                            android:layout_height="@dimen/finger_width" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:padding="6dp"
-                            android:text="@string/city"
-                            android:textSize="18dp" />
-
-                        <Spinner
-                            android:id="@+id/spinner_city"
-                            android:layout_width="wrap_content"
-                            android:layout_height="@dimen/finger_width" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:padding="6dp"
-                            android:text="@string/area"
-                            android:textSize="18dp" />
-
-                        <Spinner
-                            android:id="@+id/spinner_area"
-                            android:layout_width="wrap_content"
-                            android:layout_height="@dimen/finger_width" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:id="@+id/ll_hospital"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical">
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:gravity="center_vertical"
-                            android:orientation="horizontal">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:padding="6dp"
-                                android:text="@string/hospital"
-                                android:textSize="18dp" />
-
-                            <Spinner
-                                android:id="@+id/spinner_hospital"
-                                android:layout_width="wrap_content"
-                                android:layout_height="@dimen/finger_width" />
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:gravity="center_vertical"
-                            android:orientation="horizontal">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:padding="6dp"
-                                android:text="@string/department"
-                                android:textSize="18dp" />
-
-                            <Spinner
-                                android:id="@+id/spinner_department"
-                                android:layout_width="wrap_content"
-                                android:layout_height="@dimen/finger_width" />
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:gravity="center_vertical"
-                            android:orientation="horizontal">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:padding="6dp"
-                                android:text="@string/professional"
-                                android:textSize="18dp" />
-
-                            <Spinner
-                                android:id="@+id/spinner_professional"
-                                android:layout_width="wrap_content"
-                                android:layout_height="@dimen/finger_width" />
-                        </LinearLayout>
-
-                    </LinearLayout>
-
-
-                    <LinearLayout
-                        android:id="@+id/ll_address_detail"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:padding="6dp"
-                            android:text="@string/address_detail"
-                            android:textSize="18dp" />
-
-                        <EditText
-                            android:id="@+id/et_address_detail"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:hint="@string/address_detail"
-                            android:padding="6dp" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:id="@+id/ll_remark"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:id="@+id/tv_remark"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:padding="6dp"
-                            android:text="@string/remark"
-                            android:textSize="18dp" />
-
-                        <EditText
-                            android:id="@+id/et_remark"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:hint="@string/remark"
-                            android:padding="6dp" />
-                    </LinearLayout>
-                </LinearLayout>
-
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
                     android:orientation="horizontal">
 
-                    <Button
-                        android:id="@+id/bt_register"
-                        android:layout_width="0dp"
+                    <TextView
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:background="@drawable/selector_bt_bg_green"
-                        android:gravity="center"
-                        android:text="@string/register" />
-                </LinearLayout>
-            </LinearLayout>
-        </ScrollView>
-    </LinearLayout>
+                        android:padding="6dp"
+                        android:text="@string/username"
+                        android:textSize="18dp" />
 
-    <Button
-        android:id="@+id/bt_float_register"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical|right"
-        android:layout_marginRight="10dp"
-        android:background="@drawable/selector_green_shadow"
-        android:text="@string/register" />
-</FrameLayout>
+                    <EditText
+                        android:id="@+id/et_phone"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/phone"
+                        android:inputType="number"
+                        android:padding="6dp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="6dp"
+                        android:text="@string/pwd"
+                        android:textSize="18dp" />
+
+                    <EditText
+                        android:id="@+id/et_pwd"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/pwd"
+                        android:inputType="textPassword"
+                        android:padding="6dp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="6dp"
+                        android:text="@string/pwd_confirm"
+                        android:textSize="18dp" />
+
+                    <EditText
+                        android:id="@+id/et_pwd_confirm"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/pwd_confirm"
+                        android:inputType="textPassword"
+                        android:padding="6dp" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:padding="5dp"
+                android:text="@string/id_info"
+                android:textColor="@color/black"
+                android:textSize="18dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="5dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="6dp"
+                        android:text="@string/name"
+                        android:textSize="18dp" />
+
+                    <EditText
+                        android:id="@+id/et_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/name"
+                        android:inputType="text"
+                        android:padding="6dp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/ll_personal_info"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:inputType="text"
+                            android:padding="6dp"
+                            android:text="@string/id_number"
+                            android:textSize="18dp" />
+
+                        <EditText
+                            android:id="@+id/et_id"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/id_number"
+                            android:padding="6dp" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/ll_remark"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/tv_remark"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="6dp"
+                        android:text="@string/remark"
+                        android:textSize="18dp" />
+
+                    <EditText
+                        android:id="@+id/et_remark"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/remark"
+                        android:padding="6dp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/ll_address_detail"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="6dp"
+                        android:text="@string/address_detail"
+                        android:textSize="18dp" />
+
+                    <EditText
+                        android:id="@+id/et_address_detail"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/address_detail"
+                        android:padding="6dp" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/bt_register"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/selector_bt_bg_green"
+                android:gravity="center"
+                android:textSize="20dp"
+                android:textColor="@color/white"
+                android:text="@string/register" />
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>
+

@@ -1,17 +1,26 @@
 package com.yimeng.hyzc.activity;
 
 import android.content.Context;
-import android.graphics.Color;
+import android.os.AsyncTask;
 import android.os.Build;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 
+import com.google.gson.Gson;
 import com.yimeng.hyzc.R;
-import com.yimeng.hyzc.utils.MyApp;
+import com.yimeng.hyzc.utils.MyConstant;
+import com.yimeng.hyzc.utils.WebServiceUtils;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.Map;
 
 import cn.jpush.android.api.JPushInterface;
 
@@ -19,29 +28,78 @@ public abstract class BaseActivity extends AppCompatActivity {
     private View mStatusBarView;
     protected Context context;
 
+    /**
+     * 使用ksoap框架执行WebService请求的异步任务类
+     */
+    public class SoapAsyncTask extends AsyncTask<Object, Object, String> {
+        @Override
+        protected String doInBackground(Object... params) {
+            if (params != null && params.length >= 2) {
+                return WebServiceUtils.callWebService(MyConstant.WEB_SERVICE_URL, MyConstant.NAMESPACE, (String) params[0],
+                        (Map<String, Object>) params[1]);
+            } else if (params != null && params.length == 1) {
+                return WebServiceUtils.callWebService(MyConstant.WEB_SERVICE_URL, MyConstant.NAMESPACE, (String) params[0],
+                        null);
+            } else {
+                return null;
+            }
+        }
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (context == null){
+        if (context == null) {
             context = this;
         }
         setContentView(getLayoutResId());
+        setStatusBar();
         initView();
         setListener();
         initData();
-        setStatusBar();
         overridePendingTransition(R.anim.next_in, R.anim.next_out);
+    }
+
+    /**
+     * 解析包含JsonArray结构的数据的json对象字符串，将结果存入集合中
+     *
+     * @param result    json对象字符串，键data对应一个JsonArray
+     * @param arrayList 存入数据的集合
+     * @param clazz javabean的字节码文件
+     */
+    public <T> void parseListResult(ArrayList<T> arrayList, Class<T> clazz, String result) {
+        arrayList.clear();
+        try {
+            JSONArray array = new JSONObject(result).optJSONArray("data");
+            for (int i = 0; i < array.length(); i++) {
+               arrayList.add(new Gson().fromJson(array.optString(i),clazz));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * 判断字符串是否为空
+     * @param string 字符串
+     * @return 空true，否则false
+     */
+    protected boolean isEmpty(String string){
+        if (null == string){
+            return true;
+        }
+        return TextUtils.isEmpty(string.trim());
     }
 
     /**
      * 处理状态栏
      */
-    protected void setStatusBar(){
+    protected void setStatusBar() {
         final int sdk = Build.VERSION.SDK_INT;
-        Window window = getWindow();
-        WindowManager.LayoutParams params = window.getAttributes();
 
         if (sdk >= Build.VERSION_CODES.KITKAT) {
+            Window window = getWindow();
+            WindowManager.LayoutParams params = window.getAttributes();
             int bits = WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS;
             // 设置透明状态栏
             if ((params.flags & bits) == 0) {
@@ -59,6 +117,11 @@ public abstract class BaseActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * 创建一个背景为指定颜色，大小为状态栏大小的view，并且添加到屏幕的根view中
+     * @param contentLayout 屏幕的内容视图
+     * @param color 指定的颜色
+     */
     private void setupStatusBarView(ViewGroup contentLayout, int color) {
         if (mStatusBarView == null) {
             View statusBarView = new View(this);
@@ -68,7 +131,6 @@ public abstract class BaseActivity extends AppCompatActivity {
 
             mStatusBarView = statusBarView;
         }
-
         mStatusBarView.setBackgroundColor(color);
     }
 

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/selector_tv_bg"
+    android:padding="5dp">
+
+    <com.yimeng.hyzc.view.CircleImageView
+        android:id="@+id/item_icon"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:layout_centerVertical="true"
+        android:src="@mipmap/ic_launcher"
+        app:civ_border_color="@color/colorAccent"
+        app:civ_border_width="1dp" />
+
+    <TextView
+        android:id="@+id/item_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_toRightOf="@id/item_icon"
+        android:paddingBottom="3dp"
+        android:paddingTop="3dp"
+        android:text="@string/name"
+        android:textColor="@color/black_item_title"
+        android:textSize="16dp" />
+
+    <TextView
+        android:id="@+id/item_limit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@id/item_name"
+        android:layout_below="@id/item_name"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:paddingBottom="3dp"
+        android:paddingTop="3dp"
+        android:text="@string/appointment_limit"
+        android:textColor="@color/black_item_content"
+        android:textSize="14dp" />
+
+    <TextView
+        android:id="@+id/item_introduce"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@id/item_limit"
+        android:layout_below="@id/item_limit"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:paddingBottom="3dp"
+        android:paddingTop="3dp"
+        android:text="@string/doctor_introduce"
+        android:textColor="@color/black_item_content"
+        android:textSize="14dp" />
+
+</RelativeLayout>

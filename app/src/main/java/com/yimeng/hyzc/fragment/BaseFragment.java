@@ -8,7 +8,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.yimeng.hyzc.R;
 import com.yimeng.hyzc.utils.UiUtils;
 
 /**
@@ -16,27 +15,34 @@ import com.yimeng.hyzc.utils.UiUtils;
  */
 public abstract class BaseFragment extends Fragment {
     protected Context context;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        if (context == null){
+        if (context == null) {
             context = getActivity();
         }
-        View view = UiUtils.inflate(getLayoutResId());
-        initView(view);
-        setListener();
-        initData();
+        View view = getView();
+        if (null == view) {
+            view = UiUtils.inflate(getLayoutResId());
+            initView(view);
+            setListener();
+            initData();
+        }
         return view;
     }
 
+
     /**
      * 获得布局id
+     *
      * @return
      */
     protected abstract int getLayoutResId();
 
     /**
      * 初始化控件
+     *
      * @param view
      */
     protected abstract void initView(View view);

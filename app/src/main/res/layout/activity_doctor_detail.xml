@@ -104,15 +104,42 @@
                     android:textSize="18dp" />
             </LinearLayout>
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="3dp"
-                android:background="@color/grey_line" />
+            <include layout="@layout/layout_divider"/>
+
+            <TextView
+                android:id="@+id/tv_phone"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/item_width"
+                android:gravity="center_vertical"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:padding="2dp"
+                android:text="@string/phone"
+                android:textColor="@color/black_item_content"
+                android:textSize="18dp" />
+
+            <include layout="@layout/layout_divider"/>
+
+            <TextView
+                android:id="@+id/tv_wechat"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/item_width"
+                android:gravity="center_vertical"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:padding="2dp"
+                android:text="@string/wechat"
+                android:textColor="@color/black_item_content"
+                android:textSize="18dp" />
+
+            <include layout="@layout/layout_divider"/>
 
             <TextView
                 android:id="@+id/tv_remark"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:minHeight="@dimen/item_width"
+                android:gravity="center_vertical"
                 android:layout_marginLeft="8dp"
                 android:layout_marginRight="8dp"
                 android:padding="2dp"
@@ -120,31 +147,32 @@
                 android:textColor="@color/black_item_content"
                 android:textSize="18dp" />
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="3dp"
-                android:background="@color/grey_line" />
+            <include layout="@layout/layout_divider"/>
+
 
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
-                android:padding="8dp">
+                android:paddingTop="2dp"
+                android:paddingBottom="2dp"
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp">
 
                 <TextView
-                    android:id="@+id/tv_appointmentTime"
+                    android:id="@+id/tv_appointment_date"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
                     android:layout_centerVertical="true"
-                    android:layout_toLeftOf="@+id/bt_choose_time"
+                    android:layout_toLeftOf="@+id/bt_choose_date"
                     android:gravity="center_vertical"
-                    android:text="@string/appointment_time"
+                    android:text="@string/appointment_date"
                     android:textColor="@color/black_item_content"
                     android:textSize="18dp" />
 
                 <Button
-                    android:id="@+id/bt_choose_time"
+                    android:id="@+id/bt_choose_date"
                     android:layout_width="wrap_content"
                     android:layout_height="32dp"
                     android:layout_alignParentRight="true"
@@ -152,9 +180,37 @@
                     android:background="@drawable/selector_bt_bg_green"
                     android:gravity="center"
                     android:padding="6dp"
-                    android:text="@string/choose_time"
+                    android:text="@string/choose_date"
                     android:textColor="@color/white" />
             </RelativeLayout>
+
+            <!--<include layout="@layout/layout_divider" />-->
+
+            <!--<RelativeLayout-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:gravity="center_vertical"-->
+                <!--android:padding="8dp">-->
+
+                <!--<TextView-->
+                    <!--android:id="@+id/tv_appointment_time"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_alignParentLeft="true"-->
+                    <!--android:layout_centerVertical="true"-->
+                    <!--android:gravity="center_vertical"-->
+                    <!--android:text="@string/appointment_time"-->
+                    <!--android:textColor="@color/black_item_content"-->
+                    <!--android:textSize="18dp" />-->
+
+                <!--<NumberPicker-->
+                    <!--android:id="@+id/numberPicker1"-->
+                    <!--android:layout_width="96dp"-->
+                    <!--android:layout_height="96dp"-->
+                    <!--android:layout_marginLeft="10dp"-->
+                    <!--android:layout_toRightOf="@id/tv_appointment_time"-->
+                    <!--android:orientation="vertical"></NumberPicker>-->
+            <!--</RelativeLayout>-->
 
             <include layout="@layout/layout_divider" />
 

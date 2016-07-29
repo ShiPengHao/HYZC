@@ -17,6 +17,7 @@ import android.widget.TextView;
 import com.squareup.picasso.Picasso;
 import com.yimeng.hyzc.R;
 import com.yimeng.hyzc.bean.DoctorBean;
+import com.yimeng.hyzc.utils.DensityUtil;
 import com.yimeng.hyzc.utils.MyConstant;
 import com.yimeng.hyzc.utils.MyToast;
 import com.yimeng.hyzc.utils.WebServiceUtils;
@@ -46,10 +47,13 @@ public class DoctorDetailActivity extends BaseActivity implements View.OnClickLi
     private DoctorBean doctorBean;
     private Calendar calendar;
     private DatePicker.OnDateChangedListener onDateChangedListener;
-    private Button bt_choose_time;
-    private TextView tv_appointmentTime;
     private String date;
     private ImageView iv_back;
+    private Button bt_choose_date;
+    private TextView tv_appointment_date;
+    private TextView tv_phone;
+    private TextView tv_wechat;
+    //    private NumberPicker timePicker;
 
     @Override
     protected int getLayoutResId() {
@@ -64,14 +68,18 @@ public class DoctorDetailActivity extends BaseActivity implements View.OnClickLi
         bt_appoint = (Button) findViewById(R.id.bt_appoint);
         bt_chat = (Button) findViewById(R.id.bt_chat);
         bt_back = (Button) findViewById(R.id.bt_back);
-        bt_choose_time = (Button) findViewById(R.id.bt_choose_time);
+        bt_choose_date = (Button) findViewById(R.id.bt_choose_date);
+//        timePicker = (NumberPicker) findViewById(R.id.numberPicker1);
+
 
         tv_name = (TextView) findViewById(R.id.tv_name);
         tv_sex = (TextView) findViewById(R.id.tv_sex);
         tv_age = (TextView) findViewById(R.id.tv_age);
         tv_email = (TextView) findViewById(R.id.tv_email);
         tv_remark = (TextView) findViewById(R.id.tv_remark);
-        tv_appointmentTime = (TextView) findViewById(R.id.tv_appointmentTime);
+        tv_phone = (TextView) findViewById(R.id.tv_phone);
+        tv_wechat = (TextView) findViewById(R.id.tv_wechat);
+        tv_appointment_date = (TextView) findViewById(R.id.tv_appointment_date);
     }
 
     @Override
@@ -79,33 +87,51 @@ public class DoctorDetailActivity extends BaseActivity implements View.OnClickLi
         bt_appoint.setOnClickListener(this);
         bt_chat.setOnClickListener(this);
         bt_back.setOnClickListener(this);
-        bt_choose_time.setOnClickListener(this);
+        bt_choose_date.setOnClickListener(this);
         iv_back.setOnClickListener(this);
     }
 
     @Override
     protected void initData() {
         Intent intent = getIntent();
-        if (intent != null) {
+        if (null != intent) {
             doctorBean = (DoctorBean) intent.getSerializableExtra("doctor");
         }
         if (null == doctorBean) {
             return;
         }
-        tv_name.setText(String.format("%s：%s", getString(R.string.name), doctorBean.doctor_user == null ? "" : doctorBean.doctor_user));
-        try {
-            String birth = doctorBean.doctor_age.substring(doctorBean.doctor_age.indexOf("(") + 1, doctorBean.doctor_age.indexOf(")"));
-            tv_age.setText(String.format("%s：%s", getString(R.string.age),
-                    new Date().getYear() - new Date(Long.parseLong(birth)).getYear()));
-        } catch (Exception e) {
-            tv_age.setText(getString(R.string.age));
-        }
-        tv_email.setText(String.format("%s：%s", getString(R.string.email), doctorBean.doctor_user == null ? "" : doctorBean.doctor_email));
-        tv_remark.setText(String.format("%s：%s", getString(R.string.doctor_introduce),
-                doctorBean.remark == null ? "" : doctorBean.remark.replace("\n", "")));
+        tv_name.setText(String.format("%s：%s", getString(R.string.name),
+                isEmpty(doctorBean.doctor_name) ? getString(R.string.empty_content) : doctorBean.doctor_name));
         tv_sex.setText(String.format("%s：%s", getString(R.string.sex),
-                doctorBean.doctor_sex == 1 ? getString(R.string.male) : getString(R.string.female)));
-        Picasso.with(this).load(MyConstant.NAMESPACE + doctorBean.doctor_avatar).into(iv_avatar);
+                isEmpty(doctorBean.doctor_sex) ? getString(R.string.male) : doctorBean.doctor_sex));
+        tv_age.setText(String.format("%s：%s", getString(R.string.age),
+                isEmpty(doctorBean.doctor_age) ? getString(R.string.empty_content) : doctorBean.doctor_age));
+        tv_email.setText(String.format("%s：%s", getString(R.string.email),
+                isEmpty(doctorBean.doctor_email) ? getString(R.string.empty_content) : doctorBean.doctor_email));
+        tv_phone.setText(String.format("%s：%s", getString(R.string.phone),
+                isEmpty(doctorBean.doctor_phone) ? getString(R.string.empty_content) : doctorBean.doctor_phone));
+        tv_wechat.setText(String.format("%s：%s", getString(R.string.wechat),
+                isEmpty(doctorBean.doctor_WeChat) ? getString(R.string.empty_content) : doctorBean.doctor_WeChat));
+        tv_remark.setText(String.format("%s：%s", getString(R.string.doctor_introduce),
+                isEmpty(doctorBean.remark) ? getString(R.string.empty_content) : doctorBean.remark.replace("\n", "")));
+        Picasso.with(this)
+                .load(MyConstant.NAMESPACE + doctorBean.doctor_avatar)
+                .resize(DensityUtil.dip2px(96),DensityUtil.dip2px(96))
+                .into(iv_avatar);
+        calendar = Calendar.getInstance();
+        int hourOfDay = calendar.get(Calendar.HOUR_OF_DAY);
+        if (hourOfDay >= 15) {//15点-24点，只能挂第二天的号，所以使用第二天的日历，日期为第二天日期，时间默认为8点，范围为8-17
+            calendar.setTime(new Date(System.currentTimeMillis() + 9 * 60 * 60 * 1000));
+//            timePicker.setValue(8);
+//            timePicker.setMinValue(8);
+//        } else {//0-15点，只能挂2个小时以后的号，而且必须在工作时间8点以后
+//            timePicker.setValue(Math.max(hourOfDay + 2, 8));
+//            timePicker.setMinValue(Math.max(hourOfDay + 2, 8));
+        }
+//        timePicker.setMaxValue(17);
+        date = String.valueOf(calendar.get(Calendar.YEAR)) + "-" + (calendar.get(Calendar.MONTH) + 1) + "-" + calendar.get(Calendar.DAY_OF_MONTH);
+        tv_appointment_date.setText(String.format("%s：%s", getString(R.string.appointment_date), date));
+
     }
 
     @Override
@@ -115,23 +141,27 @@ public class DoctorDetailActivity extends BaseActivity implements View.OnClickLi
                 requestAppoint();
                 break;
             case R.id.bt_chat:
-                MyToast.show(String.format("%s%s",getString(R.string.chat_online),getString(R.string.fun_undo)));
+                MyToast.show(String.format("%s%s", getString(R.string.chat_online), getString(R.string.fun_undo)));
                 break;
             case R.id.iv_back:
             case R.id.bt_back:
                 finish();
                 break;
-            case R.id.bt_choose_time:
-                showCalendarDialog();
+            case R.id.bt_choose_date:
+                showDatePickDialog();
                 break;
         }
     }
 
     /**
-     * 显示预约对话框，选定日期后调用requestAppoint
+     * 选择日期
      */
-    private void showCalendarDialog() {
+    private void showDatePickDialog() {
         calendar = Calendar.getInstance();
+        int hourOfDay = calendar.get(Calendar.HOUR_OF_DAY);
+        if (hourOfDay > 15) {//15点-24点，只能挂第二天的号，所以使用第二天的日历
+            calendar.setTime(new Date(System.currentTimeMillis() + 9 * 60 * 60 * 1000));
+        }
         int year = calendar.get(Calendar.YEAR);
         int monthOfYear = calendar.get(Calendar.MONTH);
         int dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
@@ -142,7 +172,7 @@ public class DoctorDetailActivity extends BaseActivity implements View.OnClickLi
             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                 if (isFirst) {
                     date = String.valueOf(year) + "-" + (monthOfYear + 1) + "-" + dayOfMonth;
-                    tv_appointmentTime.setText(String.format("预约时间：%s", date));
+                    tv_appointment_date.setText(String.format("%s：%s", getString(R.string.appointment_date), date));
                     isFirst = false;
                 }
             }
@@ -153,7 +183,9 @@ public class DoctorDetailActivity extends BaseActivity implements View.OnClickLi
                 public void onDateChanged(DatePicker view, int tempYear, int tempMonthOfYear, int tempDayOfMonth) {
                     Calendar tempCalendar = Calendar.getInstance();
                     tempCalendar.set(tempYear, tempMonthOfYear, tempDayOfMonth);
-                    if (!tempCalendar.after(calendar)) {
+                    if (!tempCalendar.after(calendar) // 所选时间在目前时刻之前
+                            || tempCalendar.getTimeInMillis() - calendar.getTimeInMillis() > 5 * 24 * 60 * 60 * 1000// 所选时间在5天之后
+                            ) {
                         view.init(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH), this);
                     }
                 }
@@ -171,12 +203,6 @@ public class DoctorDetailActivity extends BaseActivity implements View.OnClickLi
         if (TextUtils.isEmpty(description)) {
             MyToast.show("请填写病情描述");
             ObjectAnimator.ofFloat(et_disease_description, "translationX", -25, 25, -25, 25, 0).setDuration(500).start();
-            return;
-        }
-
-        if (TextUtils.isEmpty(date)) {
-            MyToast.show("请选择预约时间");
-            ObjectAnimator.ofFloat(bt_choose_time, "translationX", -25, 25, -25, 25, 0).setDuration(500).start();
             return;
         }
 
@@ -203,17 +229,19 @@ public class DoctorDetailActivity extends BaseActivity implements View.OnClickLi
 
             protected void onPostExecute(String result) {
                 if (result == null) {
-                    MyToast.show(getString(R.string.connet_error));
+                    MyToast.show(getString(R.string.connect_error));
                     return;
                 }
                 try {
                     JSONObject object = new JSONObject(result);
                     if ("ok".equalsIgnoreCase(object.optString("status"))) {
+                        bt_appoint.setEnabled(false);
                         showOkTips();
                     } else {
-                        MyToast.show(getString(R.string.connet_error));
+                        MyToast.show(object.optString("msg"));
                     }
                 } catch (Exception e) {
+                    MyToast.show(getString(R.string.connect_error));
                     e.printStackTrace();
                 }
             }
@@ -224,7 +252,7 @@ public class DoctorDetailActivity extends BaseActivity implements View.OnClickLi
      * 显示预约成功的提示对话框
      */
     private void showOkTips() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this)
+        new AlertDialog.Builder(this)
                 .setTitle("预约成功！")
                 .setMessage("祝你早日康复！")
                 .setCancelable(true)
@@ -234,7 +262,6 @@ public class DoctorDetailActivity extends BaseActivity implements View.OnClickLi
                         finish();
                     }
                 })
-                .setNegativeButton("留在本页", null);
-        builder.show();
+                .show();
     }
 }

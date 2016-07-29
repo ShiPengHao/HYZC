@@ -21,6 +21,19 @@
             android:layout_centerVertical="true"
             android:layout_marginLeft="20dp"
             android:src="@mipmap/back" />
+
+        <TextView
+            android:id="@+id/tv_edit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="10dp"
+            android:gravity="center"
+            android:padding="5dp"
+            android:text="修改"
+            android:textColor="@color/white"
+            android:textSize="16dp" />
     </RelativeLayout>
 
     <ScrollView
@@ -46,7 +59,8 @@
                     android:layout_height="96dp"
                     android:layout_centerHorizontal="true"
                     android:src="@mipmap/ic_launcher"
-                    app:civ_border_color="@color/white"
+                    android:scaleType="centerCrop"
+                    app:civ_border_color="@color/colorAccent"
                     app:civ_border_width="1dp" />
 
                 <TextView
@@ -59,17 +73,6 @@
                     android:text="点击头像更换"
                     android:textColor="@color/white"
                     android:textSize="14dp" />
-
-                <Button
-                    android:visibility="gone"
-                    android:id="@+id/bt_edit"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:background="@drawable/selector_shape_transparent_grey"
-                    android:text="编辑"
-                    android:textColor="@color/white" />
             </RelativeLayout>
 
             <LinearLayout
@@ -79,104 +82,236 @@
                 android:paddingLeft="8dp"
                 android:paddingRight="8dp">
 
-                <RelativeLayout
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/finger_width"
-                    android:gravity="center_vertical">
+                    android:layout_height="@dimen/item_width"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
 
                     <TextView
-                        android:id="@+id/tv_username_title"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_centerVertical="true"
-                        android:hint="@string/username"
+                        android:text="@string/name"
+                        android:textColor="@color/black_item_title"
+                        android:textSize="18dp" />
+
+                    <EditText
+                        android:id="@+id/et_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:background="@null"
+                        android:focusable="false"
+                        android:focusableInTouchMode="false"
+                        android:hint="@string/name"
+                        android:textColor="@color/black_item_content"
+                        android:textSize="18dp" />
+                </LinearLayout>
+
+
+                <include layout="@layout/layout_divider" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/item_width"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/sex"
                         android:textColor="@color/black_item_title"
                         android:textSize="18dp" />
 
                     <TextView
-                        android:id="@+id/tv_username"
+                        android:id="@+id/tv_sex"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_centerVertical="true"
+                        android:layout_height="@dimen/item_width"
                         android:layout_marginLeft="10dp"
-                        android:layout_toRightOf="@id/tv_username_title"
-                        android:hint="@string/username"
+                        android:drawableRight="@mipmap/next"
+                        android:gravity="center_vertical"
+                        android:padding="2dp"
+                        android:text="@string/sex"
                         android:textColor="@color/black_item_content"
+                        android:textSize="18dp" />
+                </LinearLayout>
+
+
+                <include layout="@layout/layout_divider" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/item_width"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/age"
+                        android:textColor="@color/black_item_title"
                         android:textSize="18dp" />
 
                     <EditText
-                        android:id="@+id/et_username"
+                        android:id="@+id/et_age"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_centerVertical="true"
                         android:layout_marginLeft="10dp"
-                        android:layout_toRightOf="@id/tv_username_title"
                         android:background="@null"
-                        android:hint="@string/username"
+                        android:focusable="false"
+                        android:focusableInTouchMode="false"
+                        android:hint="@string/age"
+                        android:inputType="number"
                         android:textColor="@color/black_item_content"
-                        android:textSize="18dp"
-                        android:visibility="invisible" />
-                </RelativeLayout>
+                        android:textSize="18dp" />
+                </LinearLayout>
 
                 <include layout="@layout/layout_divider" />
 
-                <TextView
-                    android:id="@+id/tv_name"
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="@dimen/item_width"
                     android:gravity="center_vertical"
-                    android:padding="2dp"
-                    android:text="@string/name"
-                    android:textColor="@color/black_item_content"
-                    android:textSize="18dp" />
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/phone"
+                        android:textColor="@color/black_item_title"
+                        android:textSize="18dp" />
+
+                    <EditText
+                        android:id="@+id/et_phone"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:background="@null"
+                        android:focusable="false"
+                        android:focusableInTouchMode="false"
+                        android:hint="@string/phone"
+                        android:inputType="number"
+                        android:textColor="@color/black_item_content"
+                        android:textSize="18dp" />
+                </LinearLayout>
 
                 <include layout="@layout/layout_divider" />
 
-                <TextView
-                    android:id="@+id/tv_sex"
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="@dimen/item_width"
                     android:gravity="center_vertical"
-                    android:padding="2dp"
-                    android:text="@string/sex"
-                    android:textColor="@color/black_item_content"
-                    android:textSize="18dp" />
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/wechat"
+                        android:textColor="@color/black_item_title"
+                        android:textSize="18dp" />
+
+                    <EditText
+                        android:id="@+id/et_wechat"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:background="@null"
+                        android:focusable="false"
+                        android:focusableInTouchMode="false"
+                        android:hint="@string/wechat"
+                        android:textColor="@color/black_item_content"
+                        android:textSize="18dp" />
+                </LinearLayout>
 
                 <include layout="@layout/layout_divider" />
 
-                <TextView
-                    android:id="@+id/tv_age"
-                    android:layout_width="wrap_content"
+
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="@dimen/item_width"
                     android:gravity="center_vertical"
-                    android:padding="2dp"
-                    android:text="@string/age"
-                    android:textColor="@color/black_item_content"
-                    android:textSize="18dp" />
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/email"
+                        android:textColor="@color/black_item_title"
+                        android:textSize="18dp" />
+
+                    <EditText
+                        android:id="@+id/et_email"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:background="@null"
+                        android:focusable="false"
+                        android:focusableInTouchMode="false"
+                        android:hint="@string/email"
+                        android:textColor="@color/black_item_content"
+                        android:textSize="18dp" />
+                </LinearLayout>
 
                 <include layout="@layout/layout_divider" />
 
-                <TextView
-                    android:id="@+id/tv_email"
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:id="@+id/ll_isOrder"
+                    android:layout_width="match_parent"
                     android:layout_height="@dimen/item_width"
                     android:gravity="center_vertical"
-                    android:padding="2dp"
-                    android:text="@string/email"
-                    android:textColor="@color/black_item_content"
-                    android:textSize="18dp" />
+                    android:orientation="horizontal"
+                    android:visibility="gone">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/isOrder"
+                        android:textColor="@color/black_item_title"
+                        android:textSize="18dp" />
+
+                    <TextView
+                        android:id="@+id/tv_isOrder"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/item_width"
+                        android:layout_marginLeft="10dp"
+                        android:drawableRight="@mipmap/next"
+                        android:gravity="center_vertical"
+                        android:padding="2dp"
+                        android:text="@string/isOrder"
+                        android:textColor="@color/black_item_content"
+                        android:textSize="18dp" />
+                </LinearLayout>
 
                 <include layout="@layout/layout_divider" />
 
-                <TextView
-                    android:id="@+id/tv_phone"
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:id="@+id/ll_limit"
+                    android:layout_width="match_parent"
                     android:layout_height="@dimen/item_width"
                     android:gravity="center_vertical"
-                    android:padding="2dp"
-                    android:text="@string/phone"
-                    android:textColor="@color/black_item_content"
-                    android:textSize="18dp" />
+                    android:orientation="horizontal"
+                    android:visibility="gone">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/appointment_limit"
+                        android:textColor="@color/black_item_title"
+                        android:textSize="18dp" />
+
+                    <EditText
+                        android:id="@+id/et_limit"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:background="@null"
+                        android:focusable="false"
+                        android:focusableInTouchMode="false"
+                        android:hint="@string/appointment_limit"
+                        android:textColor="@color/black_item_content"
+                        android:textSize="18dp" />
+                </LinearLayout>
 
                 <include layout="@layout/layout_divider" />
             </LinearLayout>
