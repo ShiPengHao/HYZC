@@ -233,6 +233,23 @@
         </LinearLayout>
     </ScrollView>
     <Button
+        android:id="@+id/bt_cancel"
+        android:text="@string/cancel"
+        android:textSize="18dp"
+        android:textColor="@color/white"
+        android:background="@color/colorAccent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <Button
+        android:visibility="gone"
+        android:id="@+id/bt_prescription"
+        android:text="@string/prescribe_detail"
+        android:textSize="18dp"
+        android:textColor="@color/white"
+        android:background="@color/colorAccent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <Button
         android:id="@+id/bt_response"
         android:text="@string/doctor_response"
         android:textSize="18dp"

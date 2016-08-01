@@ -38,4 +38,5 @@ public class AppointmentBean implements Serializable {
     public String patient_age;
     public String patient_phone;
     public String registration_time;
+    public int prescription_id;
 }

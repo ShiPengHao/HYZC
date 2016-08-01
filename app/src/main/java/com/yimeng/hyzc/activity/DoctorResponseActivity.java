@@ -332,7 +332,8 @@ public class DoctorResponseActivity extends BaseActivity implements View.OnClick
                     try {
                         JSONObject object = new JSONObject(result);
                         MyToast.show(object.optString("msg"));
-                        if ("ok".equalsIgnoreCase(object.optString("status"))) {
+                        if ("ok".equalsIgnoreCase(object.optString("status"))
+                                || "error_1".equalsIgnoreCase(object.optString("status"))) {
                             setResult(AppointDetailActivity.REQUEST_CODE_DOCTOR_RESPONSE, new Intent());
                             SystemClock.sleep(500);
                             finish();

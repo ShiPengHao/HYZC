@@ -7,7 +7,9 @@ import android.widget.TextView;
 
 import com.yimeng.hyzc.R;
 import com.yimeng.hyzc.adapter.MedicineAdapter;
+import com.yimeng.hyzc.adapter.PrescriptionMedicineAdapter;
 import com.yimeng.hyzc.bean.MedicineBean;
+import com.yimeng.hyzc.bean.PrescriptionBean;
 import com.yimeng.hyzc.utils.MyApp;
 import com.yimeng.hyzc.utils.UiUtils;
 
@@ -16,18 +18,18 @@ import java.util.List;
 /**
  * 药方药品
  */
-public class MedicineHolder extends BaseHolder<MedicineBean> {
+public class PrescriptionMedicineHolder extends BaseHolder<PrescriptionBean> {
 
     private Context context;
 
     private TextView tv_medicine_name;
     private TextView tv_medicine_unit;
     private TextView tv_medicine_number;
-    private List<MedicineBean> beans;
-    private MedicineAdapter adapter;
-    private ImageView iv;
+    private List<PrescriptionBean> beans;
+    private PrescriptionMedicineAdapter adapter;
+    private TextView tv_medicine_usage;
 
-    public MedicineHolder(List<MedicineBean> data, MedicineAdapter adapter) {
+    public PrescriptionMedicineHolder(List<PrescriptionBean> data, PrescriptionMedicineAdapter adapter){
         super();
         this.beans = data;
         this.adapter = adapter;
@@ -35,29 +37,23 @@ public class MedicineHolder extends BaseHolder<MedicineBean> {
 
     @Override
     protected View initView() {
-        View view = UiUtils.inflate(R.layout.item_medicine);
+        View view = UiUtils.inflate(R.layout.item_prescription_medicine);
         tv_medicine_name = (TextView) view.findViewById(R.id.tv_medicine_name);
         tv_medicine_unit = (TextView) view.findViewById(R.id.tv_medicine_unit);
         tv_medicine_number = (TextView) view.findViewById(R.id.tv_medicine_number);
-        iv = (ImageView) view.findViewById(R.id.iv);
+        tv_medicine_usage = (TextView) view.findViewById(R.id.tv_medicine_usage);
+
         return view;
     }
 
     @Override
-    public void bindData(final MedicineBean data) {
+    public void bindData(final PrescriptionBean data) {
         if (null == context) {
             context = MyApp.getAppContext();
         }
-        tv_medicine_name.setText(String.format("%s:%s", context.getString(R.string.medicine_name), data.CnName.replace("\r", "").replace("\n", "")));
-        tv_medicine_unit.setText(String.format("%s:%s", context.getString(R.string.medicine_unit), data.Unit.replace("\r", "").replace("\n", "")));
+        tv_medicine_name.setText(String.format("%s:%s", context.getString(R.string.medicine_name), data.medicines_name.replace("\r", "").replace("\n", "")));
+        tv_medicine_unit.setText(String.format("%s:%s", context.getString(R.string.medicine_unit), data.medicines_unit.replace("\r", "").replace("\n", "")));
         tv_medicine_number.setText(String.format("%s:%s", context.getString(R.string.medicine_number), data.medicines_quantity));
-
-        iv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                beans.remove(data);
-                adapter.notifyDataSetChanged();
-            }
-        });
+        tv_medicine_usage.setText(String.format("%s:%s", context.getString(R.string.medicine_usage), data.explaination.replace("\r","").replace("\n","")));
     }
 }

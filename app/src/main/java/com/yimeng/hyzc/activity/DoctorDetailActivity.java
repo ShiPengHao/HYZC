@@ -234,7 +234,8 @@ public class DoctorDetailActivity extends BaseActivity implements View.OnClickLi
                 }
                 try {
                     JSONObject object = new JSONObject(result);
-                    if ("ok".equalsIgnoreCase(object.optString("status"))) {
+                    if ("ok".equalsIgnoreCase(object.optString("status"))
+                            || "error_1".equalsIgnoreCase(object.optString("status"))) {
                         bt_appoint.setEnabled(false);
                         showOkTips();
                     } else {

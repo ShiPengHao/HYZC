@@ -114,4 +114,9 @@
     <string name="empty_content">无</string>
     <string name="wechat">微信号</string>
     <string name="isOrder">可坐诊</string>
+    <string name="prescribe_detail">药方详情</string>
+    <string name="patient_phone">用户手机号</string>
+    <string name="prescribe_build_time">开药时间</string>
+    <string name="prescribe_get_time">取药时间</string>
+    <string name="prescribe_has_got">已取药</string>
 </resources>

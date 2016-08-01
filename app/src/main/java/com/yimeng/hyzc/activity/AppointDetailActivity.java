@@ -1,5 +1,7 @@
 package com.yimeng.hyzc.activity;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.AsyncTask;
@@ -46,11 +48,15 @@ public class AppointDetailActivity extends BaseActivity implements View.OnClickL
     private ImageView iv_back;
     private AppointmentBean bean;
     private int appointment_id;
-    private HashMap<String, Object> params;
+    private HashMap<String, Object> params = new HashMap<>();
+    ;
     private String type;
     private Button bt_response;
+    private Button bt_cancel;
+    private Button bt_prescription;
     public static final int REQUEST_CODE_DOCTOR_RESPONSE = 100;
     private boolean updateFlag;
+    private AlertDialog alertDialog;
 
     @Override
     protected int getLayoutResId() {
@@ -74,12 +80,16 @@ public class AppointDetailActivity extends BaseActivity implements View.OnClickL
         tv_appointment_add_time = (TextView) findViewById(R.id.tv_appointment_add_time);
         iv_back = (ImageView) findViewById(R.id.iv_back);
         bt_response = (Button) findViewById(R.id.bt_response);
+        bt_cancel = (Button) findViewById(R.id.bt_cancel);
+        bt_prescription = (Button) findViewById(R.id.bt_prescription);
     }
 
     @Override
     protected void setListener() {
         iv_back.setOnClickListener(this);
         bt_response.setOnClickListener(this);
+        bt_prescription.setOnClickListener(this);
+        bt_cancel.setOnClickListener(this);
     }
 
     @Override
@@ -91,6 +101,7 @@ public class AppointDetailActivity extends BaseActivity implements View.OnClickL
         type = getIntent().getStringExtra("type");
         if ("doctor".equalsIgnoreCase(type)) {
             bt_response.setVisibility(View.VISIBLE);
+            bt_cancel.setVisibility(View.GONE);
         } else {
             bt_response.setVisibility(View.GONE);
         }
@@ -127,7 +138,7 @@ public class AppointDetailActivity extends BaseActivity implements View.OnClickL
             tv_response_time.setText(String.format("%s：%s", MyApp.getAppContext().getString(R.string.doctor_response_time),
                     date));
         } catch (Exception e) {
-            tv_response_time.setText(String.format("%s：%s",MyApp.getAppContext().getString(R.string.doctor_response_time),
+            tv_response_time.setText(String.format("%s：%s", MyApp.getAppContext().getString(R.string.doctor_response_time),
                     getString(R.string.empty_content)));
         }
         tv_patient_age.setText(String.format("%s：%s", getString(R.string.age), bean.patient_age));
@@ -141,10 +152,19 @@ public class AppointDetailActivity extends BaseActivity implements View.OnClickL
         if (bean.doctor_dispose == 0) {
             tv_appointStatus.setText(String.format("%s：%s", getString(R.string.appointment_status), getString(R.string.no_response)));
             tv_appointStatus.setTextColor(Color.RED);
+            if (type.equalsIgnoreCase("patient")) {
+                bt_cancel.setVisibility(View.VISIBLE);
+            } else {
+                bt_cancel.setVisibility(View.GONE);
+            }
         } else {
+            bt_cancel.setVisibility(View.GONE);
             bt_response.setVisibility(View.GONE);
             tv_appointStatus.setText(String.format("%s：%s", getString(R.string.appointment_status), getString(R.string.has_response)));
             tv_appointStatus.setTextColor(getResources().getColor(R.color.colorAccent));
+            if (bean.prescription_id != 0) {
+                bt_prescription.setVisibility(View.VISIBLE);
+            }
         }
     }
 
@@ -152,10 +172,8 @@ public class AppointDetailActivity extends BaseActivity implements View.OnClickL
      * 请求预约详情
      */
     private void requestAppointmentDetail() {
-        if (null == params) {
-            params = new HashMap<>();
-            params.put("appointment_id", appointment_id);
-        }
+        params.clear();
+        params.put("appointment_id", appointment_id);
         new AsyncTask<Object, Object, String>() {
             @Override
             protected String doInBackground(Object... params) {
@@ -218,9 +236,74 @@ public class AppointDetailActivity extends BaseActivity implements View.OnClickL
             case R.id.bt_response:
                 startActivityForResult(new Intent(this, DoctorResponseActivity.class).putExtra("id", appointment_id), REQUEST_CODE_DOCTOR_RESPONSE);
                 break;
+            case R.id.bt_cancel:
+                showCancelDialog();
+                break;
+            case R.id.bt_prescription:
+                startActivity(new Intent(this, PrescribeDetailActivity.class).putExtra("prescription_id", bean.prescription_id));
+                break;
         }
     }
 
+    /**
+     * 显示取消预约对话框
+     */
+    private void showCancelDialog() {
+        if (null == alertDialog) {
+            alertDialog = new AlertDialog.Builder(this).setTitle("温馨提示")
+                    .setMessage("您确定要取消此预约单吗？")
+                    .setNegativeButton("确定取消", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            requestCancelAppointment();
+                        }
+                    })
+                    .setPositiveButton("不取消", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    })
+                    .setNeutralButton("取消并且重新预约", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            requestCancelAppointment();
+                            startActivity(new Intent(AppointDetailActivity.this, BookingActivity.class));
+                        }
+                    })
+                    .create();
+        }
+        alertDialog.show();
+    }
+
+    /**
+     * 请求取消此预约单//TODO 病人取消预约单
+     */
+    private void requestCancelAppointment() {
+//        params.clear();
+//        params.put("appointment_id", appointment_id);
+//        new AsyncTask<Object, Object, String>() {
+//            @Override
+//            protected String doInBackground(Object... params) {
+//                if (params != null) {
+//                    String result = WebServiceUtils.callWebService(MyConstant.WEB_SERVICE_URL, MyConstant.NAMESPACE, "Load_patient_detail",
+//                            (Map<String, Object>) params[0]);
+//                    parseAppointDetail(result);
+//                    return result;
+//                } else {
+//                    return null;
+//                }
+//            }
+//        }.execute(params);
+    }
+
+    @Override
+    protected void onDestroy() {
+        if (null != alertDialog && alertDialog.isShowing()) {
+            alertDialog.dismiss();
+        }
+        super.onDestroy();
+    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {

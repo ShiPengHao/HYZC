@@ -47,7 +47,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
     private static final int REQUEST_GALLERY_FOR_PHARMACY_LICENSE_CERT = 104;
     private static final int REQUEST_GALLERY_FOR_PHARMACY_PERMIT_CERT = 105;
     private static final int PHOTO_REQUEST_CUT = 2;
-    private static final int DEPARTMENT_ID = 2;
+//    private static final int DEPARTMENT_ID = 2;
     private EditText et_pwd;
     private EditText et_pwd_confirm;
     private EditText et_phone;
@@ -76,7 +76,6 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
     private String user;
     private String pwd;
     private String name;
-    private String phone;
     private String identify;
     private TextView uploadImgTextView;
     private LinearLayout ll_remark;
@@ -172,12 +171,10 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
         bt_permit_cert.setOnClickListener(this);
         iv_back.setOnClickListener(this);
 
-
 //        departmentAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, department);
 //        departmentAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 //        spinner_department.setAdapter(departmentAdapter);
 //        spinner_department.setOnItemSelectedListener(this);
-
 
         rg_type.setOnCheckedChangeListener(this);
         rg_type.check(getIntent().getIntExtra("checkedId", R.id.rb_patient));
@@ -272,6 +269,8 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
             try {
                 InputStream inputStream = getContentResolver().openInputStream(uri);
                 bitmap = BitmapFactory.decodeStream(inputStream);
+                assert inputStream != null;
+                inputStream.close();
 //                bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), uri);
             } catch (Exception e) {
                 e.printStackTrace();
