@@ -44,11 +44,13 @@ public class AccountInfoActivity extends BaseActivity implements View.OnClickLis
     private EditText et_phone;
     private EditText et_wechat;
     private EditText et_email;
+    private EditText et_introduce;
     private TextView tv_sex;
     private TextView tv_isOrder;
     private TextView tv_edit;
     private LinearLayout ll_isOrder;
     private LinearLayout ll_limit;
+    private LinearLayout ll_introduce;
 
     private boolean edit_status;
     private String avatarUrl;
@@ -65,6 +67,7 @@ public class AccountInfoActivity extends BaseActivity implements View.OnClickLis
     private String limit;
     private DoctorBean doctorBean;
 
+
     @Override
     protected int getLayoutResId() {
         return R.layout.activity_account_info;
@@ -78,6 +81,7 @@ public class AccountInfoActivity extends BaseActivity implements View.OnClickLis
         et_phone = (EditText) findViewById(R.id.et_phone);
         et_wechat = (EditText) findViewById(R.id.et_wechat);
         et_email = (EditText) findViewById(R.id.et_email);
+        et_introduce = (EditText) findViewById(R.id.et_introduce);
 
         tv_sex = (TextView) findViewById(R.id.tv_sex);
         tv_isOrder = (TextView) findViewById(R.id.tv_isOrder);
@@ -88,6 +92,7 @@ public class AccountInfoActivity extends BaseActivity implements View.OnClickLis
 
         ll_isOrder = (LinearLayout) findViewById(R.id.ll_isOrder);
         ll_limit = (LinearLayout) findViewById(R.id.ll_limit);
+        ll_introduce = (LinearLayout) findViewById(R.id.ll_introduce);
     }
 
     @Override
@@ -115,6 +120,7 @@ public class AccountInfoActivity extends BaseActivity implements View.OnClickLis
             requestInfo("Get_Patient_Msg", values);
         } else if (type.equalsIgnoreCase("doctor")) {
             ll_isOrder.setVisibility(View.VISIBLE);
+            ll_introduce.setVisibility(View.VISIBLE);
             values.put("doctor_id", id);
             requestInfo("Get_Doctor_Msg", values);
         } else if (type.equalsIgnoreCase("shop")) {
@@ -208,6 +214,7 @@ public class AccountInfoActivity extends BaseActivity implements View.OnClickLis
         et_wechat.setText(isEmpty(doctorBean.doctor_WeChat) ? getString(R.string.empty_content) : doctorBean.doctor_WeChat);
         et_phone.setText(isEmpty(doctorBean.doctor_phone) ? getString(R.string.empty_content) : doctorBean.doctor_phone);
         et_email.setText(isEmpty(doctorBean.doctor_email) ? getString(R.string.empty_content) : doctorBean.doctor_email);
+        et_introduce.setText(isEmpty(doctorBean.remark) ? getString(R.string.empty_content) : doctorBean.remark);
         tv_sex.setText(isEmpty(doctorBean.doctor_sex) ? getString(R.string.empty_content) : doctorBean.doctor_sex);
         if (doctorBean.Is_Order == 0) {
             tv_isOrder.setText("否");
@@ -267,7 +274,7 @@ public class AccountInfoActivity extends BaseActivity implements View.OnClickLis
                     values.put("image", avatarString);
                     uploadAvatar("upload_img", values);
                 } else {
-                    MyToast.show("出错了。。请重新选择图片");
+                    MyToast.show("出错了，请重新选择图片");
                 }
                 break;
         }
@@ -322,6 +329,9 @@ public class AccountInfoActivity extends BaseActivity implements View.OnClickLis
         }.execute(params);
     }
 
+    /**
+     * 初始化提交信息进度对话框
+     */
     private void initUploadDialog() {
         AlertDialog.Builder uploadImgBuilder = new AlertDialog.Builder(this);
         uploadTextView = new TextView(this);
@@ -362,7 +372,7 @@ public class AccountInfoActivity extends BaseActivity implements View.OnClickLis
     }
 
     /**
-     * 显示选择性别对话框
+     * 显示选择医生是否坐诊对话框
      */
     private void showOrderSelectDialog() {
         if (null == selectOrderDialog) {
@@ -385,7 +395,7 @@ public class AccountInfoActivity extends BaseActivity implements View.OnClickLis
     }
 
     /**
-     * 检查可编辑项的输入状态
+     * 检查可编辑项的文本，准备提交信息
      */
     private void checkInput() {
         String name = et_name.getText().toString().trim();
@@ -455,6 +465,9 @@ public class AccountInfoActivity extends BaseActivity implements View.OnClickLis
                 return;
             }
         }
+
+        String remark = et_introduce.getText().toString().trim();
+
         values.clear();
         if (type.equalsIgnoreCase("patient")) {
             values.put("patient_id", patientBean.patient_id);
@@ -475,7 +488,8 @@ public class AccountInfoActivity extends BaseActivity implements View.OnClickLis
             values.put("doctor_phone", phone);
             values.put("doctor_email", email);
             values.put("doctor_WeChat", weChat);
-            values.put("doctor_Audit", 1);//审核状态,1代表审核通过，这里必然为1
+            values.put("remark", remark);
+//            values.put("doctor_Audit", 1);//审核状态,1代表审核通过，这里必然为1
             try {
                 limit = String.valueOf(Integer.parseInt(limit));
             } catch (Exception e) {
@@ -573,6 +587,8 @@ public class AccountInfoActivity extends BaseActivity implements View.OnClickLis
         et_phone.setFocusableInTouchMode(edit_status);
         et_wechat.setFocusable(edit_status);
         et_wechat.setFocusableInTouchMode(edit_status);
+        et_introduce.setFocusable(edit_status);
+        et_introduce.setFocusableInTouchMode(edit_status);
 
         if (edit_status) {
             et_name.setSelection(et_name.getText().length());

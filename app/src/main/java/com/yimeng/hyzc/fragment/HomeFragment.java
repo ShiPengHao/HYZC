@@ -13,6 +13,7 @@ import com.yimeng.hyzc.activity.BookingActivity;
 import com.yimeng.hyzc.activity.TestActivity;
 import com.yimeng.hyzc.utils.Cheeses;
 import com.yimeng.hyzc.utils.DensityUtil;
+import com.yimeng.hyzc.utils.MyToast;
 import com.yimeng.hyzc.view.AutoRollViewPager;
 import com.yimeng.hyzc.view.FlowLayout;
 
@@ -27,10 +28,11 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
 
     private AutoRollViewPager viewPager;
     private Button btTest;
-    private ArrayList<String> datas;
     private Button bt_booking;
+    private Button bt_health;
     private FlowLayout flowLayout;
 
+    private ArrayList<String> datas;
 
     @Override
     protected int getLayoutResId() {
@@ -41,6 +43,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
         viewPager = (AutoRollViewPager) view.findViewById(R.id.vp);
         btTest = (Button) view.findViewById(R.id.bt_test);
         bt_booking = (Button) view.findViewById(R.id.bt_booking);
+        bt_health = (Button) view.findViewById(R.id.bt_health);
         flowLayout = (FlowLayout) view.findViewById(R.id.flowLayout);
     }
 
@@ -48,6 +51,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
     protected void setListener() {
         btTest.setOnClickListener(this);
         bt_booking.setOnClickListener(this);
+        bt_health.setOnClickListener(this);
     }
 
     @Override
@@ -92,6 +96,9 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
                 break;
             case R.id.bt_booking:
                 startActivity(new Intent(getActivity(), BookingActivity.class));
+                break;
+            case R.id.bt_health:
+                MyToast.show(String.format("%s%s",getString(R.string.health),getString(R.string.fun_undo)));
                 break;
         }
     }

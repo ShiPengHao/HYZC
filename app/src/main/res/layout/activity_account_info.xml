@@ -58,7 +58,6 @@
                     android:layout_width="96dp"
                     android:layout_height="96dp"
                     android:layout_centerHorizontal="true"
-                    android:src="@mipmap/ic_launcher"
                     android:scaleType="centerCrop"
                     app:civ_border_color="@color/colorAccent"
                     app:civ_border_width="1dp" />
@@ -314,6 +313,35 @@
                 </LinearLayout>
 
                 <include layout="@layout/layout_divider" />
+
+                <LinearLayout
+                    android:id="@+id/ll_introduce"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/item_width"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:visibility="gone">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/introduce"
+                        android:textColor="@color/black_item_title"
+                        android:textSize="18dp" />
+
+                    <EditText
+                        android:id="@+id/et_introduce"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:background="@null"
+                        android:focusable="false"
+                        android:focusableInTouchMode="false"
+                        android:hint="@string/introduce"
+                        android:textColor="@color/black_item_content"
+                        android:textSize="18dp" />
+                </LinearLayout>
+
             </LinearLayout>
 
 

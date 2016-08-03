@@ -24,6 +24,7 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.yimeng.hyzc.R;
+import com.yimeng.hyzc.bean.AddressBean;
 import com.yimeng.hyzc.utils.BitmapUtils;
 import com.yimeng.hyzc.utils.DensityUtil;
 import com.yimeng.hyzc.utils.MyConstant;
@@ -46,8 +47,8 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
     private static final int REQUEST_GALLERY_FOR_PHARMACY_ORGANIZATION_CERT = 103;
     private static final int REQUEST_GALLERY_FOR_PHARMACY_LICENSE_CERT = 104;
     private static final int REQUEST_GALLERY_FOR_PHARMACY_PERMIT_CERT = 105;
+    private static final int REQUEST_ADDRESS_CODE = 106;
     private static final int PHOTO_REQUEST_CUT = 2;
-//    private static final int DEPARTMENT_ID = 2;
     private EditText et_pwd;
     private EditText et_pwd_confirm;
     private EditText et_phone;
@@ -56,6 +57,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
     private EditText et_address_detail;
     private RadioGroup rg_type;
     private Button bt_doctor_cert;
+    private Button bt_select_address;
     private ImageView iv_doctor_cert;
     private LinearLayout ll_cert_info;// 证书信息，包含医生资格证和药店资格证
     private EditText et_name;
@@ -92,13 +94,14 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
     private EditText et_pharmacy_corporation;
     private LinearLayout ll_personal_info;// 身份证号
     private TextView tv_remark;
+    private TextView tv_select_address;
     private CheckBox cb_work;
     private CheckBox cb_home;
     private CheckBox cb_farm;
     private ImageView iv_back;
 
-    private String detail;
     private AlertDialog okDialog;
+    private AddressBean addressBean;
 
 
     @Override
@@ -128,6 +131,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
         bt_organization_cert = (Button) findViewById(R.id.bt_organization_cert);
         bt_license_cert = (Button) findViewById(R.id.bt_license_cert);
         bt_permit_cert = (Button) findViewById(R.id.bt_permit_cert);
+        bt_select_address = (Button) findViewById(R.id.bt_select_address);
 
         iv_doctor_cert = (ImageView) findViewById(R.id.iv_doctor_cert);
         iv_doctor_signature = (ImageView) findViewById(R.id.iv_doctor_signature);
@@ -144,6 +148,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
         ll_personal_info = (LinearLayout) findViewById(R.id.ll_personal_info);
 
         tv_remark = (TextView) findViewById(R.id.tv_remark);
+        tv_select_address = (TextView) findViewById(R.id.tv_select_address);
 
         initUploadDialog();
 
@@ -169,6 +174,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
         bt_organization_cert.setOnClickListener(this);
         bt_license_cert.setOnClickListener(this);
         bt_permit_cert.setOnClickListener(this);
+        bt_select_address.setOnClickListener(this);
         iv_back.setOnClickListener(this);
 
 //        departmentAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, department);
@@ -233,6 +239,9 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
             case R.id.iv_back:
                 finish();
                 break;
+            case R.id.bt_select_address:
+                startActivityForResult(new Intent(this, AddressChoiceActivity.class), REQUEST_ADDRESS_CODE);
+                break;
         }
     }
 
@@ -260,6 +269,11 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
      */
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (data == null) {
+            return;
+        }
+        if (requestCode == REQUEST_ADDRESS_CODE) {
+            addressBean = (AddressBean) data.getSerializableExtra("address");
+            tv_select_address.setText(data.getStringExtra("name"));
             return;
         }
         Uri uri = data.getData();
@@ -477,7 +491,6 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
      * 检查输入数据格式，全部正常后提交注册
      */
     private void checkInfo() {
-
         if (checkGeneralInfoError()) return;
         String method = null;
         switch (rg_type.getCheckedRadioButtonId()) {
@@ -507,39 +520,49 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
                     MyToast.show("请上传药店经营许可证");
                     return;
                 }
-                detail = et_address_detail.getText().toString().trim();
+
+                if (null == addressBean) {
+                    MyToast.show("地址不能为空");
+                    return;
+                }
+
+                String detail = et_address_detail.getText().toString().trim();
                 if (TextUtils.isEmpty(detail)) {
                     MyToast.show("详细地址不能为空");
                     return;
                 }
                 values.put("address", detail);
+                values.put("phone", user);
+                values.put("province", addressBean.provincecode);
+                values.put("city", addressBean.citycode);
+                values.put("area", addressBean.code);
                 values.put("shopname", pharmacy_name);
                 values.put("corporate", pharmacy_corporation);
                 values.put("organization", lastPharmacyOrganizationPath);
                 values.put("license", lastPharmacyLicensePath);
                 values.put("businesspermit", lastPharmacyPermitPath);
                 values.put("remark", et_remark.getText().toString().trim());// 备注无需校验
-                StringBuilder sb = new StringBuilder();
+                StringBuilder flag = new StringBuilder();// 药店标志
                 boolean hasChecked = false;
                 if (cb_farm.isChecked()) {
-                    sb.append(cb_farm.getText().toString().trim());
+                    flag.append(cb_farm.getText().toString().trim());
                     hasChecked = true;
                 }
                 if (cb_home.isChecked()) {
                     if (hasChecked) {
-                        sb.append(",");
+                        flag.append(",");
                     } else {
                         hasChecked = true;
                     }
-                    sb.append(cb_home.getText().toString().trim());
+                    flag.append(cb_home.getText().toString().trim());
                 }
                 if (cb_work.isChecked()) {
                     if (hasChecked) {
-                        sb.append(",");
+                        flag.append(",");
                     }
-                    sb.append(cb_work.getText().toString().trim());
+                    flag.append(cb_work.getText().toString().trim());
                 }
-                values.put("flag", sb.toString());
+                values.put("flag", flag.toString());
                 method = "Shop_Register";
                 break;
             case R.id.rb_doctor:
@@ -577,7 +600,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
             values.put("name", name);
             values.put("identification", identify);
             values.put("hospital_id", MyConstant.HOSPITAL_ID);
-            values.put("departments_id", MyConstant.DEPARTMENTS_ID);
+            values.put("departments_id", MyConstant.DEPARTMENT_ID);
         } else {
             values.put("contacts", name);
         }
@@ -670,7 +693,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
                         JSONObject object = new JSONObject(result);
                         if ("ok".equalsIgnoreCase(object.optString("status"))) {
                             bt_register.setEnabled(false);
-                            showOkTips(object.optString("type"),object.optString("msg"));
+                            showOkTips(object.optString("type"), object.optString("msg"));
                         } else {
                             MyToast.show(object.optString("msg"));
                         }
@@ -687,8 +710,8 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
     /**
      * 显示注册成功的提示对话框
      */
-    private void showOkTips(final String type,String msg) {
-        if (type.length() == 0){
+    private void showOkTips(final String type, String msg) {
+        if (type.length() == 0) {
             return;
         }
         if (null == okDialog) {
@@ -709,7 +732,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
                                     .putExtra("type", rg_type.getCheckedRadioButtonId())
                     );
                     finish();
-                }else{
+                } else {
                     okDialog.dismiss();
                 }
             }
@@ -719,11 +742,11 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
 
     @Override
     protected void onDestroy() {
-        if (null != okDialog && okDialog.isShowing()){
+        if (null != okDialog && okDialog.isShowing()) {
             okDialog.dismiss();
         }
 
-        if (null != uploadImageDialog && uploadImageDialog.isShowing()){
+        if (null != uploadImageDialog && uploadImageDialog.isShowing()) {
             uploadImageDialog.dismiss();
         }
         super.onDestroy();

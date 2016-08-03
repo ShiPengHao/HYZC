@@ -58,6 +58,11 @@ public class MyConstant {
     /**
      * 科室id
      */
-    public static final String DEPARTMENTS_ID = "1";
+    public static final String DEPARTMENT_ID = "1";
+
+    /**
+     * 科室名称
+     */
+    public static final String DEPARTMENT_NAME = "河南省第一人民医院疼痛科";
 
 }

@@ -252,23 +252,24 @@ public class AppointDetailActivity extends BaseActivity implements View.OnClickL
         if (null == alertDialog) {
             alertDialog = new AlertDialog.Builder(this).setTitle("温馨提示")
                     .setMessage("您确定要取消此预约单吗？")
-                    .setNegativeButton("确定取消", new DialogInterface.OnClickListener() {
+                    .setNegativeButton("确定", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            requestCancelAppointment();
+                            dialog.dismiss();
+                            requestCancelAppointment(false);
                         }
                     })
-                    .setPositiveButton("不取消", new DialogInterface.OnClickListener() {
+                    .setPositiveButton("点错了", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             dialog.dismiss();
                         }
                     })
-                    .setNeutralButton("取消并且重新预约", new DialogInterface.OnClickListener() {
+                    .setNeutralButton("确定并且重新预约", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            requestCancelAppointment();
-                            startActivity(new Intent(AppointDetailActivity.this, BookingActivity.class));
+                            dialog.dismiss();
+                            requestCancelAppointment(true);
                         }
                     })
                     .create();
@@ -277,24 +278,47 @@ public class AppointDetailActivity extends BaseActivity implements View.OnClickL
     }
 
     /**
-     * 请求取消此预约单//TODO 病人取消预约单
+     * 请求取消此预约单
+     * @param needJump 取消订单操作成功之后是否继续预约，是true，否false
      */
-    private void requestCancelAppointment() {
-//        params.clear();
-//        params.put("appointment_id", appointment_id);
-//        new AsyncTask<Object, Object, String>() {
-//            @Override
-//            protected String doInBackground(Object... params) {
-//                if (params != null) {
-//                    String result = WebServiceUtils.callWebService(MyConstant.WEB_SERVICE_URL, MyConstant.NAMESPACE, "Load_patient_detail",
-//                            (Map<String, Object>) params[0]);
-//                    parseAppointDetail(result);
-//                    return result;
-//                } else {
-//                    return null;
-//                }
-//            }
-//        }.execute(params);
+    private void requestCancelAppointment(final boolean needJump) {
+        params.clear();
+        params.put("appointment_id", appointment_id);
+        params.put("type", "patient");
+        new AsyncTask<Object, Object, String>() {
+            @Override
+            protected String doInBackground(Object... params) {
+                if (params != null) {
+                    return WebServiceUtils.callWebService(MyConstant.WEB_SERVICE_URL, MyConstant.NAMESPACE, "Del_Appointment",
+                            (Map<String, Object>) params[0]);
+                } else {
+                    return null;
+                }
+            }
+
+            @Override
+            protected void onPostExecute(String s) {
+                if (null == s){
+                    return;
+                }
+                try {
+                    if ("ok".equalsIgnoreCase(new JSONObject(s).optString("status"))){
+                        MyToast.show("操作成功！");
+                        if (needJump){
+                            startActivity(new Intent(AppointDetailActivity.this, BookingActivity.class));
+                            finish();
+                        }else{
+                            setResult(101,new Intent());
+                            finish();
+                        }
+                    }else{
+                        MyToast.show(getString(R.string.connect_error));
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }.execute(params);
     }
 
     @Override

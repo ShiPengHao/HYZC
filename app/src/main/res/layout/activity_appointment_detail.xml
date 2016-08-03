@@ -234,7 +234,7 @@
     </ScrollView>
     <Button
         android:id="@+id/bt_cancel"
-        android:text="@string/cancel"
+        android:text="@string/cancel_appointment"
         android:textSize="18dp"
         android:textColor="@color/white"
         android:background="@color/colorAccent"

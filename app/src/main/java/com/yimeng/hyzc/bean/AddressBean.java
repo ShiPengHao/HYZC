@@ -3,7 +3,7 @@ package com.yimeng.hyzc.bean;
 import java.io.Serializable;
 
 /**
- * Created by 依萌 on 2016/6/23.
+ * 省市区地址的bean
  */
 public class AddressBean implements Serializable{
     public String code;

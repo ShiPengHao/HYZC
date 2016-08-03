@@ -220,8 +220,8 @@ public class DoctorDetailActivity extends BaseActivity implements View.OnClickLi
             @Override
             protected String doInBackground(Object... params) {
                 if (params != null) {
-                    return WebServiceUtils.callWebService(MyConstant.WEB_SERVICE_URL, MyConstant.NAMESPACE, "Patient_Sub_Applications",
-                            (Map<String, Object>) params[0]);
+                    return WebServiceUtils.callWebService(MyConstant.WEB_SERVICE_URL, MyConstant.NAMESPACE
+                            , "Patient_Sub_Applications", (Map<String, Object>) params[0]);
                 } else {
                     return null;
                 }

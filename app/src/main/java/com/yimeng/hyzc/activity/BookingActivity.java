@@ -51,7 +51,7 @@ public class BookingActivity extends BaseActivity implements AdapterView.OnItemC
     @Override
     protected void initData() {
         HashMap<String, Object> hashMap = new HashMap<>();
-        hashMap.put("departments_id", MyConstant.DEPARTMENTS_ID);
+        hashMap.put("departments_id", MyConstant.DEPARTMENT_ID);
         requestDoctor("Load_Doctor", hashMap);
     }
 

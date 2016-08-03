@@ -65,7 +65,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
     private android.os.Handler handler;
     private static final int WHAT_SHOW_LOADING = 1;
     private static final int WHAT_DISMISS_LOADING = 2;
-    private TextView tv_location;
+//    private TextView tv_location;
 
 
     @Override
@@ -83,7 +83,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
         rg_userType = (RadioGroup) findViewById(R.id.rg_type);
         ll_loading = (LinearLayout) findViewById(R.id.ll_loading);
 
-        tv_location = (TextView) findViewById(R.id.tv_location);
+//        tv_location = (TextView) findViewById(R.id.tv_location);
     }
 
     @Override
@@ -219,6 +219,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.bt_register:
+//                startActivity(new Intent(this,AddressChoiceActivity.class));
                 goToRegister();
                 break;
             case R.id.bt_login:
@@ -269,7 +270,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
         values.put("user", username);
         values.put("pwd", pwd);
         values.put("hospital_id", MyConstant.HOSPITAL_ID);
-        values.put("departments_id", MyConstant.DEPARTMENTS_ID);
+        values.put("departments_id", MyConstant.DEPARTMENT_ID);
         switch (rg_userType.getCheckedRadioButtonId()) {
             case R.id.rb_patient:
                 requestLogin("Patient_Login", values);

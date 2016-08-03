@@ -37,6 +37,14 @@
             android:background="@drawable/selector_bt_bg_green"
             android:text="@string/booking"
             android:textColor="@color/white" />
+        <Button
+            android:id="@+id/bt_health"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/selector_bt_bg_green"
+            android:text="@string/health"
+            android:textColor="@color/white" />
 
         <ScrollView
             android:layout_marginTop="8dp"
