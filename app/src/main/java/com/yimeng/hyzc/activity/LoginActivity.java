@@ -24,9 +24,9 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RadioGroup;
-import android.widget.TextView;
 
 import com.yimeng.hyzc.R;
+import com.yimeng.hyzc.utils.KeyBoardUtils;
 import com.yimeng.hyzc.utils.MyApp;
 import com.yimeng.hyzc.utils.MyConstant;
 import com.yimeng.hyzc.utils.MyLog;
@@ -219,10 +219,11 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.bt_register:
-//                startActivity(new Intent(this,AddressChoiceActivity.class));
+                KeyBoardUtils.closeKeybord(et_pwd,this);
                 goToRegister();
                 break;
             case R.id.bt_login:
+                KeyBoardUtils.closeKeybord(et_pwd,this);
                 login();
                 break;
         }

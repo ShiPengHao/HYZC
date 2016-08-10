@@ -282,7 +282,8 @@ public class DoctorResponseActivity extends BaseActivity implements View.OnClick
                 } else {
                     try {
                         JSONObject object = new JSONObject(result);
-                        if ("ok".equalsIgnoreCase(object.optString("status"))) {
+                        if ("ok".equalsIgnoreCase(object.optString("status"))
+                                || "error_1".equalsIgnoreCase(object.optString("status"))) {
                             requestResponse(1);
                         }else{
                             MyToast.show(getString(R.string.connect_error));

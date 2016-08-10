@@ -18,6 +18,7 @@ import com.squareup.picasso.Picasso;
 import com.yimeng.hyzc.R;
 import com.yimeng.hyzc.bean.DoctorBean;
 import com.yimeng.hyzc.utils.DensityUtil;
+import com.yimeng.hyzc.utils.KeyBoardUtils;
 import com.yimeng.hyzc.utils.MyConstant;
 import com.yimeng.hyzc.utils.MyToast;
 import com.yimeng.hyzc.utils.WebServiceUtils;
@@ -116,7 +117,7 @@ public class DoctorDetailActivity extends BaseActivity implements View.OnClickLi
                 isEmpty(doctorBean.remark) ? getString(R.string.empty_content) : doctorBean.remark.replace("\n", "")));
         Picasso.with(this)
                 .load(MyConstant.NAMESPACE + doctorBean.doctor_avatar)
-                .resize(DensityUtil.dip2px(96),DensityUtil.dip2px(96))
+                .resize(DensityUtil.dip2px(96), DensityUtil.dip2px(96))
                 .into(iv_avatar);
         calendar = Calendar.getInstance();
         int hourOfDay = calendar.get(Calendar.HOUR_OF_DAY);
@@ -136,6 +137,7 @@ public class DoctorDetailActivity extends BaseActivity implements View.OnClickLi
 
     @Override
     public void onClick(View v) {
+        KeyBoardUtils.closeKeybord(et_disease_description, this);
         switch (v.getId()) {
             case R.id.bt_appoint:
                 requestAppoint();

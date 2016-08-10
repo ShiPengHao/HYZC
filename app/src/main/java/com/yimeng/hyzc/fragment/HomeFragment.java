@@ -2,7 +2,6 @@ package com.yimeng.hyzc.fragment;
 
 import android.content.Intent;
 import android.graphics.Color;
-import android.net.Uri;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
@@ -10,14 +9,14 @@ import android.widget.TextView;
 
 import com.yimeng.hyzc.R;
 import com.yimeng.hyzc.activity.BookingActivity;
+import com.yimeng.hyzc.activity.HealthActivity;
 import com.yimeng.hyzc.activity.TestActivity;
 import com.yimeng.hyzc.utils.Cheeses;
 import com.yimeng.hyzc.utils.DensityUtil;
-import com.yimeng.hyzc.utils.MyToast;
+import com.yimeng.hyzc.utils.MyLog;
 import com.yimeng.hyzc.view.AutoRollViewPager;
 import com.yimeng.hyzc.view.FlowLayout;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -32,7 +31,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
     private Button bt_health;
     private FlowLayout flowLayout;
 
-    private ArrayList<String> datas;
+    private ArrayList<String> data;
 
     @Override
     protected int getLayoutResId() {
@@ -49,7 +48,11 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
 
     @Override
     protected void setListener() {
-        btTest.setOnClickListener(this);
+        if (MyLog.DEBUG) {
+            btTest.setOnClickListener(this);
+        }else{
+            btTest.setVisibility(View.GONE);
+        }
         bt_booking.setOnClickListener(this);
         bt_health.setOnClickListener(this);
     }
@@ -68,11 +71,11 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
 
     @Override
     protected void initData() {
-        datas = new ArrayList<>();
-        datas.add(null);
-        datas.add(null);
-        datas.add(null);
-        viewPager.setData(datas);
+        data = new ArrayList<>();
+        data.add(null);
+        data.add(null);
+        data.add(null);
+        viewPager.setData(data);
         TextView tv;
         Random random = new Random();
         int padding = DensityUtil.dip2px(4);
@@ -92,13 +95,13 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.bt_test:
-                startActivity(new Intent(getActivity(), TestActivity.class));
+                startActivity(new Intent(getActivity(), TestActivity.class));// 测试
                 break;
             case R.id.bt_booking:
-                startActivity(new Intent(getActivity(), BookingActivity.class));
+                startActivity(new Intent(getActivity(), BookingActivity.class));// 预约挂号
                 break;
             case R.id.bt_health:
-                MyToast.show(String.format("%s%s",getString(R.string.health),getString(R.string.fun_undo)));
+                startActivity(new Intent(getActivity(), HealthActivity.class));// 健康教育
                 break;
         }
     }

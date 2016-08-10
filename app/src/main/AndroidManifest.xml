@@ -91,6 +91,11 @@
             android:name=".activity.PrescribeDetailActivity"
             android:windowSoftInputMode="stateHidden|adjustResize"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.HealthActivity"
+            android:hardwareAccelerated="true"
+            android:windowSoftInputMode="stateHidden|adjustResize"
+            android:screenOrientation="portrait" />
         <activity android:name=".activity.AddressChoiceActivity" />
         <activity
             android:name="cn.jpush.android.ui.PushActivity"

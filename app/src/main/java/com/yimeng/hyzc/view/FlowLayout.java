@@ -23,7 +23,7 @@ public class FlowLayout extends ViewGroup {
     private int VERTICAL_SPACING = DensityUtil.dip2px(8); //垂直方向的间隔
 
 
-    public FlowLayout(Context context) {
+    private FlowLayout(Context context) {
         super(context,null);
     }
 
