@@ -17,6 +17,7 @@ import com.yimeng.hyzc.utils.DensityUtil;
 import com.yimeng.hyzc.utils.MyApp;
 import com.yimeng.hyzc.utils.MyConstant;
 import com.yimeng.hyzc.utils.MyLog;
+import com.yimeng.hyzc.utils.NetUtils;
 import com.yimeng.hyzc.utils.ThreadUtils;
 import com.yimeng.hyzc.utils.WebServiceUtils;
 
@@ -59,7 +60,7 @@ public class SplashActivity extends BaseActivity {
                     goToIntroduce();
                 }
             }, 2000);
-        } else if (isAutoUpdate()) {
+        } else if (isAutoUpdate() && NetUtils.isConnected(this) && NetUtils.isWifi(this)) {
             handler.postDelayed(new Runnable() {
                 @Override
                 public void run() {

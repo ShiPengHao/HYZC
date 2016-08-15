@@ -10,6 +10,7 @@ import android.os.SystemClock;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
+import android.widget.RelativeLayout;
 
 import com.yimeng.hyzc.R;
 import com.yimeng.hyzc.utils.MyConstant;
@@ -20,14 +21,13 @@ import com.yimeng.hyzc.utils.MyToast;
  */
 public class HomeDoctorActivity extends BaseActivity implements View.OnClickListener {
 
-    private Button bt_appoint;
-    private Button bt_personal;
-    private Button bt_test;
     private long preTime;
     private Handler handler;
     private static final int WHAT_SHOW_TIP_DIALOG = 100;
     private static final int WHAT_DISMISS_TIP_DIALOG = 101;
     private AlertDialog alertDialog;
+    private RelativeLayout rl_account_info;
+    private RelativeLayout rl_appointment_history;
 
     @Override
     protected int getLayoutResId() {
@@ -36,16 +36,14 @@ public class HomeDoctorActivity extends BaseActivity implements View.OnClickList
 
     @Override
     protected void initView() {
-        bt_appoint = (Button)findViewById(R.id.bt_appoint);
-        bt_personal = (Button)findViewById(R.id.bt_personal);
-        bt_test = (Button)findViewById(R.id.bt_test);
+        rl_account_info = (RelativeLayout)findViewById(R.id.rl_account_info);
+        rl_appointment_history = (RelativeLayout)findViewById(R.id.rl_appointment_history);
     }
 
     @Override
     protected void setListener() {
-        bt_appoint.setOnClickListener(this);
-        bt_personal.setOnClickListener(this);
-        bt_test.setOnClickListener(this);
+        rl_account_info.setOnClickListener(this);
+        rl_appointment_history.setOnClickListener(this);
     }
 
     @Override
@@ -115,14 +113,11 @@ public class HomeDoctorActivity extends BaseActivity implements View.OnClickList
     @Override
     public void onClick(View v) {
         switch (v.getId()){
-            case R.id.bt_appoint:
+            case R.id.rl_appointment_history:
                 startActivity(new Intent(this,AppointHistoryActivity.class));
                 break;
-            case R.id.bt_personal:
+            case R.id.rl_account_info:
                 startActivity(new Intent(this,AccountInfoActivity.class));
-                break;
-            case R.id.bt_test:
-                startActivity(new Intent(this,TestActivity.class));
                 break;
         }
     }

@@ -78,7 +78,7 @@ public class DoctorResponseActivity extends BaseActivity implements View.OnClick
         et_medicine_remark = (EditText) findViewById(R.id.et_medicine_remark);
         listView = (ListView) findViewById(R.id.lv);
 
-        ll_remark = (LinearLayout)findViewById(R.id.ll_remark);
+        ll_remark = (LinearLayout) findViewById(R.id.ll_remark);
         ll_remark.setVisibility(View.GONE);
         initUploadDialog();
     }
@@ -153,10 +153,10 @@ public class DoctorResponseActivity extends BaseActivity implements View.OnClick
                             public void onClick(DialogInterface dialog, int which) {
                                 tv_doctor_way.setText(ways.get(which));
                                 dialog.dismiss();
-                                if (which != 0){
+                                if (which != 0) {
                                     clearMedicines();
                                     bt_prescribe.setEnabled(false);
-                                }else{
+                                } else {
                                     bt_prescribe.setEnabled(true);
                                 }
                             }
@@ -167,7 +167,7 @@ public class DoctorResponseActivity extends BaseActivity implements View.OnClick
     /**
      * 清除药方有关的信息
      */
-    private void clearMedicines(){
+    private void clearMedicines() {
         tv_prescribe.setVisibility(View.GONE);
         ll_remark.setVisibility(View.GONE);
         medicines.clear();
@@ -232,7 +232,7 @@ public class DoctorResponseActivity extends BaseActivity implements View.OnClick
             MyToast.show("未知错误，请重新登陆应用再试");
             return;
         }
-        if (medicines.size() == 0 && ways.get(0).equalsIgnoreCase(tv_doctor_way.getText().toString().trim())){
+        if (medicines.size() == 0 && ways.get(0).equalsIgnoreCase(tv_doctor_way.getText().toString().trim())) {
             MyToast.show("您还未开处方");
             ObjectAnimator.ofFloat(bt_prescribe, "translationX", 15, -15, 15, -15, 0).setDuration(300).start();
             return;
@@ -285,7 +285,7 @@ public class DoctorResponseActivity extends BaseActivity implements View.OnClick
                         if ("ok".equalsIgnoreCase(object.optString("status"))
                                 || "error_1".equalsIgnoreCase(object.optString("status"))) {
                             requestResponse(1);
-                        }else{
+                        } else {
                             MyToast.show(getString(R.string.connect_error));
                             uploadDialog.dismiss();
                         }
@@ -316,7 +316,7 @@ public class DoctorResponseActivity extends BaseActivity implements View.OnClick
 
             @Override
             protected void onPreExecute() {
-                if(!uploadDialog.isShowing()) {
+                if (!uploadDialog.isShowing()) {
                     uploadDialog.show();
                 }
                 uploadTextView.setText("正在上传医生回应");
@@ -332,7 +332,8 @@ public class DoctorResponseActivity extends BaseActivity implements View.OnClick
                 } else {
                     try {
                         JSONObject object = new JSONObject(result);
-                        MyToast.show(object.optString("msg"));
+                        if ("error".equalsIgnoreCase(object.optString("status")))
+                            MyToast.show(object.optString("msg"));
                         if ("ok".equalsIgnoreCase(object.optString("status"))
                                 || "error_1".equalsIgnoreCase(object.optString("status"))) {
                             setResult(AppointDetailActivity.REQUEST_CODE_DOCTOR_RESPONSE, new Intent());

@@ -1,5 +1,6 @@
 package com.yimeng.hyzc.activity;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Paint;
 import android.view.KeyEvent;
@@ -15,10 +16,12 @@ import com.yimeng.hyzc.R;
 
 
 /**
- * 健康教育activity
+ * 加载WebView的activity
  */
-public class HealthActivity extends BaseActivity {
-
+public class WebViewActivity extends BaseActivity {
+    /**
+     * 默认的url
+     */
     private static final String WEB_VIEW_URL = "http://m.hyzczg.com/";
     //    private static final String WEB_VIEW_URL = "http://www.baidu.com/";
     private WebView mWebView;
@@ -62,7 +65,17 @@ public class HealthActivity extends BaseActivity {
 
     @Override
     protected void initData() {
-        mWebView.loadUrl(WEB_VIEW_URL);
+        Intent startIntent = getIntent();
+        if (null == startIntent) {
+            mWebView.loadUrl(WEB_VIEW_URL);
+        } else {
+            String url = startIntent.getStringExtra("url");
+            if (null == url) {
+                mWebView.loadUrl(WEB_VIEW_URL);
+            } else {
+                mWebView.loadUrl(url);
+            }
+        }
     }
 
     /**

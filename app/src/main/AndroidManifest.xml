@@ -92,7 +92,7 @@
             android:windowSoftInputMode="stateHidden|adjustResize"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activity.HealthActivity"
+            android:name=".activity.WebViewActivity"
             android:hardwareAccelerated="true"
             android:windowSoftInputMode="stateHidden|adjustResize"
             android:screenOrientation="portrait" />

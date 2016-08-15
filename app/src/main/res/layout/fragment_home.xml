@@ -17,45 +17,119 @@
     </com.yimeng.hyzc.view.AutoRollViewPager>
 
     <LinearLayout
+        android:background="@color/white"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:padding="8dp">
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:padding="10dp">
 
-        <Button
-            android:id="@+id/bt_test"
-            android:layout_width="match_parent"
+        <LinearLayout
+            android:id="@+id/ll_booking"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:background="@drawable/selector_bt_bg_yellow"
-            android:text="@string/test" />
+            android:layout_weight="1"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
 
-        <Button
-            android:id="@+id/bt_booking"
-            android:layout_width="match_parent"
+            <ImageView
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:scaleType="centerInside"
+                android:src="@mipmap/booking" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/booking"
+                android:textColor="@color/black_item_content"
+                android:textSize="20dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingTop="5dp"
+                android:text="身体不适 随时问诊"
+                android:textColor="@color/bg_grey_aaa"
+                android:textSize="18dp" />
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="@color/grey_line" />
+
+        <LinearLayout
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:background="@drawable/selector_bt_bg_green"
-            android:text="@string/booking"
-            android:textColor="@color/white" />
-        <Button
-            android:id="@+id/bt_health"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:background="@drawable/selector_bt_bg_green"
-            android:text="@string/health"
-            android:textColor="@color/white" />
+            android:layout_weight="1"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            android:paddingLeft="10dp">
 
-        <ScrollView
-            android:layout_marginTop="8dp"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <com.yimeng.hyzc.view.FlowLayout
-                android:id="@+id/flowLayout"
+            <LinearLayout
+                android:id="@+id/ll_chat"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"></com.yimeng.hyzc.view.FlowLayout>
-        </ScrollView>
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:layout_centerVertical="true"
+                    android:scaleType="centerInside"
+                    android:src="@mipmap/chat" />
+
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="@string/chat_online"
+                    android:textColor="@color/black_item_content"
+                    android:textSize="20dp" />
+
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginBottom="5dp"
+                android:layout_marginTop="5dp"
+                android:background="@color/grey_line" />
+
+            <LinearLayout
+                android:id="@+id/ll_health"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:layout_centerVertical="true"
+                    android:scaleType="centerInside"
+                    android:src="@mipmap/health" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="@string/health"
+                    android:textColor="@color/black_item_content"
+                    android:textSize="20dp" />
+
+
+            </LinearLayout>
+
+        </LinearLayout>
+
     </LinearLayout>
 
 </LinearLayout>

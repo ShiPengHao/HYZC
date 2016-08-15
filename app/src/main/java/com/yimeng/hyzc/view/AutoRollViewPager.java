@@ -1,7 +1,6 @@
 package com.yimeng.hyzc.view;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.os.Handler;
 import android.os.SystemClock;
 import android.support.v4.view.PagerAdapter;
@@ -15,16 +14,14 @@ import android.widget.ImageView;
 import com.squareup.picasso.MemoryPolicy;
 import com.squareup.picasso.Picasso;
 import com.yimeng.hyzc.R;
-import com.yimeng.hyzc.utils.BitmapUtils;
-import com.yimeng.hyzc.utils.DensityUtil;
-import com.yimeng.hyzc.utils.MyApp;
 import com.yimeng.hyzc.utils.UiUtils;
 
 import java.util.ArrayList;
 
 public class AutoRollViewPager extends ViewPager {
 
-    private ArrayList<String> datas;
+    private ArrayList<String> data = new ArrayList<>();
+    private static final int WHAT_ROLL = 0;
 
 
     public AutoRollViewPager(Context context, AttributeSet attrs) {
@@ -35,10 +32,13 @@ public class AutoRollViewPager extends ViewPager {
         super(context);
     }
 
-    public void setData(ArrayList<String> datas) {
-        this.datas = datas;
-        this.datas.add(0, datas.get(datas.size() - 1));
-        this.datas.add(datas.get(1));
+    public void setData(ArrayList<String> data) {
+        this.data.clear();
+        for (int i = 0; i < data.size(); i++) {
+            this.data.add(data.get(i));
+        }
+        this.data.add(0, data.get(data.size() - 1));
+        this.data.add(data.get(0));
         MyPagerAdapter adapter = new MyPagerAdapter();
         setAdapter(adapter);
         addOnPageChangeListener(null);
@@ -48,9 +48,12 @@ public class AutoRollViewPager extends ViewPager {
 
     private Handler handler = new Handler() {
         public void handleMessage(android.os.Message msg) {
-            int index = (getCurrentItem() + 1) % datas.size();
-            setCurrentItem(index);
-            handler.sendEmptyMessageDelayed(0, 3000);
+            switch (msg.what) {
+                case WHAT_ROLL:
+                    int index = (getCurrentItem() + 1) % data.size();
+                    setCurrentItem(index);
+                    handler.sendEmptyMessageDelayed(WHAT_ROLL, 3000);
+            }
         }
     };
 
@@ -66,11 +69,12 @@ public class AutoRollViewPager extends ViewPager {
 
     public void startRoll() {
         stopRoll();
-        handler.sendEmptyMessageDelayed(0, 3000);
+        if (data != null && data.size() > 0)
+            handler.sendEmptyMessageDelayed(WHAT_ROLL, 3000);
     }
 
     public void stopRoll() {
-        handler.removeCallbacksAndMessages(null);
+        handler.removeMessages(WHAT_ROLL);
     }
 
     private boolean isClick;
@@ -108,7 +112,7 @@ public class AutoRollViewPager extends ViewPager {
                     getParent().requestDisallowInterceptTouchEvent(false);
                 } else if (ev.getX() > downX && getCurrentItem() == 0) {
                     getParent().requestDisallowInterceptTouchEvent(false);
-                } else if (ev.getX() < downX && getCurrentItem() == datas.size() - 1) {
+                } else if (ev.getX() < downX && getCurrentItem() == data.size() - 1) {
                     getParent().requestDisallowInterceptTouchEvent(false);
                 } else {
                     getParent().requestDisallowInterceptTouchEvent(true);
@@ -120,7 +124,7 @@ public class AutoRollViewPager extends ViewPager {
             case MotionEvent.ACTION_UP:
                 if (isClick && (SystemClock.uptimeMillis() - downTime) < 500
                         && onItemClickListener != null) {
-                    onItemClickListener.onItemClick(getCurrentItem());
+                    onItemClickListener.onItemClick(getCurrentItem() - 1);
                 }
                 startRoll();
                 break;
@@ -143,15 +147,15 @@ public class AutoRollViewPager extends ViewPager {
 
     @Override
     public void addOnPageChangeListener(OnPageChangeListener listener) {
-        super.addOnPageChangeListener(new InnserOnPageChangeListener(listener));
+        super.addOnPageChangeListener(new InnerOnPageChangeListener(listener));
     }
 
-    public class InnserOnPageChangeListener implements OnPageChangeListener {
+    public class InnerOnPageChangeListener implements OnPageChangeListener {
         private int position;
 
         private OnPageChangeListener listener;
 
-        public InnserOnPageChangeListener(OnPageChangeListener listener) {
+        public InnerOnPageChangeListener(OnPageChangeListener listener) {
             this.listener = listener;
         }
 
@@ -176,7 +180,7 @@ public class AutoRollViewPager extends ViewPager {
                     // A 最后一个条目
                     // 切换到position = 1的 条目
                     //悄悄的切换
-                    setCurrentItem(1, false);
+                    setCurrentItem(1, false);//TODO 跳页bug
                 } else if (position == 0) {
                     //D
                     setCurrentItem(getAdapter().getCount() - 2, false);
@@ -189,29 +193,18 @@ public class AutoRollViewPager extends ViewPager {
     }
 
     private class MyPagerAdapter extends PagerAdapter {
-        private int[] resId = new int[]{
-                R.mipmap.app_logo,
-                R.mipmap.ic_launcher,
-                R.mipmap.icon_user_check,
-                R.mipmap.app_logo,
-                R.mipmap.ic_launcher,
-        };
-
         @Override
         public int getCount() {
-            return datas.size();
+            return data.size();
         }
 
         @Override
         public Object instantiateItem(ViewGroup container, int position) {
             ImageView imageView = (ImageView) UiUtils.inflate(R.layout.layout_imageview);
-            imageView.setImageBitmap(BitmapUtils.getResImg(getContext(),resId[position]));
-            imageView.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
-//            Picasso.with(getContext())//// TODO: 2016/7/14 轮播图数据源为模拟
-//                    .load(datas.get(position))
-//                    .memoryPolicy(MemoryPolicy.NO_CACHE,MemoryPolicy.NO_STORE)
-//                    .error(R.mipmap.ic_launcher)
-//                    .into(imageView);
+            Picasso.with(getContext())
+                    .load(data.get(position))
+                    .memoryPolicy(MemoryPolicy.NO_CACHE, MemoryPolicy.NO_STORE)
+                    .into(imageView);
             container.addView(imageView);
             return imageView;
         }
