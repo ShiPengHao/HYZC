@@ -8,20 +8,47 @@
         style="@style/TextTitle"
         android:text="@string/home" />
 
-
-    <com.yimeng.hyzc.view.AutoRollViewPager
-        android:id="@+id/vp"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="200dp">
 
-    </com.yimeng.hyzc.view.AutoRollViewPager>
+        <com.yimeng.hyzc.view.AutoRollViewPager
+            android:id="@+id/vp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        </com.yimeng.hyzc.view.AutoRollViewPager>
+
+        <TextView
+            android:id="@+id/tv_img_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:paddingBottom="5dp"
+            android:paddingLeft="10dp"
+            android:text="@string/account_info"
+            android:textColor="@color/black_item_title"
+            android:textSize="16dp" />
+
+        <LinearLayout
+            android:id="@+id/ll_points"
+            android:gravity="center_vertical"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="20dp"
+            android:paddingBottom="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"></LinearLayout>
+
+    </RelativeLayout>
 
     <LinearLayout
-        android:background="@color/white"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
+        android:background="@color/white"
         android:gravity="center_vertical"
+        android:orientation="horizontal"
         android:padding="10dp">
 
         <LinearLayout

@@ -161,15 +161,15 @@ public class AutoRollViewPager extends ViewPager {
 
         @Override
         public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-            if (listener != null)
-                listener.onPageScrolled(position, positionOffset, positionOffsetPixels);
+            if (listener != null && position != data.size() - 1 && position != 0)
+                listener.onPageScrolled(position - 1, positionOffset, positionOffsetPixels);
         }
 
         @Override
         public void onPageSelected(int position) {
             this.position = position;
-            if (listener != null)
-                listener.onPageSelected(position);
+            if (listener != null && position != data.size() - 1 && position != 0)
+                listener.onPageSelected(position - 1);
         }
 
         @Override
@@ -177,9 +177,7 @@ public class AutoRollViewPager extends ViewPager {
             //  空闲 IDLE
             if (state == ViewPager.SCROLL_STATE_IDLE) {
                 if (position == getAdapter().getCount() - 1) {
-                    // A 最后一个条目
-                    // 切换到position = 1的 条目
-                    //悄悄的切换
+                    // A 最后一个条目 切换到position = 1的 条目 悄悄的切换
                     setCurrentItem(1, false);//TODO 跳页bug
                 } else if (position == 0) {
                     //D
