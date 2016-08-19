@@ -2,10 +2,58 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/grey"
     android:orientation="vertical">
 
-    <TextView
-        style="@style/TextTitle"
-        android:text="药店主页"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:paddingLeft="4dp"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:gravity="center_vertical"
+        android:minHeight="@dimen/finger_width"
+        android:orientation="horizontal">
+
+        <com.yimeng.hyzchbczhwq.view.ClearEditText
+            android:id="@+id/cet"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="40dp"
+            android:drawablePadding="8dp"
+            android:drawableRight="@mipmap/delete_xxx"
+            android:ellipsize="end"
+            android:hint="输入药方单号搜索"
+            android:maxLines="1"
+            android:paddingLeft="8dp"
+            android:paddingRight="12dp"
+            android:textColorHint="@color/colorAccent"
+            android:textColor="@color/colorAccent" />
+
+        <ImageView
+            android:paddingRight="10dp"
+            android:id="@+id/iv_search"
+            android:layout_width="@dimen/finger_width"
+            android:layout_height="match_parent"
+            android:scaleType="centerInside"
+            android:src="@mipmap/menu_search" />
+    </LinearLayout>
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/viewPager"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginBottom="2dp"
+        android:layout_weight="1">
+
+        <android.support.v4.view.PagerTabStrip
+            android:id="@+id/pagerTabsStrip"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:background="@color/white">
+
+        </android.support.v4.view.PagerTabStrip>
+
+    </android.support.v4.view.ViewPager>
 
 </LinearLayout>

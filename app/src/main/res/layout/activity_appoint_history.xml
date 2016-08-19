@@ -29,7 +29,7 @@
         </RelativeLayout>
 
 
-        <com.yimeng.hyzc.view.PullDownToRefreshListView
+        <com.yimeng.hyzchbczhwq.view.PullDownToRefreshListView
             android:paddingLeft="8dp"
             android:paddingRight="8dp"
             android:paddingTop="4dp"
@@ -41,7 +41,7 @@
             android:scrollbars="none"
             android:divider="@null"
             android:dividerHeight="8dp"
-            android:listSelector="@android:color/transparent"></com.yimeng.hyzc.view.PullDownToRefreshListView>
+            android:listSelector="@android:color/transparent"></com.yimeng.hyzchbczhwq.view.PullDownToRefreshListView>
     </LinearLayout>
 
 </FrameLayout>

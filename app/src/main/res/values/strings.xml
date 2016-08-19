@@ -111,7 +111,7 @@
     <string name="appointment_date">预约日期</string>
     <string name="choose_date">选择预约日期</string>
     <string name="appointment_limit">每日预约量</string>
-    <string name="department_name">吴桥中医院</string>
+    <string name="department_name">吴桥县中西医结合医院疼痛科</string>
     <string name="empty_content">无</string>
     <string name="wechat">微信号</string>
     <string name="isOrder">可坐诊</string>
@@ -123,4 +123,8 @@
     <string name="introduce">简介</string>
     <string name="select_address">选择省市区</string>
     <string name="address">地址</string>
+    <string name="suggest_pharmacy">推荐药店</string>
+    <string name="prescription_id">药方单号</string>
+    <string name="prescription_status">药方状态</string>
+    <string name="prescription_time">开药时间</string>
 </resources>

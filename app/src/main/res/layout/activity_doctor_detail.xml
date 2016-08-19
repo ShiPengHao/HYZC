@@ -40,7 +40,7 @@
                 android:background="@color/bg_light_green"
                 android:padding="8dp">
 
-                <com.yimeng.hyzc.view.CircleImageView
+                <com.yimeng.hyzchbczhwq.view.CircleImageView
                     android:id="@+id/iv_avatar"
                     android:layout_width="96dp"
                     android:layout_height="96dp"

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.yimeng.hyzc">
+    package="com.yimeng.hyzchbczhwq">
 
     <permission
         android:name="${applicationId}.permission.JPUSH_MESSAGE"
@@ -23,14 +23,14 @@
 
 
     <application
-        android:name=".utils.MyApp"
+        android:name="com.yimeng.hyzchbczhwq.utils.MyApp"
         android:allowBackup="true"
         android:icon="@mipmap/app_logo"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".activity.SplashActivity"
+            android:name="com.yimeng.hyzchbczhwq.activity.SplashActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -38,65 +38,65 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.IntroduceActivity" />
+        <activity android:name="com.yimeng.hyzchbczhwq.activity.IntroduceActivity" />
         <activity
-            android:name=".activity.LoginActivity"
+            android:name="com.yimeng.hyzchbczhwq.activity.LoginActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />
         <activity
-            android:name=".activity.RegisterActivity"
+            android:name="com.yimeng.hyzchbczhwq.activity.RegisterActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />
         <activity
-            android:name=".activity.HomePatientActivity"
+            android:name="com.yimeng.hyzchbczhwq.activity.HomePatientActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />
         <activity
-            android:name=".activity.HomeDoctorActivity"
+            android:name="com.yimeng.hyzchbczhwq.activity.HomeDoctorActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />
         <activity
-            android:name=".activity.HomePharmacyActivity"
+            android:name="com.yimeng.hyzchbczhwq.activity.HomePharmacyActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />
-        <activity android:name=".activity.TestActivity" />
+        <activity android:name="com.yimeng.hyzchbczhwq.activity.TestActivity" />
         <activity
-            android:name=".activity.BookingActivity"
+            android:name="com.yimeng.hyzchbczhwq.activity.BookingActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity
-            android:name=".activity.DoctorDetailActivity"
+            android:name="com.yimeng.hyzchbczhwq.activity.DoctorDetailActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity
-            android:name=".activity.AccountInfoActivity"
+            android:name="com.yimeng.hyzchbczhwq.activity.AccountInfoActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity
-            android:name=".activity.AppointDetailActivity"
+            android:name="com.yimeng.hyzchbczhwq.activity.AppointDetailActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity
-            android:name=".activity.AppointHistoryActivity"
+            android:name="com.yimeng.hyzchbczhwq.activity.AppointHistoryActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activity.DoctorResponseActivity"
+            android:name="com.yimeng.hyzchbczhwq.activity.DoctorResponseActivity"
             android:windowSoftInputMode="stateHidden|adjustResize"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activity.DoctorPrescribeActivity"
+            android:name="com.yimeng.hyzchbczhwq.activity.DoctorPrescribeActivity"
+            android:windowSoftInputMode="adjustResize"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.yimeng.hyzchbczhwq.activity.PrescribeDetailActivity"
             android:windowSoftInputMode="stateHidden|adjustResize"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activity.PrescribeDetailActivity"
-            android:windowSoftInputMode="stateHidden|adjustResize"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".activity.WebViewActivity"
+            android:name="com.yimeng.hyzchbczhwq.activity.WebViewActivity"
             android:hardwareAccelerated="true"
             android:windowSoftInputMode="stateHidden|adjustResize"
             android:screenOrientation="portrait" />
-        <activity android:name=".activity.AddressChoiceActivity" />
+        <activity android:name="com.yimeng.hyzchbczhwq.activity.AddressChoiceActivity" />
         <activity
             android:name="cn.jpush.android.ui.PushActivity"
             android:configChanges="orientation|keyboardHidden"
@@ -149,7 +149,7 @@
             </intent-filter>
         </receiver>
         <receiver
-            android:name=".receiver.MyJPushReceiver"
+            android:name="com.yimeng.hyzchbczhwq.receiver.MyJPushReceiver"
             android:enabled="true">
             <intent-filter>
                 <!--Required 用户注册SDK的intent-->

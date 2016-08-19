@@ -12,12 +12,12 @@
         android:layout_width="match_parent"
         android:layout_height="200dp">
 
-        <com.yimeng.hyzc.view.AutoRollViewPager
+        <com.yimeng.hyzchbczhwq.view.CycleViewPager
             android:id="@+id/vp"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-        </com.yimeng.hyzc.view.AutoRollViewPager>
+        </com.yimeng.hyzchbczhwq.view.CycleViewPager>
 
         <TextView
             android:id="@+id/tv_img_title"

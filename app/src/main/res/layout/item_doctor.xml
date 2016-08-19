@@ -7,7 +7,7 @@
     android:background="@drawable/selector_tv_bg"
     android:padding="5dp">
 
-    <com.yimeng.hyzc.view.CircleImageView
+    <com.yimeng.hyzchbczhwq.view.CircleImageView
         android:id="@+id/item_icon"
         android:layout_width="64dp"
         android:layout_height="64dp"

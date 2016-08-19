@@ -207,12 +207,40 @@
             android:textColor="@color/black_item_title"
             android:textSize="18dp" />
 
+        <CheckBox
+            android:layout_marginLeft="20dp"
+            android:id="@+id/cb_prescribe_has_got"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_vertical"
+            android:gravity="center_vertical" />
+
+    </LinearLayout>
+
+    <include layout="@layout/layout_divider" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:gravity="center_vertical"
+        android:minHeight="@dimen/item_width"
+        android:orientation="horizontal"
+        android:padding="4dp">
+
         <TextView
-            android:id="@+id/tv_prescribe_has_got"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/suggest_pharmacy"
+            android:textColor="@color/black_item_title"
+            android:textSize="18dp" />
+
+        <TextView
+            android:id="@+id/tv_suggest_pharmacy"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
-            android:text="@string/prescribe_has_got"
+            android:text="@string/suggest_pharmacy"
             android:textColor="@color/black_item_content"
             android:textSize="16dp" />
     </LinearLayout>
