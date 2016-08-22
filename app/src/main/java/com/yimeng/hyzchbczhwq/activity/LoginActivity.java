@@ -219,11 +219,11 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.bt_register:
-                KeyBoardUtils.closeKeybord(et_pwd,this);
+                KeyBoardUtils.closeKeybord(et_pwd, this);
                 goToRegister();
                 break;
             case R.id.bt_login:
-                KeyBoardUtils.closeKeybord(et_pwd,this);
+                KeyBoardUtils.closeKeybord(et_pwd, this);
                 login();
                 break;
         }
@@ -342,13 +342,12 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
         JPushInterface.setAliasAndTags(MyApp.getAppContext(), type + "+" + id, tags, new TagAliasCallback() {
             @Override
             public void gotResult(int i, String s, Set<String> set) {
-                if (i != 0) {
+                if (i != 0 ) {
                     MyLog.i("JPush", "set alias and tag error");
-                    dismissLoginDialog();
-                    MyToast.show(getString(R.string.connect_error));
-                } else {
-                    saveAccountInfo(type, id);
+//                    MyToast.show("消息推送设置异");
                 }
+                dismissLoginDialog();
+                saveAccountInfo(type, id);
             }
         });
     }

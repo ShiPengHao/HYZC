@@ -77,7 +77,9 @@ public class SplashActivity extends BaseActivity {
             }, 2000);
         } else if (
 //                isAutoUpdate() &&
-                NetUtils.isConnected(this) && NetUtils.isWifi(this)) {
+                NetUtils.isConnected(this)
+//                        && NetUtils.isWifi(this)
+                ) {
             handler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
