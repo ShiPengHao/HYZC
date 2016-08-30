@@ -9,6 +9,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.NumberPicker;
 import android.widget.TextView;
@@ -56,7 +57,8 @@ public class DoctorPrescribeActivity extends BaseActivity implements View.OnClic
     private ListView lv;
     private ArrayList<MedicineUsageBean> usages = new ArrayList<>();
     private MedicineUsageBean usage;
-    private Button bt_select;
+//    private Button bt_select;
+    private LinearLayout ll_usage;
     private NumberPicker medicineNumberPicker;
 
 
@@ -78,7 +80,8 @@ public class DoctorPrescribeActivity extends BaseActivity implements View.OnClic
         tv_medicine_usage = (TextView) findViewById(R.id.tv_medicine_usage);
         bt_submit = (Button) findViewById(R.id.bt_submit);
         bt_cancel = (Button) findViewById(R.id.bt_cancel);
-        bt_select = (Button) findViewById(R.id.bt_select);
+//        bt_select = (Button) findViewById(R.id.bt_select);
+        ll_usage = (LinearLayout) findViewById(R.id.ll_usage);
         lv = (ListView) findViewById(R.id.lv);
 
         medicineNumberPicker = (NumberPicker) findViewById(R.id.np);
@@ -92,7 +95,7 @@ public class DoctorPrescribeActivity extends BaseActivity implements View.OnClic
         iv_back.setOnClickListener(this);
         bt_submit.setOnClickListener(this);
         bt_cancel.setOnClickListener(this);
-        bt_select.setOnClickListener(this);
+        ll_usage.setOnClickListener(this);
         cet.addTextChangedListener(new ClearEditText.SimpleTextChangedListener() {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
@@ -208,7 +211,7 @@ public class DoctorPrescribeActivity extends BaseActivity implements View.OnClic
             case R.id.bt_cancel:
                 clearText();
                 break;
-            case R.id.bt_select:
+            case R.id.ll_usage:
                 showUsageDialog();
                 break;
         }

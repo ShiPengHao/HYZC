@@ -44,14 +44,13 @@ public class DoctorResponseActivity extends BaseActivity implements View.OnClick
     private TextView tv_command_pharmacy;
     private Button bt_prescribe;
     private Button bt_response;
-    private Button bt_select;
-    private Button bt_select_pharmacy;
     private EditText et_doctor_response;
     private EditText et_medicine_remark;
     private ListView listView;
     private int id;
     public static final int REQUEST_CODE_FOR_PRESCRIBE = 100;
     public static final int REQUEST_CODE_FOR_ADDRESS = 101;
+    public static final int REQUEST_CODE_FOR_TEMPLATE = 102;
     private ArrayList<MedicineBean> medicines = new ArrayList<>();
     private BaseAdapter medicineAdapter;
     private HashMap<String, Object> map = new HashMap<>();
@@ -59,13 +58,15 @@ public class DoctorResponseActivity extends BaseActivity implements View.OnClick
     private AlertDialog uploadDialog;
     private LinearLayout ll_remark;
     private LinearLayout ll_pharmacy;
+    private LinearLayout ll_response_way;
     private ArrayList<String> ways = new ArrayList<>();
     private String response;
     private String way;
     private String pharmacyId;
     private AlertDialog selectPharmacyDialog;
-    private ArrayList<PharmacyBean> pharmacyBeanArrayList= new ArrayList<>();
+    private ArrayList<PharmacyBean> pharmacyBeanArrayList = new ArrayList<>();
     private AlertDialog selectResponseWayDialog;
+    private LinearLayout ll_response;
 
     @Override
     protected int getLayoutResId() {
@@ -80,8 +81,6 @@ public class DoctorResponseActivity extends BaseActivity implements View.OnClick
         bt_prescribe = (Button) findViewById(R.id.bt_prescribe);
         bt_prescribe.setEnabled(false);
         bt_response = (Button) findViewById(R.id.bt_response);
-        bt_select = (Button) findViewById(R.id.bt_select);
-        bt_select_pharmacy = (Button) findViewById(R.id.bt_select_pharmacy);
 
         et_doctor_response = (EditText) findViewById(R.id.et_doctor_response);
         tv_doctor_way = (TextView) findViewById(R.id.tv_doctor_way);
@@ -92,6 +91,8 @@ public class DoctorResponseActivity extends BaseActivity implements View.OnClick
         ll_remark = (LinearLayout) findViewById(R.id.ll_remark);
         ll_remark.setVisibility(View.GONE);
         ll_pharmacy = (LinearLayout) findViewById(R.id.ll_pharmacy);
+        ll_response = (LinearLayout) findViewById(R.id.ll_response);
+        ll_response_way = (LinearLayout) findViewById(R.id.ll_response_way);
         ll_pharmacy.setVisibility(View.GONE);
         initUploadDialog();
     }
@@ -117,8 +118,9 @@ public class DoctorResponseActivity extends BaseActivity implements View.OnClick
         iv_back.setOnClickListener(this);
         bt_prescribe.setOnClickListener(this);
         bt_response.setOnClickListener(this);
-        bt_select.setOnClickListener(this);
-        bt_select_pharmacy.setOnClickListener(this);
+        ll_response_way.setOnClickListener(this);
+        ll_pharmacy.setOnClickListener(this);
+        ll_response.setOnClickListener(this);
         medicineAdapter = new MedicineAdapter(medicines);
         listView.setAdapter(medicineAdapter);
     }
@@ -148,13 +150,23 @@ public class DoctorResponseActivity extends BaseActivity implements View.OnClick
             case R.id.bt_response:
                 requestMedicines();
                 break;
-            case R.id.bt_select:
+            case R.id.ll_response_way:
                 showWayDialog();
                 break;
-            case R.id.bt_select_pharmacy:
+            case R.id.ll_pharmacy:
                 requestPharmacy();
                 break;
+            case R.id.ll_response:
+                requestResponseTemplate();
+                break;
         }
+    }
+
+    /**
+     * 选择医生回应模板
+     */
+    private void requestResponseTemplate() {
+        startActivityForResult(new Intent(this, ResponseTemplateActivity.class), REQUEST_CODE_FOR_TEMPLATE);
     }
 
 
@@ -205,7 +217,7 @@ public class DoctorResponseActivity extends BaseActivity implements View.OnClick
             return;
         }
 
-        switch (requestCode){
+        switch (requestCode) {
             case REQUEST_CODE_FOR_PRESCRIBE:
                 try {
                     MedicineBean bean = (MedicineBean) data.getSerializableExtra("medicine");
@@ -218,25 +230,29 @@ public class DoctorResponseActivity extends BaseActivity implements View.OnClick
                     e.printStackTrace();
                 }
                 break;
+            case REQUEST_CODE_FOR_TEMPLATE:
+                et_doctor_response.setText(data.getStringExtra(ResponseTemplateActivity.EXTRA_TEMPLATE));
+                et_doctor_response.setSelection(et_doctor_response.getText().length());
+                break;
         }
     }
 
     /**
      * 根据区县code获取药店列表
      */
-    private void requestPharmacy(){
-        if (pharmacyBeanArrayList.size() > 0){
+    private void requestPharmacy() {
+        if (pharmacyBeanArrayList.size() > 0) {
             showPharmacySelectDialog();
         }
         map.clear();
-        map.put("counties",MyConstant.AREA_CODE);
+        map.put("counties", MyConstant.AREA_CODE);
         new SoapAsyncTask() {
             @Override
             protected void onPostExecute(String s) {
-                parseListResult(pharmacyBeanArrayList,PharmacyBean.class,s);
-                if (pharmacyBeanArrayList.size() > 0){
+                parseListResult(pharmacyBeanArrayList, PharmacyBean.class, s);
+                if (pharmacyBeanArrayList.size() > 0) {
                     showPharmacySelectDialog();
-                }else {
+                } else {
                     MyToast.show("本地区还没有药店加盟");
                 }
             }
@@ -251,7 +267,7 @@ public class DoctorResponseActivity extends BaseActivity implements View.OnClick
         if (null == selectPharmacyDialog) {
             selectPharmacyDialog = new AlertDialog.Builder(this)
                     .setTitle("请选择推荐药店")
-                    .setSingleChoiceItems(new ArrayAdapter<>(this,R.layout.item_text1,pharmacyBeanArrayList), 0, new DialogInterface.OnClickListener() {
+                    .setSingleChoiceItems(new ArrayAdapter<>(this, R.layout.item_text1, pharmacyBeanArrayList), 0, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             dialog.dismiss();
@@ -295,7 +311,7 @@ public class DoctorResponseActivity extends BaseActivity implements View.OnClick
         way = tv_doctor_way.getText().toString().trim();
         if (TextUtils.isEmpty(way)) {
             MyToast.show(String.format("%s%s", getString(R.string.doctor_response_way), getString(R.string.can_not_be_null)));
-            ObjectAnimator.ofFloat(bt_select, "translationX", 15, -15, 15, -15, 0).setDuration(300).start();
+            ObjectAnimator.ofFloat(ll_response_way, "translationX", 15, -15, 15, -15, 0).setDuration(300).start();
             return;
         }
         if (id == 0) {
@@ -318,7 +334,7 @@ public class DoctorResponseActivity extends BaseActivity implements View.OnClick
             return;
         }
 
-        if (TextUtils.isEmpty(pharmacyId)){
+        if (TextUtils.isEmpty(pharmacyId)) {
             MyToast.show(String.format("%s%s", getString(R.string.suggest_pharmacy), getString(R.string.can_not_be_null)));
             ObjectAnimator.ofFloat(tv_command_pharmacy, "translationX", 15, -15, 15, -15, 0).setDuration(300).start();
             return;
@@ -327,7 +343,7 @@ public class DoctorResponseActivity extends BaseActivity implements View.OnClick
         map.clear();
         map.put("appointment_id", id);
         map.put("remark", remark);
-        map.put("pharmacy_id",pharmacyId);
+        map.put("pharmacy_id", pharmacyId);
         try {
             map.put("Medicine", createMedicinesJson());
         } catch (Exception e) {
@@ -427,13 +443,13 @@ public class DoctorResponseActivity extends BaseActivity implements View.OnClick
 
     @Override
     protected void onDestroy() {
-        if (uploadDialog != null && uploadDialog.isShowing()){
+        if (uploadDialog != null && uploadDialog.isShowing()) {
             uploadDialog.dismiss();
         }
-        if (selectPharmacyDialog != null && selectPharmacyDialog.isShowing()){
-           selectPharmacyDialog.dismiss();
+        if (selectPharmacyDialog != null && selectPharmacyDialog.isShowing()) {
+            selectPharmacyDialog.dismiss();
         }
-        if (selectResponseWayDialog != null && selectResponseWayDialog.isShowing()){
+        if (selectResponseWayDialog != null && selectResponseWayDialog.isShowing()) {
             selectResponseWayDialog.dismiss();
         }
         super.onDestroy();

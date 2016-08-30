@@ -12,6 +12,7 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
@@ -25,6 +26,7 @@ import com.yimeng.hyzchbczhwq.utils.WebServiceUtils;
 
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -34,6 +36,8 @@ import java.util.Map;
  * 医生详情界面，展示医生详情介绍，提交病人预约申请
  */
 public class DoctorDetailActivity extends BaseActivity implements View.OnClickListener {
+
+    private static final int REQUEST_CODE_FOR_DISEASE_MODULE = 100;
 
     private ImageView iv_avatar;
     private EditText et_disease_description;
@@ -50,10 +54,12 @@ public class DoctorDetailActivity extends BaseActivity implements View.OnClickLi
     private DatePicker.OnDateChangedListener onDateChangedListener;
     private String date;
     private ImageView iv_back;
-    private Button bt_choose_date;
+    private LinearLayout ll_choose_date;
     private TextView tv_appointment_date;
     private TextView tv_phone;
     private TextView tv_wechat;
+    private TextView tv_disease_description;
+    private String module;
     //    private NumberPicker timePicker;
 
     @Override
@@ -69,7 +75,7 @@ public class DoctorDetailActivity extends BaseActivity implements View.OnClickLi
         bt_appoint = (Button) findViewById(R.id.bt_appoint);
         bt_chat = (Button) findViewById(R.id.bt_chat);
         bt_back = (Button) findViewById(R.id.bt_back);
-        bt_choose_date = (Button) findViewById(R.id.bt_choose_date);
+        ll_choose_date = (LinearLayout) findViewById(R.id.ll_choose_date);
 //        timePicker = (NumberPicker) findViewById(R.id.numberPicker1);
 
 
@@ -80,6 +86,7 @@ public class DoctorDetailActivity extends BaseActivity implements View.OnClickLi
         tv_remark = (TextView) findViewById(R.id.tv_remark);
         tv_phone = (TextView) findViewById(R.id.tv_phone);
         tv_wechat = (TextView) findViewById(R.id.tv_wechat);
+        tv_disease_description = (TextView) findViewById(R.id.tv_disease_description);
         tv_appointment_date = (TextView) findViewById(R.id.tv_appointment_date);
     }
 
@@ -88,8 +95,9 @@ public class DoctorDetailActivity extends BaseActivity implements View.OnClickLi
         bt_appoint.setOnClickListener(this);
         bt_chat.setOnClickListener(this);
         bt_back.setOnClickListener(this);
-        bt_choose_date.setOnClickListener(this);
+        ll_choose_date.setOnClickListener(this);
         iv_back.setOnClickListener(this);
+        tv_disease_description.setOnClickListener(this);
     }
 
     @Override
@@ -149,10 +157,44 @@ public class DoctorDetailActivity extends BaseActivity implements View.OnClickLi
             case R.id.bt_back:
                 finish();
                 break;
-            case R.id.bt_choose_date:
+            case R.id.ll_choose_date:
                 showDatePickDialog();
                 break;
+            case R.id.tv_disease_description:
+                pickDiseaseModule();
+                break;
         }
+    }
+
+    /**
+     * 选择疾病描述模板
+     */
+    private void pickDiseaseModule() {
+        startActivityForResult(new Intent(this, DiseaseModuleActivity.class), REQUEST_CODE_FOR_DISEASE_MODULE);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (data == null)
+            return;
+        switch (requestCode) {
+            case REQUEST_CODE_FOR_DISEASE_MODULE:
+                ArrayList<String> checkedItems = (ArrayList<String>) data.getSerializableExtra(DiseaseModuleActivity.EXTRA_CHECKED_ITEMS);
+                if (checkedItems == null)
+                    return;
+                String module = "";
+                for (int i = 0; i < checkedItems.size(); i++) {
+                    module += checkedItems.get(i);
+                    if (i != checkedItems.size() - 1)
+                        module += "\r\n";
+                }
+                if (isEmpty(module))
+                    module = "无";
+                tv_disease_description.setText("病情模板：" + module);
+                this.module = tv_disease_description.getText().toString();
+                break;
+        }
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     /**
@@ -201,10 +243,17 @@ public class DoctorDetailActivity extends BaseActivity implements View.OnClickLi
      * 提交预约申请
      */
     private void requestAppoint() {
+
         String description = et_disease_description.getText().toString().trim();
         if (TextUtils.isEmpty(description)) {
             MyToast.show("请填写病情描述");
             ObjectAnimator.ofFloat(et_disease_description, "translationX", -25, 25, -25, 25, 0).setDuration(500).start();
+            return;
+        }
+
+        if (TextUtils.isEmpty(module)) {
+            MyToast.show("请选择病情模板");
+            ObjectAnimator.ofFloat(tv_disease_description, "translationX", -25, 25, -25, 25, 0).setDuration(500).start();
             return;
         }
 
@@ -215,7 +264,7 @@ public class DoctorDetailActivity extends BaseActivity implements View.OnClickLi
 
         HashMap<String, Object> params = new HashMap<>();
         params.put("patient_id", patientId);
-        params.put("disease_description", description);
+        params.put("disease_description", this.module + "\r\n病情描述：" + description);
         params.put("select_doctor_id", doctorBean.doctor_id);
         params.put("registration_time", date);
         new AsyncTask<Object, Object, String>() {

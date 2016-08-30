@@ -11,14 +11,14 @@
         android:layout_height="wrap_content"
         android:background="@color/white"
         android:gravity="center_vertical"
-        android:minHeight="@dimen/finger_width"
         android:orientation="horizontal">
 
         <com.yimeng.hyzchbczhwq.view.ClearEditText
             android:id="@+id/cet"
             android:layout_width="0dp"
             android:layout_weight="1"
-            android:layout_height="40dp"
+            android:layout_height="wrap_content"
+            android:minHeight="@dimen/finger_width"
             android:drawablePadding="8dp"
             android:drawableRight="@mipmap/delete_xxx"
             android:ellipsize="end"

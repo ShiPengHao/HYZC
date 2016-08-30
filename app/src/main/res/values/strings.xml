@@ -127,4 +127,7 @@
     <string name="prescription_id">药方单号</string>
     <string name="prescription_status">药方状态</string>
     <string name="prescription_time">开药时间</string>
+    <string name="disease_description_module">病情模板</string>
+    <string name="disease_description_module_select">选择病情模板</string>
+    <string name="response_module_select">选择回应模板</string>
 </resources>

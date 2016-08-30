@@ -95,7 +95,6 @@ public class CycleViewPager extends ViewPager {
 
     private float downX;
 
-
     protected void onDetachedFromWindow() {
         stopRoll();
         super.onDetachedFromWindow();

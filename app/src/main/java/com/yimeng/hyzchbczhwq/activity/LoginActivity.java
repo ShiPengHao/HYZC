@@ -334,17 +334,18 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
     }
 
     /**
-     * 登陆成功后为本应用用户绑定JPush的别名和标签，别名为账号类型+"-"+id，标签为账号类型，设置成功以后缓存登陆信息，跳转到主页
+     * 登陆成功后为本应用用户绑定JPush的别名和标签，别名为账号类型+"+"+id，标签为账号类型，设置成功以后缓存登陆信息，跳转到主页
      */
     private void setJPushAliasAndTag(final String type, final String id) {
         final HashSet<String> tags = new HashSet<>();
         tags.add(type);
-        JPushInterface.setAliasAndTags(MyApp.getAppContext(), type + "+" + id, tags, new TagAliasCallback() {
+        String alias = type + "+" + id;
+        JPushInterface.setAliasAndTags(MyApp.getAppContext(), alias, tags, new TagAliasCallback() {
             @Override
             public void gotResult(int i, String s, Set<String> set) {
                 if (i != 0 ) {
                     MyLog.i("JPush", "set alias and tag error");
-//                    MyToast.show("消息推送设置异");
+//                    MyToast.show("消息推送设置异常");
                 }
                 dismissLoginDialog();
                 saveAccountInfo(type, id);

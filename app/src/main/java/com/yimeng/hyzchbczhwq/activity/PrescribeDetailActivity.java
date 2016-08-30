@@ -1,6 +1,8 @@
 package com.yimeng.hyzchbczhwq.activity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
@@ -43,6 +45,7 @@ public class PrescribeDetailActivity extends BaseActivity implements View.OnClic
     private boolean isPharmacy;
     private String prescription_id;
     private boolean flagChanged;
+    private TextView tv_prescription_id;
 
     @Override
     protected int getLayoutResId() {
@@ -54,6 +57,7 @@ public class PrescribeDetailActivity extends BaseActivity implements View.OnClic
         iv_back = (ImageView) findViewById(R.id.iv_back);
         tv_doctor = (TextView) findViewById(R.id.tv_doctor);
         tv_medicine_remark = (TextView) findViewById(R.id.tv_medicine_remark);
+        tv_prescription_id = (TextView) findViewById(R.id.tv_prescription_id);
         tv_patient = (TextView) findViewById(R.id.tv_patient);
         tv_phone = (TextView) findViewById(R.id.tv_phone);
         tv_prescribe_build_time = (TextView) findViewById(R.id.tv_prescribe_build_time);
@@ -123,6 +127,7 @@ public class PrescribeDetailActivity extends BaseActivity implements View.OnClic
      */
     private void bindData() {
         PrescriptionBean bean = prescriptions.get(0);
+        tv_prescription_id.setText(bean.prescription_id);
         tv_doctor.setText(bean.doctor_name);
         tv_medicine_remark.setText(bean.remark);
         tv_patient.setText(bean.patient_name);
@@ -156,25 +161,29 @@ public class PrescribeDetailActivity extends BaseActivity implements View.OnClic
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.iv_back:
-                if (flagChanged){
-                    setResult(1000,new Intent());
-                }
-                finish();
+                notifyFlagChanged();
                 break;
         }
     }
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        switch (keyCode){
+        switch (keyCode) {
             case KeyEvent.KEYCODE_BACK:
-                if (flagChanged){
-                    setResult(1000,new Intent());
-                }
-                finish();
+                notifyFlagChanged();
                 return true;
         }
         return super.onKeyDown(keyCode, event);
+    }
+
+    /**
+     * 如果取药标志已经更改，则通知上个页面更新界面
+     */
+    private void notifyFlagChanged() {
+        if (flagChanged) {
+            setResult(1000, new Intent());
+        }
+        finish();
     }
 
     @Override
@@ -183,12 +192,40 @@ public class PrescribeDetailActivity extends BaseActivity implements View.OnClic
             case R.id.cb_prescribe_has_got:
                 if (isChecked) {
                     cb_prescribe_has_got.setClickable(false);
-                    requestSubRecipeFlag();
+                    showFlagChangedDialog();
                 }
                 break;
         }
     }
 
+    /**
+     * 显示确认更改取药标志对话框
+     */
+    public void showFlagChangedDialog() {
+        new AlertDialog.Builder(this)
+                .setTitle("温馨提示")
+                .setMessage("您确定病人已取药吗？")
+                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                        requestSubRecipeFlag();
+                    }
+                })
+                .setNegativeButton("不确定", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                        cb_prescribe_has_got.setChecked(false);
+                        cb_prescribe_has_got.setClickable(true);
+                    }
+                })
+                .show();
+    }
+
+    /**
+     * 向服务器请求更新将药方标志设置为已取药，成功则刷新页面，失败则更新checkbox为false、可点击
+     */
     public void requestSubRecipeFlag() {
         params.clear();
         params.put("prescription_id", prescription_id);
@@ -207,7 +244,7 @@ public class PrescribeDetailActivity extends BaseActivity implements View.OnClic
                     if (!"ok".equalsIgnoreCase(object.optString("status"))) {
                         cb_prescribe_has_got.setChecked(false);
                         cb_prescribe_has_got.setClickable(true);
-                    }else{
+                    } else {
                         flagChanged = true;
                         requestPrescriptionDetail();
                     }

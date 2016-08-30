@@ -63,6 +63,8 @@
         android:layout_height="wrap_content"
         android:padding="3dp"
         android:text="@string/disease_description"
+        android:maxLines="3"
+        android:ellipsize="end"
         android:textColor="@color/black_item_content" />
 
 </LinearLayout>

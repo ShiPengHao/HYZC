@@ -104,130 +104,95 @@
                     android:textSize="18dp" />
             </LinearLayout>
 
-            <include layout="@layout/layout_divider"/>
+            <include layout="@layout/layout_divider" />
 
             <TextView
                 android:id="@+id/tv_phone"
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/item_width"
-                android:gravity="center_vertical"
                 android:layout_marginLeft="8dp"
                 android:layout_marginRight="8dp"
+                android:gravity="center_vertical"
                 android:padding="2dp"
                 android:text="@string/phone"
                 android:textColor="@color/black_item_content"
                 android:textSize="18dp" />
 
-            <include layout="@layout/layout_divider"/>
+            <include layout="@layout/layout_divider" />
 
             <TextView
                 android:id="@+id/tv_wechat"
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/item_width"
-                android:gravity="center_vertical"
                 android:layout_marginLeft="8dp"
                 android:layout_marginRight="8dp"
+                android:gravity="center_vertical"
                 android:padding="2dp"
                 android:text="@string/wechat"
                 android:textColor="@color/black_item_content"
                 android:textSize="18dp" />
 
-            <include layout="@layout/layout_divider"/>
+            <include layout="@layout/layout_divider" />
 
             <TextView
                 android:id="@+id/tv_remark"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:minHeight="@dimen/item_width"
-                android:gravity="center_vertical"
                 android:layout_marginLeft="8dp"
                 android:layout_marginRight="8dp"
+                android:gravity="center_vertical"
+                android:minHeight="@dimen/item_width"
                 android:padding="2dp"
                 android:text="@string/doctor_introduce"
                 android:textColor="@color/black_item_content"
                 android:textSize="18dp" />
 
-            <include layout="@layout/layout_divider"/>
+            <include layout="@layout/layout_divider" />
 
 
-            <RelativeLayout
+            <LinearLayout
+                android:id="@+id/ll_choose_date"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
-                android:paddingTop="2dp"
-                android:paddingBottom="2dp"
                 android:paddingLeft="8dp"
                 android:paddingRight="8dp">
 
                 <TextView
                     android:id="@+id/tv_appointment_date"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentLeft="true"
-                    android:layout_centerVertical="true"
-                    android:layout_toLeftOf="@+id/bt_choose_date"
+                    android:drawableRight="@mipmap/next"
                     android:gravity="center_vertical"
+                    android:minHeight="@dimen/item_width"
                     android:text="@string/appointment_date"
                     android:textColor="@color/black_item_content"
                     android:textSize="18dp" />
 
-                <Button
-                    android:id="@+id/bt_choose_date"
-                    android:layout_width="wrap_content"
-                    android:layout_height="32dp"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:background="@drawable/selector_bt_bg_green"
-                    android:gravity="center"
-                    android:padding="6dp"
-                    android:text="@string/choose_date"
-                    android:textColor="@color/white" />
-            </RelativeLayout>
-
-            <!--<include layout="@layout/layout_divider" />-->
-
-            <!--<RelativeLayout-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:gravity="center_vertical"-->
-                <!--android:padding="8dp">-->
-
-                <!--<TextView-->
-                    <!--android:id="@+id/tv_appointment_time"-->
-                    <!--android:layout_width="wrap_content"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:layout_alignParentLeft="true"-->
-                    <!--android:layout_centerVertical="true"-->
-                    <!--android:gravity="center_vertical"-->
-                    <!--android:text="@string/appointment_time"-->
-                    <!--android:textColor="@color/black_item_content"-->
-                    <!--android:textSize="18dp" />-->
-
-                <!--<NumberPicker-->
-                    <!--android:id="@+id/numberPicker1"-->
-                    <!--android:layout_width="96dp"-->
-                    <!--android:layout_height="96dp"-->
-                    <!--android:layout_marginLeft="10dp"-->
-                    <!--android:layout_toRightOf="@id/tv_appointment_time"-->
-                    <!--android:orientation="vertical"></NumberPicker>-->
-            <!--</RelativeLayout>-->
+            </LinearLayout>
 
             <include layout="@layout/layout_divider" />
 
             <TextView
-                android:layout_width="wrap_content"
+                android:id="@+id/tv_disease_description"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="8dp"
-                android:padding="2dp"
-                android:text="@string/disease_description"
+                android:drawableRight="@mipmap/next"
+                android:gravity="center_vertical"
+                android:minHeight="@dimen/item_width"
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp"
+                android:text="@string/disease_description_module"
                 android:textColor="@color/black_item_content"
                 android:textSize="18dp" />
+
+            <include layout="@layout/layout_divider" />
 
             <EditText
                 android:id="@+id/et_disease_description"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="8dp"
+                android:paddingLeft="8dp"
                 android:hint="@string/disease_description_hint"
                 android:textColor="@color/black_item_content"
                 android:textSize="16dp" />
@@ -240,7 +205,7 @@
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:paddingTop="10dp">
+        android:paddingTop="4dp">
 
         <Button
             android:id="@+id/bt_appoint"

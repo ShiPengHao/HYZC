@@ -25,6 +25,7 @@
 
 
     <LinearLayout
+        android:id="@+id/ll_response"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="4dp"
@@ -43,15 +44,26 @@
 
         <EditText
             android:id="@+id/et_doctor_response"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
+            android:layout_weight="1"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:hint="@string/doctor_response"
             android:textColor="@color/black_item_content"
             android:textSize="16dp" />
+
+        <ImageView
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="6dp"
+            android:scaleType="centerInside"
+            android:src="@mipmap/next" />
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/ll_response_way"
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:layout_marginBottom="4dp"
@@ -78,15 +90,15 @@
             android:textColor="@color/black_item_content"
             android:textSize="16dp" />
 
-        <Button
-            android:id="@+id/bt_select"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/selector_bt_bg_green"
-            android:padding="3dp"
-            android:text="@string/select"
-            android:textColor="@color/white"
-            android:textSize="16dp" />
+        <ImageView
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="6dp"
+            android:scaleType="centerInside"
+            android:src="@mipmap/next" />
+
     </LinearLayout>
 
 
@@ -117,15 +129,15 @@
             android:textColor="@color/black_item_content"
             android:textSize="16dp" />
 
-        <Button
-            android:id="@+id/bt_select_pharmacy"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/selector_bt_bg_green"
-            android:padding="3dp"
-            android:text="@string/select"
-            android:textColor="@color/white"
-            android:textSize="16dp" />
+        <ImageView
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="6dp"
+            android:scaleType="centerInside"
+            android:src="@mipmap/next" />
+
     </LinearLayout>
 
     <LinearLayout

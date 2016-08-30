@@ -311,9 +311,14 @@ public class SplashActivity extends BaseActivity {
             }
 
             @Override
-            public void inProgress(float progress, long total, int id) {
-                if (progress < apkSize)
-                    progressDialog.setProgress((int) progress);
+            public void inProgress(final float progress, long total, int id) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (progressDialog != null && progressDialog.isShowing() && progress < apkSize)
+                            progressDialog.setProgress((int) progress);
+                    }
+                });
             }
 
             @Override

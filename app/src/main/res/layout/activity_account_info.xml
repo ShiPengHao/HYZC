@@ -340,6 +340,8 @@
                         android:hint="@string/introduce"
                         android:textColor="@color/black_item_content"
                         android:textSize="18dp" />
+
+
                 </LinearLayout>
 
             </LinearLayout>

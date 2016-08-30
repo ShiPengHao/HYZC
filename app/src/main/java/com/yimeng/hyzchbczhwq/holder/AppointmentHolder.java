@@ -1,6 +1,7 @@
 package com.yimeng.hyzchbczhwq.holder;
 
 import android.graphics.Color;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.TextView;
 
@@ -25,11 +26,11 @@ public class AppointmentHolder extends BaseHolder<AppointmentBean> {
     @Override
     protected View initView() {
         View view = UiUtils.inflate(R.layout.item_apponintment);
-        tv_appointmentId =  (TextView) view.findViewById(R.id.tv_appointmentId);
-        tv_status =  (TextView) view.findViewById(R.id.tv_appointStatus);
-        tv_doctor =  (TextView) view.findViewById(R.id.tv_doctor);
-        tv_appointmentTime =  (TextView) view.findViewById(R.id.tv_appointmentTime);
-        tv_description =  (TextView) view.findViewById(R.id.tv_description);
+        tv_appointmentId = (TextView) view.findViewById(R.id.tv_appointmentId);
+        tv_status = (TextView) view.findViewById(R.id.tv_appointStatus);
+        tv_doctor = (TextView) view.findViewById(R.id.tv_doctor);
+        tv_appointmentTime = (TextView) view.findViewById(R.id.tv_appointmentTime);
+        tv_description = (TextView) view.findViewById(R.id.tv_description);
         return view;
     }
 
@@ -38,12 +39,19 @@ public class AppointmentHolder extends BaseHolder<AppointmentBean> {
         MyApp context = MyApp.getAppContext();
         tv_doctor.setText(String.format("%s：%s", context.getString(R.string.doctor), bean.doctor_name));
         tv_appointmentId.setText(String.format("%s：%s", context.getString(R.string.appointment_id), bean.appointment_id));
-        tv_description.setText(String.format("%s：%s", context.getString(R.string.disease_description), bean.disease_description.replace("\n","")));
-        if (bean.doctor_dispose == 0){
+        String description = bean.disease_description;
+        if (TextUtils.isEmpty(description))
+            tv_description.setText(String.format("%s：%s", context.getString(R.string.disease_description), context.getString(R.string.empty_content)));
+        else if (description.contains("模板")) {
+            tv_description.setText(description);
+        } else {
+            tv_description.setText(String.format("%s：%s", context.getString(R.string.disease_description), description));
+        }
+        if (bean.doctor_dispose == 0) {
             tv_status.setText(String.format("%s：%s", context.getString(R.string.appointment_status), context.getString(R.string.no_response)));
             tv_status.setTextColor(Color.RED);
-        }else{
-            tv_status.setText(String.format("%s：%s", context.getString(R.string.appointment_status),context.getString(R.string.has_response)));
+        } else {
+            tv_status.setText(String.format("%s：%s", context.getString(R.string.appointment_status), context.getString(R.string.has_response)));
             tv_status.setTextColor(MyApp.getAppContext().getResources().getColor(R.color.colorAccent));
         }
         try {

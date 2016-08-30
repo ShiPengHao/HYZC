@@ -111,8 +111,14 @@ public class AppointDetailActivity extends BaseActivity implements View.OnClickL
 
     private void bindData() {
         tv_appointmentId.setText(String.format("%s：%s", getString(R.string.appointment_id), bean.appointment_id));
-        tv_description.setText(String.format("%s：%s", getString(R.string.disease_description),
-                isEmpty(bean.disease_description) ? getString(R.string.empty_content) : bean.disease_description));
+        String description = bean.disease_description;
+        if (isEmpty(description))
+            tv_description.setText(String.format("%s：%s", getString(R.string.disease_description), getString(R.string.empty_content)));
+        else if(description.contains("模板")){
+            tv_description.setText(description);
+        }else{
+            tv_description.setText(String.format("%s：%s", getString(R.string.disease_description), description));
+        }
         tv_doctor.setText(String.format("%s：%s", getString(R.string.doctor),
                 isEmpty(bean.doctor_name) ? getString(R.string.empty_content) : bean.doctor_name));
         tv_response.setText(String.format("%s：%s", getString(R.string.doctor_response),
@@ -280,6 +286,7 @@ public class AppointDetailActivity extends BaseActivity implements View.OnClickL
 
     /**
      * 请求取消此预约单
+     *
      * @param needJump 取消订单操作成功之后是否继续预约，是true，否false
      */
     private void requestCancelAppointment(final boolean needJump) {
@@ -299,20 +306,20 @@ public class AppointDetailActivity extends BaseActivity implements View.OnClickL
 
             @Override
             protected void onPostExecute(String s) {
-                if (null == s){
+                if (null == s) {
                     return;
                 }
                 try {
-                    if ("ok".equalsIgnoreCase(new JSONObject(s).optString("status"))){
+                    if ("ok".equalsIgnoreCase(new JSONObject(s).optString("status"))) {
                         MyToast.show("操作成功！");
-                        if (needJump){
+                        if (needJump) {
                             startActivity(new Intent(AppointDetailActivity.this, BookingActivity.class));
                             finish();
-                        }else{
-                            setResult(101,new Intent());
+                        } else {
+                            setResult(101, new Intent());
                             finish();
                         }
-                    }else{
+                    } else {
                         MyToast.show(getString(R.string.connect_error));
                     }
                 } catch (Exception e) {

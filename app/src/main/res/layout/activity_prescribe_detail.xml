@@ -35,6 +35,34 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text="@string/prescription_id"
+            android:textColor="@color/black_item_title"
+            android:textSize="18dp" />
+
+        <TextView
+            android:id="@+id/tv_prescription_id"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:text="@string/prescription_id"
+            android:textColor="@color/black_item_content"
+            android:textSize="16dp" />
+    </LinearLayout>
+
+    <include layout="@layout/layout_divider" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:gravity="center_vertical"
+        android:minHeight="@dimen/item_width"
+        android:orientation="horizontal"
+        android:padding="4dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:text="@string/doctor"
             android:textColor="@color/black_item_title"
             android:textSize="18dp" />
