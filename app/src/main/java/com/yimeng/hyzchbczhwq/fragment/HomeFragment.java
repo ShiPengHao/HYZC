@@ -12,7 +12,7 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 import com.yimeng.hyzchbczhwq.R;
-import com.yimeng.hyzchbczhwq.activity.BookingActivity;
+import com.yimeng.hyzchbczhwq.activity.DoctorListActivity;
 import com.yimeng.hyzchbczhwq.activity.WebViewActivity;
 import com.yimeng.hyzchbczhwq.utils.DensityUtil;
 import com.yimeng.hyzchbczhwq.utils.MyToast;
@@ -192,10 +192,12 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.ll_chat:
-                MyToast.show(String.format("%s%s", getString(R.string.chat_online), getString(R.string.fun_undo)));// 在线咨询
+                startActivity(new Intent(getActivity(), DoctorListActivity.class)
+                        .putExtra(DoctorListActivity.EXTRA_CHAT_OR_BOOKING, DoctorListActivity.EXTRA_CHAT));// 在线咨询
                 break;
             case R.id.ll_booking:
-                startActivity(new Intent(getActivity(), BookingActivity.class));// 预约挂号
+                startActivity(new Intent(getActivity(), DoctorListActivity.class)
+                        .putExtra(DoctorListActivity.EXTRA_CHAT_OR_BOOKING, DoctorListActivity.EXTRA_BOOKING));// 预约挂号
                 break;
             case R.id.ll_health:
                 startActivity(new Intent(getActivity(), WebViewActivity.class));// 健康教育

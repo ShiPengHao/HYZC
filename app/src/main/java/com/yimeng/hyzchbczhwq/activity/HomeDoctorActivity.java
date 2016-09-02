@@ -9,9 +9,13 @@ import android.os.Message;
 import android.os.SystemClock;
 import android.view.KeyEvent;
 import android.view.View;
+import android.widget.CompoundButton;
 import android.widget.RelativeLayout;
+import android.widget.ToggleButton;
 
 import com.yimeng.hyzchbczhwq.R;
+import com.yimeng.hyzchbczhwq.huanxin.ConversationListActivity;
+import com.yimeng.hyzchbczhwq.huanxin.PreferenceManager;
 import com.yimeng.hyzchbczhwq.utils.MyConstant;
 import com.yimeng.hyzchbczhwq.utils.MyToast;
 
@@ -27,6 +31,9 @@ public class HomeDoctorActivity extends BaseActivity implements View.OnClickList
     private AlertDialog alertDialog;
     private RelativeLayout rl_account_info;
     private RelativeLayout rl_appointment_history;
+    private RelativeLayout rl_conversation_history;
+    private ToggleButton tb_sound;
+    private ToggleButton tb_vibrate;
 
     @Override
     protected int getLayoutResId() {
@@ -35,20 +42,38 @@ public class HomeDoctorActivity extends BaseActivity implements View.OnClickList
 
     @Override
     protected void initView() {
-        rl_account_info = (RelativeLayout)findViewById(R.id.rl_account_info);
-        rl_appointment_history = (RelativeLayout)findViewById(R.id.rl_appointment_history);
+        rl_account_info = (RelativeLayout) findViewById(R.id.rl_account_info);
+        rl_appointment_history = (RelativeLayout) findViewById(R.id.rl_appointment_history);
+        rl_conversation_history = (RelativeLayout) findViewById(R.id.rl_conversation_history);
+        tb_sound = (ToggleButton) findViewById(R.id.tb_sound);
+        tb_vibrate = (ToggleButton) findViewById(R.id.tb_vibrate);
+        tb_sound.setChecked(PreferenceManager.getInstance().getSettingMsgSound());
+        tb_vibrate.setChecked(PreferenceManager.getInstance().getSettingMsgVibrate());
     }
 
     @Override
     protected void setListener() {
         rl_account_info.setOnClickListener(this);
         rl_appointment_history.setOnClickListener(this);
+        rl_conversation_history.setOnClickListener(this);
+        tb_sound.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                PreferenceManager.getInstance().setSettingMsgSound(isChecked);
+            }
+        });
+        tb_vibrate.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                PreferenceManager.getInstance().setSettingMsgVibrate(isChecked);
+            }
+        });
     }
 
     @Override
     protected void initData() {
         SharedPreferences spAccount = getSharedPreferences(MyConstant.PREFS_ACCOUNT, MODE_PRIVATE);
-        if(spAccount.getBoolean(MyConstant.KEY_ACCOUNT_FIRSTRUNNING,true)) {
+        if (spAccount.getBoolean(MyConstant.KEY_ACCOUNT_FIRSTRUNNING, true)) {
             dealFirstRunningTip();
             spAccount.edit().putBoolean(MyConstant.KEY_ACCOUNT_FIRSTRUNNING, false).apply();// 更新首次运行标志
         }
@@ -58,26 +83,26 @@ public class HomeDoctorActivity extends BaseActivity implements View.OnClickList
      * 首次运行弹框提示
      */
     private void dealFirstRunningTip() {
-        handler = new Handler(){
+        handler = new Handler() {
             @Override
             public void handleMessage(Message msg) {
-                switch (msg.what){
+                switch (msg.what) {
                     case WHAT_SHOW_TIP_DIALOG:
                         showTipDialog();
-                        handler.sendEmptyMessageDelayed(WHAT_DISMISS_TIP_DIALOG,5000);
+                        handler.sendEmptyMessageDelayed(WHAT_DISMISS_TIP_DIALOG, 5000);
                         break;
                     case WHAT_DISMISS_TIP_DIALOG:
                         dismissTipDialog();
                 }
             }
         };
-        handler.sendEmptyMessageDelayed(WHAT_SHOW_TIP_DIALOG,500);
+        handler.sendEmptyMessageDelayed(WHAT_SHOW_TIP_DIALOG, 500);
     }
 
     /**
      * 显示首次运行提示对话框
      */
-    private void showTipDialog(){
+    private void showTipDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         alertDialog = builder.setTitle("欢迎使用华医之春互联网医院")
                 .setMessage("为了节省您的流量，首次运行应用时需要缓存部分必须数据，可能造成微小卡顿，请耐心等待几秒钟即可")
@@ -98,7 +123,7 @@ public class HomeDoctorActivity extends BaseActivity implements View.OnClickList
         if (null != handler) {
             handler.removeMessages(WHAT_DISMISS_TIP_DIALOG);
         }
-        if (null != alertDialog && alertDialog.isShowing()){
+        if (null != alertDialog && alertDialog.isShowing()) {
             alertDialog.dismiss();
         }
     }
@@ -111,12 +136,15 @@ public class HomeDoctorActivity extends BaseActivity implements View.OnClickList
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.rl_appointment_history:
-                startActivity(new Intent(this,AppointHistoryActivity.class));
+                startActivity(new Intent(this, AppointHistoryActivity.class));
                 break;
             case R.id.rl_account_info:
-                startActivity(new Intent(this,AccountInfoActivity.class));
+                startActivity(new Intent(this, AccountInfoActivity.class));
+                break;
+            case R.id.rl_conversation_history:
+                startActivity(new Intent(this, ConversationListActivity.class));
                 break;
         }
     }

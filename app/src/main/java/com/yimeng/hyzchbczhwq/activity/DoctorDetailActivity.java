@@ -15,9 +15,11 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.hyphenate.easeui.EaseConstant;
 import com.squareup.picasso.Picasso;
 import com.yimeng.hyzchbczhwq.R;
 import com.yimeng.hyzchbczhwq.bean.DoctorBean;
+import com.yimeng.hyzchbczhwq.huanxin.ChatActivity;
 import com.yimeng.hyzchbczhwq.utils.DensityUtil;
 import com.yimeng.hyzchbczhwq.utils.KeyBoardUtils;
 import com.yimeng.hyzchbczhwq.utils.MyConstant;
@@ -151,7 +153,7 @@ public class DoctorDetailActivity extends BaseActivity implements View.OnClickLi
                 requestAppoint();
                 break;
             case R.id.bt_chat:
-                MyToast.show(String.format("%s%s", getString(R.string.chat_online), getString(R.string.fun_undo)));
+                startActivity(new Intent(this, ChatActivity.class).putExtra(EaseConstant.EXTRA_USER_ID,"doctor_"+doctorBean.doctor_id));
                 break;
             case R.id.iv_back:
             case R.id.bt_back:
@@ -245,11 +247,11 @@ public class DoctorDetailActivity extends BaseActivity implements View.OnClickLi
     private void requestAppoint() {
 
         String description = et_disease_description.getText().toString().trim();
-        if (TextUtils.isEmpty(description)) {
-            MyToast.show("请填写病情描述");
-            ObjectAnimator.ofFloat(et_disease_description, "translationX", -25, 25, -25, 25, 0).setDuration(500).start();
-            return;
-        }
+//        if (TextUtils.isEmpty(description)) {
+//            MyToast.show("请填写病情描述");
+//            ObjectAnimator.ofFloat(et_disease_description, "translationX", -25, 25, -25, 25, 0).setDuration(500).start();
+//            return;
+//        }
 
         if (TextUtils.isEmpty(module)) {
             MyToast.show("请选择病情模板");

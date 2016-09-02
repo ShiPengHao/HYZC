@@ -2,6 +2,7 @@ package com.yimeng.hyzchbczhwq.utils;
 
 import android.app.Application;
 
+import com.yimeng.hyzchbczhwq.huanxin.HuanXinHelper;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.cookie.CookieJarImpl;
 
@@ -23,6 +24,7 @@ public class MyApp extends Application {
 //        Picasso.setSingletonInstance(Picasso.with(this));
         initHttpUtils();
         initJPush();
+        HuanXinHelper.getInstance().init(this);
     }
 
     /**

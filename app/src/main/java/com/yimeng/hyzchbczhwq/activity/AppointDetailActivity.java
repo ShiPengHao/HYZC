@@ -313,7 +313,7 @@ public class AppointDetailActivity extends BaseActivity implements View.OnClickL
                     if ("ok".equalsIgnoreCase(new JSONObject(s).optString("status"))) {
                         MyToast.show("操作成功！");
                         if (needJump) {
-                            startActivity(new Intent(AppointDetailActivity.this, BookingActivity.class));
+                            startActivity(new Intent(AppointDetailActivity.this, DoctorListActivity.class));
                             finish();
                         } else {
                             setResult(101, new Intent());

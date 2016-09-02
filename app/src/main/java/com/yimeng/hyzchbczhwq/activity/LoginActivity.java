@@ -25,6 +25,8 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RadioGroup;
 
+import com.hyphenate.EMCallBack;
+import com.hyphenate.chat.EMClient;
 import com.yimeng.hyzchbczhwq.R;
 import com.yimeng.hyzchbczhwq.utils.KeyBoardUtils;
 import com.yimeng.hyzchbczhwq.utils.MyApp;
@@ -308,6 +310,9 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
 //                        new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
                         JSONObject object = new JSONObject(result);
                         if ("ok".equalsIgnoreCase(object.optString("status"))) {
+                            String username = object.optString("username");
+                            String password = object.optString("password");
+                            loginHuanXin(username, password);
                             String type = object.optString("type");
                             String id = object.optString("id");
                             setJPushAliasAndTag(type, id);
@@ -334,6 +339,40 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
     }
 
     /**
+     * 登陆成功后登陆环信服务器
+     */
+    private void loginHuanXin(final String username, final String password) {
+        new AsyncTask<Object, Object, Object>() {
+            @Override
+            protected Object doInBackground(Object... params) {
+                try {
+//                    EMClient.getInstance().createAccount(username, password);//同步方法
+                    EMClient.getInstance().login(username, password, new EMCallBack() {//回调
+                        @Override
+                        public void onSuccess() {
+                            EMClient.getInstance().groupManager().loadAllGroups();
+                            EMClient.getInstance().chatManager().loadAllConversations();
+                        }
+
+                        @Override
+                        public void onProgress(int progress, String status) {
+
+                        }
+
+                        @Override
+                        public void onError(int code, String message) {
+                            MyLog.i(getClass(), message);
+                        }
+                    });
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                return null;
+            }
+        }.execute();
+    }
+
+    /**
      * 登陆成功后为本应用用户绑定JPush的别名和标签，别名为账号类型+"+"+id，标签为账号类型，设置成功以后缓存登陆信息，跳转到主页
      */
     private void setJPushAliasAndTag(final String type, final String id) {
@@ -343,7 +382,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
         JPushInterface.setAliasAndTags(MyApp.getAppContext(), alias, tags, new TagAliasCallback() {
             @Override
             public void gotResult(int i, String s, Set<String> set) {
-                if (i != 0 ) {
+                if (i != 0) {
                     MyLog.i("JPush", "set alias and tag error");
 //                    MyToast.show("消息推送设置异常");
                 }
@@ -376,7 +415,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
      * 跳转到主页，根据账号类型判断
      */
     private void goToHome(String type) {
-        finish();
         if (type.equalsIgnoreCase("patient")) {
             startActivity(new Intent(this, HomePatientActivity.class));
         } else if (type.equalsIgnoreCase("doctor")) {
@@ -384,6 +422,13 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
         } else if (type.equalsIgnoreCase("shop")) {
             startActivity(new Intent(this, HomePharmacyActivity.class));
         }
+        et_username.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+
+                finish();
+            }
+        }, 400);
     }
 
     @Override

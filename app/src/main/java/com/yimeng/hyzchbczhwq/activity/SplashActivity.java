@@ -22,7 +22,7 @@ import com.yimeng.hyzchbczhwq.utils.DensityUtil;
 import com.yimeng.hyzchbczhwq.utils.MyApp;
 import com.yimeng.hyzchbczhwq.utils.MyConstant;
 import com.yimeng.hyzchbczhwq.utils.MyLog;
-import com.yimeng.hyzchbczhwq.utils.NetUtils;
+import com.yimeng.hyzchbczhwq.utils.MyNetUtils;
 import com.yimeng.hyzchbczhwq.utils.ThreadUtils;
 import com.yimeng.hyzchbczhwq.utils.WebServiceUtils;
 import com.zhy.http.okhttp.OkHttpUtils;
@@ -77,8 +77,8 @@ public class SplashActivity extends BaseActivity {
             }, 2000);
         } else if (
 //                isAutoUpdate() &&
-                NetUtils.isConnected(this)
-//                        && NetUtils.isWifi(this)
+                MyNetUtils.isConnected(this)
+//                        && MyNetUtils.isWifi(this)
                 ) {
             handler.postDelayed(new Runnable() {
                 @Override
