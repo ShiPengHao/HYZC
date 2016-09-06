@@ -54,7 +54,8 @@
             android:cacheColorHint="@android:color/transparent"
             android:divider="@color/grey_line"
             android:dividerHeight="1dp"
-            android:listSelector="@android:color/transparent"></ListView>
+            android:scrollbars="none"
+            android:listSelector="@android:color/transparent"/>
 
         <TextView
             android:id="@+id/tv_tip"

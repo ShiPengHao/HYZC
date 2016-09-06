@@ -8,155 +8,178 @@
         style="@style/TextTitle"
         android:text="@string/home" />
 
-    <RelativeLayout
+    <ScrollView
+        android:scrollbars="none"
         android:layout_width="match_parent"
-        android:layout_height="200dp">
+        android:layout_height="match_parent"
+        android:background="@color/white">
 
-        <com.yimeng.hyzchbczhwq.view.CycleViewPager
-            android:id="@+id/vp"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-        </com.yimeng.hyzchbczhwq.view.CycleViewPager>
-
-        <TextView
-            android:id="@+id/tv_img_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:paddingBottom="5dp"
-            android:paddingLeft="10dp"
-            android:text="@string/account_info"
-            android:textColor="@color/black_item_title"
-            android:textSize="16dp" />
-
-        <LinearLayout
-            android:id="@+id/ll_points"
-            android:gravity="center_vertical"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentRight="true"
-            android:layout_marginRight="20dp"
-            android:paddingBottom="10dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"></LinearLayout>
-
-    </RelativeLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/white"
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
-        android:padding="10dp">
-
-        <LinearLayout
-            android:id="@+id/ll_booking"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center_horizontal"
+            android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <ImageView
-                android:layout_width="64dp"
-                android:layout_height="64dp"
-                android:scaleType="centerInside"
-                android:src="@mipmap/booking" />
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="200dp">
+
+                <com.yimeng.hyzchbczhwq.view.CycleViewPager
+                    android:id="@+id/vp"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                </com.yimeng.hyzchbczhwq.view.CycleViewPager>
+
+                <TextView
+                    android:id="@+id/tv_img_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:paddingBottom="5dp"
+                    android:paddingLeft="10dp"
+                    android:text="资讯展示"
+                    android:textColor="@color/black_item_title"
+                    android:textSize="16dp" />
+
+                <LinearLayout
+                    android:id="@+id/ll_points"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="20dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingBottom="10dp"></LinearLayout>
+
+            </RelativeLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:padding="10dp">
+
+                <LinearLayout
+                    android:id="@+id/ll_booking"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center_horizontal"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:layout_width="64dp"
+                        android:layout_height="64dp"
+                        android:scaleType="centerInside"
+                        android:src="@mipmap/booking" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/booking"
+                        android:textColor="@color/black_item_content"
+                        android:textSize="20dp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="5dp"
+                        android:text="身体不适 随时问诊"
+                        android:textColor="@color/bg_grey_aaa"
+                        android:textSize="18dp" />
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:background="@color/grey_line" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center_horizontal"
+                    android:orientation="vertical"
+                    android:paddingLeft="10dp">
+
+                    <LinearLayout
+                        android:id="@+id/ll_chat"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:layout_width="48dp"
+                            android:layout_height="48dp"
+                            android:layout_centerVertical="true"
+                            android:scaleType="centerInside"
+                            android:src="@mipmap/chat" />
+
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:text="@string/chat_online"
+                            android:textColor="@color/black_item_content"
+                            android:textSize="20dp" />
+
+
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginBottom="5dp"
+                        android:layout_marginTop="5dp"
+                        android:background="@color/grey_line" />
+
+                    <LinearLayout
+                        android:id="@+id/ll_health"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:layout_width="48dp"
+                            android:layout_height="48dp"
+                            android:layout_centerVertical="true"
+                            android:scaleType="centerInside"
+                            android:src="@mipmap/health" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:text="@string/health"
+                            android:textColor="@color/black_item_content"
+                            android:textSize="20dp" />
+
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </LinearLayout>
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/booking"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/white"
+                android:lineSpacingMultiplier="1.2"
+                android:textAlignment="inherit"
+                android:padding="8dp"
+                android:text="【康复大厅】吴桥县中西医结合医院康复疼痛科，利用针灸，拔罐，艾灸，推拿按摩，远红外线理疗，磁疗，腊疗等传统中医技术，结合现代医学治疗设备，利用【内热成像检查仪】【骨密度检测仪】【骨质疏松治疗仪】【中药四肢薰蒸仪】【热磁恒波治疗仪】以及射频消融，臭氧，椎间孔镜技术，为颈肩腰腿疼的患者解除病痛！吴桥县中西医结合医院设置康复大厅，疼痛门诊，康复疼痛住院病区，欢迎预约就诊！电话0317--8323530"
                 android:textColor="@color/black_item_content"
-                android:textSize="20dp" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingTop="5dp"
-                android:text="身体不适 随时问诊"
-                android:textColor="@color/bg_grey_aaa"
-                android:textSize="18dp" />
-
+                android:textSize="16dp" />
         </LinearLayout>
-
-        <View
-            android:layout_width="1dp"
-            android:layout_height="match_parent"
-            android:background="@color/grey_line" />
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center_horizontal"
-            android:orientation="vertical"
-            android:paddingLeft="10dp">
-
-            <LinearLayout
-                android:id="@+id/ll_chat"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
-
-                <ImageView
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
-                    android:layout_centerVertical="true"
-                    android:scaleType="centerInside"
-                    android:src="@mipmap/chat" />
-
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:text="@string/chat_online"
-                    android:textColor="@color/black_item_content"
-                    android:textSize="20dp" />
-
-
-            </LinearLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginBottom="5dp"
-                android:layout_marginTop="5dp"
-                android:background="@color/grey_line" />
-
-            <LinearLayout
-                android:id="@+id/ll_health"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
-
-                <ImageView
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
-                    android:layout_centerVertical="true"
-                    android:scaleType="centerInside"
-                    android:src="@mipmap/health" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:text="@string/health"
-                    android:textColor="@color/black_item_content"
-                    android:textSize="20dp" />
-
-
-            </LinearLayout>
-
-        </LinearLayout>
-
-    </LinearLayout>
-
+    </ScrollView>
 </LinearLayout>

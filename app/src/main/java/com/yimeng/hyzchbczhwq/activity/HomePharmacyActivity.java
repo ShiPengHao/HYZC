@@ -75,7 +75,7 @@ public class HomePharmacyActivity extends BaseActivity implements View.OnClickLi
         if (spAccount.getBoolean(MyConstant.KEY_ACCOUNT_FIRSTRUNNING, true)) {
             spAccount.edit().putBoolean(MyConstant.KEY_ACCOUNT_FIRSTRUNNING, false).apply();
         }
-
+        // recipe_flag取药标志，0未取，1已取
         PrescriptionListFragment fragment1 = new PrescriptionListFragment();
         Bundle bundle1 = new Bundle();
         bundle1.putInt("recipe_flag", 0);

@@ -16,6 +16,7 @@ import android.os.Message;
 import android.text.TextUtils;
 import android.widget.ImageView;
 
+import com.hyphenate.util.TextFormater;
 import com.yimeng.hyzchbczhwq.R;
 import com.yimeng.hyzchbczhwq.utils.BitmapUtils;
 import com.yimeng.hyzchbczhwq.utils.DensityUtil;
@@ -267,9 +268,8 @@ public class SplashActivity extends BaseActivity {
      * 弹出一个对话框，提示用户更新，如果更新，则下载新版本，不更新则跳到登陆页面
      */
     private void showUpdateDialog() {
-        // 限制对话框取消动作
         updateDialog = new AlertDialog.Builder(SplashActivity.this).setTitle("技术同学又出新版本啦!")
-                .setMessage("现在更新？")
+                .setMessage("新版本安装包大小为" + TextFormater.getDataSize(apkSize) + "，现在更新？")
                 // 限制对话框取消动作
                 .setCancelable(false)
                 .setPositiveButton("我要！", new DialogInterface.OnClickListener() {
@@ -311,14 +311,9 @@ public class SplashActivity extends BaseActivity {
             }
 
             @Override
-            public void inProgress(final float progress, long total, int id) {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (progressDialog != null && progressDialog.isShowing() && progress < apkSize)
-                            progressDialog.setProgress((int) progress);
-                    }
-                });
+            public void inProgress(float progress, long total, int id) {
+                if (progressDialog != null && progressDialog.isShowing())
+                    progressDialog.setProgress(-(int) progress);
             }
 
             @Override

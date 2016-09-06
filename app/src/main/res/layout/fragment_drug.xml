@@ -21,13 +21,12 @@
         <com.yimeng.hyzchbczhwq.view.ClearEditText
             android:id="@+id/cet"
             android:layout_width="match_parent"
-            android:layout_height="40dp"
+            android:layout_height="wrap_content"
+            android:minHeight="@dimen/item_width"
             android:drawableLeft="@mipmap/menu_search"
             android:drawablePadding="8dp"
             android:drawableRight="@mipmap/delete_xxx"
-            android:ellipsize="end"
             android:hint="@string/hint_search"
-            android:maxLines="1"
             android:paddingLeft="8dp"
             android:paddingRight="12dp"
             android:textColor="@color/black_item_content" />
@@ -42,7 +41,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:divider="@color/grey_line"
-            android:dividerHeight="1dp"></ListView>
+            android:dividerHeight="1dp"/>
 
         <com.yimeng.hyzchbczhwq.view.QuickIndexBar
             android:id="@+id/quickindexbar"

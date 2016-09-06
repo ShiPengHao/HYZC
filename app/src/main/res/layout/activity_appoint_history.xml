@@ -2,8 +2,7 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/grey"
-    >
+    android:background="@color/grey">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -28,20 +27,91 @@
                 android:src="@mipmap/back" />
         </RelativeLayout>
 
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white">
+
+            <com.yimeng.hyzchbczhwq.view.ClearEditText
+                android:id="@+id/cet"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:drawablePadding="8dp"
+                android:drawableRight="@mipmap/delete_xxx"
+                android:ellipsize="end"
+                android:hint="输入医生姓名"
+                android:maxLines="1"
+                android:minHeight="@dimen/finger_width"
+                android:paddingLeft="18dp"
+                android:paddingRight="12dp"
+                android:textColor="@color/colorAccent"
+                android:textColorHint="@color/colorAccent" />
+        </FrameLayout>
+
+
+        <LinearLayout
+            android:layout_marginTop="4dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:gravity="center_vertical"
+            android:minHeight="@dimen/finger_width"
+            android:orientation="horizontal"
+            android:paddingLeft="4dp">
+
+            <CheckBox
+                android:id="@+id/cb_time_limit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:paddingLeft="4dp"
+                android:paddingRight="4dp"
+                android:text="限定日期:"
+                android:textColor="@color/black_item_title"
+                android:textSize="16dp" />
+
+            <TextView
+                android:id="@+id/tv_time_start"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingLeft="2dp"
+                android:paddingRight="2dp"
+                android:text="起始日期"
+                android:textColor="@color/colorAccent"
+                android:textSize="16dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingLeft="2dp"
+                android:paddingRight="2dp"
+                android:text="到"
+                android:textColor="@color/black_item_title"
+                android:textSize="16dp" />
+
+            <TextView
+                android:id="@+id/tv_time_end"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingLeft="2dp"
+                android:text="结束日期"
+                android:textColor="@color/colorAccent"
+                android:textSize="16dp" />
+
+        </LinearLayout>
 
         <com.yimeng.hyzchbczhwq.view.PullDownToRefreshListView
-            android:paddingLeft="8dp"
-            android:paddingRight="8dp"
-            android:paddingTop="4dp"
             android:id="@+id/lv"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
             android:cacheColorHint="@android:color/transparent"
-            android:scrollbars="none"
             android:divider="@null"
             android:dividerHeight="8dp"
-            android:listSelector="@android:color/transparent"></com.yimeng.hyzchbczhwq.view.PullDownToRefreshListView>
+            android:listSelector="@android:color/transparent"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:scrollbars="none"></com.yimeng.hyzchbczhwq.view.PullDownToRefreshListView>
     </LinearLayout>
 
 </FrameLayout>

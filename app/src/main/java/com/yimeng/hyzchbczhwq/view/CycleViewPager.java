@@ -11,12 +11,12 @@ import android.view.View;
 import android.view.ViewGroup;
 
 /**
- * 无限轮播ViewPager，可以设置轮播间隔时间和每个条目的点击事件，可以手动控制自动轮播的开始和停止，默认自动轮播
+ * 无限轮播ViewPager，可以设置轮播间隔时间和每个条目的点击事件，可以手动控制自动轮播的开始和停止，默认设置完适配器之后开始自动轮播
  */
 public class CycleViewPager extends ViewPager {
 
     private static final int WHAT_ROLL = 0;
-    private static final int DURATION_DEFAULT = 1000;// 轮播间隔默认1s
+    private static final int DURATION_DEFAULT = 2000;// 轮播间隔默认2s
     private int duration = DURATION_DEFAULT;
     /**
      * 包装外部adapter的adapter
@@ -86,7 +86,7 @@ public class CycleViewPager extends ViewPager {
             switch (msg.what) {
                 case WHAT_ROLL:
                     if (innerPagerAdapter != null && innerPagerAdapter.getCount() > 2) {
-                        setCurrentItem(position++);
+                        setCurrentItem(position + 1);
                     }
                     handler.sendEmptyMessageDelayed(WHAT_ROLL, duration);
             }
@@ -234,6 +234,13 @@ public class CycleViewPager extends ViewPager {
      * 适配器包装类，主要处理轮播图的pager视图修正
      */
     private class InnerPagerAdapter extends PagerAdapter {
+
+        @Override
+        public void notifyDataSetChanged() {
+            super.notifyDataSetChanged();
+            setCurrentItem(1);
+            startRoll();
+        }
 
         private PagerAdapter outerAdapter;
 

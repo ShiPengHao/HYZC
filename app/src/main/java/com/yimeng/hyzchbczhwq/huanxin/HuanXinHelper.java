@@ -673,7 +673,7 @@ public class HuanXinHelper {
      */
     protected void onConnectionConflict() {
         MyToast.show("user has logged into another device");
-
+//TODO 单点登录的处理
 //        Intent intent = new Intent(appContext, ChatActivity.class);
 //        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 //        intent.putExtra(Constant.ACCOUNT_CONFLICT, true);

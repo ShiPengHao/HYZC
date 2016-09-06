@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/grey"
+    android:background="@color/white"
     android:orientation="vertical">
 
     <RelativeLayout
@@ -30,79 +30,88 @@
         android:fillViewport="true">
 
         <LinearLayout
+            android:paddingLeft="2dp"
+            android:paddingRight="2dp"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <FrameLayout
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/bg_light_green"
+                android:gravity="center_vertical"
                 android:padding="8dp">
 
                 <com.yimeng.hyzchbczhwq.view.CircleImageView
                     android:id="@+id/iv_avatar"
                     android:layout_width="96dp"
                     android:layout_height="96dp"
-                    android:layout_gravity="center_horizontal"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="10dp"
                     android:src="@mipmap/ic_launcher"
                     app:civ_border_color="@color/colorAccent"
                     app:civ_border_width="2dp" />
-            </FrameLayout>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:paddingLeft="8dp"
-                android:paddingRight="8dp">
+                <LinearLayout
+                    android:layout_centerVertical="true"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_toRightOf="@id/iv_avatar"
+                    android:orientation="vertical"
+                    android:paddingLeft="8dp"
+                    android:paddingRight="8dp">
 
-                <TextView
-                    android:id="@+id/tv_name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="@dimen/item_width"
-                    android:gravity="center_vertical"
-                    android:padding="2dp"
-                    android:text="@string/name"
-                    android:textColor="@color/black_item_content"
-                    android:textSize="18dp" />
+                    <TextView
+                        android:id="@+id/tv_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="@dimen/item_width"
+                        android:gravity="center_vertical"
+                        android:padding="2dp"
+                        android:text="@string/name"
+                        android:textColor="@color/black_item_content"
+                        android:textSize="16dp" />
 
-                <include layout="@layout/layout_divider" />
+                    <include layout="@layout/layout_divider" />
 
-                <TextView
-                    android:id="@+id/tv_sex"
-                    android:layout_width="wrap_content"
-                    android:layout_height="@dimen/item_width"
-                    android:gravity="center_vertical"
-                    android:padding="2dp"
-                    android:text="@string/sex"
-                    android:textColor="@color/black_item_content"
-                    android:textSize="18dp" />
+                    <TextView
+                        android:id="@+id/tv_sex"
+                        android:layout_width="wrap_content"
+                        android:layout_height="@dimen/item_width"
+                        android:gravity="center_vertical"
+                        android:padding="2dp"
+                        android:text="@string/sex"
+                        android:textColor="@color/black_item_content"
+                        android:textSize="16dp" />
 
-                <include layout="@layout/layout_divider" />
+                    <include layout="@layout/layout_divider" />
 
-                <TextView
-                    android:id="@+id/tv_age"
-                    android:layout_width="wrap_content"
-                    android:layout_height="@dimen/item_width"
-                    android:gravity="center_vertical"
-                    android:padding="2dp"
-                    android:text="@string/age"
-                    android:textColor="@color/black_item_content"
-                    android:textSize="18dp" />
+                    <TextView
+                        android:id="@+id/tv_age"
+                        android:layout_width="wrap_content"
+                        android:layout_height="@dimen/item_width"
+                        android:gravity="center_vertical"
+                        android:padding="2dp"
+                        android:text="@string/age"
+                        android:textColor="@color/black_item_content"
+                        android:textSize="16dp" />
+                </LinearLayout>
+            </RelativeLayout>
 
-                <include layout="@layout/layout_divider" />
+            <include layout="@layout/layout_divider" />
 
-                <TextView
-                    android:id="@+id/tv_email"
-                    android:layout_width="wrap_content"
-                    android:layout_height="@dimen/item_width"
-                    android:gravity="center_vertical"
-                    android:padding="2dp"
-                    android:text="@string/email"
-                    android:textColor="@color/black_item_content"
-                    android:textSize="18dp" />
-            </LinearLayout>
+
+            <TextView
+                android:id="@+id/tv_email"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/item_width"
+                android:gravity="center_vertical"
+                android:padding="2dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:text="@string/email"
+                android:textColor="@color/black_item_content"
+                android:textSize="18dp" />
 
             <include layout="@layout/layout_divider" />
 
@@ -155,14 +164,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
-                android:paddingLeft="8dp"
-                android:paddingRight="8dp">
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp">
 
                 <TextView
                     android:id="@+id/tv_appointment_date"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:drawableRight="@mipmap/next"
+                    android:drawableRight="@mipmap/r_arrow"
                     android:gravity="center_vertical"
                     android:minHeight="@dimen/item_width"
                     android:text="@string/appointment_date"
@@ -177,11 +186,11 @@
                 android:id="@+id/tv_disease_description"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:drawableRight="@mipmap/next"
+                android:drawableRight="@mipmap/r_arrow"
                 android:gravity="center_vertical"
                 android:minHeight="@dimen/item_width"
-                android:paddingLeft="8dp"
-                android:paddingRight="8dp"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
                 android:text="@string/disease_description_module"
                 android:textColor="@color/black_item_content"
                 android:textSize="18dp" />
@@ -192,8 +201,9 @@
                 android:id="@+id/et_disease_description"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingLeft="8dp"
                 android:hint="@string/disease_description_hint"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
                 android:textColor="@color/black_item_content"
                 android:textSize="16dp" />
 
