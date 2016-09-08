@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingLeft="4dp"
+    android:paddingRight="4dp"
+    android:paddingTop="10dp">
+
+    <EditText
+        android:textColor="@color/black_item_content"
+        android:id="@+id/et_adjust"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="请填写您的评价意见"
+        android:lineSpacingMultiplier="1.1" />
+
+    <LinearLayout
+        android:layout_marginTop="6dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <RatingBar
+            android:id="@+id/rating_bar"
+            style="@style/myRatingBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:numStars="5"
+            android:rating="4"
+            android:stepSize="1" />
+
+        <TextView
+            android:id="@+id/tv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="4"
+            android:textColor="@color/colorAccent"
+            android:textSize="18dp" />
+    </LinearLayout>
+
+</LinearLayout>

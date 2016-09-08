@@ -13,10 +13,13 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RatingBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 import com.yimeng.hyzchbczhwq.R;
+import com.yimeng.hyzchbczhwq.bean.CommentBean;
 import com.yimeng.hyzchbczhwq.bean.DoctorBean;
 import com.yimeng.hyzchbczhwq.bean.PatientBean;
 import com.yimeng.hyzchbczhwq.utils.BitmapUtils;
@@ -66,6 +69,9 @@ public class AccountInfoActivity extends BaseActivity implements View.OnClickLis
     private HashMap<String, Object> values = new HashMap<>();
     private String limit;
     private DoctorBean doctorBean;
+    private RatingBar rating_bar;
+    private RelativeLayout rl_score;
+    private String id;
 
 
     @Override
@@ -93,6 +99,9 @@ public class AccountInfoActivity extends BaseActivity implements View.OnClickLis
         ll_isOrder = (LinearLayout) findViewById(R.id.ll_isOrder);
         ll_limit = (LinearLayout) findViewById(R.id.ll_limit);
         ll_introduce = (LinearLayout) findViewById(R.id.ll_introduce);
+        rl_score = (RelativeLayout) findViewById(R.id.rl_score);
+
+        rating_bar = (RatingBar) findViewById(R.id.rating_bar);
     }
 
     @Override
@@ -107,7 +116,7 @@ public class AccountInfoActivity extends BaseActivity implements View.OnClickLis
     @Override
     protected void initData() {
         SharedPreferences spAccount = getSharedPreferences(MyConstant.PREFS_ACCOUNT, MODE_PRIVATE);
-        String id = spAccount.getString(MyConstant.KEY_ACCOUNT_LAST_ID, "");
+        id = spAccount.getString(MyConstant.KEY_ACCOUNT_LAST_ID, "");
         type = spAccount.getString(MyConstant.KEY_ACCOUNT_LAST_TYPE, "");
         if (TextUtils.isEmpty(id) || TextUtils.isEmpty(type)) {
             MyToast.show("账号异常，请重新登陆再试");
@@ -121,9 +130,30 @@ public class AccountInfoActivity extends BaseActivity implements View.OnClickLis
         } else if (type.equalsIgnoreCase("doctor")) {
             ll_isOrder.setVisibility(View.VISIBLE);
             ll_introduce.setVisibility(View.VISIBLE);
+            rl_score.setVisibility(View.VISIBLE);
+            rl_score.setOnClickListener(this);
             values.put("doctor_id", id);
             requestInfo("Get_Doctor_Msg", values);
+            requestCommentScore();
         }
+    }
+
+    /**
+     * 根据医生id获取这个医生的满意度平均分
+     */
+    private void requestCommentScore() {
+        values.clear();
+        values.put("doctor_id", id);
+        new SoapAsyncTask() {
+            @Override
+            protected void onPostExecute(String s) {
+                try {
+                    rating_bar.setRating(new JSONObject(s).optInt("AVG"));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }.execute("get_doctor_AVG", values);
     }
 
     @Override
@@ -206,6 +236,7 @@ public class AccountInfoActivity extends BaseActivity implements View.OnClickLis
      */
     private void bindDoctorData() {
         avatarUrl = doctorBean.doctor_avatar;
+//        rating_bar.setRating();
         et_name.setText(doctorBean.doctor_name);
         et_age.setText(isEmpty(doctorBean.doctor_age) ? getString(R.string.empty_content) : doctorBean.doctor_age);
         et_wechat.setText(isEmpty(doctorBean.doctor_WeChat) ? getString(R.string.empty_content) : doctorBean.doctor_WeChat);
@@ -249,6 +280,9 @@ public class AccountInfoActivity extends BaseActivity implements View.OnClickLis
                 break;
             case R.id.iv_avatar:
                 PickImageUtils.getGalleryImage(this, REQUEST_GALLERY_FOR_AVATAR);
+                break;
+            case R.id.rl_score:
+                startActivity(new Intent(this,DoctorScoreDetailActivity.class).putExtra("doctor",doctorBean));
                 break;
         }
     }

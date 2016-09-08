@@ -13,6 +13,7 @@ import android.view.WindowManager;
 
 import com.google.gson.Gson;
 import com.yimeng.hyzchbczhwq.R;
+import com.yimeng.hyzchbczhwq.utils.MyApp;
 import com.yimeng.hyzchbczhwq.utils.MyConstant;
 import com.yimeng.hyzchbczhwq.utils.WebServiceUtils;
 
@@ -49,6 +50,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        MyApp.getAppContext().addActivity(this);
         if (context == null) {
             context = this;
         }

@@ -30,11 +30,11 @@
         android:fillViewport="true">
 
         <LinearLayout
-            android:paddingLeft="2dp"
-            android:paddingRight="2dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:paddingLeft="2dp"
+            android:paddingRight="2dp">
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -53,9 +53,9 @@
                     app:civ_border_width="2dp" />
 
                 <LinearLayout
-                    android:layout_centerVertical="true"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
                     android:layout_marginLeft="10dp"
                     android:layout_toRightOf="@id/iv_avatar"
                     android:orientation="vertical"
@@ -100,15 +100,55 @@
 
             <include layout="@layout/layout_divider" />
 
+            <RelativeLayout
+                android:id="@+id/rl_score"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="@dimen/item_width"
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp">
+
+                <TextView
+                    android:id="@+id/tv_score"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:padding="2dp"
+                    android:text="满意度"
+                    android:textColor="@color/black_item_content"
+                    android:textSize="18dp" />
+
+                <RatingBar
+                    android:id="@+id/rating_bar"
+                    style="@style/mySmallRatingBar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="8dp"
+                    android:layout_toRightOf="@id/tv_score"
+                    android:numStars="5"
+                    android:rating="4"
+                    android:stepSize="1" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:src="@mipmap/r_arrow" />
+            </RelativeLayout>
+
+            <include layout="@layout/layout_divider" />
+
 
             <TextView
                 android:id="@+id/tv_email"
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/item_width"
-                android:gravity="center_vertical"
-                android:padding="2dp"
                 android:layout_marginLeft="8dp"
                 android:layout_marginRight="8dp"
+                android:gravity="center_vertical"
+                android:padding="2dp"
                 android:text="@string/email"
                 android:textColor="@color/black_item_content"
                 android:textSize="18dp" />

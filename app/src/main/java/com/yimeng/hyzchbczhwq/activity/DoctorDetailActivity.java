@@ -13,6 +13,8 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RatingBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.hyphenate.easeui.EaseConstant;
@@ -62,6 +64,8 @@ public class DoctorDetailActivity extends BaseActivity implements View.OnClickLi
     private TextView tv_wechat;
     private TextView tv_disease_description;
     private String module;
+    private RatingBar rating_bar;
+    private RelativeLayout rl_score;
     //    private NumberPicker timePicker;
 
     @Override
@@ -90,6 +94,9 @@ public class DoctorDetailActivity extends BaseActivity implements View.OnClickLi
         tv_wechat = (TextView) findViewById(R.id.tv_wechat);
         tv_disease_description = (TextView) findViewById(R.id.tv_disease_description);
         tv_appointment_date = (TextView) findViewById(R.id.tv_appointment_date);
+
+        rating_bar = (RatingBar) findViewById(R.id.rating_bar);
+        rl_score = (RelativeLayout) findViewById(R.id.rl_score);
     }
 
     @Override
@@ -97,9 +104,28 @@ public class DoctorDetailActivity extends BaseActivity implements View.OnClickLi
         bt_appoint.setOnClickListener(this);
         bt_chat.setOnClickListener(this);
         bt_back.setOnClickListener(this);
+        rl_score.setOnClickListener(this);
         ll_choose_date.setOnClickListener(this);
         iv_back.setOnClickListener(this);
         tv_disease_description.setOnClickListener(this);
+    }
+
+    /**
+     * 根据医生id获取这个医生的满意度平均分
+     */
+    private void requestCommentScore() {
+        HashMap<String,Object> values = new HashMap<>();
+        values.put("doctor_id", doctorBean.doctor_id);
+        new SoapAsyncTask() {
+            @Override
+            protected void onPostExecute(String s) {
+                try {
+                    rating_bar.setRating(new JSONObject(s).optInt("AVG"));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }.execute("get_doctor_AVG", values);
     }
 
     @Override
@@ -111,6 +137,7 @@ public class DoctorDetailActivity extends BaseActivity implements View.OnClickLi
         if (null == doctorBean) {
             return;
         }
+        requestCommentScore();
         tv_name.setText(String.format("%s：%s", getString(R.string.name),
                 isEmpty(doctorBean.doctor_name) ? getString(R.string.empty_content) : doctorBean.doctor_name));
         tv_sex.setText(String.format("%s：%s", getString(R.string.sex),
@@ -153,7 +180,7 @@ public class DoctorDetailActivity extends BaseActivity implements View.OnClickLi
                 requestAppoint();
                 break;
             case R.id.bt_chat:
-                startActivity(new Intent(this, ChatActivity.class).putExtra(EaseConstant.EXTRA_USER_ID,"doctor_"+doctorBean.doctor_id));
+                startActivity(new Intent(this, ChatActivity.class).putExtra(EaseConstant.EXTRA_USER_ID, "doctor_" + doctorBean.doctor_id));
                 break;
             case R.id.iv_back:
             case R.id.bt_back:
@@ -164,6 +191,9 @@ public class DoctorDetailActivity extends BaseActivity implements View.OnClickLi
                 break;
             case R.id.tv_disease_description:
                 pickDiseaseModule();
+                break;
+            case R.id.rl_score:
+                startActivity(new Intent(this, DoctorScoreDetailActivity.class).putExtra("doctor", doctorBean));
                 break;
         }
     }
@@ -318,4 +348,5 @@ public class DoctorDetailActivity extends BaseActivity implements View.OnClickLi
                 })
                 .show();
     }
+
 }

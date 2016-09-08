@@ -316,6 +316,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
                             String type = object.optString("type");
                             String id = object.optString("id");
                             setJPushAliasAndTag(type, id);
+                            dismissLoginDialog();
+                            saveAccountInfo(type, id);
                         } else {
                             MyToast.show(object.optString("msg"));
                             dismissLoginDialog();
@@ -386,8 +388,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
                     MyLog.i("JPush", "set alias and tag error");
 //                    MyToast.show("消息推送设置异常");
                 }
-                dismissLoginDialog();
-                saveAccountInfo(type, id);
             }
         });
     }

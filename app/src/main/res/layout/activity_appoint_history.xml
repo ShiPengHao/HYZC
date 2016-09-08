@@ -100,6 +100,8 @@
 
         </LinearLayout>
 
+        <include layout="@layout/layout_divider"/>
+
         <com.yimeng.hyzchbczhwq.view.PullDownToRefreshListView
             android:id="@+id/lv"
             android:layout_width="match_parent"
@@ -111,7 +113,7 @@
             android:listSelector="@android:color/transparent"
             android:paddingLeft="8dp"
             android:paddingRight="8dp"
-            android:scrollbars="none"></com.yimeng.hyzchbczhwq.view.PullDownToRefreshListView>
+            android:scrollbars="none"/>
     </LinearLayout>
 
 </FrameLayout>

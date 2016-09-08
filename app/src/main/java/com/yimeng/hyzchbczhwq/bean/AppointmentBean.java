@@ -28,11 +28,14 @@ public class AppointmentBean implements Serializable {
     public String doctor_name;
     public int appointment_id;
     public String disease_description;
+    public String select_doctor_id;
+    public String patient_id;
     public int doctor_dispose;
     public String doctor_Responses;
     public String doctor_Responses_time;
     public String doctor_Way;
     public int IsPrescribe;
+    public int is_comment;
     public String patient_name;
     public String patient_sex;
     public String patient_age;

@@ -25,6 +25,15 @@
         <item name="android:textColor">@color/black</item>
     </style>
 
+    <style name="mySmallRatingBar" parent="@android:style/Widget.Holo.RatingBar.Small">
+        <item name="android:progressDrawable">@drawable/progress_ratingbar_small</item>
+        <item name="android:minHeight">18dp</item>
+        <item name="android:maxHeight">18dp</item>
+    </style>
 
-
+    <style name="myRatingBar" parent="@android:style/Widget.RatingBar">
+        <item name="android:progressDrawable">@drawable/progress_ratingbar</item>
+        <item name="android:minHeight">36dp</item>
+        <item name="android:maxHeight">36dp</item>
+    </style>
 </resources>

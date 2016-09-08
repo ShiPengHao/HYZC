@@ -107,6 +107,43 @@
                         android:textSize="18dp" />
                 </LinearLayout>
 
+                <include layout="@layout/layout_divider" />
+
+                <RelativeLayout
+                    android:id="@+id/rl_score"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:minHeight="@dimen/item_width"
+                    android:paddingRight="8dp">
+
+                    <TextView
+                        android:id="@+id/tv_score"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:text="满意度"
+                        android:textColor="@color/black_item_title"
+                        android:textSize="18dp" />
+
+                    <RatingBar
+                        android:id="@+id/rating_bar"
+                        style="@style/mySmallRatingBar"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="8dp"
+                        android:layout_toRightOf="@id/tv_score"
+                        android:numStars="5"
+                        android:rating="4"
+                        android:stepSize="1" />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:src="@mipmap/r_arrow" />
+                </RelativeLayout>
 
                 <include layout="@layout/layout_divider" />
 
@@ -114,6 +151,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/item_width"
                     android:gravity="center_vertical"
+                    android:paddingRight="8dp"
                     android:orientation="horizontal">
 
                     <TextView
@@ -124,11 +162,12 @@
                         android:textSize="18dp" />
 
                     <TextView
+
                         android:id="@+id/tv_sex"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/item_width"
                         android:layout_marginLeft="10dp"
-                        android:drawableRight="@mipmap/next"
+                        android:drawableRight="@mipmap/r_arrow"
                         android:gravity="center_vertical"
                         android:padding="2dp"
                         android:text="@string/sex"
@@ -255,6 +294,7 @@
                 <include layout="@layout/layout_divider" />
 
                 <LinearLayout
+                    android:paddingRight="8dp"
                     android:id="@+id/ll_isOrder"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/item_width"
@@ -274,7 +314,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/item_width"
                         android:layout_marginLeft="10dp"
-                        android:drawableRight="@mipmap/next"
+                        android:drawableRight="@mipmap/r_arrow"
                         android:gravity="center_vertical"
                         android:padding="2dp"
                         android:text="@string/isOrder"

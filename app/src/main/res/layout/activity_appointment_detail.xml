@@ -132,6 +132,48 @@
 
             <include layout="@layout/layout_divider" />
 
+            <RelativeLayout
+                android:id="@+id/rl_score"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="@dimen/item_width"
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp">
+
+                <TextView
+                    android:id="@+id/tv_score"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:padding="2dp"
+                    android:text="@string/doctor_score"
+                    android:textColor="@color/black_item_content"
+                    android:textSize="16dp" />
+
+                <RatingBar
+                    android:id="@+id/rating_bar"
+                    style="@style/mySmallRatingBar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="8dp"
+                    android:layout_toRightOf="@id/tv_score"
+                    android:numStars="5"
+                    android:rating="0"
+                    android:stepSize="1" />
+
+                <ImageView
+                    android:id="@+id/iv_comment_indicator"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:src="@mipmap/r_arrow"
+                    android:visibility="gone" />
+            </RelativeLayout>
+
+            <include layout="@layout/layout_divider" />
+
             <TextView
                 android:id="@+id/tv_response"
                 android:layout_width="match_parent"
@@ -229,32 +271,39 @@
                 android:text="@string/phone"
                 android:textColor="@color/black_item_content"
                 android:textSize="16dp" />
+
             <include layout="@layout/layout_divider" />
         </LinearLayout>
     </ScrollView>
+
     <Button
         android:id="@+id/bt_cancel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorAccent"
         android:text="@string/cancel_appointment"
-        android:textSize="18dp"
         android:textColor="@color/white"
-        android:background="@color/colorAccent"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:textSize="18dp" />
+
+
     <Button
-        android:visibility="gone"
         android:id="@+id/bt_prescription"
-        android:text="@string/prescribe_detail"
-        android:textSize="18dp"
-        android:textColor="@color/white"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
         android:background="@color/colorAccent"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:text="@string/prescribe_detail"
+        android:textColor="@color/white"
+        android:textSize="18dp"
+        android:visibility="gone" />
+
+
     <Button
         android:id="@+id/bt_response"
-        android:text="@string/doctor_response"
-        android:textSize="18dp"
-        android:textColor="@color/white"
-        android:background="@color/colorAccent"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:background="@color/colorAccent"
+        android:text="@string/doctor_response"
+        android:textColor="@color/white"
+        android:textSize="18dp" />
 </LinearLayout>
