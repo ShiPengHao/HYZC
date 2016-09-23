@@ -28,6 +28,7 @@ import com.yimeng.hyzchbczhwq.utils.MyConstant;
 import com.yimeng.hyzchbczhwq.utils.MyToast;
 import com.yimeng.hyzchbczhwq.utils.WebServiceUtils;
 
+
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -63,6 +64,7 @@ public class DoctorDetailActivity extends BaseActivity implements View.OnClickLi
     private TextView tv_phone;
     private TextView tv_wechat;
     private TextView tv_disease_description;
+    private TextView tv_doctor_title;
     private String module;
     private RatingBar rating_bar;
     private RelativeLayout rl_score;
@@ -94,6 +96,7 @@ public class DoctorDetailActivity extends BaseActivity implements View.OnClickLi
         tv_wechat = (TextView) findViewById(R.id.tv_wechat);
         tv_disease_description = (TextView) findViewById(R.id.tv_disease_description);
         tv_appointment_date = (TextView) findViewById(R.id.tv_appointment_date);
+        tv_doctor_title = (TextView) findViewById(R.id.tv_doctor_title);
 
         rating_bar = (RatingBar) findViewById(R.id.rating_bar);
         rl_score = (RelativeLayout) findViewById(R.id.rl_score);
@@ -114,7 +117,7 @@ public class DoctorDetailActivity extends BaseActivity implements View.OnClickLi
      * 根据医生id获取这个医生的满意度平均分
      */
     private void requestCommentScore() {
-        HashMap<String,Object> values = new HashMap<>();
+        HashMap<String, Object> values = new HashMap<>();
         values.put("doctor_id", doctorBean.doctor_id);
         new SoapAsyncTask() {
             @Override
@@ -138,6 +141,25 @@ public class DoctorDetailActivity extends BaseActivity implements View.OnClickLi
             return;
         }
         requestCommentScore();
+        String doctorTitle = context.getString(R.string.general_doctor);
+        switch (doctorBean.doctor_title) {
+            case 0:
+                doctorTitle = context.getString(R.string.village_doctor);
+                break;
+            case 1:
+                doctorTitle = context.getString(R.string.general_doctor);
+                break;
+            case 2:
+                doctorTitle = context.getString(R.string.chief_doctor);
+                break;
+            case 3:
+                doctorTitle = context.getString(R.string.vice_director_doctor);
+                break;
+            case 4:
+                doctorTitle = context.getString(R.string.director_doctor);
+                break;
+        }
+        tv_doctor_title.setText(String.format("%s：%s", getString(R.string.doctor_title), doctorTitle));
         tv_name.setText(String.format("%s：%s", getString(R.string.name),
                 isEmpty(doctorBean.doctor_name) ? getString(R.string.empty_content) : doctorBean.doctor_name));
         tv_sex.setText(String.format("%s：%s", getString(R.string.sex),
@@ -202,7 +224,7 @@ public class DoctorDetailActivity extends BaseActivity implements View.OnClickLi
      * 选择疾病描述模板
      */
     private void pickDiseaseModule() {
-        startActivityForResult(new Intent(this, DiseaseModuleActivity.class), REQUEST_CODE_FOR_DISEASE_MODULE);
+        startActivityForResult(new Intent(this, DiseaseTemplateActivity.class), REQUEST_CODE_FOR_DISEASE_MODULE);
     }
 
     @Override
@@ -211,7 +233,7 @@ public class DoctorDetailActivity extends BaseActivity implements View.OnClickLi
             return;
         switch (requestCode) {
             case REQUEST_CODE_FOR_DISEASE_MODULE:
-                ArrayList<String> checkedItems = (ArrayList<String>) data.getSerializableExtra(DiseaseModuleActivity.EXTRA_CHECKED_ITEMS);
+                ArrayList<String> checkedItems = (ArrayList<String>) data.getSerializableExtra(DiseaseTemplateActivity.EXTRA_CHECKED_ITEMS);
                 if (checkedItems == null)
                     return;
                 String module = "";

@@ -15,6 +15,7 @@ import com.yimeng.hyzchbczhwq.huanxin.ChatActivity;
 import com.yimeng.hyzchbczhwq.utils.MyConstant;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 
 /**
@@ -87,6 +88,7 @@ public class DoctorListActivity extends BaseActivity implements AdapterView.OnIt
             protected void onPostExecute(String result) {
                 if (result != null) {
                     parseListResult(doctor, DoctorBean.class, result);
+                    Collections.sort(doctor);
                     doctorAdapter.notifyDataSetChanged();
                     if (doctor.size() > 0) {
                         listView.setVisibility(View.VISIBLE);

@@ -48,7 +48,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
     private LinearLayout ll_booking;
     private LinearLayout ll_chat;
     private LinearLayout ll_health;
-    private final String url = "http://www.hyzczg.com/plugins/advert/advert_js.ashx?id=1";
+    private final String BANNER_URL = "http://www.hyzczg.com/plugins/advert/advert_js.ashx?id=1";
     private LinearLayout ll_points;
     private TextView tv_img_title;
     private PagerAdapter adapter;
@@ -151,7 +151,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
         imgUrls.clear();
         backUrls.clear();
         imgTitles.clear();
-        OkHttpUtils.get().url(url).build().execute(new StringCallback() {
+        OkHttpUtils.get().url(BANNER_URL).build().execute(new StringCallback() {
             @Override
             public void onError(Call call, Exception e, int i) {
 

@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:gravity="center_horizontal"
+    android:orientation="vertical">
 
     <RelativeLayout
         android:id="@+id/rl_title"
@@ -25,26 +27,23 @@
     <ExpandableListView
         android:id="@+id/expend_lv"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@id/rl_title"
+        android:layout_height="0dp"
+        android:layout_weight="1"
         android:background="@color/white"
         android:cacheColorHint="@null"
         android:childDivider="@color/grey"
         android:divider="@null"
         android:dividerHeight="3dp"
         android:groupIndicator="@null"
-        android:listSelector="@null"></ExpandableListView>
+        android:listSelector="@null" />
 
     <Button
         android:id="@+id/bt_submit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="4dp"
-        android:layout_marginLeft="16dp"
+        android:layout_margin="4dp"
         android:background="@drawable/selector_bt_bg_green"
         android:minHeight="@dimen/finger_width"
         android:text="@string/submit"
         android:textColor="@color/white" />
-</RelativeLayout>
+</LinearLayout>

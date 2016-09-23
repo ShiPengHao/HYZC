@@ -146,7 +146,7 @@ public class HuanXinHelper {
             appContext = context;
 
             //debug mode, you'd better set it to false, if you want release your App officially.
-            EMClient.getInstance().setDebugMode(true);
+            EMClient.getInstance().setDebugMode(false);
             //get easeui instance
             easeUI = EaseUI.getInstance();
             //to set user's profile and avatar

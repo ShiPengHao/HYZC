@@ -69,5 +69,8 @@ public class MyConstant {
      * 科室名称
      */
     public static final String DEPARTMENT_NAME = "河南省第一人民医院疼痛科";
-
+    /**
+     * 请求码
+     */
+    public static final String REQUEST_CODE = "REQUEST_CODE";
 }

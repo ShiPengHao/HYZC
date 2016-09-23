@@ -13,6 +13,7 @@ import android.view.WindowManager;
 
 import com.google.gson.Gson;
 import com.yimeng.hyzchbczhwq.R;
+import com.yimeng.hyzchbczhwq.utils.LocationUtils;
 import com.yimeng.hyzchbczhwq.utils.MyApp;
 import com.yimeng.hyzchbczhwq.utils.MyConstant;
 import com.yimeng.hyzchbczhwq.utils.WebServiceUtils;
@@ -60,6 +61,13 @@ public abstract class BaseActivity extends AppCompatActivity {
         setListener();
         initData();
         overridePendingTransition(R.anim.next_in, R.anim.next_out);
+        LocationUtils.setUpdateLocationListener(null);//TODO 位置服务测试
+    }
+
+    @Override
+    protected void onDestroy() {
+        MyApp.getAppContext().removeActivity(this);
+        super.onDestroy();
     }
 
     /**
@@ -67,14 +75,14 @@ public abstract class BaseActivity extends AppCompatActivity {
      *
      * @param result    json对象字符串，键data对应一个JsonArray
      * @param arrayList 存入数据的集合
-     * @param clazz javabean的字节码文件
+     * @param clazz     javabean的字节码文件
      */
     public <T> void parseListResult(ArrayList<T> arrayList, Class<T> clazz, String result) {
         arrayList.clear();
         try {
             JSONArray array = new JSONObject(result).optJSONArray("data");
             for (int i = 0; i < array.length(); i++) {
-               arrayList.add(new Gson().fromJson(array.optString(i),clazz));
+                arrayList.add(new Gson().fromJson(array.optString(i), clazz));
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -83,11 +91,12 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     /**
      * 判断字符串是否为空
+     *
      * @param string 字符串
      * @return 空true，否则false
      */
-    protected boolean isEmpty(String string){
-        if (null == string){
+    protected boolean isEmpty(String string) {
+        if (null == string) {
             return true;
         }
         return TextUtils.isEmpty(string.trim());
@@ -111,7 +120,7 @@ public abstract class BaseActivity extends AppCompatActivity {
 
             // 设置状态栏颜色
             ViewGroup contentLayout = (ViewGroup) findViewById(android.R.id.content);
-            setupStatusBarView(contentLayout, getResources().getColor(R.color.colorStatusBar));
+            setupStatusBarView(contentLayout);
 
             // 设置Activity layout的fitsSystemWindows
             View contentChild = contentLayout.getChildAt(0);
@@ -121,10 +130,10 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     /**
      * 创建一个背景为指定颜色，大小为状态栏大小的view，并且添加到屏幕的根view中
+     *
      * @param contentLayout 屏幕的内容视图
-     * @param color 指定的颜色
      */
-    private void setupStatusBarView(ViewGroup contentLayout, int color) {
+    private void setupStatusBarView(ViewGroup contentLayout) {
         if (mStatusBarView == null) {
             View statusBarView = new View(this);
             ViewGroup.LayoutParams lp = new ViewGroup.LayoutParams(
@@ -133,7 +142,16 @@ public abstract class BaseActivity extends AppCompatActivity {
 
             mStatusBarView = statusBarView;
         }
-        mStatusBarView.setBackgroundColor(color);
+        mStatusBarView.setBackgroundColor(setStatusBarColor());
+    }
+
+    /**
+     * 设置状态栏颜色
+     *
+     * @return 颜色
+     */
+    protected int setStatusBarColor() {
+        return getResources().getColor(R.color.colorStatusBar);
     }
 
     /**

@@ -19,7 +19,6 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 import com.yimeng.hyzchbczhwq.R;
-import com.yimeng.hyzchbczhwq.bean.CommentBean;
 import com.yimeng.hyzchbczhwq.bean.DoctorBean;
 import com.yimeng.hyzchbczhwq.bean.PatientBean;
 import com.yimeng.hyzchbczhwq.utils.BitmapUtils;
@@ -27,6 +26,7 @@ import com.yimeng.hyzchbczhwq.utils.DensityUtil;
 import com.yimeng.hyzchbczhwq.utils.MyConstant;
 import com.yimeng.hyzchbczhwq.utils.MyToast;
 import com.yimeng.hyzchbczhwq.utils.PickImageUtils;
+
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -125,6 +125,7 @@ public class AccountInfoActivity extends BaseActivity implements View.OnClickLis
         }
         values.clear();
         if (type.equalsIgnoreCase("patient")) {
+            rl_score.setVisibility(View.GONE);
             values.put("patient_id", id);
             requestInfo("Get_Patient_Msg", values);
         } else if (type.equalsIgnoreCase("doctor")) {
@@ -179,7 +180,6 @@ public class AccountInfoActivity extends BaseActivity implements View.OnClickLis
                 } else if (type.equalsIgnoreCase("doctor")) {
                     ll_isOrder.setVisibility(View.VISIBLE);
                     parseDoctorInfo(s);
-                } else if (type.equalsIgnoreCase("shop")) {
                 }
             }
         }.execute(params);
@@ -236,7 +236,6 @@ public class AccountInfoActivity extends BaseActivity implements View.OnClickLis
      */
     private void bindDoctorData() {
         avatarUrl = doctorBean.doctor_avatar;
-//        rating_bar.setRating();
         et_name.setText(doctorBean.doctor_name);
         et_age.setText(isEmpty(doctorBean.doctor_age) ? getString(R.string.empty_content) : doctorBean.doctor_age);
         et_wechat.setText(isEmpty(doctorBean.doctor_WeChat) ? getString(R.string.empty_content) : doctorBean.doctor_WeChat);
@@ -282,7 +281,7 @@ public class AccountInfoActivity extends BaseActivity implements View.OnClickLis
                 PickImageUtils.getGalleryImage(this, REQUEST_GALLERY_FOR_AVATAR);
                 break;
             case R.id.rl_score:
-                startActivity(new Intent(this,DoctorScoreDetailActivity.class).putExtra("doctor",doctorBean));
+                startActivity(new Intent(this, DoctorScoreDetailActivity.class).putExtra("doctor", doctorBean));
                 break;
         }
     }
@@ -553,7 +552,6 @@ public class AccountInfoActivity extends BaseActivity implements View.OnClickLis
             protected void onPostExecute(String s) {
                 if (s != null) {
                     try {
-                        System.out.println(s);
 //                        new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
                         JSONObject object = new JSONObject(s);
                         if ("ok".equalsIgnoreCase(object.optString("status"))) {

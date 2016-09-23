@@ -16,6 +16,7 @@ import com.yimeng.hyzchbczhwq.R;
 import com.yimeng.hyzchbczhwq.bean.ModuleClassifyBean;
 import com.yimeng.hyzchbczhwq.bean.ModuleTemplateBean;
 import com.yimeng.hyzchbczhwq.utils.DensityUtil;
+import com.yimeng.hyzchbczhwq.utils.MyConstant;
 import com.yimeng.hyzchbczhwq.utils.MyToast;
 import com.yimeng.hyzchbczhwq.utils.UiUtils;
 
@@ -25,7 +26,7 @@ import java.util.HashMap;
 /**
  * 病情描述模板界面
  */
-public class DiseaseModuleActivity extends BaseActivity implements View.OnClickListener {
+public class DiseaseTemplateActivity extends BaseActivity implements View.OnClickListener {
 
     private ExpandableListView expend_lv;
     /**

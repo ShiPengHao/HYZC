@@ -1,5 +1,8 @@
 <resources>
     <string name="app_name">华医之春</string>
+    <string name="apk_name">hyzc.apk</string>
+    <string name="apk_short_name">hyzc</string>
+    <string name="department_introduce">【康复大厅】吴桥县中西医结合医院康复疼痛科，利用针灸，拔罐，艾灸，推拿按摩，远红外线理疗，磁疗，腊疗等传统中医技术，结合现代医学治疗设备，利用【内热成像检查仪】【骨密度检测仪】【骨质疏松治疗仪】【中药四肢薰蒸仪】【热磁恒波治疗仪】以及射频消融，臭氧，椎间孔镜技术，为颈肩腰腿疼的患者解除病痛！吴桥县中西医结合医院设置康复大厅，疼痛门诊，康复疼痛住院病区，欢迎预约就诊！电话0317--8323530</string>
     <string name="login">登录</string>
     <string name="username">用户名</string>
     <string name="pwd">设置密码</string>
@@ -466,4 +469,12 @@
     <string name="comment_time">评论时间</string>
     <string name="comment">评论</string>
     <string name="anonymous">匿名</string>
+    <string name="village_doctor">村医</string>
+    <string name="director_doctor">主任医师</string>
+    <string name="vice_director_doctor">副主任医师</string>
+    <string name="general_doctor">医师</string>
+    <string name="chief_doctor">主治医师</string>
+    <string name="doctor_title">医生职称</string>
+    <string name="select_department">选择医院科室</string>
+    <string name="work_department">执业医院</string>
 </resources>

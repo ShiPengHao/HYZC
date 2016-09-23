@@ -1,21 +1,10 @@
 package com.yimeng.hyzchbczhwq.activity;
 
-import android.Manifest;
 import android.animation.ObjectAnimator;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
-import android.location.Address;
-import android.location.Criteria;
-import android.location.Geocoder;
-import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
 import android.os.AsyncTask;
-import android.os.Bundle;
 import android.os.Message;
-import android.support.v4.app.ActivityCompat;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
@@ -40,7 +29,6 @@ import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -67,7 +55,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
     private android.os.Handler handler;
     private static final int WHAT_SHOW_LOADING = 1;
     private static final int WHAT_DISMISS_LOADING = 2;
-//    private TextView tv_location;
 
 
     @Override
@@ -85,7 +72,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
         rg_userType = (RadioGroup) findViewById(R.id.rg_type);
         ll_loading = (LinearLayout) findViewById(R.id.ll_loading);
 
-//        tv_location = (TextView) findViewById(R.id.tv_location);
     }
 
     @Override
@@ -113,83 +99,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
                 }
             }
         };
-//        initLocationService();
     }
-
-    private void initLocationService() {
-        LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-
-        Criteria criteria = new Criteria();
-        criteria.setAccuracy(Criteria.ACCURACY_FINE);
-        criteria.setAltitudeRequired(false);
-        criteria.setBearingRequired(false);
-        criteria.setCostAllowed(true);
-        criteria.setPowerRequirement(Criteria.POWER_LOW);
-        String provider = locationManager.getBestProvider(criteria, true);
-
-        Location location = locationManager.getLastKnownLocation(provider);
-        updateWithNewLocation(location);
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
-                && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            return;
-        }
-
-        locationManager.requestLocationUpdates(provider, 2000, 10, new LocationListener() {
-            @Override
-            public void onLocationChanged(Location location) {
-                updateWithNewLocation(location);
-            }
-
-            @Override
-            public void onStatusChanged(String provider, int status, Bundle extras) {
-
-            }
-
-            @Override
-            public void onProviderEnabled(String provider) {
-
-            }
-
-            @Override
-            public void onProviderDisabled(String provider) {
-
-            }
-        });
-
-    }
-
-    private void updateWithNewLocation(Location location) {
-        new AsyncTask<Location, Void, String>() {
-            @Override
-            protected String doInBackground(Location... params) {
-                if (null == params || null == params[0]) {
-                    return "无法获取地理信息";
-                }
-                Location location = params[0];
-                double lat = location.getLatitude();
-                double lng = location.getLongitude();
-                String locationStr = "维度：" + lat + "\n经度：" + lng;
-                List<Address> addList;
-                Geocoder ge = new Geocoder(MyApp.getAppContext());
-                try {
-                    addList = ge.getFromLocation(lat, lng, 1);
-                    if (addList != null && addList.size() > 0) {
-                        Address ad = addList.get(0);
-                        locationStr += "\n地址：" + ad.getAddressLine(0);
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                return locationStr;
-            }
-
-            @Override
-            protected void onPostExecute(String s) {
-//                tv_location.setText(s);
-            }
-        }.execute(location);
-    }
-
 
     @Override
     protected void initData() {
@@ -272,8 +182,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
         values.clear();
         values.put("user", username);
         values.put("pwd", pwd);
-        values.put("hospital_id", MyConstant.HOSPITAL_ID);
-        values.put("departments_id", MyConstant.DEPARTMENT_ID);
         switch (rg_userType.getCheckedRadioButtonId()) {
             case R.id.rb_patient:
                 requestLogin("Patient_Login", values);
@@ -425,7 +333,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
         et_username.postDelayed(new Runnable() {
             @Override
             public void run() {
-
                 finish();
             }
         }, 400);

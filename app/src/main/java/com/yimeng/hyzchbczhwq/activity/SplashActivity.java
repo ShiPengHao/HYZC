@@ -16,7 +16,10 @@ import android.os.Message;
 import android.text.TextUtils;
 import android.widget.ImageView;
 
+import com.hyphenate.EMCallBack;
+import com.hyphenate.chat.EMClient;
 import com.hyphenate.util.TextFormater;
+
 import com.yimeng.hyzchbczhwq.R;
 import com.yimeng.hyzchbczhwq.utils.BitmapUtils;
 import com.yimeng.hyzchbczhwq.utils.DensityUtil;
@@ -189,9 +192,7 @@ public class SplashActivity extends BaseActivity {
 //                      new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
                         JSONObject object = new JSONObject(result);
                         if ("ok".equalsIgnoreCase(object.optString("status"))) {
-                            String type = object.optString("type");
-                            String id = object.optString("id");
-                            setJPushAliasAndTag(type, id);
+                            loginHuanXin(object);
                         } else {
                             goToLogin();
                         }
@@ -205,6 +206,46 @@ public class SplashActivity extends BaseActivity {
                 return null;
             }
         }.execute(params);
+    }
+
+    /**
+     * 登陆成功后登陆环信服务器
+     */
+    private void loginHuanXin(final JSONObject object) {
+        new AsyncTask<Object, Object, Object>() {
+            @Override
+            protected Object doInBackground(Object... params) {
+                try {
+//                    EMClient.getInstance().createAccount(username, password);//同步方法
+                    String username = object.optString("username");
+                    String password = object.optString("password");
+                    EMClient.getInstance().login(username, password, new EMCallBack() {//回调
+                        @Override
+                        public void onSuccess() {
+                            String type = object.optString("type");
+                            String id = object.optString("id");
+                            setJPushAliasAndTag(type, id);
+                            EMClient.getInstance().groupManager().loadAllGroups();
+                            EMClient.getInstance().chatManager().loadAllConversations();
+                        }
+
+                        @Override
+                        public void onProgress(int progress, String status) {
+
+                        }
+
+                        @Override
+                        public void onError(int code, String message) {
+                            MyLog.i(getClass(), message);
+                            goToLogin();
+                        }
+                    });
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                return null;
+            }
+        }.execute();
     }
 
     /**
@@ -268,7 +309,7 @@ public class SplashActivity extends BaseActivity {
      * 弹出一个对话框，提示用户更新，如果更新，则下载新版本，不更新则跳到登陆页面
      */
     private void showUpdateDialog() {
-        updateDialog = new AlertDialog.Builder(SplashActivity.this).setTitle("技术同学又出新版本啦!")
+        updateDialog = new AlertDialog.Builder(SplashActivity.this).setTitle("发现新版本!")
                 .setMessage("新版本安装包大小为" + TextFormater.getDataSize(apkSize) + "，现在更新？")
                 // 限制对话框取消动作
                 .setCancelable(false)
@@ -299,7 +340,7 @@ public class SplashActivity extends BaseActivity {
         } else {
             fileDir = getFilesDir().getAbsolutePath();
         }
-        OkHttpUtils.get().url(downloadUrl).build().execute(new FileCallBack(fileDir, "hyzc.apk") {
+        OkHttpUtils.get().url(downloadUrl).build().execute(new FileCallBack(fileDir, getString(R.string.apk_name)) {
 
             @Override
             public void onBefore(Request request, int id) {

@@ -11,7 +11,6 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Base64;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.AdapterView;
@@ -28,6 +27,7 @@ import com.yimeng.hyzchbczhwq.bean.AddressBean;
 import com.yimeng.hyzchbczhwq.utils.BitmapUtils;
 import com.yimeng.hyzchbczhwq.utils.DensityUtil;
 import com.yimeng.hyzchbczhwq.utils.MyConstant;
+import com.yimeng.hyzchbczhwq.utils.MyLog;
 import com.yimeng.hyzchbczhwq.utils.MyToast;
 import com.yimeng.hyzchbczhwq.utils.ThreadUtils;
 import com.yimeng.hyzchbczhwq.utils.WebServiceUtils;
@@ -35,11 +35,15 @@ import com.yimeng.hyzchbczhwq.utils.WebServiceUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.yimeng.hyzchbczhwq.R.id.tv;
+
+/**
+ * 注册activity
+ */
 public class RegisterActivity extends BaseActivity implements View.OnClickListener, AdapterView.OnItemSelectedListener, RadioGroup.OnCheckedChangeListener {
 
     private static final int REQUEST_GALLERY_FOR_DOCTOR_CERT = 101;
@@ -47,8 +51,10 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
     private static final int REQUEST_GALLERY_FOR_PHARMACY_ORGANIZATION_CERT = 103;
     private static final int REQUEST_GALLERY_FOR_PHARMACY_LICENSE_CERT = 104;
     private static final int REQUEST_GALLERY_FOR_PHARMACY_PERMIT_CERT = 105;
-    private static final int REQUEST_ADDRESS_CODE = 106;
+    public static final int REQUEST_ADDRESS_CODE = 106;
+    public static final int REQUEST_DEPARTMENT_CODE = 107;
     private static final int PHOTO_REQUEST_CUT = 2;
+    private static final Object[] CHECK_NUMBERS = new Object[]{1, 0, "X", 9, 8, 7, 6, 5, 4, 3, 2};
     private EditText et_pwd;
     private EditText et_pwd_confirm;
     private EditText et_phone;
@@ -57,7 +63,6 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
     private EditText et_address_detail;
     private RadioGroup rg_type;
     private Button bt_doctor_cert;
-    private Button bt_select_address;
     private ImageView iv_doctor_cert;
     private LinearLayout ll_cert_info;// 证书信息，包含医生资格证和药店资格证
     private EditText et_name;
@@ -79,6 +84,8 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
     private String pwd;
     private String name;
     private String identify;
+    private String hospital_id;
+    private String departments_id;
     private TextView uploadImgTextView;
     private LinearLayout ll_remark;
     private EditText et_remark;
@@ -102,6 +109,10 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
 
     private AlertDialog okDialog;
     private AddressBean addressBean;
+    private LinearLayout ll_select_address;
+    private RadioGroup rg_doctor_title;
+    private TextView tv_select_department;
+    //    private JSONObject cityJsonObject;
 
 
     @Override
@@ -121,6 +132,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
         et_pharmacy_corporation = (EditText) findViewById(R.id.et_pharmacy_corporation);
 
         rg_type = (RadioGroup) findViewById(R.id.rg_type);
+        rg_doctor_title = (RadioGroup) findViewById(R.id.rg_doctor_title);
         cb_work = (CheckBox) findViewById(R.id.cb_work);
         cb_home = (CheckBox) findViewById(R.id.cb_home);
         cb_farm = (CheckBox) findViewById(R.id.cb_farm);
@@ -131,7 +143,6 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
         bt_organization_cert = (Button) findViewById(R.id.bt_organization_cert);
         bt_license_cert = (Button) findViewById(R.id.bt_license_cert);
         bt_permit_cert = (Button) findViewById(R.id.bt_permit_cert);
-        bt_select_address = (Button) findViewById(R.id.bt_select_address);
 
         iv_doctor_cert = (ImageView) findViewById(R.id.iv_doctor_cert);
         iv_doctor_signature = (ImageView) findViewById(R.id.iv_doctor_signature);
@@ -146,9 +157,11 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
         ll_doctor_cert = (LinearLayout) findViewById(R.id.ll_doctor_cert);
         ll_pharmacy_cert = (LinearLayout) findViewById(R.id.ll_pharmacy_cert);
         ll_personal_info = (LinearLayout) findViewById(R.id.ll_personal_info);
+        ll_select_address = (LinearLayout) findViewById(R.id.ll_select_address);
 
         tv_remark = (TextView) findViewById(R.id.tv_remark);
         tv_select_address = (TextView) findViewById(R.id.tv_select_address);
+        tv_select_department = (TextView) findViewById(R.id.tv_select_department);
 
         initUploadDialog();
 
@@ -174,7 +187,8 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
         bt_organization_cert.setOnClickListener(this);
         bt_license_cert.setOnClickListener(this);
         bt_permit_cert.setOnClickListener(this);
-        bt_select_address.setOnClickListener(this);
+        ll_select_address.setOnClickListener(this);
+        tv_select_department.setOnClickListener(this);
         iv_back.setOnClickListener(this);
 
 //        departmentAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, department);
@@ -187,7 +201,22 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
     }
 
     protected void initData() {
+//        String cityString = "{'11':'北京','12':'天津','13':'河北','14':'山西','15':'内蒙古'," +
+//                "'21':'辽宁','22':'吉林','23':'黑龙江','31':'上海','32':'江苏','33':'浙江'," +
+//                "'34':'安徽','35':'福建','36':'江西','37':'山东','41':'河南','42':'湖北',"
+//                + "'43':'湖南','44':'广东','45':'广西','46':'海南','50':'重庆','51':'四川'," +
+//                "'52':'贵州','53':'云南','54':'西藏','61':'陕西','62':'甘肃','63':'青海'," +
+//                "'64':'宁夏','65':'新疆','71':'台湾','81':'香港','82':'澳门','91':'国外'}";
 
+//        try {
+//            cityJsonObject = new JSONObject(cityString);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+        for (int i = 0; i < rg_doctor_title.getChildCount(); i++) {
+            rg_doctor_title.getChildAt(i).setId(i);
+        }
+        rg_doctor_title.check(0);
     }
 
     @Override
@@ -239,8 +268,13 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
             case R.id.iv_back:
                 finish();
                 break;
-            case R.id.bt_select_address:
-                startActivityForResult(new Intent(this, AddressChoiceActivity.class), REQUEST_ADDRESS_CODE);
+            case R.id.ll_select_address:
+                startActivityForResult(new Intent(this, AddressChoiceActivity.class)
+                        .putExtra(MyConstant.REQUEST_CODE, REQUEST_ADDRESS_CODE), REQUEST_ADDRESS_CODE);
+                break;
+            case R.id.tv_select_department:
+                startActivityForResult(new Intent(this, AddressChoiceActivity.class)
+                        .putExtra(MyConstant.REQUEST_CODE, REQUEST_DEPARTMENT_CODE), REQUEST_DEPARTMENT_CODE);
                 break;
         }
     }
@@ -276,6 +310,12 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
             tv_select_address.setText(data.getStringExtra("name"));
             return;
         }
+        if (requestCode == REQUEST_DEPARTMENT_CODE) {
+            hospital_id = data.getStringExtra("hospital_id");
+            departments_id = data.getStringExtra("departments_id");
+            tv_select_department.setText(data.getStringExtra("name"));
+            return;
+        }
         Uri uri = data.getData();
         Bitmap bitmap = null;
         // 从相册返回的数据，得到图片的全路径
@@ -299,6 +339,8 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
         if (bitmap == null) {
             return;
         }
+        uploadImageDialog.show();
+        uploadImgTextView.setText("正在上传，请稍后。。。");
         saveBitmap(requestCode, bitmap);
         super.onActivityResult(requestCode, resultCode, data);
     }
@@ -343,7 +385,6 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
             @Override
             public void run() {
                 uploadImg(requestCode, bitmap, pathCopy);
-                bitmap.recycle();
             }
         });
     }
@@ -356,30 +397,17 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
      * @param path        历史图片路径
      */
     private void uploadImg(int requestCode, Bitmap bitmap, String path) {
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        byte[] bytes;
-        int quality = 100;
-        while (quality > 0) {
-            if (bitmap.compress(Bitmap.CompressFormat.JPEG, quality, baos)
-                    && (bytes = baos.toByteArray()).length < 2 * 1024 * 1024) {
-
-                if (uploadImageDialog != null) {
-                    ThreadUtils.runOnUIThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            uploadImageDialog.show();
-                            uploadImgTextView.setText("正在上传，请稍后。。。");
-                        }
-                    });
-                }
-                values.clear();
-                values.put("fileName", "1.jpg");
-                values.put("DelFilePath", path);
-                values.put("image", Base64.encodeToString(bytes, Base64.DEFAULT));
-                requestUploadImg("upload_img", values, requestCode);
-                break;
-            }
-            quality -= 10;
+        String imageStr = BitmapUtils.compressBitmap2Base64String(bitmap);
+        bitmap.recycle();
+        if (null != imageStr) {
+            values.clear();
+            values.put("fileName", "1.jpg");
+            values.put("DelFilePath", path);
+            values.put("image", imageStr);
+            requestUploadImg("upload_img", values, requestCode);
+        }else {
+            MyToast.show("上传失败，请稍后重新选择图片再试!");
+            uploadImageDialog.dismiss();
         }
     }
 
@@ -576,8 +604,16 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
                     ObjectAnimator.ofFloat(bt_doctor_signature, "translationX", 15f, -15f, 20f, -20f, 0).setDuration(300).start();
                     return;
                 }
+                if (isEmpty(hospital_id) || isEmpty(departments_id)) {
+                    MyToast.show("请选择执业医院");
+                    ObjectAnimator.ofFloat(tv_select_department, "translationX", 15f, -15f, 20f, -20f, 0).setDuration(300).start();
+                    return;
+                }
                 values.put("qualification", lastDoctorCertPath);
                 values.put("E_signature", lastDoctorSignPath);
+                values.put("hospital_id", hospital_id);
+                values.put("departments_id", departments_id);
+                values.put("doctor_title", rg_doctor_title.getCheckedRadioButtonId());//职称类型
                 values.put("remark", et_remark.getText().toString().trim());// 备注无需校验
                 method = "Doctor_Register";
                 break;
@@ -599,8 +635,6 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
         if (rg_type.getCheckedRadioButtonId() != R.id.rb_pharmacy) {
             values.put("name", name);
             values.put("identification", identify);
-            values.put("hospital_id", MyConstant.HOSPITAL_ID);
-            values.put("departments_id", MyConstant.DEPARTMENT_ID);
         } else {
             values.put("contacts", name);
         }
@@ -659,10 +693,24 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
                 ObjectAnimator.ofFloat(et_id, "translationX", 15f, -15f, 20f, -20f, 0).setDuration(300).start();
                 return true;
             }
-            if (!identify.matches("[0-9]{17}x") && !identify.matches("[0-9]{15}") && !identify.matches("[0-9]{18}")) {
+            if ((!identify.matches("[0-9]{17}x") && !identify.matches("[0-9]{15}") && !identify.matches("[0-9]{18}"))// 校验位数
+//                    || (cityJsonObject != null && isEmpty(cityJsonObject.optString(identify.substring(0, 2))))// 校验省级区号
+                    ) {
                 MyToast.show("身份证号格式不正确");
                 ObjectAnimator.ofFloat(et_id, "translationX", 15f, -15f, 20f, -20f, 0).setDuration(300).start();
                 return true;
+            }
+
+            if (!MyLog.DEBUG && identify.length() == 18) {// 校验校验码
+                int sum = 0;
+                for (int i = 0; i < identify.length() - 1; i++) {
+                    sum += Integer.parseInt(identify.substring(i, i + 1)) * Math.pow(2, 17 - i);
+                }
+                if (!identify.substring(17, 18).equalsIgnoreCase(String.valueOf(CHECK_NUMBERS[sum % 11]))) {
+                    MyToast.show("身份证号不正确");
+                    ObjectAnimator.ofFloat(et_id, "translationX", 15f, -15f, 20f, -20f, 0).setDuration(300).start();
+                    return true;
+                }
             }
         }
         mapGeneralInfo();

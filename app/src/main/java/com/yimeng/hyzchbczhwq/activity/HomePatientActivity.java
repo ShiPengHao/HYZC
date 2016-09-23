@@ -29,6 +29,9 @@ import com.yimeng.hyzchbczhwq.utils.MyToast;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * 病人主页
+ */
 public class HomePatientActivity extends BaseActivity implements View.OnClickListener {
 
     private ViewPager vp;

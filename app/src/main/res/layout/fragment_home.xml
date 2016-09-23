@@ -16,7 +16,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="vertical">
 
             <RelativeLayout
@@ -50,7 +50,7 @@
                     android:layout_marginRight="20dp"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
-                    android:paddingBottom="10dp"></LinearLayout>
+                    android:paddingBottom="10dp"/>
 
             </RelativeLayout>
 
@@ -117,7 +117,6 @@
                         <ImageView
                             android:layout_width="48dp"
                             android:layout_height="48dp"
-                            android:layout_centerVertical="true"
                             android:scaleType="centerInside"
                             android:src="@mipmap/chat" />
 
@@ -151,7 +150,6 @@
                         <ImageView
                             android:layout_width="48dp"
                             android:layout_height="48dp"
-                            android:layout_centerVertical="true"
                             android:scaleType="centerInside"
                             android:src="@mipmap/health" />
 
@@ -177,7 +175,7 @@
                 android:lineSpacingMultiplier="1.2"
                 android:textAlignment="inherit"
                 android:padding="8dp"
-                android:text="【康复大厅】吴桥县中西医结合医院康复疼痛科，利用针灸，拔罐，艾灸，推拿按摩，远红外线理疗，磁疗，腊疗等传统中医技术，结合现代医学治疗设备，利用【内热成像检查仪】【骨密度检测仪】【骨质疏松治疗仪】【中药四肢薰蒸仪】【热磁恒波治疗仪】以及射频消融，臭氧，椎间孔镜技术，为颈肩腰腿疼的患者解除病痛！吴桥县中西医结合医院设置康复大厅，疼痛门诊，康复疼痛住院病区，欢迎预约就诊！电话0317--8323530"
+                android:text="@string/department_introduce"
                 android:textColor="@color/black_item_content"
                 android:textSize="16dp" />
         </LinearLayout>

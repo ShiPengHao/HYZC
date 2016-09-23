@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/selector_tv_bg"
-    android:padding="5dp">
+    android:padding="10dp">
 
     <com.yimeng.hyzchbczhwq.view.CircleImageView
         android:id="@+id/item_icon"
@@ -16,24 +16,43 @@
         app:civ_border_color="@color/colorAccent"
         app:civ_border_width="1dp" />
 
-    <TextView
-        android:id="@+id/item_name"
-        android:layout_width="wrap_content"
+    <RelativeLayout
+        android:id="@+id/rl"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
-        android:layout_toRightOf="@id/item_icon"
-        android:paddingBottom="3dp"
-        android:paddingTop="3dp"
-        android:text="@string/name"
-        android:textColor="@color/black_item_title"
-        android:textSize="16dp" />
+        android:layout_toRightOf="@id/item_icon">
+
+        <TextView
+            android:id="@+id/item_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:paddingBottom="3dp"
+            android:paddingTop="3dp"
+            android:text="@string/name"
+            android:textColor="@color/black_item_title"
+            android:textSize="16dp" />
+
+        <RatingBar
+            android:id="@+id/rating_bar"
+            style="@style/mySmallRatingBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="8dp"
+            android:layout_toRightOf="@id/item_name"
+            android:numStars="5"
+            android:rating="4"
+            android:stepSize="1" />
+    </RelativeLayout>
 
     <TextView
         android:id="@+id/item_limit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@id/item_name"
-        android:layout_below="@id/item_name"
+        android:layout_alignLeft="@id/rl"
+        android:layout_below="@id/rl"
         android:ellipsize="end"
         android:maxLines="1"
         android:paddingBottom="3dp"

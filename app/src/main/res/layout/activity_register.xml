@@ -4,8 +4,7 @@
     android:layout_height="match_parent"
     android:background="@color/grey"
     android:gravity="center_horizontal"
-    android:orientation="vertical"
-    >
+    android:orientation="vertical">
 
 
     <RelativeLayout
@@ -63,6 +62,32 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:padding="6dp"
+                            android:text="@string/work_department"
+                            android:textSize="18dp" />
+
+                        <TextView
+                            android:id="@+id/tv_select_department"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:hint="@string/select_department"
+                            android:drawableRight="@mipmap/r_arrow"
+                            android:padding="6dp"
+                            android:textSize="16dp" />
+                    </LinearLayout>
+
+                    <include layout="@layout/layout_doctor_title" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
                         android:orientation="vertical">
 
                         <Button
@@ -106,6 +131,8 @@
                             android:scaleType="centerInside"
                             android:visibility="gone" />
                     </LinearLayout>
+
+
                 </LinearLayout>
 
                 <LinearLayout
@@ -274,6 +301,7 @@
                     </LinearLayout>
 
                     <LinearLayout
+                        android:id="@+id/ll_select_address"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center_vertical"
@@ -291,17 +319,10 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:textSize="18dp"
                             android:hint="@string/select_address"
-                            android:padding="6dp" />
-
-                        <Button
-                            android:id="@+id/bt_select_address"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:background="@drawable/selector_bt_bg_green"
-                            android:text="@string/select_address"
-                            android:textColor="@color/white" />
+                            android:drawableRight="@mipmap/r_arrow"
+                            android:padding="6dp"
+                            android:textSize="18dp" />
                     </LinearLayout>
                 </LinearLayout>
             </LinearLayout>

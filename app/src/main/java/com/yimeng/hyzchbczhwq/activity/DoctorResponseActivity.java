@@ -27,6 +27,7 @@ import com.yimeng.hyzchbczhwq.utils.MyConstant;
 import com.yimeng.hyzchbczhwq.utils.MyToast;
 import com.yimeng.hyzchbczhwq.utils.WebServiceUtils;
 
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -242,7 +243,8 @@ public class DoctorResponseActivity extends BaseActivity implements View.OnClick
      */
     private void requestPharmacy() {
         if (pharmacyBeanArrayList.size() > 0) {
-            showPharmacySelectDialog();
+            showPharmacySelectDialog(false);
+            return;
         }
         map.clear();
         map.put("counties", MyConstant.AREA_CODE);
@@ -251,7 +253,7 @@ public class DoctorResponseActivity extends BaseActivity implements View.OnClick
             protected void onPostExecute(String s) {
                 parseListResult(pharmacyBeanArrayList, PharmacyBean.class, s);
                 if (pharmacyBeanArrayList.size() > 0) {
-                    showPharmacySelectDialog();
+                    showPharmacySelectDialog(true);
                 } else {
                     MyToast.show("本地区还没有药店加盟");
                 }
@@ -262,9 +264,13 @@ public class DoctorResponseActivity extends BaseActivity implements View.OnClick
 
     /**
      * 显示选择医生是否坐诊对话框
+     *
+     * @param dataChanged 数据是否有更新
      */
-    private void showPharmacySelectDialog() {
-        if (null == selectPharmacyDialog) {
+    private void showPharmacySelectDialog(boolean dataChanged) {
+        if (selectPharmacyDialog != null && selectPharmacyDialog.isShowing())
+            selectPharmacyDialog.dismiss();
+        if (null == selectPharmacyDialog || dataChanged) {
             selectPharmacyDialog = new AlertDialog.Builder(this)
                     .setTitle("请选择推荐药店")
                     .setSingleChoiceItems(new ArrayAdapter<>(this, R.layout.item_text1, pharmacyBeanArrayList), 0, new DialogInterface.OnClickListener() {

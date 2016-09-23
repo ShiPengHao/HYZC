@@ -3,7 +3,7 @@ package com.yimeng.hyzchbczhwq.bean;
 import java.io.Serializable;
 
 /**
- * Created by 依萌 on 2016/6/28.
+ * 医院bean
  */
 public class HospitalBean implements Serializable {
     public String province;

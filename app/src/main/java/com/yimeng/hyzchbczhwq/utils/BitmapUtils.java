@@ -69,8 +69,8 @@ public class BitmapUtils {
     /**
      * 缩放本地图片 依赖于zoomBitmap
      *
-     * @param path 文件路径
-     * @param newWidth 指定宽
+     * @param path      文件路径
+     * @param newWidth  指定宽
      * @param newHeight 指定高
      * @return bitmap对象，或者null，如果指定路径文件不能被解析为bitmap
      */
@@ -86,9 +86,9 @@ public class BitmapUtils {
     /**
      * 缩放资产图片 依赖于zoomBitmap
      *
-     * @param context 上下文
-     * @param fileName 资产文件名
-     * @param newWidth 指定宽
+     * @param context   上下文
+     * @param fileName  资产文件名
+     * @param newWidth  指定宽
      * @param newHeight 指定高
      * @return bitmap对象，或者null，如果指定的资产文件不能被解析
      */
@@ -144,7 +144,7 @@ public class BitmapUtils {
      * Bitmap转换成Drawable
      *
      * @param context 上下文
-     * @param bitmap bitmap对象
+     * @param bitmap  bitmap对象
      * @return drawable对象
      */
     public static Drawable bitmapToDrawable(Context context, Bitmap bitmap) {
@@ -156,7 +156,7 @@ public class BitmapUtils {
      * 从资源中获取Bitmap
      *
      * @param context 上下文
-     * @param resId  资源id R.drawable.IconUrl(eg.)
+     * @param resId   资源id R.drawable.IconUrl(eg.)
      * @return bitmap对象
      */
     public Bitmap getBitmapFromResources(Context context, int resId) {
@@ -184,17 +184,23 @@ public class BitmapUtils {
     public byte[] Bitmap2Bytes(Bitmap bm) {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         bm.compress(Bitmap.CompressFormat.PNG, 100, baos);
-        return baos.toByteArray();
+        byte[] bytes = baos.toByteArray();
+        try {
+            baos.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return bytes;
     }
 
     /**
      * 将图片对象压缩为不大于2M的string
      *
-     * @param bitmap      图片对象
+     * @param bitmap 图片对象
      * @return 压缩成功返回string，否则null
      */
     public static String compressBitmap2Base64String(Bitmap bitmap) {
-        if (bitmap == null){
+        if (bitmap == null) {
             return null;
         }
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -206,7 +212,18 @@ public class BitmapUtils {
 
                 return Base64.encodeToString(bytes, Base64.DEFAULT);
             }
-            quality -= 10;
+            try {
+                baos.reset();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            quality -= 9;
+        }
+        try {
+            baos.close();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         return null;
     }

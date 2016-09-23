@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:background="@drawable/shape_white_grey_line"
     android:orientation="vertical"
-    android:padding="3dp">
+    android:padding="8dp">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -64,6 +64,7 @@
         android:padding="3dp"
         android:text="@string/disease_description"
         android:maxLines="2"
+        android:lineSpacingMultiplier="1.1"
         android:ellipsize="end"
         android:textColor="@color/black_item_content" />
 

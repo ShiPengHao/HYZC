@@ -9,6 +9,9 @@ import android.widget.ListView;
 
 import com.yimeng.hyzchbczhwq.R;
 import com.yimeng.hyzchbczhwq.bean.AddressBean;
+import com.yimeng.hyzchbczhwq.bean.HospitalBean;
+import com.yimeng.hyzchbczhwq.utils.MyConstant;
+import com.yimeng.hyzchbczhwq.utils.MyToast;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -26,11 +29,14 @@ public class AddressChoiceActivity extends BaseActivity implements View.OnClickL
     private ArrayList<AddressBean> province = new ArrayList<>();
     private ArrayList<AddressBean> city = new ArrayList<>();
     private ArrayList<AddressBean> area = new ArrayList<>();
+    private ArrayList<HospitalBean> hospital = new ArrayList<>();
     private ArrayAdapter<AddressBean> provinceAdapter;
     private ArrayAdapter<AddressBean> cityAdapter;
     private ArrayAdapter<AddressBean> areaAdapter;
     HashMap<String, Object> params = new HashMap<>();
     private int cityPosition;
+    private int requestCode;
+    private int provincePosition;
 
     @Override
     protected int getLayoutResId() {
@@ -63,6 +69,11 @@ public class AddressChoiceActivity extends BaseActivity implements View.OnClickL
 
     @Override
     protected void initData() {
+        try {
+            requestCode = getIntent().getIntExtra(MyConstant.REQUEST_CODE, RegisterActivity.REQUEST_ADDRESS_CODE);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         requestProvince("GetProvince");
     }
 
@@ -133,6 +144,7 @@ public class AddressChoiceActivity extends BaseActivity implements View.OnClickL
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         switch (parent.getId()) {
             case R.id.lv_province:// 点击某个省，获得市的信息，同时清空区的信息
+                provincePosition = position;
                 params.clear();
                 params.put("provincecode", province.get(position).code);
                 requestCity("GetCity", params);
@@ -148,12 +160,57 @@ public class AddressChoiceActivity extends BaseActivity implements View.OnClickL
                 params.put("citycode", city.get(position).code);
                 requestArea("GetArea", params);
                 break;
-            case R.id.lv_area:// 点击县，获得省市区编号，并将其返回给上个activity
-                setResult(101, new Intent()
-                        .putExtra("address", area.get(position))
-                        .putExtra("name", city.get(cityPosition).name + area.get(position).name));
-                finish();
+            case R.id.lv_area:// 点击县区，如果是选择省市区，则获得省市区编号，并将其返回给上个activity；如果是选择医院科室，则跳转到
+                switch (requestCode) {
+                    case RegisterActivity.REQUEST_ADDRESS_CODE:
+                        setResult(101, new Intent()
+                                .putExtra("address", area.get(position))
+                                .putExtra("name", city.get(cityPosition).name + area.get(position).name));
+                        finish();
+                        break;
+                    case RegisterActivity.REQUEST_DEPARTMENT_CODE:
+                        params.clear();
+                        params.put("province", province.get(provincePosition).code);
+                        params.put("city", city.get(cityPosition).code);
+                        params.put("area", area.get(position).code);
+                        requestHospital("Load_Hospital", params);
+                        break;
+                }
                 break;
         }
+    }
+
+    /**
+     * 获得医院
+     *
+     * @param params 方法名+参数
+     */
+    private void requestHospital(Object... params) {
+        new SoapAsyncTask() {
+            @Override
+            protected void onPostExecute(String s) {
+                if (null == s)
+                    return;
+                parseListResult(hospital, HospitalBean.class, s);
+                if (hospital.size() == 0) {
+                    MyToast.show("该地区没有互联网医院，欢迎您联系\"华医之春\"合作");
+                } else {
+                    startActivityForResult(new Intent(AddressChoiceActivity.this, DepartmentChoiceActivity.class)
+                            .putExtra("hospital", hospital), RegisterActivity.REQUEST_DEPARTMENT_CODE);
+                }
+            }
+        }.execute(params);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (data == null)
+            return;
+        if (requestCode == RegisterActivity.REQUEST_DEPARTMENT_CODE) {
+            setResult(100, data);
+            finish();
+            return;
+        }
+        super.onActivityResult(requestCode, resultCode, data);
     }
 }

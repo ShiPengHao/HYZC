@@ -13,6 +13,7 @@ import com.yimeng.hyzchbczhwq.R;
 import com.yimeng.hyzchbczhwq.bean.ModuleClassifyBean;
 import com.yimeng.hyzchbczhwq.bean.ModuleTemplateBean;
 import com.yimeng.hyzchbczhwq.utils.DensityUtil;
+import com.yimeng.hyzchbczhwq.utils.MyConstant;
 import com.yimeng.hyzchbczhwq.utils.MyToast;
 import com.yimeng.hyzchbczhwq.utils.UiUtils;
 
