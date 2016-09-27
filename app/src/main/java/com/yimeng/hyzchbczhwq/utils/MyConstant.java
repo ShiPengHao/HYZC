@@ -51,26 +51,11 @@ public class MyConstant {
     public static final String WEB_SERVICE_URL = NAMESPACE + "API/ymOR_WebService.asmx";
 
     /**
-     * 医院id
-     */
-    public static final String HOSPITAL_ID = "1";
-
-    /**
-     * 科室id
-     */
-    public static final String DEPARTMENT_ID = "1";
-
-    /**
-     * 区县id
-     */
-    public static final String AREA_CODE = "130928";
-
-    /**
-     * 科室名称
-     */
-    public static final String DEPARTMENT_NAME = "河南省第一人民医院疼痛科";
-    /**
      * 请求码
      */
     public static final String REQUEST_CODE = "REQUEST_CODE";
+    /**
+     * android
+     */
+    public static final String ANDROID = "android";
 }

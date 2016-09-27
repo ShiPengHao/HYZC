@@ -23,6 +23,8 @@ public class DoctorBean implements Serializable, Comparable<DoctorBean> {
     public String doctor_WeChat;//电话
     public String doctor_email;//邮箱
     public String remark;//简介
+    public String departments_id;//科室id
+    public String hospital_id;//科室id
     public String doctor_Audit;//审核状态（0未受理 1已通过 -1未通过）
     public String add_time;//注册时间
 

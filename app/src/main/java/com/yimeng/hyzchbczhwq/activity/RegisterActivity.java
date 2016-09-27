@@ -39,8 +39,6 @@ import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.yimeng.hyzchbczhwq.R.id.tv;
-
 /**
  * 注册activity
  */
@@ -191,11 +189,6 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
         tv_select_department.setOnClickListener(this);
         iv_back.setOnClickListener(this);
 
-//        departmentAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, department);
-//        departmentAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-//        spinner_department.setAdapter(departmentAdapter);
-//        spinner_department.setOnItemSelectedListener(this);
-
         rg_type.setOnCheckedChangeListener(this);
         rg_type.check(getIntent().getIntExtra("checkedId", R.id.rb_patient));
     }
@@ -223,22 +216,6 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
     }
 
-    /**
-     * 根据选择的医院请求科室数据
-     */
-//    public void requestDepartment(Object... params) {
-//        new SoapAsyncTask(){
-//            protected void onPostExecute(String result) {
-//                if (result != null) {
-//                    parseListResult(department, result);
-//                    if (department.size() > 0) {
-//                        spinner_department.setSelection(0);
-//                    }
-//                    departmentAdapter.notifyDataSetChanged();
-//                }
-//            }
-//        }.execute(params);
-//    }
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
 
@@ -313,7 +290,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
         if (requestCode == REQUEST_DEPARTMENT_CODE) {
             hospital_id = data.getStringExtra("hospital_id");
             departments_id = data.getStringExtra("departments_id");
-            tv_select_department.setText(data.getStringExtra("name"));
+            tv_select_department.setText(String.format("%s%s",data.getStringExtra("hospital_name"),data.getStringExtra("departments_name")));
             return;
         }
         Uri uri = data.getData();
@@ -405,7 +382,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
             values.put("DelFilePath", path);
             values.put("image", imageStr);
             requestUploadImg("upload_img", values, requestCode);
-        }else {
+        } else {
             MyToast.show("上传失败，请稍后重新选择图片再试!");
             uploadImageDialog.dismiss();
         }

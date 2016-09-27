@@ -70,6 +70,13 @@ public class DepartmentChoiceActivity extends BaseActivity implements View.OnCli
             this.hospital.clear();
             this.hospital.addAll(hospital);
             hospitalAdapter.notifyDataSetChanged();
+            if (hospital.size()>0) {
+                hospitalBean = hospital.get(0);
+                params.clear();
+                params.put("hospital_id", hospitalBean.hospital_id);
+                params.put("parentid", 0);
+                requestDepartment("Load_KS", params);
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -105,10 +112,16 @@ public class DepartmentChoiceActivity extends BaseActivity implements View.OnCli
             case R.id.lv_department:
                 DepartmentBean departmentBean = department.get(position);
                 Intent intent = new Intent();
-                intent.putExtra("hospital_id", departmentBean.hospital_id);
-                intent.putExtra("departments_id", departmentBean.hospital_id);
-                intent.putExtra("name", hospitalBean.hospital_name + departmentBean.departments_name);
-                setResult(100, intent);
+                intent.putExtra("hospital_id", String.valueOf(departmentBean.hospital_id));
+                intent.putExtra("departments_id", String.valueOf(departmentBean.hospital_id));
+                intent.putExtra("hospital_name", hospitalBean.hospital_name);
+                intent.putExtra("departments_name", departmentBean.departments_name);
+                int chatOrBooking = getIntent().getIntExtra(DoctorListActivity.EXTRA_CHAT_OR_BOOKING, -1);
+                if (chatOrBooking == -1)
+                    setResult(100, intent);
+                else
+                    startActivity(intent.setClass(this,DoctorListActivity.class)
+                            .putExtra(DoctorListActivity.EXTRA_CHAT_OR_BOOKING, chatOrBooking));
                 finish();
                 break;
             case R.id.iv_back:

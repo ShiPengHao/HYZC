@@ -224,7 +224,10 @@ public class DoctorDetailActivity extends BaseActivity implements View.OnClickLi
      * 选择疾病描述模板
      */
     private void pickDiseaseModule() {
-        startActivityForResult(new Intent(this, DiseaseTemplateActivity.class), REQUEST_CODE_FOR_DISEASE_MODULE);
+        if (doctorBean == null)
+            return;
+        startActivityForResult(new Intent(this, DiseaseTemplateActivity.class)
+                .putExtra("departments_id", doctorBean.departments_id), REQUEST_CODE_FOR_DISEASE_MODULE);
     }
 
     @Override

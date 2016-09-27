@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.text.TextUtils;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -25,7 +26,6 @@ import com.yimeng.hyzchbczhwq.utils.MyConstant;
 import com.yimeng.hyzchbczhwq.utils.MyToast;
 import com.yimeng.hyzchbczhwq.utils.UiUtils;
 import com.yimeng.hyzchbczhwq.utils.WebServiceUtils;
-
 
 import org.json.JSONObject;
 
@@ -292,7 +292,9 @@ public class AppointDetailActivity extends BaseActivity implements View.OnClickL
                 finish();
                 break;
             case R.id.bt_response:
-                startActivityForResult(new Intent(this, DoctorResponseActivity.class).putExtra("id", appointment_id), REQUEST_CODE_DOCTOR_RESPONSE);
+                startActivityForResult(new Intent(this, DoctorResponseActivity.class)
+                        .putExtra("doctor_id", appointmentBean.select_doctor_id)
+                        .putExtra("appointment_id", appointment_id), REQUEST_CODE_DOCTOR_RESPONSE);
                 break;
             case R.id.bt_cancel:
                 showCancelDialog();
@@ -304,6 +306,19 @@ public class AppointDetailActivity extends BaseActivity implements View.OnClickL
                 startActivity(new Intent(this, PrescribeDetailActivity.class).putExtra("prescription_id", appointmentBean.prescription_id));
                 break;
         }
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        switch (keyCode) {
+            case KeyEvent.KEYCODE_BACK:
+                if (updateFlag) {
+                    setResult(100, new Intent());
+                }
+                finish();
+                return true;
+        }
+        return super.onKeyDown(keyCode, event);
     }
 
     /**

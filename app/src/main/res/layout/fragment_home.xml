@@ -4,15 +4,45 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <TextView
-        style="@style/TextTitle"
-        android:text="@string/home" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            style="@style/TextTitle"
+            android:text="@string/home" />
+
+        <LinearLayout
+            android:id="@+id/ll_location"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:padding="5dp"
+            android:layout_marginLeft="10dp">
+
+            <TextView
+                android:id="@+id/tv_location"
+                android:minWidth="10dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/white" />
+
+            <ImageView
+                android:id="@+id/iv_location"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@mipmap/location" />
+        </LinearLayout>
+    </RelativeLayout>
 
     <ScrollView
-        android:scrollbars="none"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/white">
+        android:background="@color/white"
+        android:scrollbars="none">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -50,7 +80,7 @@
                     android:layout_marginRight="20dp"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
-                    android:paddingBottom="10dp"/>
+                    android:paddingBottom="10dp" />
 
             </RelativeLayout>
 
@@ -168,16 +198,16 @@
 
             </LinearLayout>
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@color/white"
-                android:lineSpacingMultiplier="1.2"
-                android:textAlignment="inherit"
-                android:padding="8dp"
-                android:text="@string/department_introduce"
-                android:textColor="@color/black_item_content"
-                android:textSize="16dp" />
+            <!--<TextView-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:background="@color/white"-->
+                <!--android:lineSpacingMultiplier="1.2"-->
+                <!--android:padding="8dp"-->
+                <!--android:text="@string/department_introduce"-->
+                <!--android:textAlignment="inherit"-->
+                <!--android:textColor="@color/black_item_content"-->
+                <!--android:textSize="16dp" />-->
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

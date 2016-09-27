@@ -132,7 +132,10 @@ public class PrescribeDetailActivity extends BaseActivity implements View.OnClic
         tv_medicine_remark.setText(bean.remark);
         tv_patient.setText(bean.patient_name);
         tv_phone.setText(bean.patient_phone);
-        tv_suggest_pharmacy.setText(bean.pharmacy_name + "(" + bean.pharmacy_adress + ")");
+        if (TextUtils.isEmpty(bean.pharmacy_name) || TextUtils.isEmpty(bean.pharmacy_adress))
+            tv_suggest_pharmacy.setText(getString(R.string.empty_content));
+        else
+            tv_suggest_pharmacy.setText(bean.pharmacy_name + "(" + bean.pharmacy_adress + ")");
         if (bean.recipe_flag == 0) {
             cb_prescribe_has_got.setChecked(false);
             if (isPharmacy) {

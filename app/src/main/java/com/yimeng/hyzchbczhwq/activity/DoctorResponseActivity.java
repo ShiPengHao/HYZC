@@ -4,6 +4,9 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.Location;
 import android.os.AsyncTask;
 import android.os.SystemClock;
 import android.text.TextUtils;
@@ -23,21 +26,26 @@ import com.yimeng.hyzchbczhwq.R;
 import com.yimeng.hyzchbczhwq.adapter.MedicineAdapter;
 import com.yimeng.hyzchbczhwq.bean.MedicineBean;
 import com.yimeng.hyzchbczhwq.bean.PharmacyBean;
+import com.yimeng.hyzchbczhwq.utils.LocationUtils;
+import com.yimeng.hyzchbczhwq.utils.MyApp;
 import com.yimeng.hyzchbczhwq.utils.MyConstant;
 import com.yimeng.hyzchbczhwq.utils.MyToast;
 import com.yimeng.hyzchbczhwq.utils.WebServiceUtils;
-
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+
+import static com.yimeng.hyzchbczhwq.R.string.city;
+import static com.yimeng.hyzchbczhwq.fragment.HomeFragment.REQUEST_CODE_FOR_CITY;
 
 /**
  * 医生回复界面
  */
-public class DoctorResponseActivity extends BaseActivity implements View.OnClickListener {
+public class DoctorResponseActivity extends BaseActivity implements View.OnClickListener, LocationUtils.UpdateLocationListener {
 
     private ImageView iv_back;
     private TextView tv_prescribe;
@@ -48,7 +56,7 @@ public class DoctorResponseActivity extends BaseActivity implements View.OnClick
     private EditText et_doctor_response;
     private EditText et_medicine_remark;
     private ListView listView;
-    private int id;
+    private int appointment_id;
     public static final int REQUEST_CODE_FOR_PRESCRIBE = 100;
     public static final int REQUEST_CODE_FOR_ADDRESS = 101;
     public static final int REQUEST_CODE_FOR_TEMPLATE = 102;
@@ -68,6 +76,13 @@ public class DoctorResponseActivity extends BaseActivity implements View.OnClick
     private ArrayList<PharmacyBean> pharmacyBeanArrayList = new ArrayList<>();
     private AlertDialog selectResponseWayDialog;
     private LinearLayout ll_response;
+    private String doctor_id;
+    private TextView tv_location;
+    private LinearLayout ll_location;
+    private String locationCity;
+    private ImageView iv_location;
+    private String cityName;
+    private String departments_id;
 
     @Override
     protected int getLayoutResId() {
@@ -95,6 +110,10 @@ public class DoctorResponseActivity extends BaseActivity implements View.OnClick
         ll_response = (LinearLayout) findViewById(R.id.ll_response);
         ll_response_way = (LinearLayout) findViewById(R.id.ll_response_way);
         ll_pharmacy.setVisibility(View.GONE);
+
+        ll_location = (LinearLayout) findViewById(R.id.ll_location);
+        tv_location = (TextView) findViewById(R.id.tv_location);
+        iv_location = (ImageView) findViewById(R.id.iv_location);
         initUploadDialog();
     }
 
@@ -122,8 +141,10 @@ public class DoctorResponseActivity extends BaseActivity implements View.OnClick
         ll_response_way.setOnClickListener(this);
         ll_pharmacy.setOnClickListener(this);
         ll_response.setOnClickListener(this);
+        ll_location.setOnClickListener(this);
         medicineAdapter = new MedicineAdapter(medicines);
         listView.setAdapter(medicineAdapter);
+        LocationUtils.setUpdateLocationListener(this);
     }
 
     @Override
@@ -133,10 +154,12 @@ public class DoctorResponseActivity extends BaseActivity implements View.OnClick
         ways.add("视频诊疗");
         ways.add("来院诊疗");
         try {
-            id = getIntent().getIntExtra("id", 0);
+            appointment_id = getIntent().getIntExtra("appointment_id", 0);
+            doctor_id = getIntent().getStringExtra("doctor_id");
         } catch (Exception e) {
             e.printStackTrace();
         }
+        requestDepartment();
     }
 
     @Override
@@ -160,14 +183,36 @@ public class DoctorResponseActivity extends BaseActivity implements View.OnClick
             case R.id.ll_response:
                 requestResponseTemplate();
                 break;
+            case R.id.ll_location:
+                startActivityForResult(new Intent(this, AddressChoiceActivity.class)
+                        .putExtra(MyConstant.REQUEST_CODE, REQUEST_CODE_FOR_CITY), REQUEST_CODE_FOR_CITY);// 选择市
+                break;
         }
+    }
+
+    /**
+     * 根据医生id获得医师所在科室id
+     */
+    private void requestDepartment() {
+        map.clear();
+        map.put("doctor_id", doctor_id);
+        new SoapAsyncTask() {
+            @Override
+            protected void onPostExecute(String s) {
+                try {
+                    departments_id = new JSONObject(s).optJSONArray("data").getJSONObject(0).optString("departments_id");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }.execute("Get_Doctor_Msg", map);
     }
 
     /**
      * 选择医生回应模板
      */
     private void requestResponseTemplate() {
-        startActivityForResult(new Intent(this, ResponseTemplateActivity.class), REQUEST_CODE_FOR_TEMPLATE);
+        startActivityForResult(new Intent(this, ResponseTemplateActivity.class).putExtra("departments_id", departments_id), REQUEST_CODE_FOR_TEMPLATE);
     }
 
 
@@ -235,19 +280,37 @@ public class DoctorResponseActivity extends BaseActivity implements View.OnClick
                 et_doctor_response.setText(data.getStringExtra(ResponseTemplateActivity.EXTRA_TEMPLATE));
                 et_doctor_response.setSelection(et_doctor_response.getText().length());
                 break;
+            case REQUEST_CODE_FOR_CITY:
+                String city = data.getStringExtra("city");
+                if (city == null) return;
+                tv_location.setText(city);
+                cityName = city;
+                pharmacyId="";
+                tv_command_pharmacy.setText(getString(R.string.suggest_pharmacy));
+                if (!city.equalsIgnoreCase(locationCity))
+                    iv_location.setVisibility(View.GONE);
+                else
+                    iv_location.setVisibility(View.VISIBLE);
+                break;
         }
+
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     /**
-     * 根据区县code获取药店列表
+     * 根据城市名字获取药店列表
      */
     private void requestPharmacy() {
         if (pharmacyBeanArrayList.size() > 0) {
             showPharmacySelectDialog(false);
             return;
         }
+        if (TextUtils.isEmpty(cityName)){
+            MyToast.show("您还未选择地区");
+            return;
+        }
         map.clear();
-        map.put("counties", MyConstant.AREA_CODE);
+        map.put("cityname", cityName);
         new SoapAsyncTask() {
             @Override
             protected void onPostExecute(String s) {
@@ -255,6 +318,7 @@ public class DoctorResponseActivity extends BaseActivity implements View.OnClick
                 if (pharmacyBeanArrayList.size() > 0) {
                     showPharmacySelectDialog(true);
                 } else {
+                    tv_command_pharmacy.setText("本地区还没有药店加盟");
                     MyToast.show("本地区还没有药店加盟");
                 }
             }
@@ -286,6 +350,12 @@ public class DoctorResponseActivity extends BaseActivity implements View.OnClick
         selectPharmacyDialog.show();
     }
 
+    /**
+     * 将药品集合转为json
+     *
+     * @return json字符串
+     * @throws Exception
+     */
     private String createMedicinesJson() throws Exception {
         JSONArray medicineArray = new JSONArray();
         MedicineBean bean;
@@ -320,7 +390,7 @@ public class DoctorResponseActivity extends BaseActivity implements View.OnClick
             ObjectAnimator.ofFloat(ll_response_way, "translationX", 15, -15, 15, -15, 0).setDuration(300).start();
             return;
         }
-        if (id == 0) {
+        if (appointment_id == 0) {
             MyToast.show("未知错误，请重新登陆应用再试");
             return;
         }
@@ -341,13 +411,11 @@ public class DoctorResponseActivity extends BaseActivity implements View.OnClick
         }
 
         if (TextUtils.isEmpty(pharmacyId)) {
-            MyToast.show(String.format("%s%s", getString(R.string.suggest_pharmacy), getString(R.string.can_not_be_null)));
-            ObjectAnimator.ofFloat(tv_command_pharmacy, "translationX", 15, -15, 15, -15, 0).setDuration(300).start();
-            return;
+            pharmacyId = "0";
         }
 
         map.clear();
-        map.put("appointment_id", id);
+        map.put("appointment_id", appointment_id);
         map.put("remark", remark);
         map.put("pharmacy_id", pharmacyId);
         try {
@@ -404,7 +472,7 @@ public class DoctorResponseActivity extends BaseActivity implements View.OnClick
             map = new HashMap<>();
         }
         map.clear();
-        map.put("appointment_id", id);
+        map.put("appointment_id", appointment_id);
         map.put("doctor_Responses", response);
         map.put("doctor_dispose", 1);
         map.put("doctor_Way", way);
@@ -459,5 +527,38 @@ public class DoctorResponseActivity extends BaseActivity implements View.OnClick
             selectResponseWayDialog.dismiss();
         }
         super.onDestroy();
+    }
+
+    @Override
+    public void updateWithNewLocation(Location location) {
+        new AsyncTask<Location, Void, Void>() {
+            @Override
+            protected Void doInBackground(Location... params) {
+                if (null == params || null == params[0]) {
+                    return null;
+                }
+                Location location = params[0];
+                double lat = location.getLatitude();
+                double lng = location.getLongitude();
+                List<Address> addList;
+                Geocoder ge = new Geocoder(MyApp.getAppContext());
+                try {
+                    addList = ge.getFromLocation(lat, lng, 1);
+                    if (addList != null && addList.size() > 0) {
+                        Address ad = addList.get(0);
+                        locationCity = ad.getLocality();
+                        cityName = locationCity;
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Void aVoid) {
+                tv_location.setText(locationCity);
+            }
+        }.execute(location);
     }
 }

@@ -278,8 +278,7 @@ public class SplashActivity extends BaseActivity {
     private void checkUpdate() {
         final String packageName = getPackageName();
         HashMap<String, Object> map = new HashMap<>();
-        map.put("hospital_id", MyConstant.HOSPITAL_ID);
-        map.put("departments_id", MyConstant.DEPARTMENT_ID);
+        map.put("app_type", MyConstant.ANDROID);
         new SoapAsyncTask() {
             @Override
             protected void onPostExecute(String s) {

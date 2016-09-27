@@ -12,7 +12,6 @@ import com.yimeng.hyzchbczhwq.R;
 import com.yimeng.hyzchbczhwq.adapter.DoctorAdapter;
 import com.yimeng.hyzchbczhwq.bean.DoctorBean;
 import com.yimeng.hyzchbczhwq.huanxin.ChatActivity;
-import com.yimeng.hyzchbczhwq.utils.MyConstant;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -35,6 +34,11 @@ public class DoctorListActivity extends BaseActivity implements AdapterView.OnIt
     private ListView listView;
     private TextView tv_tip;
     private TextView tv_title;
+    private String departments_id;
+    private TextView tv_department;
+    private String hospital_id;
+    private String departments_name;
+    private String hospital_name;
 
     @Override
     protected int getLayoutResId() {
@@ -47,6 +51,7 @@ public class DoctorListActivity extends BaseActivity implements AdapterView.OnIt
         listView = (ListView) findViewById(R.id.lv);
         tv_tip = (TextView) findViewById(R.id.tv_tip);
         tv_title = (TextView) findViewById(R.id.tv_title);
+        tv_department = (TextView) findViewById(R.id.tv_department);
         tv_tip.setVisibility(View.GONE);
     }
 
@@ -61,7 +66,15 @@ public class DoctorListActivity extends BaseActivity implements AdapterView.OnIt
     @Override
     protected void initData() {
         try {
-            chatOrBooking = getIntent().getIntExtra(EXTRA_CHAT_OR_BOOKING, EXTRA_BOOKING);
+            Intent intent = getIntent();
+            chatOrBooking = intent.getIntExtra(EXTRA_CHAT_OR_BOOKING, EXTRA_BOOKING);
+            departments_name = intent.getStringExtra("departments_name");
+            hospital_name = intent.getStringExtra("hospital_name");
+            tv_department.setText(String.format("%s%s", hospital_name, departments_name));
+            tv_department.setFocusable(true);
+            tv_department.setFocusableInTouchMode(true);
+            hospital_id = intent.getStringExtra("hospital_id");
+            departments_id = intent.getStringExtra("departments_id");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -74,7 +87,7 @@ public class DoctorListActivity extends BaseActivity implements AdapterView.OnIt
                 break;
         }
         HashMap<String, Object> hashMap = new HashMap<>();
-        hashMap.put("departments_id", MyConstant.DEPARTMENT_ID);
+        hashMap.put("departments_id", departments_id);
         requestDoctor("Load_Doctor", hashMap);
     }
 
@@ -107,7 +120,9 @@ public class DoctorListActivity extends BaseActivity implements AdapterView.OnIt
         DoctorBean doctorBean = doctor.get(position);
         switch (chatOrBooking) {
             case EXTRA_BOOKING:
-                startActivity(new Intent(this, DoctorDetailActivity.class).putExtra("doctor", doctorBean));
+                startActivity(new Intent(this, DoctorDetailActivity.class)
+                        .putExtra("departments_name",departments_name)
+                        .putExtra("doctor", doctorBean));
                 break;
             case EXTRA_CHAT:
                 startActivity(new Intent(this, ChatActivity.class).putExtra(EaseConstant.EXTRA_USER_ID, "doctor_" + doctorBean.doctor_id));

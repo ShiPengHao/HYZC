@@ -10,6 +10,7 @@ import android.widget.ListView;
 import com.yimeng.hyzchbczhwq.R;
 import com.yimeng.hyzchbczhwq.bean.AddressBean;
 import com.yimeng.hyzchbczhwq.bean.HospitalBean;
+import com.yimeng.hyzchbczhwq.fragment.HomeFragment;
 import com.yimeng.hyzchbczhwq.utils.MyConstant;
 import com.yimeng.hyzchbczhwq.utils.MyToast;
 
@@ -155,6 +156,11 @@ public class AddressChoiceActivity extends BaseActivity implements View.OnClickL
                 }
                 break;
             case R.id.lv_city:// 点击市，获得县信息
+                if (requestCode == HomeFragment.REQUEST_CODE_FOR_CITY){
+                    setResult(100,new Intent().putExtra("city",city.get(position).toString()));
+                    finish();
+                    return;
+                }
                 cityPosition = position;
                 params.clear();
                 params.put("citycode", city.get(position).code);

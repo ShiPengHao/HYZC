@@ -1,6 +1,11 @@
 package com.yimeng.hyzchbczhwq.fragment;
 
+import android.animation.ObjectAnimator;
 import android.content.Intent;
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.Location;
+import android.os.AsyncTask;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
@@ -12,9 +17,18 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 import com.yimeng.hyzchbczhwq.R;
+import com.yimeng.hyzchbczhwq.activity.AddressChoiceActivity;
+import com.yimeng.hyzchbczhwq.activity.BaseActivity;
+import com.yimeng.hyzchbczhwq.activity.DepartmentChoiceActivity;
 import com.yimeng.hyzchbczhwq.activity.DoctorListActivity;
 import com.yimeng.hyzchbczhwq.activity.WebViewActivity;
+import com.yimeng.hyzchbczhwq.bean.HospitalBean;
 import com.yimeng.hyzchbczhwq.utils.DensityUtil;
+import com.yimeng.hyzchbczhwq.utils.JsonUtils;
+import com.yimeng.hyzchbczhwq.utils.LocationUtils;
+import com.yimeng.hyzchbczhwq.utils.MyApp;
+import com.yimeng.hyzchbczhwq.utils.MyConstant;
+import com.yimeng.hyzchbczhwq.utils.MyToast;
 import com.yimeng.hyzchbczhwq.utils.UiUtils;
 import com.yimeng.hyzchbczhwq.view.CycleViewPager;
 import com.zhy.http.okhttp.OkHttpUtils;
@@ -24,13 +38,17 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 import okhttp3.Call;
+
+
 
 /**
  * 病人首页fragment
  */
-public class HomeFragment extends BaseFragment implements View.OnClickListener, CycleViewPager.OnItemClickListener {
+public class HomeFragment extends BaseFragment implements View.OnClickListener, CycleViewPager.OnItemClickListener, LocationUtils.UpdateLocationListener {
 
     private CycleViewPager viewPager;
     /**
@@ -49,9 +67,11 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
     private LinearLayout ll_chat;
     private LinearLayout ll_health;
     private final String BANNER_URL = "http://www.hyzczg.com/plugins/advert/advert_js.ashx?id=1";
+    public static final int REQUEST_CODE_FOR_CITY = 200;
     private LinearLayout ll_points;
     private TextView tv_img_title;
     private PagerAdapter adapter;
+    private ArrayList<HospitalBean> hospital = new ArrayList<>();
 
     private final String URL_PATTERN =
             "^((https|http|ftp|rtsp|mms)?://)"//ftp的user@
@@ -70,6 +90,11 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
                     + "(:[0-9]{1,4})?" // 端口- :80
                     + "((/?)|"
                     + "(/[0-9a-zA-Z_!~*'().;?:@&=+$,%#-]+)+/?)$";
+    private TextView tv_location;
+    private LinearLayout ll_location;
+    private String locationCity;
+    private ImageView iv_location;
+    private String cityName;
 
     @Override
     protected int getLayoutResId() {
@@ -82,7 +107,10 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
         ll_chat = (LinearLayout) view.findViewById(R.id.ll_chat);
         ll_health = (LinearLayout) view.findViewById(R.id.ll_health);
         ll_points = (LinearLayout) view.findViewById(R.id.ll_points);
+        ll_location = (LinearLayout) view.findViewById(R.id.ll_location);
         tv_img_title = (TextView) view.findViewById(R.id.tv_img_title);
+        tv_location = (TextView) view.findViewById(R.id.tv_location);
+        iv_location = (ImageView) view.findViewById(R.id.iv_location);
     }
 
     @Override
@@ -90,6 +118,8 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
         ll_health.setOnClickListener(this);
         ll_chat.setOnClickListener(this);
         ll_booking.setOnClickListener(this);
+        ll_location.setOnClickListener(this);
+        LocationUtils.setUpdateLocationListener(this);
         viewPager.setOnItemClickListener(this);
         adapter = new PagerAdapter() {
             @Override
@@ -148,6 +178,9 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
 
     @Override
     protected void initData() {
+        if (locationCity != null) {
+            tv_location.setText(locationCity);
+        }
         imgUrls.clear();
         backUrls.clear();
         imgTitles.clear();
@@ -205,21 +238,90 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
         }
     }
 
+    /**
+     * 验证城市名字
+     *
+     * @return 非空
+     */
+    private boolean checkCityNameAndHospital() {
+        if (TextUtils.isEmpty(cityName)) {
+            MyToast.show("请选择您所在的城市");
+            ObjectAnimator.ofFloat(ll_location, "translationX", 15f, -15f, 20f, -20f, 0).setDuration(300).start();
+            return false;
+        }
+        if (hospital == null || hospital.size() == 0) {
+            ObjectAnimator.ofFloat(ll_location, "translationX", 15f, -15f, 20f, -20f, 0).setDuration(300).start();
+            MyToast.show("该地区没有互联网医院，欢迎您联系\"华医之春\"合作");
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * 获得本市医院
+     */
+    private void requestHospital(String cityName) {
+        if (TextUtils.isEmpty(cityName))
+            return;
+        HashMap<String, Object> params = new HashMap<>();
+        params.put("cityname", cityName);
+        new BaseActivity.SoapAsyncTask() {
+            @Override
+            protected void onPostExecute(String s) {
+                if (null == s)
+                    return;
+                try {
+                    JsonUtils.parseListResult(hospital, HospitalBean.class, s);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }.execute("get_City_Hospital", params);
+    }
+
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.ll_chat:
-                startActivity(new Intent(getActivity(), DoctorListActivity.class)
-                        .putExtra(DoctorListActivity.EXTRA_CHAT_OR_BOOKING, DoctorListActivity.EXTRA_CHAT));// 在线咨询
+                if (checkCityNameAndHospital())
+                    startActivity(new Intent(getActivity(), DepartmentChoiceActivity.class)
+                            .putExtra("hospital", hospital)
+                            .putExtra(DoctorListActivity.EXTRA_CHAT_OR_BOOKING, DoctorListActivity.EXTRA_CHAT));// 在线咨询
                 break;
             case R.id.ll_booking:
-                startActivity(new Intent(getActivity(), DoctorListActivity.class)
-                        .putExtra(DoctorListActivity.EXTRA_CHAT_OR_BOOKING, DoctorListActivity.EXTRA_BOOKING));// 预约挂号
+                if (checkCityNameAndHospital())
+                    startActivity(new Intent(getActivity(), DepartmentChoiceActivity.class)
+                            .putExtra("hospital", hospital)
+                            .putExtra(DoctorListActivity.EXTRA_CHAT_OR_BOOKING, DoctorListActivity.EXTRA_BOOKING));// 预约挂号
                 break;
             case R.id.ll_health:
                 startActivity(new Intent(getActivity(), WebViewActivity.class));// 健康教育
                 break;
+            case R.id.ll_location:
+                startActivityForResult(new Intent(getActivity(),
+                        AddressChoiceActivity.class).putExtra(MyConstant.REQUEST_CODE, REQUEST_CODE_FOR_CITY), REQUEST_CODE_FOR_CITY);// 选择市
+                break;
         }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (data == null)
+            return;
+        switch (requestCode) {
+            case REQUEST_CODE_FOR_CITY:
+                String city = data.getStringExtra("city");
+                if (city == null) return;
+                tv_location.setText(city);
+                cityName = city;
+                requestHospital(city);
+                if (!city.equalsIgnoreCase(locationCity))
+                    iv_location.setVisibility(View.GONE);
+                else
+                    iv_location.setVisibility(View.VISIBLE);
+                break;
+        }
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     @Override
@@ -228,5 +330,42 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
         if (!TextUtils.isEmpty(url) && url.matches(URL_PATTERN)) {
             startActivity(new Intent(getActivity(), WebViewActivity.class).putExtra("url", url));
         }
+    }
+
+    @Override
+    public void updateWithNewLocation(Location location) {
+        new AsyncTask<Location, Void, Void>() {
+            @Override
+            protected Void doInBackground(Location... params) {
+                if (null == params || null == params[0]) {
+                    return null;
+                }
+                Location location = params[0];
+                double lat = location.getLatitude();
+                double lng = location.getLongitude();
+                List<Address> addList;
+                Geocoder ge = new Geocoder(MyApp.getAppContext());
+                try {
+                    addList = ge.getFromLocation(lat, lng, 1);
+                    if (addList != null && addList.size() > 0) {
+                        Address ad = addList.get(0);
+                        cityName = ad.getLocality();
+                        hospital.clear();
+                        requestHospital(cityName);
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Void aVoid) {
+                if (!TextUtils.isEmpty(cityName) && !cityName.equalsIgnoreCase(locationCity)) {
+                    locationCity = cityName;
+                    tv_location.setText(cityName);
+                }
+            }
+        }.execute(location);
     }
 }

@@ -8,8 +8,8 @@ android {
         applicationId "com.yimeng.hyzchbczhwq"
         minSdkVersion 14
         targetSdkVersion 23
-        versionCode 8
-        versionName "2.1.4正式版"
+        versionCode 9
+        versionName "2.2.0正式版"
     }
 
     buildTypes {

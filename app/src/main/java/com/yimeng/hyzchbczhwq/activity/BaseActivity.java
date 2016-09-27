@@ -61,7 +61,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         setListener();
         initData();
         overridePendingTransition(R.anim.next_in, R.anim.next_out);
-        LocationUtils.setUpdateLocationListener(null);//TODO 位置服务测试
+//        LocationUtils.setUpdateLocationListener(null);
     }
 
     @Override
