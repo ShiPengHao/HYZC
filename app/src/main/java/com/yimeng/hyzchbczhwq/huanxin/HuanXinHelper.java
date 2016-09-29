@@ -41,6 +41,7 @@ import com.yimeng.hyzchbczhwq.activity.BaseActivity;
 import com.yimeng.hyzchbczhwq.bean.DoctorBean;
 import com.yimeng.hyzchbczhwq.bean.PatientBean;
 import com.yimeng.hyzchbczhwq.utils.JsonUtils;
+import com.yimeng.hyzchbczhwq.utils.MyApp;
 import com.yimeng.hyzchbczhwq.utils.MyConstant;
 import com.yimeng.hyzchbczhwq.utils.MyToast;
 
@@ -54,7 +55,7 @@ import java.util.UUID;
 public class HuanXinHelper {
 
     private String type;
-    private String tempUserName;
+    private HashMap<String, EaseUser> usersMap = new HashMap<>();
 
     /**
      * data sync listener
@@ -173,6 +174,7 @@ public class HuanXinHelper {
         options.setRequireAck(true);
         // set if you need delivery ack
         options.setRequireDeliveryAck(false);
+        options.setAutoLogin(false);
 
         //you need apply & set your own id if you want to use google cloud messaging.
 //        options.setGCMNumber("324169311137");
@@ -277,7 +279,7 @@ public class HuanXinHelper {
             @Override
             public int getSmallIcon(EMMessage message) {
                 //you can update icon here
-                return R.drawable.ic_launcher;
+                return R.mipmap.app_logo;
             }
 
             @Override
@@ -672,7 +674,8 @@ public class HuanXinHelper {
      * user has logged into another device
      */
     protected void onConnectionConflict() {
-        MyToast.show("user has logged into another device");
+        MyToast.show("该用户在其它设备登录，程序将退出！");
+        MyApp.getAppContext().finish();
 //TODO 单点登录的处理
 //        Intent intent = new Intent(appContext, ChatActivity.class);
 //        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -684,7 +687,8 @@ public class HuanXinHelper {
      * account is removed
      */
     protected void onCurrentAccountRemoved() {
-        MyToast.show("account is removed");
+        MyToast.show("账号状态异常，程序将退出！");
+        MyApp.getAppContext().finish();
 //        Intent intent = new Intent(appContext, ChatActivity.class);
 //        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 //        intent.putExtra(Constant.ACCOUNT_REMOVED, true);
@@ -694,25 +698,25 @@ public class HuanXinHelper {
     private EaseUser getUserInfo(String username) {
         // To get instance of EaseUser, here we get it from the user list in memory
         // You'd better cache it if you get it from your server
-        EaseUser user = null;
+        EaseUser user = usersMap.get(username);
 //        if(username.equals(EMClient.getInstance().getCurrentUser()))
 //            return getUserProfileManager().getCurrentUserInfo();
-        user = getContactList().get(username);
-        if (user == null && getRobotList() != null) {
-            user = getRobotList().get(username);
-        }
+//        user = getContactList().get(username);
+//        if (user == null && getRobotList() != null) {
+//            user = getRobotList().get(username);
+//        }
 
         // if user is not in your contacts, set inital letter for him/her
-        if (user == null) {
+        if (user == null || TextUtils.isEmpty(user.getAvatar()) || TextUtils.isEmpty(user.getNick())) {
             user = new EaseUser(username);
-            user.setNick(PreferenceManager.getInstance().getUserNick(username));
+            String userNick = PreferenceManager.getInstance().getUserNick(username);
+            user.setNick(userNick);
             String userAvatar = PreferenceManager.getInstance().getUserAvatar(username);
             if (!TextUtils.isEmpty(userAvatar))
-                user.setAvatar(MyConstant.WEB_SERVICE_URL + userAvatar);
+                user.setAvatar(MyConstant.NAMESPACE + userAvatar);
             EaseCommonUtils.setUserInitialLetter(user);
             String[] split = username.split("_");
             if (split.length == 2) {
-                this.tempUserName = username;
                 type = split[0];
                 String id = split[1];
                 HashMap<String, Object> values = new HashMap<>();
@@ -755,14 +759,25 @@ public class HuanXinHelper {
      * @param s json数据
      */
     private void parsePatientInfo(String s) {
-        ArrayList<PatientBean> patientBeanArrayList = new ArrayList<>();
+        ArrayList<PatientBean> arrayList = new ArrayList<>();
         try {
-            JsonUtils.parseListResult(patientBeanArrayList, PatientBean.class, s);
-            if (patientBeanArrayList.size() > 0) {
-                PatientBean patientBean = patientBeanArrayList.get(0);
-                PreferenceManager.getInstance().setUserNick(tempUserName, patientBean.patient_name);
-                PreferenceManager.getInstance().setUserAvatar(tempUserName, patientBean.patient_avatar);
-//                MyApp.getAppContext().sendBroadcast(new Intent(Constant.ACTION_MY_PROFILE_REFRESH));
+            JsonUtils.parseListResult(arrayList, PatientBean.class, s);
+            if (arrayList.size() > 0) {
+                PatientBean patientBean = arrayList.get(0);
+                String username = "patient_" + patientBean.patient_id;
+                String nick = patientBean.patient_name;
+                String avatar = patientBean.patient_avatar;
+                EaseUser easeUser = new EaseUser(username);
+                easeUser.setAvatar(MyConstant.NAMESPACE + avatar);
+                easeUser.setNick(nick);
+                usersMap.put(username, easeUser);
+
+                PreferenceManager.getInstance().setUserNick(username, nick);
+                PreferenceManager.getInstance().setUserAvatar(username, avatar);
+
+                MyApp.getAppContext().sendBroadcast(new Intent(Constant.ACTION_MY_PROFILE_REFRESH)
+                        .putExtra("username", username)
+                        .putExtra("nick", nick));
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -778,10 +793,22 @@ public class HuanXinHelper {
         ArrayList<DoctorBean> arrayList = new ArrayList<>();
         try {
             JsonUtils.parseListResult(arrayList, DoctorBean.class, s);
-            DoctorBean doctorBean = arrayList.get(0);
-            PreferenceManager.getInstance().setUserNick(tempUserName, doctorBean.doctor_name);
-            PreferenceManager.getInstance().setUserAvatar(tempUserName, doctorBean.doctor_avatar);
-//            MyApp.getAppContext().sendBroadcast(new Intent(Constant.ACTION_MY_PROFILE_REFRESH));
+            if (arrayList.size() > 0) {
+                DoctorBean doctorBean = arrayList.get(0);
+                String username = "doctor_" + doctorBean.doctor_id;
+                String nick = doctorBean.doctor_name;
+                String avatar = doctorBean.doctor_avatar;
+                EaseUser easeUser = new EaseUser(username);
+                easeUser.setAvatar(MyConstant.NAMESPACE + avatar);
+                easeUser.setNick(nick);
+                usersMap.put(username, easeUser);
+                PreferenceManager.getInstance().setUserNick(username, nick);
+                PreferenceManager.getInstance().setUserAvatar(username, avatar);
+
+                MyApp.getAppContext().sendBroadcast(new Intent(Constant.ACTION_MY_PROFILE_REFRESH)
+                        .putExtra("username", username)
+                        .putExtra("nick", nick));
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }

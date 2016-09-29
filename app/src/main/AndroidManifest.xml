@@ -142,8 +142,8 @@
             android:name=".huanxin.ConversationListActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustResize" />
-        <activity android:name=".huanxin.VideoCallActivity" />
-        <activity android:name=".huanxin.VoiceCallActivity" />
+        <activity android:name=".huanxin.VideoCallActivity" android:screenOrientation="portrait"/>
+        <activity android:name=".huanxin.VoiceCallActivity" android:screenOrientation="portrait"/>
 
         <!-- 设置环信应用的AppKey -->
         <meta-data

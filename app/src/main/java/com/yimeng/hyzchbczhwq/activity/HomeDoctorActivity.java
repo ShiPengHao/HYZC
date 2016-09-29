@@ -34,6 +34,8 @@ public class HomeDoctorActivity extends BaseActivity implements View.OnClickList
     private RelativeLayout rl_conversation_history;
     private ToggleButton tb_sound;
     private ToggleButton tb_vibrate;
+    private ToggleButton tb_autoLogin;
+    private SharedPreferences sharedPreferences;
 
     @Override
     protected int getLayoutResId() {
@@ -47,8 +49,11 @@ public class HomeDoctorActivity extends BaseActivity implements View.OnClickList
         rl_conversation_history = (RelativeLayout) findViewById(R.id.rl_conversation_history);
         tb_sound = (ToggleButton) findViewById(R.id.tb_sound);
         tb_vibrate = (ToggleButton) findViewById(R.id.tb_vibrate);
+        tb_autoLogin = (ToggleButton) findViewById(R.id.tb_autoLogin);
         tb_sound.setChecked(PreferenceManager.getInstance().getSettingMsgSound());
         tb_vibrate.setChecked(PreferenceManager.getInstance().getSettingMsgVibrate());
+        sharedPreferences = getSharedPreferences(MyConstant.PREFS_ACCOUNT, MODE_PRIVATE);
+        tb_autoLogin.setChecked(sharedPreferences.getBoolean(MyConstant.KEY_ACCOUNT_AUTOLOGIN,false));
     }
 
     @Override
@@ -66,6 +71,12 @@ public class HomeDoctorActivity extends BaseActivity implements View.OnClickList
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 PreferenceManager.getInstance().setSettingMsgVibrate(isChecked);
+            }
+        });
+        tb_autoLogin.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                sharedPreferences.edit().putBoolean(MyConstant.KEY_ACCOUNT_AUTOLOGIN,isChecked).apply();
             }
         });
     }

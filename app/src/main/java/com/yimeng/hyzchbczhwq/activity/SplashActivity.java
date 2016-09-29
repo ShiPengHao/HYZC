@@ -90,13 +90,13 @@ public class SplashActivity extends BaseActivity {
                     checkUpdate();
                 }
             }, 2000);
-        } else if (isAutoLogin()) {
-            handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    attemptToLogin();
-                }
-            }, 2000);
+//        } else if (isAutoLogin()) {
+//            handler.postDelayed(new Runnable() {
+//                @Override
+//                public void run() {
+//                    attemptToLogin();
+//                }
+//            }, 2000);
         } else {
             handler.postDelayed(new Runnable() {
                 @Override
@@ -219,14 +219,18 @@ public class SplashActivity extends BaseActivity {
 //                    EMClient.getInstance().createAccount(username, password);//同步方法
                     String username = object.optString("username");
                     String password = object.optString("password");
+                    while (EMClient.getInstance().isLoggedInBefore()
+                            && !username.equalsIgnoreCase(EMClient.getInstance().getCurrentUser())) {
+                        EMClient.getInstance().logout(true);
+                    }
                     EMClient.getInstance().login(username, password, new EMCallBack() {//回调
                         @Override
                         public void onSuccess() {
+                            EMClient.getInstance().groupManager().loadAllGroups();
+                            EMClient.getInstance().chatManager().loadAllConversations();
                             String type = object.optString("type");
                             String id = object.optString("id");
                             setJPushAliasAndTag(type, id);
-                            EMClient.getInstance().groupManager().loadAllGroups();
-                            EMClient.getInstance().chatManager().loadAllConversations();
                         }
 
                         @Override
@@ -237,7 +241,9 @@ public class SplashActivity extends BaseActivity {
                         @Override
                         public void onError(int code, String message) {
                             MyLog.i(getClass(), message);
-                            goToLogin();
+                            String type = object.optString("type");
+                            String id = object.optString("id");
+                            setJPushAliasAndTag(type, id);
                         }
                     });
                 } catch (Exception e) {
@@ -283,7 +289,10 @@ public class SplashActivity extends BaseActivity {
             @Override
             protected void onPostExecute(String s) {
                 if (s == null) {
-                    goToLogin();
+                    if (isAutoLogin())
+                        attemptToLogin();
+                    else
+                        goToLogin();
                     return;
                 }
                 try {
@@ -294,11 +303,17 @@ public class SplashActivity extends BaseActivity {
                         downloadUrl = object.optString("version_Url");
                         showUpdateDialog();
                     } else {
-                        goToLogin();
+                        if (isAutoLogin())
+                            attemptToLogin();
+                        else
+                            goToLogin();
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
-                    goToLogin();
+                    if (isAutoLogin())
+                        attemptToLogin();
+                    else
+                        goToLogin();
                 }
             }
         }.execute("Get_VersionCode", map);
@@ -309,7 +324,6 @@ public class SplashActivity extends BaseActivity {
      */
     private void showUpdateDialog() {
         updateDialog = new AlertDialog.Builder(SplashActivity.this).setTitle("发现新版本!")
-                .setMessage("新版本安装包大小为" + TextFormater.getDataSize(apkSize) + "，现在更新？")
                 // 限制对话框取消动作
                 .setCancelable(false)
                 .setPositiveButton("我要！", new DialogInterface.OnClickListener() {
@@ -322,11 +336,19 @@ public class SplashActivity extends BaseActivity {
                 .setNegativeButton("下次再说", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        goToLogin();
+                        if (isAutoLogin())
+                            attemptToLogin();
+                        else
+                            goToLogin();
                         dialog.dismiss();
                     }
                 })
                 .create();
+        String wifiTip = "";
+        if (!MyNetUtils.isWifi(this)) {
+            wifiTip = "检测到您的手机当前并非在wifi环境下，";
+        }
+        updateDialog.setMessage(String.format("新版本安装包大小为%s，%s确定更新？", TextFormater.getDataSize(apkSize), wifiTip));
         updateDialog.show();
     }
 
@@ -369,7 +391,10 @@ public class SplashActivity extends BaseActivity {
             public void onError(Call call, Exception e, int i) {
                 e.printStackTrace();
                 progressDialog.dismiss();
-                goToLogin();
+                if (isAutoLogin())
+                    attemptToLogin();
+                else
+                    goToLogin();
             }
         });
     }

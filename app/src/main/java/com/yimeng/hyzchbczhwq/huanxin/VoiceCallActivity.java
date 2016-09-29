@@ -103,8 +103,8 @@ public class VoiceCallActivity extends CallActivity implements OnClickListener {
         msgid = UUID.randomUUID().toString();
 
         username = getIntent().getStringExtra("username");
+        nickTextView.setText(PreferenceManager.getInstance().getUserNick(username));
         isInComingCall = getIntent().getBooleanExtra("isComingCall", false);
-        nickTextView.setText(username);
         if (!isInComingCall) {// outgoing call
             soundPool = new SoundPool(1, AudioManager.STREAM_RING, 0);
             outgoing = soundPool.load(this, R.raw.em_outgoing, 1);

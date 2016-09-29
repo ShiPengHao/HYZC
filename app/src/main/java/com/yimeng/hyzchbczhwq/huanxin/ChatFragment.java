@@ -60,12 +60,16 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentHe
      */
     private boolean isRobot;
     private MyReceiver myReceiver;
+    private String nick;
 
     private class MyReceiver extends BroadcastReceiver {
 
         @Override
         public void onReceive(Context context, Intent intent) {
-            refreshUI();
+            if (toChatUsername.equalsIgnoreCase(intent.getStringExtra("username"))) {
+                nick = intent.getStringExtra("nick");
+                titleBar.setTitle(nick);
+            }
         }
     }
 
@@ -118,6 +122,7 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentHe
 //            });
 //        }
         setRefreshProfileReceiver();
+        nick = PreferenceManager.getInstance().getUserNick(toChatUsername);
     }
 
     @Override
@@ -217,7 +222,6 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentHe
         myReceiver = new MyReceiver();
         getActivity().registerReceiver(myReceiver, new IntentFilter(Constant.ACTION_MY_PROFILE_REFRESH));
     }
-
 
 
     @Override
@@ -357,7 +361,8 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentHe
         if (!EMClient.getInstance().isConnected()) {
             Toast.makeText(getActivity(), R.string.not_connect_to_server, Toast.LENGTH_SHORT).show();
         } else {
-            startActivity(new Intent(getActivity(), VoiceCallActivity.class).putExtra("username", toChatUsername)
+            startActivity(new Intent(getActivity(), VoiceCallActivity.class)
+                    .putExtra("username", toChatUsername)
                     .putExtra("isComingCall", false));
             // voiceCallBtn.setEnabled(false);
             inputMenu.hideExtendMenuContainer();
@@ -371,7 +376,8 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentHe
         if (!EMClient.getInstance().isConnected())
             Toast.makeText(getActivity(), R.string.not_connect_to_server, Toast.LENGTH_SHORT).show();
         else {
-            startActivity(new Intent(getActivity(), VideoCallActivity.class).putExtra("username", toChatUsername)
+            startActivity(new Intent(getActivity(), VideoCallActivity.class)
+                    .putExtra("username", toChatUsername)
                     .putExtra("isComingCall", false));
             // videoCallBtn.setEnabled(false);
             inputMenu.hideExtendMenuContainer();

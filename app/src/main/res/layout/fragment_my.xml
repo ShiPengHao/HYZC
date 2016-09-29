@@ -51,40 +51,40 @@
                 android:src="@mipmap/next" />
         </RelativeLayout>
 
-        <RelativeLayout
-            android:id="@+id/rl_booking"
-            android:layout_width="fill_parent"
-            android:layout_height="@dimen/finger_width"
-            android:layout_marginBottom="4dp"
-            android:background="@color/white"
-            android:padding="5dp">
+        <!--<RelativeLayout-->
+            <!--android:id="@+id/rl_booking"-->
+            <!--android:layout_width="fill_parent"-->
+            <!--android:layout_height="@dimen/finger_width"-->
+            <!--android:layout_marginBottom="4dp"-->
+            <!--android:background="@color/white"-->
+            <!--android:padding="5dp">-->
 
-            <ImageView
-                android:id="@+id/iv_booking"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:layout_centerVertical="true"
-                android:src="@mipmap/search" />
+            <!--<ImageView-->
+                <!--android:id="@+id/iv_booking"-->
+                <!--android:layout_width="24dp"-->
+                <!--android:layout_height="24dp"-->
+                <!--android:layout_centerVertical="true"-->
+                <!--android:src="@mipmap/search" />-->
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="16dp"
-                android:layout_toRightOf="@id/iv_booking"
-                android:text="@string/booking"
-                android:textColor="@color/black"
-                android:textSize="18dp" />
+            <!--<TextView-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_centerVertical="true"-->
+                <!--android:layout_marginLeft="16dp"-->
+                <!--android:layout_toRightOf="@id/iv_booking"-->
+                <!--android:text="@string/booking"-->
+                <!--android:textColor="@color/black"-->
+                <!--android:textSize="18dp" />-->
 
-            <ImageView
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:layout_marginRight="6dp"
-                android:scaleType="centerInside"
-                android:src="@mipmap/next" />
-        </RelativeLayout>
+            <!--<ImageView-->
+                <!--android:layout_width="32dp"-->
+                <!--android:layout_height="32dp"-->
+                <!--android:layout_alignParentRight="true"-->
+                <!--android:layout_centerVertical="true"-->
+                <!--android:layout_marginRight="6dp"-->
+                <!--android:scaleType="centerInside"-->
+                <!--android:src="@mipmap/next" />-->
+        <!--</RelativeLayout>-->
 
         <RelativeLayout
             android:id="@+id/rl_appointment_history"
@@ -206,6 +206,35 @@
 
             <ToggleButton
                 android:id="@+id/tb_vibrate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/selector_toggle_btn"
+                android:checked="false"
+                android:text=""
+                android:textOff=""
+                android:textOn="" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/finger_width"
+            android:layout_marginBottom="4dp"
+            android:background="@color/white"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:padding="5dp">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:paddingLeft="5dp"
+                android:text="@string/autoLogin"
+                android:textColor="@color/black"
+                android:textSize="18dp" />
+
+            <ToggleButton
+                android:id="@+id/tb_autoLogin"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/selector_toggle_btn"

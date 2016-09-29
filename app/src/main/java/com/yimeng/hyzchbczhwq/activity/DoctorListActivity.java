@@ -1,6 +1,7 @@
 package com.yimeng.hyzchbczhwq.activity;
 
 import android.content.Intent;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
@@ -70,7 +71,8 @@ public class DoctorListActivity extends BaseActivity implements AdapterView.OnIt
             chatOrBooking = intent.getIntExtra(EXTRA_CHAT_OR_BOOKING, EXTRA_BOOKING);
             departments_name = intent.getStringExtra("departments_name");
             hospital_name = intent.getStringExtra("hospital_name");
-            tv_department.setText(String.format("%s%s", hospital_name, departments_name));
+            if (!TextUtils.isEmpty(departments_name) && !TextUtils.isEmpty(hospital_name))
+                tv_department.setText(String.format("%s%s", hospital_name, departments_name));
             tv_department.setFocusable(true);
             tv_department.setFocusableInTouchMode(true);
             hospital_id = intent.getStringExtra("hospital_id");
@@ -121,7 +123,6 @@ public class DoctorListActivity extends BaseActivity implements AdapterView.OnIt
         switch (chatOrBooking) {
             case EXTRA_BOOKING:
                 startActivity(new Intent(this, DoctorDetailActivity.class)
-                        .putExtra("departments_name",departments_name)
                         .putExtra("doctor", doctorBean));
                 break;
             case EXTRA_CHAT:

@@ -186,7 +186,7 @@ public class CallActivity extends BaseActivity {
                     saveCallRecord();
                     finish();
                 }
-                
+
                 break;
             case MSG_CALL_RLEASE_HANDLER:
                 try {

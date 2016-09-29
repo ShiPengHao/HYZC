@@ -43,9 +43,12 @@ import com.hyphenate.chat.EMClient;
 import com.hyphenate.media.EMLocalSurfaceView;
 import com.hyphenate.media.EMOppositeSurfaceView;
 import com.hyphenate.util.PathUtil;
-import com.yimeng.hyzchbczhwq.R;
 
 import java.util.UUID;
+
+import com.yimeng.hyzchbczhwq.R;
+import com.yimeng.hyzchbczhwq.utils.MyConstant;
+import com.yimeng.hyzchbczhwq.utils.MyToast;
 
 public class VideoCallActivity extends CallActivity implements OnClickListener {
 
@@ -162,8 +165,7 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
         msgid = UUID.randomUUID().toString();
         isInComingCall = getIntent().getBooleanExtra("isComingCall", false);
         username = getIntent().getStringExtra("username");
-
-        nickTextView.setText(username);
+        nickTextView.setText(PreferenceManager.getInstance().getUserNick(username));
 
         // local surfaceview
         localSurface = (EMLocalSurfaceView) findViewById(R.id.local_surface);

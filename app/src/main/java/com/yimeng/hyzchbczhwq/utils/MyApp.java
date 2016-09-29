@@ -11,6 +11,7 @@ import android.os.Looper;
 import android.os.SystemClock;
 import android.widget.Toast;
 
+import com.hyphenate.chat.EMClient;
 import com.yimeng.hyzchbczhwq.R;
 import com.yimeng.hyzchbczhwq.huanxin.HuanXinHelper;
 import com.zhy.http.okhttp.OkHttpUtils;
@@ -88,6 +89,7 @@ public class MyApp extends Application implements Thread.UncaughtExceptionHandle
      * 完全退出本应用
      */
     public void finish() {
+        EMClient.getInstance().logout(true);
         stopJPush();
         for (int j = 0; j < activities.size(); j++) {
             activities.get(j).finish();

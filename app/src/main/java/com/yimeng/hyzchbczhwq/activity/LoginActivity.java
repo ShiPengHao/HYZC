@@ -257,6 +257,10 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
             protected Object doInBackground(Object... params) {
                 try {
 //                    EMClient.getInstance().createAccount(username, password);//同步方法
+                    while (EMClient.getInstance().isLoggedInBefore()
+                            && !username.equalsIgnoreCase(EMClient.getInstance().getCurrentUser())) {
+                        EMClient.getInstance().logout(true);
+                    }
                     EMClient.getInstance().login(username, password, new EMCallBack() {//回调
                         @Override
                         public void onSuccess() {
