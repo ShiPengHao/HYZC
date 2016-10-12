@@ -20,13 +20,12 @@ import android.widget.TextView;
 import com.squareup.picasso.Picasso;
 import com.yimeng.hyzchbczhwq.R;
 import com.yimeng.hyzchbczhwq.bean.DoctorBean;
-import com.yimeng.hyzchbczhwq.bean.PatientBean;
+import com.yimeng.hyzchbczhwq.bean.UserBean;
 import com.yimeng.hyzchbczhwq.utils.BitmapUtils;
 import com.yimeng.hyzchbczhwq.utils.DensityUtil;
 import com.yimeng.hyzchbczhwq.utils.MyConstant;
 import com.yimeng.hyzchbczhwq.utils.MyToast;
 import com.yimeng.hyzchbczhwq.utils.PickImageUtils;
-
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -62,7 +61,7 @@ public class AccountInfoActivity extends BaseActivity implements View.OnClickLis
     private AlertDialog.Builder selectSexDialog;
     private AlertDialog.Builder selectOrderDialog;
     private String type;
-    private PatientBean patientBean;
+    private UserBean userBean;
     private static final int REQUEST_GALLERY_FOR_AVATAR = 101;
     private AlertDialog uploadDialog;
     private TextView uploadTextView;
@@ -72,6 +71,12 @@ public class AccountInfoActivity extends BaseActivity implements View.OnClickLis
     private RatingBar rating_bar;
     private RelativeLayout rl_score;
     private String id;
+    private TextView tv_change_pwd;
+    private LinearLayout ll_personal_info;
+    private String name;
+    private String age;
+    private String sex;
+    private String phone;
 
 
     @Override
@@ -92,6 +97,7 @@ public class AccountInfoActivity extends BaseActivity implements View.OnClickLis
         tv_sex = (TextView) findViewById(R.id.tv_sex);
         tv_isOrder = (TextView) findViewById(R.id.tv_isOrder);
         tv_edit = (TextView) findViewById(R.id.tv_edit);
+        tv_change_pwd = (TextView) findViewById(R.id.tv_change_pwd);
 
         iv_back = (ImageView) findViewById(R.id.iv_back);
         iv_avatar = (ImageView) findViewById(R.id.iv_avatar);
@@ -100,6 +106,7 @@ public class AccountInfoActivity extends BaseActivity implements View.OnClickLis
         ll_limit = (LinearLayout) findViewById(R.id.ll_limit);
         ll_introduce = (LinearLayout) findViewById(R.id.ll_introduce);
         rl_score = (RelativeLayout) findViewById(R.id.rl_score);
+        ll_personal_info = (LinearLayout) findViewById(R.id.ll_personal_info);
 
         rating_bar = (RatingBar) findViewById(R.id.rating_bar);
     }
@@ -109,6 +116,7 @@ public class AccountInfoActivity extends BaseActivity implements View.OnClickLis
         tv_edit.setOnClickListener(this);
         tv_sex.setOnClickListener(this);
         tv_isOrder.setOnClickListener(this);
+        tv_change_pwd.setOnClickListener(this);
         iv_back.setOnClickListener(this);
         iv_avatar.setOnClickListener(this);
     }
@@ -126,8 +134,9 @@ public class AccountInfoActivity extends BaseActivity implements View.OnClickLis
         values.clear();
         if (type.equalsIgnoreCase("patient")) {
             rl_score.setVisibility(View.GONE);
-            values.put("patient_id", id);
-            requestInfo("Get_Patient_Msg", values);
+            ll_personal_info.setVisibility(View.GONE);
+            values.put("user_id", id);
+            requestInfo("Get_User_Msg", values);
         } else if (type.equalsIgnoreCase("doctor")) {
             ll_isOrder.setVisibility(View.VISIBLE);
             ll_introduce.setVisibility(View.VISIBLE);
@@ -191,10 +200,10 @@ public class AccountInfoActivity extends BaseActivity implements View.OnClickLis
      * @param s json数据
      */
     private void parsePatientInfo(String s) {
-        ArrayList<PatientBean> patientBeanArrayList = new ArrayList<>();
-        parseListResult(patientBeanArrayList, PatientBean.class, s);
-        if (patientBeanArrayList.size() > 0) {
-            patientBean = patientBeanArrayList.get(0);
+        ArrayList<UserBean> userBeanArrayList = new ArrayList<>();
+        parseListResult(userBeanArrayList, UserBean.class, s);
+        if (userBeanArrayList.size() > 0) {
+            userBean = userBeanArrayList.get(0);
             bindPatientData();
         }
     }
@@ -203,13 +212,9 @@ public class AccountInfoActivity extends BaseActivity implements View.OnClickLis
      * 绑定病人数据到控件
      */
     private void bindPatientData() {
-        avatarUrl = patientBean.patient_avatar;
-        et_name.setText(patientBean.patient_name);
-        et_age.setText(isEmpty(patientBean.patient_age) ? getString(R.string.empty_content) : patientBean.patient_age);
-        et_wechat.setText(isEmpty(patientBean.patieny_WeChat) ? getString(R.string.empty_content) : patientBean.patieny_WeChat);
-        et_phone.setText(isEmpty(patientBean.patient_phone) ? getString(R.string.empty_content) : patientBean.patient_phone);
-        et_email.setText(isEmpty(patientBean.patient_email) ? getString(R.string.empty_content) : patientBean.patient_email);
-        tv_sex.setText(isEmpty(patientBean.patient_sex) ? getString(R.string.empty_content) : patientBean.patient_sex);
+        avatarUrl = userBean.user_avatar;
+        et_wechat.setText(isEmpty(userBean.user_WeChat) ? getString(R.string.empty_content) : userBean.user_WeChat);
+        et_email.setText(isEmpty(userBean.user_email) ? getString(R.string.empty_content) : userBean.user_email);
         Picasso.with(this)
                 .load(MyConstant.NAMESPACE + avatarUrl)
                 .resize(DensityUtil.dip2px(96), DensityUtil.dip2px(96))
@@ -273,6 +278,9 @@ public class AccountInfoActivity extends BaseActivity implements View.OnClickLis
                 } else {
                     switchEditState();
                 }
+                break;
+            case R.id.tv_change_pwd:
+                startActivity(new Intent(this, ChangePwdActivity.class));
                 break;
             case R.id.iv_back:
                 finish();
@@ -428,34 +436,36 @@ public class AccountInfoActivity extends BaseActivity implements View.OnClickLis
      * 检查可编辑项的文本，准备提交信息
      */
     private void checkInput() {
-        String name = et_name.getText().toString().trim();
-        if (TextUtils.isEmpty(name)) {
-            MyToast.show(String.format("%s%s", getString(R.string.name), getString(R.string.can_not_be_null)));
-            ObjectAnimator.ofFloat(et_name, "translationX", 15f, -15f, 20f, -20f, 0).setDuration(300).start();
-            return;
-        }
-        String age = et_age.getText().toString().trim();
-        if (TextUtils.isEmpty(age)) {
-            MyToast.show(String.format("%s%s", getString(R.string.age), getString(R.string.can_not_be_null)));
-            ObjectAnimator.ofFloat(et_age, "translationX", 15f, -15f, 20f, -20f, 0).setDuration(300).start();
-            return;
-        }
-        String sex = tv_sex.getText().toString().trim();
-        if (TextUtils.isEmpty(sex)) {
-            MyToast.show(String.format("%s%s", getString(R.string.sex), getString(R.string.can_not_be_null)));
-            ObjectAnimator.ofFloat(tv_sex, "translationX", 15f, -15f, 20f, -20f, 0).setDuration(300).start();
-            return;
-        }
-        String phone = et_phone.getText().toString().trim();
-        if (TextUtils.isEmpty(phone)) {
-            MyToast.show(String.format("%s%s", getString(R.string.phone), getString(R.string.can_not_be_null)));
-            ObjectAnimator.ofFloat(et_phone, "translationX", 15f, -15f, 20f, -20f, 0).setDuration(300).start();
-            return;
-        }
-        if (!phone.matches("[1][358]\\d{9}")) {
-            MyToast.show("手机号格式不正确");
-            ObjectAnimator.ofFloat(et_phone, "translationX", 15f, -15f, 20f, -20f, 0).setDuration(300).start();
-            return;
+        if (ll_personal_info.getVisibility() == View.VISIBLE) {
+            name = et_name.getText().toString().trim();
+            if (TextUtils.isEmpty(name)) {
+                MyToast.show(String.format("%s%s", getString(R.string.name), getString(R.string.can_not_be_null)));
+                ObjectAnimator.ofFloat(et_name, "translationX", 15f, -15f, 20f, -20f, 0).setDuration(300).start();
+                return;
+            }
+            age = et_age.getText().toString().trim();
+            if (TextUtils.isEmpty(age)) {
+                MyToast.show(String.format("%s%s", getString(R.string.age), getString(R.string.can_not_be_null)));
+                ObjectAnimator.ofFloat(et_age, "translationX", 15f, -15f, 20f, -20f, 0).setDuration(300).start();
+                return;
+            }
+            sex = tv_sex.getText().toString().trim();
+            if (TextUtils.isEmpty(sex)) {
+                MyToast.show(String.format("%s%s", getString(R.string.sex), getString(R.string.can_not_be_null)));
+                ObjectAnimator.ofFloat(tv_sex, "translationX", 15f, -15f, 20f, -20f, 0).setDuration(300).start();
+                return;
+            }
+            phone = et_phone.getText().toString().trim();
+            if (TextUtils.isEmpty(phone)) {
+                MyToast.show(String.format("%s%s", getString(R.string.phone), getString(R.string.can_not_be_null)));
+                ObjectAnimator.ofFloat(et_phone, "translationX", 15f, -15f, 20f, -20f, 0).setDuration(300).start();
+                return;
+            }
+            if (!phone.matches("[1][358]\\d{9}")) {
+                MyToast.show("手机号格式不正确");
+                ObjectAnimator.ofFloat(et_phone, "translationX", 15f, -15f, 20f, -20f, 0).setDuration(300).start();
+                return;
+            }
         }
         String email = et_email.getText().toString().trim();
         if (TextUtils.isEmpty(email)) {
@@ -500,15 +510,11 @@ public class AccountInfoActivity extends BaseActivity implements View.OnClickLis
 
         values.clear();
         if (type.equalsIgnoreCase("patient")) {
-            values.put("patient_id", patientBean.patient_id);
-            values.put("patient_avatar", avatarUrl);
-            values.put("patient_name", name);
-            values.put("patient_sex", sex);
-            values.put("patient_age", age);
-            values.put("patient_phone", phone);
-            values.put("patient_email", email);
-            values.put("patieny_WeChat", weChat);
-            uploadInfo("Update_Patient_Msg", values);
+            values.put("user_id", userBean.user_id);
+            values.put("user_avatar", avatarUrl);
+            values.put("user_email", email);
+            values.put("user_WeChat", weChat);
+            uploadInfo("Update_User_Msg", values);
         } else if (type.equalsIgnoreCase("doctor")) {
             values.put("doctor_id", doctorBean.doctor_id);
             values.put("doctor_avatar", avatarUrl);
@@ -586,9 +592,9 @@ public class AccountInfoActivity extends BaseActivity implements View.OnClickLis
      */
     private void switchEditState() {
         if (edit_status) {
-            tv_edit.setText("修改");
+            tv_edit.setText(getString(R.string.edit));
         } else {
-            tv_edit.setText("完成");
+            tv_edit.setText(getString(R.string.finish));
         }
         edit_status = !edit_status;
 

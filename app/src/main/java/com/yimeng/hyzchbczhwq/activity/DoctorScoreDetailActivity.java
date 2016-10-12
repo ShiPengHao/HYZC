@@ -57,13 +57,14 @@ public class DoctorScoreDetailActivity extends BaseActivity implements View.OnCl
         };
         lv.setAdapter(adapter);
         lv.hideFooter();
+        lv.setFooterDividersEnabled(false);
     }
 
     @Override
     protected void initData() {
         try {
             DoctorBean doctorBean = (DoctorBean) getIntent().getSerializableExtra("doctor");
-            tv_doctor.setText(String.format("%s  %s",getString(R.string.department_name),doctorBean.doctor_name));
+            tv_doctor.setText(doctorBean.doctor_name);
             doctor_id = doctorBean.doctor_id;
             pageCount = 1;
             itemCount = 0;
@@ -92,7 +93,7 @@ public class DoctorScoreDetailActivity extends BaseActivity implements View.OnCl
             }
         } else if (lv.isRefreshing()) {
             params.put("pageindex", 1);
-            params.put("pagesize", itemCount);
+            params.put("pagesize", Math.max(itemCount, DEFAULT_NUMBER_PER_PAGE));
         }
         new SoapAsyncTask() {
             @Override

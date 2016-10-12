@@ -3,11 +3,13 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/white"
+    android:minHeight="@dimen/finger_width"
     android:padding="4dp">
 
     <RelativeLayout
         android:id="@+id/rl"
         android:layout_width="match_parent"
+
         android:layout_height="wrap_content">
 
         <TextView
@@ -16,7 +18,9 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:padding="2dp"
-            android:text="@string/name" />
+            android:text="@string/name"
+            android:textColor="@color/black_item_title"
+            android:textSize="16dp" />
 
         <RatingBar
             android:id="@+id/rating_bar"
@@ -40,14 +44,18 @@
             android:layout_toRightOf="@id/rating_bar"
             android:gravity="end"
             android:padding="2dp"
-            android:text="@string/comment_time" />
+            android:text="@string/comment_time"
+            android:textColor="@color/black_item_content"
+            android:textSize="14dp" />
     </RelativeLayout>
 
     <TextView
-        android:padding="2dp"
         android:id="@+id/tv_comment"
-        android:text="@string/comment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/rl" />
+        android:layout_below="@id/rl"
+        android:padding="2dp"
+        android:text="@string/comment"
+        android:textColor="@color/black_item_content"
+        android:textSize="14dp" />
 </RelativeLayout>

@@ -119,18 +119,18 @@ public class HomePatientActivity extends BaseActivity implements View.OnClickLis
 
         fragments.clear();
         fragments.add(new HomeFragment());
-        fragments.add(new DrugFragment());
+//        fragments.add(new DrugFragment());
         fragments.add(new MyFragment());
         adapter.notifyDataSetChanged();
 
         tabPressedIcons.clear();
         tabPressedIcons.add(getResources().getDrawable(R.mipmap.icon_home_check));
-        tabPressedIcons.add(getResources().getDrawable(R.mipmap.icon_med_check));
+//        tabPressedIcons.add(getResources().getDrawable(R.mipmap.icon_med_check));
         tabPressedIcons.add(getResources().getDrawable(R.mipmap.icon_user_check));
 
         tabNormalIcons.clear();
         tabNormalIcons.add(getResources().getDrawable(R.mipmap.icon_home_normal));
-        tabNormalIcons.add(getResources().getDrawable(R.mipmap.icon_med_normal));
+//        tabNormalIcons.add(getResources().getDrawable(R.mipmap.icon_med_normal));
         tabNormalIcons.add(getResources().getDrawable(R.mipmap.icon_user_normal));
     }
 

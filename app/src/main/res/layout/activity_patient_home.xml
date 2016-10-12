@@ -38,15 +38,15 @@
             android:textSize="14dp" />
 
 
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:drawableTop="@mipmap/icon_med_normal"
-            android:gravity="center"
-            android:paddingTop="3dp"
-            android:text="@string/drug"
-            android:textSize="14dp" />
+        <!--<TextView-->
+            <!--android:layout_width="0dp"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_weight="1"-->
+            <!--android:drawableTop="@mipmap/icon_med_normal"-->
+            <!--android:gravity="center"-->
+            <!--android:paddingTop="3dp"-->
+            <!--android:text="@string/drug"-->
+            <!--android:textSize="14dp" />-->
 
         <TextView
             android:layout_width="0dp"

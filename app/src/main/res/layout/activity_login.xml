@@ -91,6 +91,14 @@
                 android:textColor="@color/white"
                 android:text="@string/register" />
         </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_forget_pwd"
+            android:text="@string/forget_pwd"
+            android:layout_gravity="end"
+            android:layout_marginRight="16dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
     </LinearLayout>
 
     <include layout="@layout/layout_loading" />

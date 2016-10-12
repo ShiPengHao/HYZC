@@ -3,7 +3,6 @@ package com.yimeng.hyzchbczhwq.activity;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.AdapterView;
@@ -19,7 +18,6 @@ import com.yimeng.hyzchbczhwq.adapter.AppointmentAdapter;
 import com.yimeng.hyzchbczhwq.bean.AppointmentBean;
 import com.yimeng.hyzchbczhwq.utils.MyConstant;
 import com.yimeng.hyzchbczhwq.utils.MyToast;
-import com.yimeng.hyzchbczhwq.utils.WebServiceUtils;
 import com.yimeng.hyzchbczhwq.view.ClearEditText;
 import com.yimeng.hyzchbczhwq.view.PullDownToRefreshListView;
 
@@ -27,10 +25,11 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+
+import static com.yimeng.hyzchbczhwq.R.id.lv;
+
 
 /**
  * 预约历史
@@ -43,6 +42,7 @@ public class AppointHistoryActivity extends BaseActivity implements View.OnClick
     private String userId;
     private HashMap<String, Object> params = new HashMap<>();
     private static final int ITEM_NUMBER_PER_PAGE = 20;
+    private int pageCount;
     private int itemsCount;
     private String type;
     private ImageView iv_back;
@@ -64,7 +64,7 @@ public class AppointHistoryActivity extends BaseActivity implements View.OnClick
 
     @Override
     protected void initView() {
-        listView = (PullDownToRefreshListView) findViewById(R.id.lv);
+        listView = (PullDownToRefreshListView) findViewById(lv);
         iv_back = (ImageView) findViewById(R.id.iv_back);
         cb_time_limit = (CheckBox) findViewById(R.id.cb_time_limit);
         tv_time_start = (TextView) findViewById(R.id.tv_time_start);
@@ -88,39 +88,28 @@ public class AppointHistoryActivity extends BaseActivity implements View.OnClick
     protected void initData() {
         userId = context.getSharedPreferences(MyConstant.PREFS_ACCOUNT, Context.MODE_PRIVATE).getString(MyConstant.KEY_ACCOUNT_LAST_ID, "");
         type = context.getSharedPreferences(MyConstant.PREFS_ACCOUNT, Context.MODE_PRIVATE).getString(MyConstant.KEY_ACCOUNT_LAST_TYPE, "");
+        if (TextUtils.isEmpty(userId) || TextUtils.isEmpty(type)) {
+            MyToast.show("账号异常，请重新登陆再试");
+            startActivity(new Intent(this, LoginActivity.class));
+            finish();
+        }
         if (type.equalsIgnoreCase("doctor")) {
             cet.setHint("输入病人姓名");
         }
         data.clear();
         itemsCount = 0;
+        pageCount = 1;
         requestAppointmentList();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        if (TextUtils.isEmpty(userId) || TextUtils.isEmpty(type)) {
-            MyToast.show("账号异常，请重新登陆再试");
-            return;
-        }
     }
 
     /**
      * 请求预约列表
      */
     private void requestAppointmentList() {
-        appendParams();
-        new AsyncTask<Object, Object, String>() {
-            @Override
-            protected String doInBackground(Object... params) {
-                if (params != null) {
-                    return WebServiceUtils.callWebService(MyConstant.WEB_SERVICE_URL, MyConstant.NAMESPACE, "Load_AppointmentData",
-                            (Map<String, Object>) params[0]);
-                } else {
-                    return null;
-                }
-            }
-
+        String method = appendParamsGetMethod();
+        if (method == null)
+            return;
+        new SoapAsyncTask() {
             protected void onPostExecute(String result) {
                 if (result == null) {
                     MyToast.show(getString(R.string.connect_error));
@@ -133,43 +122,52 @@ public class AppointHistoryActivity extends BaseActivity implements View.OnClick
                 }
                 parseAppointList(result);
             }
-        }.execute(params);
+        }.execute(method, params);
     }
 
     /**
-     * 设置请求参数
+     * 设置请求参数，并获得要调用的接口方法名
+     *
+     * @return 返回要调用的接口方法名, 为null说明参数有误，应该中止此次请求
      */
-    private void appendParams() {
+    private String appendParamsGetMethod() {
         params.clear();
-
-        // 排序和id
-        params.put("orderby", "add_time desc");// 默认按时间倒序
-        String where = String.format("%s_id=%s", type, userId);
-        if (type.equalsIgnoreCase("doctor")) {
-            where = "select_" + where;
-            params.put("orderby", "doctor_dispose asc, add_time desc");// 医生按处理标志升序，时间倒序
-        }
-        // 关键字（医生或者病人姓名）
-        String keyWord = cet.getText().toString().trim();
-        if (!TextUtils.isEmpty(keyWord)) {
-            if (type.equalsIgnoreCase("doctor")) {
-                where = where + " and patient_name like '%" + keyWord + "%'";
-            } else {
-                where = where + " and doctor_name like '%" + keyWord + "%'";
-            }
-        }
         // 时间范围
         if (cb_time_limit.isChecked() && !isEmpty(startTime) && !isEmpty(endTime)) {
-            where = where + "and registration_time between '" + startTime + "' and '" + endTime + "'";
+            params.put("starttime", startTime);
+            params.put("endtime", endTime);
+        }else{
+            params.put("starttime", "");
+            params.put("endtime", "");
         }
-        params.put("where", where);
+        // 页码和长度
+        params.put("pageindex", pageCount);
+        params.put("pagesize", ITEM_NUMBER_PER_PAGE);
+        if (listView.isLoadingMore()) {
+            if (pageCount * ITEM_NUMBER_PER_PAGE == itemsCount) {
+                pageCount++;
+                params.put("pageindex", pageCount);
+            } else {
+                MyToast.show(getString(R.string.no_more_data));
+                return null;
+            }
+        } else if (listView.isRefreshing()) {
+            params.put("pageindex", 1);
+            params.put("pagesize", Math.max(itemsCount, ITEM_NUMBER_PER_PAGE));
+        }
 
-        if (listView.isRefreshing()) {
-            params.put("startIndex", 1);
-            params.put("endIndex", Math.max(ITEM_NUMBER_PER_PAGE, itemsCount));
+        // 关键字（医生或者病人姓名）
+        String keyWord = cet.getText().toString().trim();
+
+        // id
+        if (type.equalsIgnoreCase("doctor")) {
+            params.put("doctorid", userId);
+            params.put("patientname", keyWord);
+            return "Doctor_AppointmentList";
         } else {
-            params.put("startIndex", itemsCount + 1);
-            params.put("endIndex", itemsCount + ITEM_NUMBER_PER_PAGE);
+            params.put("userid", userId);
+            params.put("doctorname", keyWord);
+            return "Patient_AppointmentList";
         }
     }
 
@@ -181,8 +179,9 @@ public class AppointHistoryActivity extends BaseActivity implements View.OnClick
     private void parseAppointList(String result) {
         try {
             JSONObject object = new JSONObject(result);
-            ArrayList<AppointmentBean> tempData = new Gson().fromJson(object.optString("data"), new TypeToken<ArrayList<AppointmentBean>>() {
-            }.getType());
+            ArrayList<AppointmentBean> tempData = new Gson().fromJson(object.optString("data")
+                    , new TypeToken<ArrayList<AppointmentBean>>() {
+                    }.getType());
             if (tempData.size() == 0) {
                 MyToast.show(getString(R.string.no_more_data));
             }
@@ -191,6 +190,10 @@ public class AppointHistoryActivity extends BaseActivity implements View.OnClick
             }
             data.addAll(tempData);
             itemsCount = data.size();
+            if (itemsCount % ITEM_NUMBER_PER_PAGE == 0)
+                pageCount = itemsCount / ITEM_NUMBER_PER_PAGE;
+            else
+                pageCount = itemsCount / ITEM_NUMBER_PER_PAGE + 1;
             appointmentAdapter.notifyDataSetChanged();
             if (listView.isRefreshing()) {
                 listView.refreshCompleted(true);

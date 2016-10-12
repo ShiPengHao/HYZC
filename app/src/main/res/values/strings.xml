@@ -64,7 +64,7 @@
     <string name="pharmacy_introduce">药店简介</string>
     <string name="my">我的</string>
     <string name="personal">个人信息</string>
-    <string name="my_appointment">我的预约历史</string>
+    <string name="my_appointment">我的预约</string>
     <string name="age">年龄</string>
     <string name="disease_description">病情描述</string>
     <string name="appoint_now">马上预约</string>
@@ -114,7 +114,6 @@
     <string name="appointment_date">预约日期</string>
     <string name="choose_date">选择预约日期</string>
     <string name="appointment_limit">每日预约量</string>
-    <string name="department_name">吴桥县中西医结合医院疼痛科</string>
     <string name="empty_content">无</string>
     <string name="wechat">微信号</string>
     <string name="isOrder">可坐诊</string>
@@ -461,7 +460,7 @@
 
     <string name="network_unstable">网络不稳定</string>
     <string name="no_call_data">没有通话数据</string>
-    <string name="my_conversation">我的聊天历史</string>
+    <string name="my_conversation">我的聊天</string>
     <string name="notify_sound">新消息声音提醒</string>
     <string name="notify_vibrate">新消息震动提醒</string>
     <string name="doctor_score">满意度评价</string>
@@ -477,4 +476,33 @@
     <string name="doctor_title">医生职称</string>
     <string name="select_department">选择医院科室</string>
     <string name="work_department">执业医院</string>
+    <string name="about_company">关于华医之春</string>
+    <string name="quit_app">完全退出应用</string>
+    <string name="check_update">检测新版本</string>
+    <string name="suggest">意见和反馈</string>
+    <string name="is_new">当前版本即为最新版本</string>
+    <string name="suggest_introduce">您的每个意见和建议都是我们进步的动力</string>
+    <string name="input_suggest">请输入您的意见或者建议</string>
+    <string name="can_input">还可输入</string>
+    <string name="charactor">字符</string>
+    <string name="news_title">新闻标题</string>
+    <string name="news_content">新闻简介</string>
+    <string name="contact_way">联系方式：\nQQ邮箱:  286797498@qq.com\n电话号码:  15837120019</string>
+    <string name="forget_pwd">忘记密码？</string>
+    <string name="phone_nullable">手机号码（可选填）</string>
+    <string name="change_pwd">修改密码</string>
+    <string name="input_new_pwd">请输入您的新密码</string>
+    <string name="edit">编辑</string>
+    <string name="finish">完成</string>
+    <string name="old_pwd">老密码</string>
+    <string name="new_pwd">新密码</string>
+    <string name="pwd_new_equal_old_error">您输入的新密码和老密码相同</string>
+    <string name="choose_patient">选择就诊者</string>
+    <string name="patient_name">就诊者</string>
+    <string name="no_patient">您还未添加就诊者信息</string>
+    <string name="patient_list">就诊者列表</string>
+    <string name="edit_patient">编辑就诊者资料</string>
+    <string name="add_patient">添加就诊者</string>
+    <string name="tip">温馨提示</string>
+    <string name="department_name">科室名称</string>
 </resources>

@@ -110,6 +110,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
     private LinearLayout ll_select_address;
     private RadioGroup rg_doctor_title;
     private TextView tv_select_department;
+    private LinearLayout ll_id_info;
     //    private JSONObject cityJsonObject;
 
 
@@ -156,6 +157,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
         ll_pharmacy_cert = (LinearLayout) findViewById(R.id.ll_pharmacy_cert);
         ll_personal_info = (LinearLayout) findViewById(R.id.ll_personal_info);
         ll_select_address = (LinearLayout) findViewById(R.id.ll_select_address);
+        ll_id_info = (LinearLayout) findViewById(R.id.ll_id_info);
 
         tv_remark = (TextView) findViewById(R.id.tv_remark);
         tv_select_address = (TextView) findViewById(R.id.tv_select_address);
@@ -290,7 +292,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
         if (requestCode == REQUEST_DEPARTMENT_CODE) {
             hospital_id = data.getStringExtra("hospital_id");
             departments_id = data.getStringExtra("departments_id");
-            tv_select_department.setText(String.format("%s%s",data.getStringExtra("hospital_name"),data.getStringExtra("departments_name")));
+            tv_select_department.setText(String.format("%s%s", data.getStringExtra("hospital_name"), data.getStringExtra("departments_name")));
             return;
         }
         Uri uri = data.getData();
@@ -500,7 +502,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
         String method = null;
         switch (rg_type.getCheckedRadioButtonId()) {
             case R.id.rb_patient:
-                method = "Patient_Register";
+                method = "User_Register";
                 break;
             case R.id.rb_pharmacy:
                 String pharmacy_name = et_pharmacy_name.getText().toString().trim();
@@ -606,14 +608,17 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
      */
     private void mapGeneralInfo() {
         values.clear();
-        values.put("pwd", pwd);
         values.put("user", user);
+        values.put("pwd", pwd);
 
-        if (rg_type.getCheckedRadioButtonId() != R.id.rb_pharmacy) {
-            values.put("name", name);
-            values.put("identification", identify);
-        } else {
-            values.put("contacts", name);
+        switch (rg_type.getCheckedRadioButtonId()) {
+            case R.id.rb_pharmacy:
+                values.put("contacts", name);
+                break;
+            case R.id.rb_doctor:
+                values.put("name", name);
+                values.put("identification", identify);
+                break;
         }
     }
 
@@ -654,41 +659,42 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
             return true;
         }
 
+        switch (rg_type.getCheckedRadioButtonId()) {
 
-        name = et_name.getText().toString().trim();
-        if (TextUtils.isEmpty(name)) {
-            MyToast.show("姓名不能为空");
-            ObjectAnimator.ofFloat(et_name, "translationX", 15f, -15f, 20f, -20f, 0).setDuration(300).start();
-            return true;
-        }
-
-
-        if (rg_type.getCheckedRadioButtonId() != R.id.rb_pharmacy) {
-            identify = et_id.getText().toString().trim();
-            if (TextUtils.isEmpty(identify)) {
-                MyToast.show("身份证号不能为空");
-                ObjectAnimator.ofFloat(et_id, "translationX", 15f, -15f, 20f, -20f, 0).setDuration(300).start();
-                return true;
-            }
-            if ((!identify.matches("[0-9]{17}x") && !identify.matches("[0-9]{15}") && !identify.matches("[0-9]{18}"))// 校验位数
-//                    || (cityJsonObject != null && isEmpty(cityJsonObject.optString(identify.substring(0, 2))))// 校验省级区号
-                    ) {
-                MyToast.show("身份证号格式不正确");
-                ObjectAnimator.ofFloat(et_id, "translationX", 15f, -15f, 20f, -20f, 0).setDuration(300).start();
-                return true;
-            }
-
-            if (!MyLog.DEBUG && identify.length() == 18) {// 校验校验码
-                int sum = 0;
-                for (int i = 0; i < identify.length() - 1; i++) {
-                    sum += Integer.parseInt(identify.substring(i, i + 1)) * Math.pow(2, 17 - i);
-                }
-                if (!identify.substring(17, 18).equalsIgnoreCase(String.valueOf(CHECK_NUMBERS[sum % 11]))) {
-                    MyToast.show("身份证号不正确");
+            case R.id.rb_doctor:
+                identify = et_id.getText().toString().trim();
+                if (TextUtils.isEmpty(identify)) {
+                    MyToast.show("身份证号不能为空");
                     ObjectAnimator.ofFloat(et_id, "translationX", 15f, -15f, 20f, -20f, 0).setDuration(300).start();
                     return true;
                 }
-            }
+                if ((!identify.matches("[0-9]{17}x") && !identify.matches("[0-9]{15}") && !identify.matches("[0-9]{18}"))// 校验位数
+//                    || (cityJsonObject != null && isEmpty(cityJsonObject.optString(identify.substring(0, 2))))// 校验省级区号
+                        ) {
+                    MyToast.show("身份证号格式不正确");
+                    ObjectAnimator.ofFloat(et_id, "translationX", 15f, -15f, 20f, -20f, 0).setDuration(300).start();
+                    return true;
+                }
+
+                if (!MyLog.DEBUG && identify.length() == 18) {// 校验校验码
+                    int sum = 0;
+                    for (int i = 0; i < identify.length() - 1; i++) {
+                        sum += Integer.parseInt(identify.substring(i, i + 1)) * Math.pow(2, 17 - i);
+                    }
+                    if (!identify.substring(17, 18).equalsIgnoreCase(String.valueOf(CHECK_NUMBERS[sum % 11]))) {
+                        MyToast.show("身份证号不正确");
+                        ObjectAnimator.ofFloat(et_id, "translationX", 15f, -15f, 20f, -20f, 0).setDuration(300).start();
+                        return true;
+                    }
+                }
+            case R.id.rb_pharmacy:
+                name = et_name.getText().toString().trim();
+                if (TextUtils.isEmpty(name)) {
+                    MyToast.show("姓名不能为空");
+                    ObjectAnimator.ofFloat(et_name, "translationX", 15f, -15f, 20f, -20f, 0).setDuration(300).start();
+                    return true;
+                }
+                break;
         }
         mapGeneralInfo();
         return false;
@@ -722,10 +728,12 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
                         } else {
                             MyToast.show(object.optString("msg"));
                         }
-                    } catch (JSONException e) {
+                    } catch (Exception e) {
                         MyToast.show(getString(R.string.connect_error));
                         e.printStackTrace();
                     }
+                } else {
+                    MyToast.show(getString(R.string.connect_error));
                 }
             }
 
@@ -745,7 +753,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
                     .setCancelable(true)
                     .create();
         }
-        okDialog.setMessage("恭喜" + name + msg);
+        okDialog.setMessage("恭喜" + (name == null ? "您" : name) + msg);
         okDialog.setButton(AlertDialog.BUTTON_POSITIVE, "知道了", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -786,6 +794,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
             switch (checkedId) {
                 case R.id.rb_patient:
                     ll_address_detail.setVisibility(View.GONE);
+                    ll_id_info.setVisibility(View.GONE);
                     ll_cert_info.setVisibility(View.GONE);
                     ll_remark.setVisibility(View.GONE);
                     ll_personal_info.setVisibility(View.VISIBLE);
@@ -795,6 +804,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
                     ll_address_detail.setVisibility(View.GONE);
                     ll_pharmacy_cert.setVisibility(View.GONE);
                     ll_doctor_cert.setVisibility(View.VISIBLE);
+                    ll_id_info.setVisibility(View.VISIBLE);
                     ll_cert_info.setVisibility(View.VISIBLE);
                     ll_remark.setVisibility(View.VISIBLE);
                     ll_personal_info.setVisibility(View.VISIBLE);
@@ -804,6 +814,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
                     ll_doctor_cert.setVisibility(View.GONE);
                     ll_address_detail.setVisibility(View.VISIBLE);
                     ll_pharmacy_cert.setVisibility(View.VISIBLE);
+                    ll_id_info.setVisibility(View.VISIBLE);
                     ll_cert_info.setVisibility(View.VISIBLE);
                     ll_remark.setVisibility(View.VISIBLE);
                     ll_personal_info.setVisibility(View.GONE);

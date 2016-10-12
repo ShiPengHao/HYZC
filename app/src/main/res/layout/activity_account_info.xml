@@ -31,7 +31,7 @@
             android:layout_marginRight="10dp"
             android:gravity="center"
             android:padding="5dp"
-            android:text="修改"
+            android:text="@string/edit"
             android:textColor="@color/white"
             android:textSize="16dp" />
     </RelativeLayout>
@@ -44,34 +44,32 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="vertical">
 
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/bg_light_green"
+                android:background="@color/grey"
                 android:padding="8dp">
 
                 <com.yimeng.hyzchbczhwq.view.CircleImageView
                     android:id="@+id/iv_avatar"
                     android:layout_width="96dp"
                     android:layout_height="96dp"
-                    android:layout_centerHorizontal="true"
+                    android:layout_centerInParent="true"
                     android:scaleType="centerCrop"
-                    app:civ_border_color="@color/colorAccent"
+                    app:civ_border_color="@color/grey_line"
                     app:civ_border_width="1dp" />
 
                 <TextView
+                    android:id="@+id/tv_change_pwd"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/iv_avatar"
-                    android:layout_centerHorizontal="true"
-                    android:gravity="center"
-                    android:paddingTop="3dp"
-                    android:text="点击头像更换"
-                    android:textColor="@color/white"
-                    android:textSize="14dp" />
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:text="@string/change_pwd"
+                    android:textColor="@color/black" />
             </RelativeLayout>
 
             <LinearLayout
@@ -81,33 +79,6 @@
                 android:paddingLeft="8dp"
                 android:paddingRight="8dp">
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/item_width"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/name"
-                        android:textColor="@color/black_item_title"
-                        android:textSize="18dp" />
-
-                    <EditText
-                        android:id="@+id/et_name"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp"
-                        android:background="@null"
-                        android:focusable="false"
-                        android:focusableInTouchMode="false"
-                        android:hint="@string/name"
-                        android:textColor="@color/black_item_content"
-                        android:textSize="18dp" />
-                </LinearLayout>
-
-                <include layout="@layout/layout_divider" />
 
                 <RelativeLayout
                     android:id="@+id/rl_score"
@@ -145,96 +116,127 @@
                         android:src="@mipmap/r_arrow" />
                 </RelativeLayout>
 
-                <include layout="@layout/layout_divider" />
-
                 <LinearLayout
+                    android:id="@+id/ll_personal_info"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/item_width"
-                    android:gravity="center_vertical"
-                    android:paddingRight="8dp"
-                    android:orientation="horizontal">
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/sex"
-                        android:textColor="@color/black_item_title"
-                        android:textSize="18dp" />
-
-                    <TextView
-
-                        android:id="@+id/tv_sex"
+                    <LinearLayout
+                        android:id="@+id/ll_name"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/item_width"
-                        android:layout_marginLeft="10dp"
-                        android:drawableRight="@mipmap/r_arrow"
                         android:gravity="center_vertical"
-                        android:padding="2dp"
-                        android:text="@string/sex"
-                        android:textColor="@color/black_item_content"
-                        android:textSize="18dp" />
-                </LinearLayout>
+                        android:orientation="horizontal">
 
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/name"
+                            android:textColor="@color/black_item_title"
+                            android:textSize="18dp" />
 
-                <include layout="@layout/layout_divider" />
+                        <EditText
+                            android:id="@+id/et_name"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="10dp"
+                            android:background="@null"
+                            android:focusable="false"
+                            android:focusableInTouchMode="false"
+                            android:hint="@string/name"
+                            android:textColor="@color/black_item_content"
+                            android:textSize="18dp" />
+                    </LinearLayout>
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/item_width"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/age"
-                        android:textColor="@color/black_item_title"
-                        android:textSize="18dp" />
-
-                    <EditText
-                        android:id="@+id/et_age"
+                    <LinearLayout
+                        android:id="@+id/ll_sex"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp"
-                        android:background="@null"
-                        android:focusable="false"
-                        android:focusableInTouchMode="false"
-                        android:hint="@string/age"
-                        android:inputType="number"
-                        android:textColor="@color/black_item_content"
-                        android:textSize="18dp" />
-                </LinearLayout>
+                        android:layout_height="@dimen/item_width"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:paddingRight="8dp">
 
-                <include layout="@layout/layout_divider" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/sex"
+                            android:textColor="@color/black_item_title"
+                            android:textSize="18dp" />
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/item_width"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal">
+                        <TextView
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/phone"
-                        android:textColor="@color/black_item_title"
-                        android:textSize="18dp" />
+                            android:id="@+id/tv_sex"
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/item_width"
+                            android:layout_marginLeft="10dp"
+                            android:drawableRight="@mipmap/r_arrow"
+                            android:gravity="center_vertical"
+                            android:padding="2dp"
+                            android:text="@string/sex"
+                            android:textColor="@color/black_item_content"
+                            android:textSize="18dp" />
+                    </LinearLayout>
 
-                    <EditText
-                        android:id="@+id/et_phone"
+
+                    <LinearLayout
+                        android:id="@+id/ll_age"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp"
-                        android:background="@null"
-                        android:focusable="false"
-                        android:focusableInTouchMode="false"
-                        android:hint="@string/phone"
-                        android:inputType="number"
-                        android:textColor="@color/black_item_content"
-                        android:textSize="18dp" />
-                </LinearLayout>
+                        android:layout_height="@dimen/item_width"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
 
-                <include layout="@layout/layout_divider" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/age"
+                            android:textColor="@color/black_item_title"
+                            android:textSize="18dp" />
+
+                        <EditText
+                            android:id="@+id/et_age"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="10dp"
+                            android:background="@null"
+                            android:focusable="false"
+                            android:focusableInTouchMode="false"
+                            android:hint="@string/age"
+                            android:inputType="number"
+                            android:textColor="@color/black_item_content"
+                            android:textSize="18dp" />
+                    </LinearLayout>
+
+
+                    <LinearLayout
+                        android:id="@+id/ll_phone"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/item_width"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/phone"
+                            android:textColor="@color/black_item_title"
+                            android:textSize="18dp" />
+
+                        <EditText
+                            android:id="@+id/et_phone"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="10dp"
+                            android:background="@null"
+                            android:focusable="false"
+                            android:focusableInTouchMode="false"
+                            android:hint="@string/phone"
+                            android:inputType="number"
+                            android:textColor="@color/black_item_content"
+                            android:textSize="18dp" />
+                    </LinearLayout>
+
+                </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -261,8 +263,6 @@
                         android:textColor="@color/black_item_content"
                         android:textSize="18dp" />
                 </LinearLayout>
-
-                <include layout="@layout/layout_divider" />
 
 
                 <LinearLayout
@@ -291,15 +291,14 @@
                         android:textSize="18dp" />
                 </LinearLayout>
 
-                <include layout="@layout/layout_divider" />
 
                 <LinearLayout
-                    android:paddingRight="8dp"
                     android:id="@+id/ll_isOrder"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/item_width"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
+                    android:paddingRight="8dp"
                     android:visibility="gone">
 
                     <TextView
@@ -322,7 +321,6 @@
                         android:textSize="18dp" />
                 </LinearLayout>
 
-                <include layout="@layout/layout_divider" />
 
                 <LinearLayout
                     android:id="@+id/ll_limit"
@@ -352,7 +350,6 @@
                         android:textSize="18dp" />
                 </LinearLayout>
 
-                <include layout="@layout/layout_divider" />
 
                 <LinearLayout
                     android:id="@+id/ll_introduce"

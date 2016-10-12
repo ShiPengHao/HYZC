@@ -11,7 +11,7 @@ public class CommentBean implements Serializable{
      * comment_point : 5
      * comment_time : /Date(1473238091277)/
      * is_anonymity : 0
-     * patient_name : 张三
+     * user_name : 张三
      */
 
     public String comment_content;

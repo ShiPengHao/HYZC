@@ -36,4 +36,10 @@
         <item name="android:minHeight">36dp</item>
         <item name="android:maxHeight">36dp</item>
     </style>
+
+    <style name="MyCheckBox" parent="@android:style/Widget.CompoundButton.CheckBox">
+        <item name="android:button">@drawable/eye_toggle</item>
+        <item name="android:maxHeight">36dip</item>
+        <item name="android:maxWidth">36dip</item>
+    </style>
 </resources>

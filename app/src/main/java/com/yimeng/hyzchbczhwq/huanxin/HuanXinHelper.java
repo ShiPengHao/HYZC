@@ -39,7 +39,7 @@ import com.hyphenate.util.EMLog;
 import com.yimeng.hyzchbczhwq.R;
 import com.yimeng.hyzchbczhwq.activity.BaseActivity;
 import com.yimeng.hyzchbczhwq.bean.DoctorBean;
-import com.yimeng.hyzchbczhwq.bean.PatientBean;
+import com.yimeng.hyzchbczhwq.bean.UserBean;
 import com.yimeng.hyzchbczhwq.utils.JsonUtils;
 import com.yimeng.hyzchbczhwq.utils.MyApp;
 import com.yimeng.hyzchbczhwq.utils.MyConstant;
@@ -721,8 +721,8 @@ public class HuanXinHelper {
                 String id = split[1];
                 HashMap<String, Object> values = new HashMap<>();
                 if (type.equalsIgnoreCase("patient")) {
-                    values.put("patient_id", id);
-                    requestInfo("Get_Patient_Msg", values);
+                    values.put("user_id", id);
+                    requestInfo("Get_User_Msg", values);
                 } else if (type.equalsIgnoreCase("doctor")) {
                     values.put("doctor_id", id);
                     requestInfo("Get_Doctor_Msg", values);
@@ -759,14 +759,14 @@ public class HuanXinHelper {
      * @param s json数据
      */
     private void parsePatientInfo(String s) {
-        ArrayList<PatientBean> arrayList = new ArrayList<>();
+        ArrayList<UserBean> arrayList = new ArrayList<>();
         try {
-            JsonUtils.parseListResult(arrayList, PatientBean.class, s);
+            JsonUtils.parseListResult(arrayList, UserBean.class, s);
             if (arrayList.size() > 0) {
-                PatientBean patientBean = arrayList.get(0);
-                String username = "patient_" + patientBean.patient_id;
-                String nick = patientBean.patient_name;
-                String avatar = patientBean.patient_avatar;
+                UserBean userBean = arrayList.get(0);
+                String username = "patient_" + userBean.user_id;
+                String nick = userBean.user_name;
+                String avatar = userBean.user_avatar;
                 EaseUser easeUser = new EaseUser(username);
                 easeUser.setAvatar(MyConstant.NAMESPACE + avatar);
                 easeUser.setNick(nick);

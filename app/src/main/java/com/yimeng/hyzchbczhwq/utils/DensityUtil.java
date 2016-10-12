@@ -1,16 +1,19 @@
 package com.yimeng.hyzchbczhwq.utils;
 
+/**
+ * 手机分辨率工具类
+ */
 public class DensityUtil {
     /**
-     * 手机的分辨率
+     * 手机的分辨率倍率
      */
     public static final float DENSITY = MyApp.getAppContext().getResources().getDisplayMetrics().density;
     /**
-     * 手机的分辨率
+     * 手机的宽度像素
      */
     public static final int SCREEN_WIDTH = MyApp.getAppContext().getResources().getDisplayMetrics().widthPixels;
     /**
-     * 手机的分辨率
+     * 手机的高度像素
      */
     public static final int SCREEN_HEIGHT = MyApp.getAppContext().getResources().getDisplayMetrics().heightPixels;
 

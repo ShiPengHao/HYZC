@@ -8,11 +8,15 @@ import android.location.Location;
 import android.os.AsyncTask;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
@@ -22,7 +26,11 @@ import com.yimeng.hyzchbczhwq.activity.BaseActivity;
 import com.yimeng.hyzchbczhwq.activity.DepartmentChoiceActivity;
 import com.yimeng.hyzchbczhwq.activity.DoctorListActivity;
 import com.yimeng.hyzchbczhwq.activity.WebViewActivity;
+import com.yimeng.hyzchbczhwq.adapter.DefaultAdapter;
+import com.yimeng.hyzchbczhwq.bean.DecorateImgBean;
 import com.yimeng.hyzchbczhwq.bean.HospitalBean;
+import com.yimeng.hyzchbczhwq.holder.BaseHolder;
+import com.yimeng.hyzchbczhwq.holder.NewsHolder;
 import com.yimeng.hyzchbczhwq.utils.DensityUtil;
 import com.yimeng.hyzchbczhwq.utils.JsonUtils;
 import com.yimeng.hyzchbczhwq.utils.LocationUtils;
@@ -31,47 +39,36 @@ import com.yimeng.hyzchbczhwq.utils.MyConstant;
 import com.yimeng.hyzchbczhwq.utils.MyToast;
 import com.yimeng.hyzchbczhwq.utils.UiUtils;
 import com.yimeng.hyzchbczhwq.view.CycleViewPager;
-import com.zhy.http.okhttp.OkHttpUtils;
-import com.zhy.http.okhttp.callback.StringCallback;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import okhttp3.Call;
-
-
 
 /**
  * 病人首页fragment
  */
-public class HomeFragment extends BaseFragment implements View.OnClickListener, CycleViewPager.OnItemClickListener, LocationUtils.UpdateLocationListener {
+public class HomeFragment extends BaseFragment implements View.OnClickListener, CycleViewPager.OnItemClickListener, LocationUtils.UpdateLocationListener, SwipeRefreshLayout.OnRefreshListener, AdapterView.OnItemClickListener {
 
     private CycleViewPager viewPager;
     /**
-     * 轮播图图片url集合
+     * 轮播图对应条目集合
      */
-    private ArrayList<String> imgUrls = new ArrayList<>();
+    private ArrayList<DecorateImgBean> bannerImgList = new ArrayList<>();
     /**
-     * 轮播图图片对应链接url集合
+     * 资讯对应条目集合
      */
-    private ArrayList<String> backUrls = new ArrayList<>();
-    /**
-     * 轮播图图片标题集合
-     */
-    private ArrayList<String> imgTitles = new ArrayList<>();
+    private ArrayList<DecorateImgBean> newsImgList = new ArrayList<>();
     private LinearLayout ll_booking;
     private LinearLayout ll_chat;
     private LinearLayout ll_health;
-    private final String BANNER_URL = "http://www.hyzczg.com/plugins/advert/advert_js.ashx?id=1";
     public static final int REQUEST_CODE_FOR_CITY = 200;
     private LinearLayout ll_points;
     private TextView tv_img_title;
-    private PagerAdapter adapter;
+    private PagerAdapter pagerAdapter;
     private ArrayList<HospitalBean> hospital = new ArrayList<>();
+    private static final String IMG_TYPE_LBT = "LBT";
+    private static final String IMG_TYPE_NEWS = "NEWS";
 
     private final String URL_PATTERN =
             "^((https|http|ftp|rtsp|mms)?://)"//ftp的user@
@@ -95,6 +92,9 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
     private String locationCity;
     private ImageView iv_location;
     private String cityName;
+    private ListView listView;
+    private SwipeRefreshLayout swipeRefreshLayout;
+    private DefaultAdapter<DecorateImgBean> listAdapter;
 
     @Override
     protected int getLayoutResId() {
@@ -111,6 +111,8 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
         tv_img_title = (TextView) view.findViewById(R.id.tv_img_title);
         tv_location = (TextView) view.findViewById(R.id.tv_location);
         iv_location = (ImageView) view.findViewById(R.id.iv_location);
+        listView = (ListView)view.findViewById(R.id.lv);
+        swipeRefreshLayout = (SwipeRefreshLayout)view.findViewById(R.id.swipeRefreshLayout);
     }
 
     @Override
@@ -119,12 +121,21 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
         ll_chat.setOnClickListener(this);
         ll_booking.setOnClickListener(this);
         ll_location.setOnClickListener(this);
+        swipeRefreshLayout.setOnRefreshListener(this);
         LocationUtils.setUpdateLocationListener(this);
         viewPager.setOnItemClickListener(this);
-        adapter = new PagerAdapter() {
+        listView.setOnItemClickListener(this);
+        listAdapter = new DefaultAdapter<DecorateImgBean>(newsImgList) {
+            @Override
+            protected BaseHolder getHolder() {
+                return new NewsHolder();
+            }
+        };
+        listView.setAdapter(listAdapter);
+        pagerAdapter = new PagerAdapter() {
             @Override
             public int getCount() {
-                return imgUrls.size();
+                return bannerImgList.size();
             }
 
             @Override
@@ -136,7 +147,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
             public Object instantiateItem(ViewGroup container, int position) {
                 ImageView imageView = (ImageView) UiUtils.inflate(R.layout.layout_imageview);
                 Picasso.with(getContext())
-                        .load(imgUrls.get(position))
+                        .load(MyConstant.NAMESPACE + bannerImgList.get(position).decorate_img)
                         .resize(viewPager.getWidth(), viewPager.getHeight())
 //                        .memoryPolicy(MemoryPolicy.NO_CACHE, MemoryPolicy.NO_STORE)
                         .into(imageView);
@@ -152,7 +163,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
         viewPager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
             @Override
             public void onPageSelected(int position) {
-                tv_img_title.setText(imgTitles.get(position));
+                tv_img_title.setText(bannerImgList.get(position).decorate_name);
                 for (int i = 0; i < ll_points.getChildCount(); i++) {
                     if (i == position) {
                         ll_points.getChildAt(i).setEnabled(false);
@@ -181,41 +192,45 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
         if (locationCity != null) {
             tv_location.setText(locationCity);
         }
-        imgUrls.clear();
-        backUrls.clear();
-        imgTitles.clear();
-        OkHttpUtils.get().url(BANNER_URL).build().execute(new StringCallback() {
-            @Override
-            public void onError(Call call, Exception e, int i) {
+        requestImg(IMG_TYPE_LBT);
+        requestImg(IMG_TYPE_NEWS);
+    }
 
-            }
-
+    /**
+     * 请求轮播图或者资讯图片
+     *
+     * @param imgType 轮播图或者资讯图片
+     */
+    private void requestImg(final String imgType) {
+        HashMap<String, Object> hashMap = new HashMap<>();
+        hashMap.put("key", imgType);
+        new BaseActivity.SoapAsyncTask() {
             @Override
-            public void onResponse(String s, int code) {
+            protected void onPostExecute(String s) {
                 if (null == s) {
                     return;
                 }
                 try {
-                    JSONArray jsonArray = new JSONObject(s).optJSONArray("advert");
-                    JSONObject obj;
-                    for (int i = 0; i < jsonArray.length(); i++) {
-                        obj = jsonArray.optJSONObject(i);
-                        if (obj != null) {
-                            imgUrls.add(obj.optString("file_path"));
-                            backUrls.add(obj.optString("url"));
-                            imgTitles.add(obj.optString("title"));
+                    ArrayList<DecorateImgBean> tempList = new ArrayList<>();
+                    JsonUtils.parseListResult(tempList, DecorateImgBean.class, s);
+                    if (IMG_TYPE_LBT.equalsIgnoreCase(imgType)) {
+                        bannerImgList.clear();
+                        bannerImgList.addAll(tempList);
+                        if (bannerImgList.size() > 0) {
+                            tv_img_title.setText(bannerImgList.get(0).decorate_name);
+                            initDots();
+                            viewPager.setAdapter(pagerAdapter);
                         }
-                    }
-                    if (imgUrls.size() > 0) {
-                        tv_img_title.setText(imgTitles.get(0));
-                        initDots();
-                        viewPager.setAdapter(adapter);
+                    } else if (IMG_TYPE_NEWS.equalsIgnoreCase(imgType)) {
+                        newsImgList.clear();
+                        newsImgList.addAll(tempList);
+                        listAdapter.notifyDataSetChanged();
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
-        });
+        }.execute("get_APP_Decorate", hashMap);
     }
 
 
@@ -224,7 +239,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
      */
     private void initDots() {
         ll_points.removeAllViews();
-        for (int i = 0; i < imgUrls.size(); i++) {
+        for (int i = 0; i < bannerImgList.size(); i++) {
             ImageView imageView = new ImageView(context);
             imageView.setBackgroundResource(R.drawable.selector_dot);
             LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
@@ -325,8 +340,11 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
     }
 
     @Override
+    /**
+     * 轮播图条目被点击回调
+     */
     public void onItemClick(int index) {
-        String url = backUrls.get(index);
+        String url = bannerImgList.get(index).decorate_value;
         if (!TextUtils.isEmpty(url) && url.matches(URL_PATTERN)) {
             startActivity(new Intent(getActivity(), WebViewActivity.class).putExtra("url", url));
         }
@@ -367,5 +385,21 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
                 }
             }
         }.execute(location);
+    }
+
+    @Override
+    public void onRefresh() {
+        requestImg(IMG_TYPE_NEWS);
+    }
+
+    @Override
+    /**
+     * 新闻列表ListView条目被点击回调
+     */
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        String url = newsImgList.get(position).decorate_value;
+        if (!TextUtils.isEmpty(url) && url.matches(URL_PATTERN)) {
+            startActivity(new Intent(getActivity(), WebViewActivity.class).putExtra("url", url));
+        }
     }
 }

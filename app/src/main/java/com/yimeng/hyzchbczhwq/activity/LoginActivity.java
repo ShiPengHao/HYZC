@@ -13,6 +13,7 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 
 import com.hyphenate.EMCallBack;
 import com.hyphenate.chat.EMClient;
@@ -55,6 +56,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
     private android.os.Handler handler;
     private static final int WHAT_SHOW_LOADING = 1;
     private static final int WHAT_DISMISS_LOADING = 2;
+    private TextView tv_forget_pwd;
 
 
     @Override
@@ -71,7 +73,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
         bt_login = (Button) findViewById(R.id.bt_login);
         rg_userType = (RadioGroup) findViewById(R.id.rg_type);
         ll_loading = (LinearLayout) findViewById(R.id.ll_loading);
-
+        tv_forget_pwd = (TextView) findViewById(R.id.tv_forget_pwd);
     }
 
     @Override
@@ -79,6 +81,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
         cb_auto.setOnCheckedChangeListener(this);
         bt_register.setOnClickListener(this);
         bt_login.setOnClickListener(this);
+        tv_forget_pwd.setOnClickListener(this);
         et_username.addTextChangedListener(new ClearEditText.SimpleTextChangedListener() {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
@@ -138,6 +141,9 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
                 KeyBoardUtils.closeKeybord(et_pwd, this);
                 login();
                 break;
+            case R.id.tv_forget_pwd:
+                startActivity(new Intent(this, SuggestActivity.class).putExtra("phone",et_username.getText().toString().trim()));
+                break;
         }
     }
 
@@ -184,7 +190,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
         values.put("pwd", pwd);
         switch (rg_userType.getCheckedRadioButtonId()) {
             case R.id.rb_patient:
-                requestLogin("Patient_Login", values);
+                requestLogin("User_Login", values);
                 break;
             case R.id.rb_doctor:
                 requestLogin("Doctor_Login", values);
@@ -202,6 +208,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
      * @param params 方法名+参数列表（哈希表形式）
      */
     public void requestLogin(Object... params) {
+        bt_login.setEnabled(false);
         handler.sendEmptyMessageDelayed(WHAT_SHOW_LOADING, 500);
         new AsyncTask<Object, Object, String>() {
             @Override
@@ -237,6 +244,11 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
                     }
                 }
                 return null;
+            }
+
+            @Override
+            protected void onPostExecute(String s) {
+                bt_login.setEnabled(true);
             }
         }.execute(params);
     }

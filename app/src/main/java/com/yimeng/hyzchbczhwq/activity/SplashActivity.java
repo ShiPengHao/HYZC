@@ -156,7 +156,7 @@ public class SplashActivity extends BaseActivity {
         String type = spAccount.getString(MyConstant.KEY_ACCOUNT_LAST_TYPE, "");
         String method = null;
         if (type.equalsIgnoreCase("patient")) {
-            method = "Patient_Login";
+            method = "User_Login";
         } else if (type.equalsIgnoreCase("doctor")) {
             method = "Doctor_Login";
         } else if (type.equalsIgnoreCase("shop")) {

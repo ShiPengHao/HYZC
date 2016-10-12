@@ -212,6 +212,20 @@
 
             <include layout="@layout/layout_divider" />
 
+            <TextView
+                android:id="@+id/tv_choose_patient"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:drawableRight="@mipmap/r_arrow"
+                android:gravity="center_vertical"
+                android:minHeight="@dimen/item_width"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:text="@string/choose_patient"
+                android:textColor="@color/black_item_content"
+                android:textSize="18dp" />
+
+            <include layout="@layout/layout_divider" />
 
             <LinearLayout
                 android:id="@+id/ll_choose_date"
@@ -250,6 +264,7 @@
                 android:textSize="18dp" />
 
             <include layout="@layout/layout_divider" />
+
 
             <EditText
                 android:id="@+id/et_disease_description"

@@ -28,7 +28,6 @@ import com.yimeng.hyzchbczhwq.utils.MyConstant;
 import com.yimeng.hyzchbczhwq.utils.MyToast;
 import com.yimeng.hyzchbczhwq.utils.WebServiceUtils;
 
-
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -43,6 +42,7 @@ import java.util.Map;
 public class DoctorDetailActivity extends BaseActivity implements View.OnClickListener {
 
     private static final int REQUEST_CODE_FOR_DISEASE_MODULE = 100;
+    private static final int REQUEST_CODE_FOR_PATIENT = 101;
 
     private ImageView iv_avatar;
     private EditText et_disease_description;
@@ -65,9 +65,11 @@ public class DoctorDetailActivity extends BaseActivity implements View.OnClickLi
     private TextView tv_wechat;
     private TextView tv_disease_description;
     private TextView tv_doctor_title;
+    private TextView tv_choose_patient;
     private String module;
     private RatingBar rating_bar;
     private RelativeLayout rl_score;
+    private String patient_id;
     //    private NumberPicker timePicker;
 
     @Override
@@ -97,6 +99,7 @@ public class DoctorDetailActivity extends BaseActivity implements View.OnClickLi
         tv_disease_description = (TextView) findViewById(R.id.tv_disease_description);
         tv_appointment_date = (TextView) findViewById(R.id.tv_appointment_date);
         tv_doctor_title = (TextView) findViewById(R.id.tv_doctor_title);
+        tv_choose_patient = (TextView) findViewById(R.id.tv_choose_patient);
 
         rating_bar = (RatingBar) findViewById(R.id.rating_bar);
         rl_score = (RelativeLayout) findViewById(R.id.rl_score);
@@ -111,6 +114,7 @@ public class DoctorDetailActivity extends BaseActivity implements View.OnClickLi
         ll_choose_date.setOnClickListener(this);
         iv_back.setOnClickListener(this);
         tv_disease_description.setOnClickListener(this);
+        tv_choose_patient.setOnClickListener(this);
     }
 
     /**
@@ -214,10 +218,22 @@ public class DoctorDetailActivity extends BaseActivity implements View.OnClickLi
             case R.id.tv_disease_description:
                 pickDiseaseModule();
                 break;
+            case R.id.tv_choose_patient:
+                pickPatient();
+                break;
             case R.id.rl_score:
                 startActivity(new Intent(this, DoctorScoreDetailActivity.class).putExtra("doctor", doctorBean));
                 break;
         }
+    }
+
+    /**
+     * 选择当前账号下的病人
+     */
+    private void pickPatient() {
+        startActivityForResult(new Intent(this, PatientListActivity.class)
+                        .putExtra(PatientListActivity.EXTRA_CHOOSE_OR_QUERY, PatientListActivity.EXTRA_CHOOSE)
+                , REQUEST_CODE_FOR_PATIENT);
     }
 
     /**
@@ -249,6 +265,10 @@ public class DoctorDetailActivity extends BaseActivity implements View.OnClickLi
                     module = "无";
                 tv_disease_description.setText("病情模板：" + module);
                 this.module = tv_disease_description.getText().toString();
+                break;
+            case REQUEST_CODE_FOR_PATIENT:
+                patient_id = data.getStringExtra("patient_id");
+                tv_choose_patient.setText(String.format("%s:  %s", getString(R.string.patient_name), data.getStringExtra("patient_name")));
                 break;
         }
         super.onActivityResult(requestCode, resultCode, data);
@@ -307,6 +327,11 @@ public class DoctorDetailActivity extends BaseActivity implements View.OnClickLi
 //            ObjectAnimator.ofFloat(et_disease_description, "translationX", -25, 25, -25, 25, 0).setDuration(500).start();
 //            return;
 //        }
+        if (TextUtils.isEmpty(patient_id)) {
+            MyToast.show("请选择就诊者");
+            ObjectAnimator.ofFloat(tv_choose_patient, "translationX", -25, 25, -25, 25, 0).setDuration(500).start();
+            return;
+        }
 
         if (TextUtils.isEmpty(module)) {
             MyToast.show("请选择病情模板");
@@ -314,13 +339,9 @@ public class DoctorDetailActivity extends BaseActivity implements View.OnClickLi
             return;
         }
 
-        String patientId = getSharedPreferences(MyConstant.PREFS_ACCOUNT, MODE_PRIVATE).getString(MyConstant.KEY_ACCOUNT_LAST_ID, "");
-        if (TextUtils.isEmpty(patientId)) {
-            return;
-        }
 
         HashMap<String, Object> params = new HashMap<>();
-        params.put("patient_id", patientId);
+        params.put("patient_id", patient_id);
         params.put("disease_description", this.module + "\r\n病情描述：" + description);
         params.put("select_doctor_id", doctorBean.doctor_id);
         params.put("registration_time", date);

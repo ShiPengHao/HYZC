@@ -9,13 +9,12 @@ import android.os.Message;
 import android.os.SystemClock;
 import android.view.KeyEvent;
 import android.view.View;
-import android.widget.CompoundButton;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.ToggleButton;
 
 import com.yimeng.hyzchbczhwq.R;
 import com.yimeng.hyzchbczhwq.huanxin.ConversationListActivity;
-import com.yimeng.hyzchbczhwq.huanxin.PreferenceManager;
+import com.yimeng.hyzchbczhwq.utils.MyApp;
 import com.yimeng.hyzchbczhwq.utils.MyConstant;
 import com.yimeng.hyzchbczhwq.utils.MyToast;
 
@@ -32,10 +31,9 @@ public class HomeDoctorActivity extends BaseActivity implements View.OnClickList
     private RelativeLayout rl_account_info;
     private RelativeLayout rl_appointment_history;
     private RelativeLayout rl_conversation_history;
-    private ToggleButton tb_sound;
-    private ToggleButton tb_vibrate;
-    private ToggleButton tb_autoLogin;
-    private SharedPreferences sharedPreferences;
+    private LinearLayout ll_settings;
+    private LinearLayout ll_about;
+    private LinearLayout ll_quit;
 
     @Override
     protected int getLayoutResId() {
@@ -47,13 +45,9 @@ public class HomeDoctorActivity extends BaseActivity implements View.OnClickList
         rl_account_info = (RelativeLayout) findViewById(R.id.rl_account_info);
         rl_appointment_history = (RelativeLayout) findViewById(R.id.rl_appointment_history);
         rl_conversation_history = (RelativeLayout) findViewById(R.id.rl_conversation_history);
-        tb_sound = (ToggleButton) findViewById(R.id.tb_sound);
-        tb_vibrate = (ToggleButton) findViewById(R.id.tb_vibrate);
-        tb_autoLogin = (ToggleButton) findViewById(R.id.tb_autoLogin);
-        tb_sound.setChecked(PreferenceManager.getInstance().getSettingMsgSound());
-        tb_vibrate.setChecked(PreferenceManager.getInstance().getSettingMsgVibrate());
-        sharedPreferences = getSharedPreferences(MyConstant.PREFS_ACCOUNT, MODE_PRIVATE);
-        tb_autoLogin.setChecked(sharedPreferences.getBoolean(MyConstant.KEY_ACCOUNT_AUTOLOGIN,false));
+        ll_settings = (LinearLayout) findViewById(R.id.ll_settings);
+        ll_about = (LinearLayout) findViewById(R.id.ll_about);
+        ll_quit = (LinearLayout) findViewById(R.id.ll_quit);
     }
 
     @Override
@@ -61,24 +55,9 @@ public class HomeDoctorActivity extends BaseActivity implements View.OnClickList
         rl_account_info.setOnClickListener(this);
         rl_appointment_history.setOnClickListener(this);
         rl_conversation_history.setOnClickListener(this);
-        tb_sound.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                PreferenceManager.getInstance().setSettingMsgSound(isChecked);
-            }
-        });
-        tb_vibrate.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                PreferenceManager.getInstance().setSettingMsgVibrate(isChecked);
-            }
-        });
-        tb_autoLogin.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                sharedPreferences.edit().putBoolean(MyConstant.KEY_ACCOUNT_AUTOLOGIN,isChecked).apply();
-            }
-        });
+        ll_settings.setOnClickListener(this);
+        ll_about.setOnClickListener(this);
+        ll_quit.setOnClickListener(this);
     }
 
     @Override
@@ -156,6 +135,15 @@ public class HomeDoctorActivity extends BaseActivity implements View.OnClickList
                 break;
             case R.id.rl_conversation_history:
                 startActivity(new Intent(this, ConversationListActivity.class));
+                break;
+            case R.id.ll_settings:
+                startActivity(new Intent(this, SettingActivity.class));
+                break;
+            case R.id.ll_about:
+                startActivity(new Intent(this, AboutActivity.class));
+                break;
+            case R.id.ll_quit:
+                MyApp.getAppContext().finish();
                 break;
         }
     }

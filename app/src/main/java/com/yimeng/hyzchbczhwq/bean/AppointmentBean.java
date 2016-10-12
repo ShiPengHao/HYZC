@@ -8,7 +8,7 @@ import java.io.Serializable;
 public class AppointmentBean implements Serializable {
     /*
     "appointment_id":22,
-    "patient_id":12,
+    "user_id":12,
     "disease_description":"aaa",
     "select_doctor_id":2,
     "doctor_Responses":"",
@@ -18,7 +18,7 @@ public class AppointmentBean implements Serializable {
     "IsPrescribe":0,
     "registration_time":"\/Date(1467734400000)\/",
     "add_time":"\/Date(1467776262920)\/",
-    "patient_name":"user001",
+    "user_name":"user001",
     "patient_sex":1,
     "patient_age":"\/Date(-99993600000)\/",
     "patient_phone":"13526669999",

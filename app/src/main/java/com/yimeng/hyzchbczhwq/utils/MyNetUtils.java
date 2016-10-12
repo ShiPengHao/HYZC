@@ -1,8 +1,5 @@
 package com.yimeng.hyzchbczhwq.utils;
 
-/**
- * Created by 依萌 on 2016/6/24.
- */
 
 import android.app.Activity;
 import android.content.ComponentName;
@@ -23,18 +20,16 @@ public class MyNetUtils {
     /**
      * 判断网络是否连接
      *
-     * @param context
-     * @return
+     * @param context 上下文
+     * @return true有连接，false没有网络连接
      */
     public static boolean isConnected(Context context) {
         ConnectivityManager connectivity = (ConnectivityManager) context
                 .getSystemService(Context.CONNECTIVITY_SERVICE);
         if (null != connectivity) {
             NetworkInfo info = connectivity.getActiveNetworkInfo();
-            if (null != info && info.isConnected()) {
-                if (info.getState() == NetworkInfo.State.CONNECTED) {
-                    return true;
-                }
+            if (null != info && info.isConnected() && info.getState() == NetworkInfo.State.CONNECTED) {
+                return true;
             }
         }
         return false;
@@ -47,9 +42,7 @@ public class MyNetUtils {
     public static boolean isWifi(Context context) {
         ConnectivityManager cm = (ConnectivityManager) context
                 .getSystemService(Context.CONNECTIVITY_SERVICE);
-        if (cm == null)
-            return false;
-        return cm.getActiveNetworkInfo().getType() == ConnectivityManager.TYPE_WIFI;
+        return cm != null && cm.getActiveNetworkInfo().getType() == ConnectivityManager.TYPE_WIFI;
     }
 
 

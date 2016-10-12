@@ -6,7 +6,6 @@ import android.widget.TextView;
 
 import com.yimeng.hyzchbczhwq.R;
 import com.yimeng.hyzchbczhwq.bean.CommentBean;
-import com.yimeng.hyzchbczhwq.bean.PrescriptionBean;
 import com.yimeng.hyzchbczhwq.utils.MyApp;
 import com.yimeng.hyzchbczhwq.utils.UiUtils;
 
@@ -36,7 +35,8 @@ public class CommentHolder extends BaseHolder<CommentBean> {
     public void bindData(CommentBean bean) {
         MyApp context = MyApp.getAppContext();
         if (bean.is_anonymity == 0) {// 实名
-            tv_name.setText(String.format("%s：%s", context.getString(R.string.patient), bean.patient_name));
+            tv_name.setText(String.format("%s：%s", context.getString(R.string.patient)
+                    , bean.patient_name == null ? context.getString(R.string.anonymous) : bean.patient_name));
         } else {// 匿名
             tv_name.setText(String.format("%s：%s", context.getString(R.string.patient), context.getString(R.string.anonymous)));
         }

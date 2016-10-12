@@ -25,6 +25,7 @@
     <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.CALL_PHONE"/>
 
 
     <application
@@ -120,6 +121,28 @@
             android:screenOrientation="portrait" />
         <activity
             android:name="com.yimeng.hyzchbczhwq.activity.DepartmentChoiceActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.yimeng.hyzchbczhwq.activity.SettingActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.yimeng.hyzchbczhwq.activity.AboutActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.yimeng.hyzchbczhwq.activity.SuggestActivity"
+            android:windowSoftInputMode="stateHidden|adjustResize"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.yimeng.hyzchbczhwq.activity.ChangePwdActivity"
+            android:windowSoftInputMode="stateHidden|adjustResize"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.yimeng.hyzchbczhwq.activity.PatientListActivity"
+            android:windowSoftInputMode="stateHidden|adjustResize"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.yimeng.hyzchbczhwq.activity.PatientEditActivity"
+            android:windowSoftInputMode="stateHidden|adjustResize"
             android:screenOrientation="portrait" />
         <activity
             android:name="cn.jpush.android.ui.PushActivity"
