@@ -32,7 +32,7 @@ import static com.yimeng.hyzchbczhwq.R.id.lv;
 
 
 /**
- * 预约历史
+ * 预约历史，医生和患者端共用
  */
 public class AppointHistoryActivity extends BaseActivity implements View.OnClickListener, PullDownToRefreshListView.OnRefreshListener, AdapterView.OnItemClickListener {
 
@@ -55,6 +55,10 @@ public class AppointHistoryActivity extends BaseActivity implements View.OnClick
     private String startTime;
     private Calendar calendar;
     private DatePicker.OnDateChangedListener onDateChangedListener;
+    private String lastKeyWord;
+    private String lastStartTime;
+    private String lastEndTime;
+    private boolean lastTimeChecked;
 
 
     @Override
@@ -132,18 +136,21 @@ public class AppointHistoryActivity extends BaseActivity implements View.OnClick
      */
     private String appendParamsGetMethod() {
         params.clear();
-        // 时间范围
-        if (cb_time_limit.isChecked() && !isEmpty(startTime) && !isEmpty(endTime)) {
-            params.put("starttime", startTime);
-            params.put("endtime", endTime);
-        }else{
-            params.put("starttime", "");
-            params.put("endtime", "");
-        }
-        // 页码和长度
-        params.put("pageindex", pageCount);
         params.put("pagesize", ITEM_NUMBER_PER_PAGE);
-        if (listView.isLoadingMore()) {
+
+        // 确定页码
+        // 关键字（医生或者病人姓名）
+        String keyWord = cet.getText().toString().trim();
+        // 是否限定日期
+        boolean timeChecked = cb_time_limit.isChecked();
+        // 只有在上拉加载并且各种条件都不变时才需要计算（累加）页码，否则清空数据源，页面设置为1，即请求第一页数据
+        if (listView.isLoadingMore()
+                && lastKeyWord.equalsIgnoreCase(keyWord)
+                && lastTimeChecked == timeChecked
+                && lastStartTime.equalsIgnoreCase(startTime)
+                && lastEndTime.equalsIgnoreCase(endTime)
+                ) {
+            //请求的数据等于集合的数据，则请求下一页，否则说明上次返回的数据长度不够，提示没有更多数据，中止此次请求
             if (pageCount * ITEM_NUMBER_PER_PAGE == itemsCount) {
                 pageCount++;
                 params.put("pageindex", pageCount);
@@ -151,13 +158,24 @@ public class AppointHistoryActivity extends BaseActivity implements View.OnClick
                 MyToast.show(getString(R.string.no_more_data));
                 return null;
             }
-        } else if (listView.isRefreshing()) {
+        } else {
             params.put("pageindex", 1);
-            params.put("pagesize", Math.max(itemsCount, ITEM_NUMBER_PER_PAGE));
+            data.clear();
         }
 
-        // 关键字（医生或者病人姓名）
-        String keyWord = cet.getText().toString().trim();
+        // 时间范围
+        if (!cb_time_limit.isChecked() || isEmpty(startTime) || isEmpty(endTime)) {
+            startTime = "";
+            endTime = "";
+        }
+        params.put("starttime", startTime);
+        params.put("endtime", endTime);
+
+        // 保存状态，以便下次请求时比较
+        lastKeyWord = keyWord;
+        lastTimeChecked = timeChecked;
+        lastStartTime = startTime;
+        lastEndTime = endTime;
 
         // id
         if (type.equalsIgnoreCase("doctor")) {
@@ -170,6 +188,7 @@ public class AppointHistoryActivity extends BaseActivity implements View.OnClick
             return "Patient_AppointmentList";
         }
     }
+
 
     /**
      * 解析预约列表
@@ -184,9 +203,6 @@ public class AppointHistoryActivity extends BaseActivity implements View.OnClick
                     }.getType());
             if (tempData.size() == 0) {
                 MyToast.show(getString(R.string.no_more_data));
-            }
-            if (listView.isRefreshing()) {
-                data.clear();
             }
             data.addAll(tempData);
             itemsCount = data.size();
@@ -301,8 +317,6 @@ public class AppointHistoryActivity extends BaseActivity implements View.OnClick
 
     @Override
     public void onLoadMore() {
-        if (itemsCount >= ITEM_NUMBER_PER_PAGE) {
-            requestAppointmentList();
-        }
+        requestAppointmentList();
     }
 }

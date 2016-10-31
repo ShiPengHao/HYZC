@@ -13,6 +13,7 @@ import com.yimeng.hyzchbczhwq.activity.PatientListActivity;
 import com.yimeng.hyzchbczhwq.activity.SettingActivity;
 import com.yimeng.hyzchbczhwq.huanxin.ConversationListActivity;
 import com.yimeng.hyzchbczhwq.utils.MyApp;
+import com.yimeng.hyzchbczhwq.utils.MyToast;
 
 /**
  * 我的对应fragment
@@ -88,6 +89,7 @@ public class MyFragment extends BaseFragment implements View.OnClickListener {
                 startActivity(new Intent(getActivity(), AboutActivity.class));
                 break;
             case R.id.ll_quit:
+                MyToast.show(getString(R.string.app_exit));
                 MyApp.getAppContext().finish();
                 break;
         }

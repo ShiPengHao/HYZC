@@ -142,7 +142,10 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
                 login();
                 break;
             case R.id.tv_forget_pwd:
-                startActivity(new Intent(this, SuggestActivity.class).putExtra("phone",et_username.getText().toString().trim()));
+                startActivity(new Intent(this, PwdRetActivity.class)
+                        .putExtra("phone",et_username.getText().toString().trim())
+                        .putExtra("type",rg_userType.getCheckedRadioButtonId())
+                );
                 break;
         }
     }

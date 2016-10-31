@@ -156,8 +156,8 @@ public class AddressChoiceActivity extends BaseActivity implements View.OnClickL
                 }
                 break;
             case R.id.lv_city:// 点击市，获得县信息
-                if (requestCode == HomeFragment.REQUEST_CODE_FOR_CITY){
-                    setResult(100,new Intent().putExtra("city",city.get(position).toString()));
+                if (requestCode == HomeFragment.REQUEST_CODE_FOR_CITY) {
+                    setResult(100, new Intent().putExtra("city", city.get(position).toString()));
                     finish();
                     return;
                 }
@@ -212,11 +212,14 @@ public class AddressChoiceActivity extends BaseActivity implements View.OnClickL
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (data == null)
             return;
-        if (requestCode == RegisterActivity.REQUEST_DEPARTMENT_CODE) {
-            setResult(100, data);
-            finish();
-            return;
+
+        switch (requestCode) {
+            case RegisterActivity.REQUEST_DEPARTMENT_CODE:
+                setResult(RESULT_OK, data);
+                finish();
+                return;
         }
+
         super.onActivityResult(requestCode, resultCode, data);
     }
 }

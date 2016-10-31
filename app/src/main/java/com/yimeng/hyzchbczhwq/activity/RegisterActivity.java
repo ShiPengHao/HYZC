@@ -24,6 +24,7 @@ import android.widget.TextView;
 
 import com.yimeng.hyzchbczhwq.R;
 import com.yimeng.hyzchbczhwq.bean.AddressBean;
+import com.yimeng.hyzchbczhwq.qrcode.CaptureActivity;
 import com.yimeng.hyzchbczhwq.utils.BitmapUtils;
 import com.yimeng.hyzchbczhwq.utils.DensityUtil;
 import com.yimeng.hyzchbczhwq.utils.MyConstant;
@@ -40,7 +41,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * 注册activity
+ * 注册activity，医生、药店、患者共用
  */
 public class RegisterActivity extends BaseActivity implements View.OnClickListener, AdapterView.OnItemSelectedListener, RadioGroup.OnCheckedChangeListener {
 
@@ -51,6 +52,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
     private static final int REQUEST_GALLERY_FOR_PHARMACY_PERMIT_CERT = 105;
     public static final int REQUEST_ADDRESS_CODE = 106;
     public static final int REQUEST_DEPARTMENT_CODE = 107;
+    public static final int REQUEST_SCAN_QRCODE = 108;
     private static final int PHOTO_REQUEST_CUT = 2;
     private static final Object[] CHECK_NUMBERS = new Object[]{1, 0, "X", 9, 8, 7, 6, 5, 4, 3, 2};
     private EditText et_pwd;
@@ -97,6 +99,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
     private ImageView iv_permit_cert;
     private EditText et_pharmacy_name;
     private EditText et_pharmacy_corporation;
+    private EditText et_invite_code;
     private LinearLayout ll_personal_info;// 身份证号
     private TextView tv_remark;
     private TextView tv_select_address;
@@ -111,6 +114,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
     private RadioGroup rg_doctor_title;
     private TextView tv_select_department;
     private LinearLayout ll_id_info;
+    private LinearLayout ll_invite_code;
     //    private JSONObject cityJsonObject;
 
 
@@ -129,6 +133,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
         et_remark = (EditText) findViewById(R.id.et_remark);
         et_pharmacy_name = (EditText) findViewById(R.id.et_pharmacy_name);
         et_pharmacy_corporation = (EditText) findViewById(R.id.et_pharmacy_corporation);
+        et_invite_code = (EditText) findViewById(R.id.et_invite_code);
 
         rg_type = (RadioGroup) findViewById(R.id.rg_type);
         rg_doctor_title = (RadioGroup) findViewById(R.id.rg_doctor_title);
@@ -158,6 +163,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
         ll_personal_info = (LinearLayout) findViewById(R.id.ll_personal_info);
         ll_select_address = (LinearLayout) findViewById(R.id.ll_select_address);
         ll_id_info = (LinearLayout) findViewById(R.id.ll_id_info);
+        ll_invite_code = (LinearLayout) findViewById(R.id.ll_invite_code);
 
         tv_remark = (TextView) findViewById(R.id.tv_remark);
         tv_select_address = (TextView) findViewById(R.id.tv_select_address);
@@ -190,6 +196,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
         ll_select_address.setOnClickListener(this);
         tv_select_department.setOnClickListener(this);
         iv_back.setOnClickListener(this);
+        ll_invite_code.setOnClickListener(this);
 
         rg_type.setOnCheckedChangeListener(this);
         rg_type.check(getIntent().getIntExtra("checkedId", R.id.rb_patient));
@@ -226,6 +233,9 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.ll_invite_code:
+                startActivityForResult(new Intent(this, CaptureActivity.class),REQUEST_SCAN_QRCODE);
+                break;
             case R.id.bt_register:
                 checkInfo();
                 break;
@@ -293,6 +303,14 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
             hospital_id = data.getStringExtra("hospital_id");
             departments_id = data.getStringExtra("departments_id");
             tv_select_department.setText(String.format("%s%s", data.getStringExtra("hospital_name"), data.getStringExtra("departments_name")));
+            return;
+        }
+        if (requestCode == REQUEST_SCAN_QRCODE){
+            String code = data.getStringExtra("result");
+            if (!isEmpty(code)) {
+                et_invite_code.setText(code);
+                et_invite_code.setSelection(code.length());
+            }
             return;
         }
         Uri uri = data.getData();
@@ -610,6 +628,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
         values.clear();
         values.put("user", user);
         values.put("pwd", pwd);
+        values.put("ICode", et_invite_code.getText().toString().trim());
 
         switch (rg_type.getCheckedRadioButtonId()) {
             case R.id.rb_pharmacy:

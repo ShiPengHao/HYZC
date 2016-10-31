@@ -23,7 +23,7 @@ public class WebViewActivity extends BaseActivity {
      * 默认的url
      */
     private static final String WEB_VIEW_URL = "http://m.hyzczg.com/";
-    //    private static final String WEB_VIEW_URL = "http://www.baidu.com/";
+//        private static final String WEB_VIEW_URL = "http://116.255.239.201:8080/committee/jsp/2016101418064626462028.jsp";
     private WebView mWebView;
     private LinearLayout ll_loading;
 

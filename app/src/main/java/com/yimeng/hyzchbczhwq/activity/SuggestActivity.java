@@ -22,7 +22,10 @@ import com.yimeng.hyzchbczhwq.utils.MyConstant;
 import com.yimeng.hyzchbczhwq.utils.MyToast;
 import com.yimeng.hyzchbczhwq.view.ClearEditText;
 
+import org.json.JSONObject;
+
 import java.util.HashMap;
+
 
 /**
  * 意见与反馈界面
@@ -115,9 +118,26 @@ public class SuggestActivity extends BaseActivity implements View.OnClickListene
             return;
         }
         HashMap<String, Object> params = new HashMap<>();
-        params.put("suggest", suggest);
-        params.put("phoneNumber", phoneNumber);
-        //TODO 意见和建议接口
+        params.put("msg", suggest);
+        params.put("phone", phoneNumber);
+        new SoapAsyncTask() {
+            @Override
+            protected void onPostExecute(String s) {
+                if (s == null) {
+                    MyToast.show(getString(R.string.connect_error));
+                    return;
+                }
+                try {
+                    JSONObject object = new JSONObject(s);
+                    MyToast.show(object.optString("msg"));
+                    if ("ok".equalsIgnoreCase(object.optString("status")))
+                        finish();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    MyToast.show(getString(R.string.connect_error));
+                }
+            }
+        }.execute("AddGuestbook", params);
     }
 
     @Override

@@ -10,6 +10,7 @@ import android.graphics.Color;
 import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -21,6 +22,7 @@ import com.squareup.picasso.Picasso;
 import com.yimeng.hyzchbczhwq.R;
 import com.yimeng.hyzchbczhwq.bean.DoctorBean;
 import com.yimeng.hyzchbczhwq.bean.UserBean;
+import com.yimeng.hyzchbczhwq.qrcode.EncodingHandler;
 import com.yimeng.hyzchbczhwq.utils.BitmapUtils;
 import com.yimeng.hyzchbczhwq.utils.DensityUtil;
 import com.yimeng.hyzchbczhwq.utils.MyConstant;
@@ -34,7 +36,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
- * 个人资料页面
+ * 个人资料页面，医师和患者端共用
  */
 public class AccountInfoActivity extends BaseActivity implements View.OnClickListener {
 
@@ -72,11 +74,13 @@ public class AccountInfoActivity extends BaseActivity implements View.OnClickLis
     private RelativeLayout rl_score;
     private String id;
     private TextView tv_change_pwd;
+    private TextView tv_invite_code;
     private LinearLayout ll_personal_info;
     private String name;
     private String age;
     private String sex;
     private String phone;
+    private AlertDialog showQRCodeDialog;
 
 
     @Override
@@ -98,6 +102,7 @@ public class AccountInfoActivity extends BaseActivity implements View.OnClickLis
         tv_isOrder = (TextView) findViewById(R.id.tv_isOrder);
         tv_edit = (TextView) findViewById(R.id.tv_edit);
         tv_change_pwd = (TextView) findViewById(R.id.tv_change_pwd);
+        tv_invite_code = (TextView) findViewById(R.id.tv_invite_code);
 
         iv_back = (ImageView) findViewById(R.id.iv_back);
         iv_avatar = (ImageView) findViewById(R.id.iv_avatar);
@@ -116,6 +121,7 @@ public class AccountInfoActivity extends BaseActivity implements View.OnClickLis
         tv_edit.setOnClickListener(this);
         tv_sex.setOnClickListener(this);
         tv_isOrder.setOnClickListener(this);
+        tv_invite_code.setOnClickListener(this);
         tv_change_pwd.setOnClickListener(this);
         iv_back.setOnClickListener(this);
         iv_avatar.setOnClickListener(this);
@@ -215,6 +221,7 @@ public class AccountInfoActivity extends BaseActivity implements View.OnClickLis
         avatarUrl = userBean.user_avatar;
         et_wechat.setText(isEmpty(userBean.user_WeChat) ? getString(R.string.empty_content) : userBean.user_WeChat);
         et_email.setText(isEmpty(userBean.user_email) ? getString(R.string.empty_content) : userBean.user_email);
+        tv_invite_code.setText(isEmpty(userBean.user_ICode) ? getString(R.string.empty_content) : userBean.user_ICode);
         Picasso.with(this)
                 .load(MyConstant.NAMESPACE + avatarUrl)
                 .resize(DensityUtil.dip2px(96), DensityUtil.dip2px(96))
@@ -248,6 +255,7 @@ public class AccountInfoActivity extends BaseActivity implements View.OnClickLis
         et_email.setText(isEmpty(doctorBean.doctor_email) ? getString(R.string.empty_content) : doctorBean.doctor_email);
         et_introduce.setText(isEmpty(doctorBean.remark) ? getString(R.string.empty_content) : doctorBean.remark);
         tv_sex.setText(isEmpty(doctorBean.doctor_sex) ? getString(R.string.empty_content) : doctorBean.doctor_sex);
+        tv_invite_code.setText(isEmpty(doctorBean.doctor_ICode) ? getString(R.string.empty_content) : doctorBean.doctor_ICode);
         if (doctorBean.Is_Order == 0) {
             tv_isOrder.setText("否");
             ll_limit.setVisibility(View.GONE);
@@ -266,6 +274,16 @@ public class AccountInfoActivity extends BaseActivity implements View.OnClickLis
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.tv_invite_code:
+                String codeString = tv_invite_code.getText().toString().trim();
+                if (isEmpty(codeString)
+                        || getString(R.string.empty_content).equalsIgnoreCase(codeString)
+                        ) {
+                    MyToast.show(getString(R.string.invite_code_error));
+                    return;
+                }
+                showQRCodePopWindow(codeString);
+                break;
             case R.id.tv_sex:
                 showSexSelectDialog();
                 break;
@@ -291,6 +309,27 @@ public class AccountInfoActivity extends BaseActivity implements View.OnClickLis
             case R.id.rl_score:
                 startActivity(new Intent(this, DoctorScoreDetailActivity.class).putExtra("doctor", doctorBean));
                 break;
+        }
+    }
+
+    /**
+     * 显示邀请码的二维码
+     */
+    private void showQRCodePopWindow(String codeString) {
+        try {
+            if (null == showQRCodeDialog) {
+                // 根据邀请码字符串和头像信息，生成二维码图像
+                Bitmap bitmap = EncodingHandler.createQRCode(codeString, DensityUtil.dip2px(144), BitmapUtils.drawableToBitmap(iv_avatar.getDrawable()));
+                if (bitmap == null)
+                    return;
+                ImageView imageView = new ImageView(this);
+                imageView.setLayoutParams(new ViewGroup.LayoutParams(DensityUtil.dip2px(144), DensityUtil.dip2px(144)));
+                imageView.setImageBitmap(bitmap);
+                showQRCodeDialog = new AlertDialog.Builder(this).setTitle(getString(R.string.invite_code_my)).setView(imageView).create();
+            }
+            showQRCodeDialog.show();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -387,6 +426,9 @@ public class AccountInfoActivity extends BaseActivity implements View.OnClickLis
     protected void onDestroy() {
         if (null != uploadDialog && uploadDialog.isShowing()) {
             uploadDialog.dismiss();
+        }
+        if (null != showQRCodeDialog && showQRCodeDialog.isShowing()) {
+            showQRCodeDialog.dismiss();
         }
         super.onDestroy();
     }

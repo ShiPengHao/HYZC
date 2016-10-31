@@ -676,11 +676,6 @@ public class HuanXinHelper {
     protected void onConnectionConflict() {
         MyToast.show("该用户在其它设备登录，程序将退出！");
         MyApp.getAppContext().finish();
-//TODO 单点登录的处理
-//        Intent intent = new Intent(appContext, ChatActivity.class);
-//        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//        intent.putExtra(Constant.ACCOUNT_CONFLICT, true);
-//        appContext.startActivity(intent);
     }
 
     /**
@@ -689,10 +684,6 @@ public class HuanXinHelper {
     protected void onCurrentAccountRemoved() {
         MyToast.show("账号状态异常，程序将退出！");
         MyApp.getAppContext().finish();
-//        Intent intent = new Intent(appContext, ChatActivity.class);
-//        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//        intent.putExtra(Constant.ACCOUNT_REMOVED, true);
-//        appContext.startActivity(intent);
     }
 
     private EaseUser getUserInfo(String username) {

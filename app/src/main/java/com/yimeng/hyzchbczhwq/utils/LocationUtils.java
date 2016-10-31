@@ -36,9 +36,14 @@ public class LocationUtils {
         criteria.setPowerRequirement(Criteria.POWER_LOW);
         String provider = locationManager.getBestProvider(criteria, true);
 
-        Location location = locationManager.getLastKnownLocation(provider);
-        if (updateLocationListener != null)
-            updateLocationListener.updateWithNewLocation(location);
+        Location location;
+        try {
+            location = locationManager.getLastKnownLocation(provider);
+            if (updateLocationListener != null && location != null)
+                updateLocationListener.updateWithNewLocation(location);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         if (ActivityCompat.checkSelfPermission(MyApp.getAppContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
                 && ActivityCompat.checkSelfPermission(MyApp.getAppContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             return;

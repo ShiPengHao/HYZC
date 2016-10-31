@@ -48,9 +48,13 @@ public class PrescriptionMedicineHolder extends BaseHolder<PrescriptionBean> {
         if (null == context) {
             context = MyApp.getAppContext();
         }
-        tv_medicine_name.setText(String.format("%s:%s", context.getString(R.string.medicine_name), data.medicines_name.replace("\r", "").replace("\n", "")));
-        tv_medicine_unit.setText(String.format("%s:%s", context.getString(R.string.medicine_unit), data.medicines_unit.replace("\r", "").replace("\n", "")));
-        tv_medicine_number.setText(String.format("%s:%s", context.getString(R.string.medicine_number), data.medicines_quantity));
-        tv_medicine_usage.setText(String.format("%s:%s", context.getString(R.string.medicine_usage), data.explaination.replace("\r","").replace("\n","")));
+        try {
+            tv_medicine_name.setText(String.format("%s:%s", context.getString(R.string.medicine_name), data.medicines_name.replace("\r", "").replace("\n", "")));
+            tv_medicine_unit.setText(String.format("%s:%s", context.getString(R.string.medicine_unit), data.medicines_unit.replace("\r", "").replace("\n", "")));
+            tv_medicine_number.setText(String.format("%s:%s", context.getString(R.string.medicine_number), data.medicines_quantity));
+            tv_medicine_usage.setText(String.format("%s:%s", context.getString(R.string.medicine_usage), data.medicines_usage.replace("\r", "").replace("\n", "")));
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 }

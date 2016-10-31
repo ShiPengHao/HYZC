@@ -19,7 +19,6 @@ import android.widget.ImageView;
 import com.hyphenate.EMCallBack;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.util.TextFormater;
-
 import com.yimeng.hyzchbczhwq.R;
 import com.yimeng.hyzchbczhwq.utils.BitmapUtils;
 import com.yimeng.hyzchbczhwq.utils.DensityUtil;
@@ -27,6 +26,7 @@ import com.yimeng.hyzchbczhwq.utils.MyApp;
 import com.yimeng.hyzchbczhwq.utils.MyConstant;
 import com.yimeng.hyzchbczhwq.utils.MyLog;
 import com.yimeng.hyzchbczhwq.utils.MyNetUtils;
+import com.yimeng.hyzchbczhwq.utils.MyToast;
 import com.yimeng.hyzchbczhwq.utils.ThreadUtils;
 import com.yimeng.hyzchbczhwq.utils.WebServiceUtils;
 import com.zhy.http.okhttp.OkHttpUtils;
@@ -61,7 +61,6 @@ public class SplashActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         getImage();
         handler = new Handler() {
             @Override

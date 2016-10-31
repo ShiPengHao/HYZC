@@ -24,13 +24,15 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
+
 /**
  * Bug收集工具类
  */
 
 public class BugHandler implements Thread.UncaughtExceptionHandler {
+    private static final boolean DEBUG = false;//调试模式
     private static BugHandler instance;
-    //用来存储设备信息和异常信息
+    //用来存储设备信息
     private Map<String, String> infos = new HashMap<>();
     //用于格式化日期,作为日志文件名的一部分
     private DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss", Locale.CHINA);
@@ -64,7 +66,6 @@ public class BugHandler implements Thread.UncaughtExceptionHandler {
         }.start();
         collectDeviceInfo();
         saveCrashInfo(ex);
-//        SystemClock.sleep(2000);
     }
 
     /**
@@ -116,13 +117,13 @@ public class BugHandler implements Thread.UncaughtExceptionHandler {
                 String versionCode = String.valueOf(pi.versionCode);
                 sb.insert(0, "versionName=" + versionName + "\n" + "versionCode=" + versionCode + "\n");
             }
-        } catch (PackageManager.NameNotFoundException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         // append 北京time
         String time = formatter.format(new Date());
         sb.insert(0, "time=" + time + "\n");
-        if (MyLog.DEBUG) {// 调试时将错误日志写入本地文件
+        if (DEBUG) {// 调试时将错误日志写入本地文件
             // create file name
             String fileName = "crash-" + time + "-" + System.currentTimeMillis() + ".log";
             // save string to local file
@@ -139,14 +140,16 @@ public class BugHandler implements Thread.UncaughtExceptionHandler {
             } catch (Exception e) {
                 e.printStackTrace();
             }
+            if (toast != null)
+                toast.cancel();
+            MyApp.getAppContext().finish();
         } else {// 上线后将错误日志上传提交到服务器
             // map request params
-//        HashMap<String, Object> map = new HashMap<>();
-//        map.put("bug", sb.toString());
+            HashMap<String, Object> map = new HashMap<>();
+            map.put("msg", sb.toString());
             // upload bug to server
-//        uploadBug("sub....", map);//TODO bug提交接口
+            uploadBug("AddBug", map);
         }
-        MyApp.getAppContext().finish();
     }
 
     /**
@@ -161,18 +164,13 @@ public class BugHandler implements Thread.UncaughtExceptionHandler {
                 try {
                     WebServiceUtils.callWebService(MyConstant.WEB_SERVICE_URL, MyConstant.NAMESPACE
                             , (String) params[0], (Map<String, Object>) params[1]);
-                }catch (Exception e){
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
-                return null;
-            }
-
-            @Override
-            protected void onPostExecute(Void s) {
-                MyToast.close();
                 if (toast != null)
                     toast.cancel();
                 MyApp.getAppContext().finish();
+                return null;
             }
         }.execute(params);
     }

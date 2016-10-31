@@ -143,6 +143,7 @@ public class HomeDoctorActivity extends BaseActivity implements View.OnClickList
                 startActivity(new Intent(this, AboutActivity.class));
                 break;
             case R.id.ll_quit:
+                MyToast.show(getString(R.string.app_exit));
                 MyApp.getAppContext().finish();
                 break;
         }

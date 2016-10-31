@@ -13,7 +13,6 @@ import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -111,8 +110,8 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
         tv_img_title = (TextView) view.findViewById(R.id.tv_img_title);
         tv_location = (TextView) view.findViewById(R.id.tv_location);
         iv_location = (ImageView) view.findViewById(R.id.iv_location);
-        listView = (ListView)view.findViewById(R.id.lv);
-        swipeRefreshLayout = (SwipeRefreshLayout)view.findViewById(R.id.swipeRefreshLayout);
+        listView = (ListView) view.findViewById(R.id.lv);
+        swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipeRefreshLayout);
     }
 
     @Override
@@ -344,9 +343,11 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
      * 轮播图条目被点击回调
      */
     public void onItemClick(int index) {
-        String url = bannerImgList.get(index).decorate_value;
-        if (!TextUtils.isEmpty(url) && url.matches(URL_PATTERN)) {
-            startActivity(new Intent(getActivity(), WebViewActivity.class).putExtra("url", url));
+        if (index < bannerImgList.size() && index >= 0) {
+            String url = bannerImgList.get(index).decorate_value;
+            if (!TextUtils.isEmpty(url) && url.matches(URL_PATTERN)) {
+                startActivity(new Intent(getActivity(), WebViewActivity.class).putExtra("url", url));
+            }
         }
     }
 

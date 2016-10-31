@@ -38,8 +38,6 @@ public class DoctorListActivity extends BaseActivity implements AdapterView.OnIt
     private String departments_id;
     private TextView tv_department;
     private String hospital_id;
-    private String departments_name;
-    private String hospital_name;
 
     @Override
     protected int getLayoutResId() {
@@ -69,8 +67,8 @@ public class DoctorListActivity extends BaseActivity implements AdapterView.OnIt
         try {
             Intent intent = getIntent();
             chatOrBooking = intent.getIntExtra(EXTRA_CHAT_OR_BOOKING, EXTRA_BOOKING);
-            departments_name = intent.getStringExtra("departments_name");
-            hospital_name = intent.getStringExtra("hospital_name");
+            String departments_name = intent.getStringExtra("departments_name");
+            String hospital_name = intent.getStringExtra("hospital_name");
             if (!TextUtils.isEmpty(departments_name) && !TextUtils.isEmpty(hospital_name))
                 tv_department.setText(String.format("%s%s", hospital_name, departments_name));
             tv_department.setFocusable(true);

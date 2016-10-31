@@ -17,6 +17,7 @@ public class PrescriptionBean implements Serializable {
     public String medicines_unit;// 单位
     public String medicines_name;// 药品名称
     public String medicines_quantity;// 药品名称
+    public String medicines_usage;// 药品用法
     public int recipe_flag;// 取药标志（病人取药否 0：未取 1已取 2取药中 -1未受理）
     public String pharmacy_name;
     public String pharmacy_adress;

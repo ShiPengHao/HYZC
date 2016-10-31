@@ -10,7 +10,7 @@
 
         <TextView
             style="@style/TextTitle"
-            android:text="@string/suggest" />
+            android:text="@string/forget_pwd_submit" />
 
         <ImageView
             android:id="@+id/iv_back"
@@ -34,48 +34,44 @@
         android:padding="4dp"
         android:scrollHorizontally="true"
         android:singleLine="true"
-        android:text="@string/suggest_introduce"
+        android:text="@string/please_check_info"
         android:textColor="@color/colorAccent"
         android:textSize="18dp" />
 
-    <include layout="@layout/layout_divider" />
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="8dp">
-
-        <EditText
-            android:id="@+id/et_suggest"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@null"
-            android:gravity="start"
-            android:hint="@string/input_suggest"
-            android:lineSpacingMultiplier="1.1"
-            android:maxLength="100"
-            android:maxLines="10"
-            android:minLines="5"
-            android:textColor="@color/black_item_title"
-            android:textSize="16dp" />
-
-        <TextView
-            android:id="@+id/tv_count"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_below="@+id/et_suggest"
-            android:layout_marginTop="4dp"
-            android:text="@string/about_company"
-            android:textColor="@color/black_item_content"
-            android:textSize="14dp" />
-    </RelativeLayout>
-
-    <include layout="@layout/layout_divider" />
+    <include layout="@layout/layout_user_type" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:gravity="center_vertical"
+        android:minHeight="@dimen/finger_width"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="6dp"
+            android:text="@string/user_name"
+            android:textColor="@color/black"
+            android:textSize="16dp" />
+
+        <EditText
+            android:id="@+id/et_username"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@null"
+            android:hint="@string/user_name"
+            android:padding="6dp"
+            android:textColor="@color/black_item_title"
+            android:textSize="16dp" />
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
         android:gravity="center_vertical"
         android:minHeight="@dimen/finger_width"
         android:orientation="horizontal">
@@ -85,6 +81,7 @@
             android:layout_height="wrap_content"
             android:padding="6dp"
             android:text="@string/phone"
+            android:textColor="@color/black"
             android:textSize="16dp" />
 
         <EditText
@@ -99,7 +96,33 @@
             android:textSize="16dp" />
     </LinearLayout>
 
-    <include layout="@layout/layout_divider" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:gravity="center_vertical"
+        android:minHeight="@dimen/finger_width"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="6dp"
+            android:text="@string/remark_"
+            android:textColor="@color/black"
+            android:textSize="16dp" />
+
+        <EditText
+            android:id="@+id/et_remark"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@null"
+            android:hint="@string/remark_"
+            android:padding="6dp"
+            android:textColor="@color/black_item_title"
+            android:textSize="16dp" />
+    </LinearLayout>
+
 
     <Button
         android:id="@+id/bt_submit"
@@ -113,13 +136,5 @@
         android:textColor="@color/white"
         android:textSize="16dp" />
 
-    <com.luseen.autolinklibrary.AutoLinkTextView
-        android:id="@+id/autoLinkTextView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="8dp"
-        android:lineSpacingMultiplier="1.2"
-        android:text="@string/about_company"
-        android:textColor="@color/black_item_content"
-        android:textSize="16dp" />
+
 </LinearLayout>

@@ -112,8 +112,6 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="10dp"
-                        android:focusable="false"
-                        android:focusableInTouchMode="false"
                         android:hint="@string/age"
                         android:inputType="number"
                         android:textColor="@color/black_item_content"

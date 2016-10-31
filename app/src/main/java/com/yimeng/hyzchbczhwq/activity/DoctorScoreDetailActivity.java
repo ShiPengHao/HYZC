@@ -93,7 +93,6 @@ public class DoctorScoreDetailActivity extends BaseActivity implements View.OnCl
             }
         } else if (lv.isRefreshing()) {
             params.put("pageindex", 1);
-            params.put("pagesize", Math.max(itemCount, DEFAULT_NUMBER_PER_PAGE));
         }
         new SoapAsyncTask() {
             @Override

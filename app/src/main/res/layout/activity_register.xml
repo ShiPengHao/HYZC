@@ -530,6 +530,36 @@
 
             </LinearLayout>
 
+            <LinearLayout
+                android:id="@+id/ll_invite_code"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:paddingTop="-5dp"
+                android:paddingBottom="5dp"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="6dp"
+                    android:text="@string/invite_code"
+                    android:textSize="18dp" />
+
+                <EditText
+                    android:id="@+id/et_invite_code"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/invite_code_nullable"
+                    android:padding="6dp" />
+                <ImageView
+                    android:src="@mipmap/r_arrow"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+
             <Button
                 android:id="@+id/bt_register"
                 android:layout_width="match_parent"

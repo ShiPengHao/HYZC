@@ -2,6 +2,7 @@ package com.yimeng.hyzchbczhwq.utils;
 
 import android.app.Activity;
 import android.app.Application;
+import android.os.SystemClock;
 
 import com.hyphenate.chat.EMClient;
 import com.yimeng.hyzchbczhwq.huanxin.HuanXinHelper;
@@ -72,6 +73,7 @@ public class MyApp extends Application {
      * 完全退出本应用
      */
     public void finish() {
+        SystemClock.sleep(2000);
         EMClient.getInstance().logout(true);
         stopJPush();
         for (int j = 0; j < activities.size(); j++) {

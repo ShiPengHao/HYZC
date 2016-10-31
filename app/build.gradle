@@ -8,8 +8,8 @@ android {
         applicationId "com.yimeng.hyzchbczhwq"
         minSdkVersion 14
         targetSdkVersion 23
-        versionCode 10
-        versionName "华医之春2.3.0 2016国庆畅聊版"
+        versionCode 12
+        versionName "华医之春  2016·霜降版"
     }
 
     buildTypes {
@@ -36,4 +36,5 @@ dependencies {
     compile 'com.nineoldandroids:library:2.4.0'
     compile 'com.github.armcha:AutoLinkTextView:0.1.1'
     compile project(':easeui')
+    compile files('libs/zxing.jar')
 }

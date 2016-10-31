@@ -184,7 +184,7 @@ public class PrescribeDetailActivity extends BaseActivity implements View.OnClic
      */
     private void notifyFlagChanged() {
         if (flagChanged) {
-            setResult(1000, new Intent());
+            setResult(RESULT_OK, new Intent());
         }
         finish();
     }

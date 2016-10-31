@@ -291,6 +291,31 @@
                         android:textSize="18dp" />
                 </LinearLayout>
 
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/item_width"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/my_invite_code"
+                        android:textColor="@color/black_item_title"
+                        android:textSize="18dp" />
+
+                    <TextView
+                        android:drawableRight="@mipmap/r_arrow"
+                        android:id="@+id/tv_invite_code"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textIsSelectable="true"
+                        android:layout_marginLeft="10dp"
+                        android:text="@string/invite_code"
+                        android:textColor="@color/black_item_content"
+                        android:textSize="18dp" />
+                </LinearLayout>
+
 
                 <LinearLayout
                     android:id="@+id/ll_isOrder"

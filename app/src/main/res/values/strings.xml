@@ -70,7 +70,7 @@
     <string name="appoint_now">马上预约</string>
     <string name="chat_online">在线咨询</string>
     <string name="back">返回</string>
-    <string name="my_account_info">个人资料</string>
+    <string name="my_account_info">账号资料</string>
     <string name="modify">修改</string>
     <string name="fun_undo">功能正在测试，敬请期待！</string>
     <string name="appointment_id">预约单号</string>
@@ -478,9 +478,9 @@
     <string name="work_department">执业医院</string>
     <string name="about_company">关于华医之春</string>
     <string name="quit_app">完全退出应用</string>
-    <string name="check_update">检测新版本</string>
-    <string name="suggest">意见和反馈</string>
-    <string name="is_new">当前版本即为最新版本</string>
+    <string name="check_update">检查新版本</string>
+    <string name="suggest">意见反馈</string>
+    <string name="is_new">当前版本已是最新版本</string>
     <string name="suggest_introduce">您的每个意见和建议都是我们进步的动力</string>
     <string name="input_suggest">请输入您的意见或者建议</string>
     <string name="can_input">还可输入</string>
@@ -500,9 +500,18 @@
     <string name="choose_patient">选择就诊者</string>
     <string name="patient_name">就诊者</string>
     <string name="no_patient">您还未添加就诊者信息</string>
-    <string name="patient_list">就诊者列表</string>
-    <string name="edit_patient">编辑就诊者资料</string>
-    <string name="add_patient">添加就诊者</string>
+    <string name="patient_list">家人列表</string>
+    <string name="edit_patient">编辑家人资料</string>
+    <string name="add_patient">添加家人</string>
     <string name="tip">温馨提示</string>
     <string name="department_name">科室名称</string>
+    <string name="invite_code">邀请码</string>
+    <string name="invite_code_nullable">邀请码（可不填）</string>
+    <string name="my_invite_code">我的邀请码</string>
+    <string name="invite_code_error">您的邀请码有误</string>
+    <string name="invite_code_my">我的邀请码二维码</string>
+    <string name="app_exit">2s后应用将退出</string>
+    <string name="forget_pwd_submit">忘记密码(提交个人信息)</string>
+    <string name="please_check_info">请检查您的以下个人信息</string>
+    <string name="remark_">备注</string>
 </resources>

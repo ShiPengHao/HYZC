@@ -42,7 +42,8 @@ public class CycleViewPager extends ViewPager {
         innerPagerAdapter = new InnerPagerAdapter(adapter);
         super.setAdapter(innerPagerAdapter);
         setCurrentItem(1);
-        startRoll();
+        if (adapter.getCount() > 1)
+            startRoll();
     }
 
     /**
@@ -145,9 +146,16 @@ public class CycleViewPager extends ViewPager {
                 startRoll();
                 break;
             case MotionEvent.ACTION_UP:
-                if (isClick && (SystemClock.uptimeMillis() - downTime) < 500
-                        && onItemClickListener != null) {
-                    onItemClickListener.onItemClick(position - 1);
+                if (isClick && (SystemClock.uptimeMillis() - downTime) < 500 && onItemClickListener != null) {
+                    int index = this.position;
+                    if (index == 0) {
+                        index = innerPagerAdapter.getCount() - 3;
+                    } else if (index == innerPagerAdapter.getCount() - 1) {
+                        index = 0;
+                    } else {
+                        index--;
+                    }
+                    onItemClickListener.onItemClick(index);
                 }
                 startRoll();
                 break;
