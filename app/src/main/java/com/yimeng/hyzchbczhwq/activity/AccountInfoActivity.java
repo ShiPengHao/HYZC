@@ -59,9 +59,16 @@ public class AccountInfoActivity extends BaseActivity implements View.OnClickLis
     private boolean edit_status;
     private String avatarUrl;
     private final String[] genders = new String[]{"男", "女"};
-    private final String[] isOrderStates = new String[]{"否", "是"};
-    private AlertDialog.Builder selectSexDialog;
-    private AlertDialog.Builder selectOrderDialog;
+    private final String[] isOrderStates = new String[]{"否", "是", "排班"};
+
+    private final String[] days = new String[]{"星期一", "星期二", "星期三", "星期四", "星期五", "星期六", "星期日"};
+    /**
+     * 存储医生上班的星期几
+     */
+    private ArrayList<String> doctorSchedule = new ArrayList<>();
+    private AlertDialog selectSexDialog;
+    private AlertDialog setScheduleDialog;
+    private AlertDialog selectOrderDialog;
     private String type;
     private UserBean userBean;
     private static final int REQUEST_GALLERY_FOR_AVATAR = 101;
@@ -256,11 +263,10 @@ public class AccountInfoActivity extends BaseActivity implements View.OnClickLis
         et_introduce.setText(isEmpty(doctorBean.remark) ? getString(R.string.empty_content) : doctorBean.remark);
         tv_sex.setText(isEmpty(doctorBean.doctor_sex) ? getString(R.string.empty_content) : doctorBean.doctor_sex);
         tv_invite_code.setText(isEmpty(doctorBean.doctor_ICode) ? getString(R.string.empty_content) : doctorBean.doctor_ICode);
+        tv_isOrder.setText(isOrderStates[doctorBean.Is_Order]);
         if (doctorBean.Is_Order == 0) {
-            tv_isOrder.setText("否");
             ll_limit.setVisibility(View.GONE);
         } else {
-            tv_isOrder.setText("是");
             ll_limit.setVisibility(View.VISIBLE);
             et_limit.setText(doctorBean.doctor_UCL == -1 ? "不限" : doctorBean.doctor_UCL + "");
         }
@@ -424,13 +430,29 @@ public class AccountInfoActivity extends BaseActivity implements View.OnClickLis
 
     @Override
     protected void onDestroy() {
+        dismissDialog();
+        super.onDestroy();
+    }
+
+    /**
+     * 关闭所有打开的对话框
+     */
+    private void dismissDialog() {
         if (null != uploadDialog && uploadDialog.isShowing()) {
             uploadDialog.dismiss();
         }
         if (null != showQRCodeDialog && showQRCodeDialog.isShowing()) {
             showQRCodeDialog.dismiss();
         }
-        super.onDestroy();
+        if (null != selectSexDialog && selectSexDialog.isShowing()) {
+            selectSexDialog.dismiss();
+        }
+        if (null != selectOrderDialog && selectOrderDialog.isShowing()) {
+            selectOrderDialog.dismiss();
+        }
+        if (null != setScheduleDialog && setScheduleDialog.isShowing()) {
+            setScheduleDialog.dismiss();
+        }
     }
 
     /**
@@ -446,7 +468,7 @@ public class AccountInfoActivity extends BaseActivity implements View.OnClickLis
                             dialog.dismiss();
                             tv_sex.setText(genders[which]);
                         }
-                    });
+                    }).create();
         }
         selectSexDialog.show();
     }
@@ -468,10 +490,98 @@ public class AccountInfoActivity extends BaseActivity implements View.OnClickLis
                             } else {
                                 ll_limit.setVisibility(View.VISIBLE);
                             }
+                            if (which == 2) {
+                                showScheduleDialog();
+                            }
                         }
-                    });
+                    }).create();
         }
         selectOrderDialog.show();
+    }
+
+    /**
+     * 设置坐诊排班对话框
+     */
+    private void showScheduleDialog() {
+        if (null == setScheduleDialog) {
+            setScheduleDialog = new AlertDialog.Builder(this)
+                    .setTitle("请设置坐诊排班")
+                    .setMultiChoiceItems(days, new boolean[]{false, false, false, false, false, false, false}
+                            , new DialogInterface.OnMultiChoiceClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which, boolean isChecked) {
+                                    if (isChecked)
+                                        doctorSchedule.add(String.valueOf(which+1));
+                                    else
+                                        doctorSchedule.remove(String.valueOf(which+1));
+                                }
+                            })
+                    .setCancelable(false)
+                    .setPositiveButton(getString(R.string.submit), new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                            uploadSchedule();
+                        }
+                    })
+                    .create();
+        }
+        setScheduleDialog.show();
+    }
+
+    /**
+     * 上传医生排班
+     */
+    private void uploadSchedule() {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < doctorSchedule.size(); i++) {
+            sb.append(doctorSchedule.get(i));
+            if (i != doctorSchedule.size() - 1)
+                sb.append(",");
+        }
+        HashMap<String, Object> hashMap = new HashMap<>();
+        hashMap.put("doctor_id", doctorBean.doctor_id);
+        hashMap.put("weekday", sb.toString());
+        new SoapAsyncTask() {
+            @Override
+            protected void onPreExecute() {
+                if (uploadDialog == null) {
+                    initUploadDialog();
+                }
+                uploadTextView.setText("正在上传，请稍后。。。");
+                uploadDialog.show();
+            }
+
+            @Override
+            protected void onPostExecute(String s) {
+                if (s != null) {
+                    try {
+//                        new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
+                        JSONObject object = new JSONObject(s);
+                        if ("ok".equalsIgnoreCase(object.optString("status"))) {
+                            uploadTextView.setText("上传成功!");
+                        } else {
+                            uploadTextView.setText("上传失败，请稍后重试!");
+                        }
+
+                        iv_avatar.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                uploadDialog.dismiss();
+                            }
+                        }, 500);
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                        MyToast.show(getString(R.string.connect_error));
+                        uploadDialog.dismiss();
+                    }
+                } else {
+                    uploadDialog.dismiss();
+                    MyToast.show(getString(R.string.connect_error));
+                }
+            }
+        }.execute("Add_Doctor_WorkLog", hashMap);
     }
 
     /**
@@ -535,8 +645,10 @@ public class AccountInfoActivity extends BaseActivity implements View.OnClickLis
             }
             if (isOrder.equalsIgnoreCase(isOrderStates[0])) {
                 doctorBean.Is_Order = 0;
-            } else {
+            } else if (isOrder.equalsIgnoreCase(isOrderStates[1])) {
                 doctorBean.Is_Order = 1;
+            } else {
+                doctorBean.Is_Order = 2;
             }
         }
         if (ll_limit.getVisibility() == View.VISIBLE) {

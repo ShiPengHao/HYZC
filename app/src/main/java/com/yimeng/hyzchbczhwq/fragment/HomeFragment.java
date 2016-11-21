@@ -22,8 +22,8 @@ import com.squareup.picasso.Picasso;
 import com.yimeng.hyzchbczhwq.R;
 import com.yimeng.hyzchbczhwq.activity.AddressChoiceActivity;
 import com.yimeng.hyzchbczhwq.activity.BaseActivity;
+import com.yimeng.hyzchbczhwq.activity.DepartmentActivity;
 import com.yimeng.hyzchbczhwq.activity.DepartmentChoiceActivity;
-import com.yimeng.hyzchbczhwq.activity.DoctorListActivity;
 import com.yimeng.hyzchbczhwq.activity.WebViewActivity;
 import com.yimeng.hyzchbczhwq.adapter.DefaultAdapter;
 import com.yimeng.hyzchbczhwq.bean.DecorateImgBean;
@@ -67,31 +67,14 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
     private PagerAdapter pagerAdapter;
     private ArrayList<HospitalBean> hospital = new ArrayList<>();
     private static final String IMG_TYPE_LBT = "LBT";
-    private static final String IMG_TYPE_NEWS = "NEWS";
-
-    private final String URL_PATTERN =
-            "^((https|http|ftp|rtsp|mms)?://)"//ftp的user@
-                    // IP形式的URL- 199.194.52.184
-                    // 允许IP和DOMAIN（域名）
-                    // 域名- www.
-                    // 二级域名
-                    // first level domain- .com or .museum
-                    // 端口- :80
-                    + "?(([0-9a-zA-Z_!~*'().&=+$%-]+: )?[0-9a-zA-Z_!~*'().&=+$%-]+@)?" //ftp的user@
-                    + "(([0-9]{1,3}\\.){3}[0-9]{1,3}" // IP形式的URL- 199.194.52.184
-                    + "|" // 允许IP和DOMAIN（域名）
-                    + "([0-9a-zA-Z_!~*'()-]+\\.)*" // 域名- www.
-                    + "([0-9a-zA-Z][0-9a-zA-Z-]{0,61})?[0-9a-zA-Z]\\." // 二级域名
-                    + "[a-zA-Z]{2,6})" // first level domain- .com or .museum
-                    + "(:[0-9]{1,4})?" // 端口- :80
-                    + "((/?)|"
-                    + "(/[0-9a-zA-Z_!~*'().;?:@&=+$,%#-]+)+/?)$";
+    private static final String IMG_TYPE_NEWS = "WZ";
     private TextView tv_location;
     private LinearLayout ll_location;
     private String locationCity;
     private ImageView iv_location;
+    private ImageView iv_mask;
     private String cityName;
-    private ListView listView;
+    private ListView newsListView;
     private SwipeRefreshLayout swipeRefreshLayout;
     private DefaultAdapter<DecorateImgBean> listAdapter;
 
@@ -110,7 +93,8 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
         tv_img_title = (TextView) view.findViewById(R.id.tv_img_title);
         tv_location = (TextView) view.findViewById(R.id.tv_location);
         iv_location = (ImageView) view.findViewById(R.id.iv_location);
-        listView = (ListView) view.findViewById(R.id.lv);
+        iv_mask = (ImageView) view.findViewById(R.id.iv_mask);
+        newsListView = (ListView) view.findViewById(R.id.lv);
         swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipeRefreshLayout);
     }
 
@@ -123,15 +107,17 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
         swipeRefreshLayout.setOnRefreshListener(this);
         LocationUtils.setUpdateLocationListener(this);
         viewPager.setOnItemClickListener(this);
-        listView.setOnItemClickListener(this);
+        newsListView.setOnItemClickListener(this);
         listAdapter = new DefaultAdapter<DecorateImgBean>(newsImgList) {
             @Override
             protected BaseHolder getHolder() {
                 return new NewsHolder();
             }
         };
-        listView.setAdapter(listAdapter);
+        newsListView.setAdapter(listAdapter);
         pagerAdapter = new PagerAdapter() {
+            private int[] bannerPlaceHolder = new int[]{R.drawable.banner_mask1, R.drawable.banner_mask2, R.drawable.banner_mask3};
+
             @Override
             public int getCount() {
                 return bannerImgList.size();
@@ -148,6 +134,8 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
                 Picasso.with(getContext())
                         .load(MyConstant.NAMESPACE + bannerImgList.get(position).decorate_img)
                         .resize(viewPager.getWidth(), viewPager.getHeight())
+                        .placeholder(bannerPlaceHolder[position % 3])
+                        .error(bannerPlaceHolder[position % 3])
 //                        .memoryPolicy(MemoryPolicy.NO_CACHE, MemoryPolicy.NO_STORE)
                         .into(imageView);
                 container.addView(imageView);
@@ -162,6 +150,8 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
         viewPager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
             @Override
             public void onPageSelected(int position) {
+                if (null == bannerImgList || bannerImgList.size() <= 1)
+                    return;
                 tv_img_title.setText(bannerImgList.get(position).decorate_name);
                 for (int i = 0; i < ll_points.getChildCount(); i++) {
                     if (i == position) {
@@ -177,7 +167,8 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
     @Override
     public void onResume() {
         super.onResume();
-        viewPager.startRoll();
+        if (pagerAdapter.getCount() > 1)
+            viewPager.startRoll();
     }
 
     @Override
@@ -203,6 +194,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
     private void requestImg(final String imgType) {
         HashMap<String, Object> hashMap = new HashMap<>();
         hashMap.put("key", imgType);
+        hashMap.put("departments_id", 0);
         new BaseActivity.SoapAsyncTask() {
             @Override
             protected void onPostExecute(String s) {
@@ -219,6 +211,9 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
                             tv_img_title.setText(bannerImgList.get(0).decorate_name);
                             initDots();
                             viewPager.setAdapter(pagerAdapter);
+                            iv_mask.setVisibility(View.GONE);
+                        } else {
+                            iv_mask.setVisibility(View.VISIBLE);
                         }
                     } else if (IMG_TYPE_NEWS.equalsIgnoreCase(imgType)) {
                         newsImgList.clear();
@@ -238,6 +233,8 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
      */
     private void initDots() {
         ll_points.removeAllViews();
+        if (null == bannerImgList || bannerImgList.size() < 2)
+            return;
         for (int i = 0; i < bannerImgList.size(); i++) {
             ImageView imageView = new ImageView(context);
             imageView.setBackgroundResource(R.drawable.selector_dot);
@@ -300,13 +297,13 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
                 if (checkCityNameAndHospital())
                     startActivity(new Intent(getActivity(), DepartmentChoiceActivity.class)
                             .putExtra("hospital", hospital)
-                            .putExtra(DoctorListActivity.EXTRA_CHAT_OR_BOOKING, DoctorListActivity.EXTRA_CHAT));// 在线咨询
+                            .putExtra(DepartmentActivity.EXTRA_CHAT_OR_BOOKING, DepartmentActivity.EXTRA_CHAT));// 在线咨询
                 break;
             case R.id.ll_booking:
                 if (checkCityNameAndHospital())
                     startActivity(new Intent(getActivity(), DepartmentChoiceActivity.class)
                             .putExtra("hospital", hospital)
-                            .putExtra(DoctorListActivity.EXTRA_CHAT_OR_BOOKING, DoctorListActivity.EXTRA_BOOKING));// 预约挂号
+                            .putExtra(DepartmentActivity.EXTRA_CHAT_OR_BOOKING, DepartmentActivity.EXTRA_BOOKING));// 预约挂号
                 break;
             case R.id.ll_health:
                 startActivity(new Intent(getActivity(), WebViewActivity.class));// 健康教育
@@ -345,7 +342,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
     public void onItemClick(int index) {
         if (index < bannerImgList.size() && index >= 0) {
             String url = bannerImgList.get(index).decorate_value;
-            if (!TextUtils.isEmpty(url) && url.matches(URL_PATTERN)) {
+            if (!TextUtils.isEmpty(url) && url.matches(MyConstant.URL_PATTERN)) {
                 startActivity(new Intent(getActivity(), WebViewActivity.class).putExtra("url", url));
             }
         }
@@ -399,7 +396,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
      */
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         String url = newsImgList.get(position).decorate_value;
-        if (!TextUtils.isEmpty(url) && url.matches(URL_PATTERN)) {
+        if (!TextUtils.isEmpty(url) && url.matches(MyConstant.URL_PATTERN)) {
             startActivity(new Intent(getActivity(), WebViewActivity.class).putExtra("url", url));
         }
     }

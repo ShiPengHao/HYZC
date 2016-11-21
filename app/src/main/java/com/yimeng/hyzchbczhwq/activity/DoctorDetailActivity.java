@@ -2,12 +2,12 @@ package com.yimeng.hyzchbczhwq.activity;
 
 import android.animation.ObjectAnimator;
 import android.app.AlertDialog;
-import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -34,7 +34,9 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
+import java.util.TimeZone;
 
 /**
  * 医生详情界面，展示医生详情介绍，提交病人预约申请
@@ -43,6 +45,24 @@ public class DoctorDetailActivity extends BaseActivity implements View.OnClickLi
 
     private static final int REQUEST_CODE_FOR_DISEASE_MODULE = 100;
     private static final int REQUEST_CODE_FOR_PATIENT = 101;
+    /**
+     * 限制最大可预约天数
+     */
+    private static final int DATE_LIMIT_DAYS = 5;
+    /**
+     * 限制每天最晚可预约的时间
+     */
+    private static final int DATE_LIMIT_LAST_HOUR = 15;
+    /**
+     * 限制每天最早可预约的时间
+     */
+    private static final int DATE_LIMIT_FIRST_HOUR = 8;
+    /**
+     * 限制预约的时间与当前时间差，即现在只能预约n小时以后的号
+     */
+    private static final int DATE_LIMIT_AFTER_HOURS = 2;
+
+    private String[] days = new String[]{"一", "二", "三", "四", "五", "六", "日"};
 
     private ImageView iv_avatar;
     private EditText et_disease_description;
@@ -70,6 +90,9 @@ public class DoctorDetailActivity extends BaseActivity implements View.OnClickLi
     private RatingBar rating_bar;
     private RelativeLayout rl_score;
     private String patient_id;
+    private ArrayList<String> workDays = new ArrayList<>();
+    private AlertDialog datePickerDialog;
+    private String today;
     //    private NumberPicker timePicker;
 
     @Override
@@ -182,20 +205,49 @@ public class DoctorDetailActivity extends BaseActivity implements View.OnClickLi
                 .load(MyConstant.NAMESPACE + doctorBean.doctor_avatar)
                 .resize(DensityUtil.dip2px(96), DensityUtil.dip2px(96))
                 .into(iv_avatar);
-        calendar = Calendar.getInstance();
-        int hourOfDay = calendar.get(Calendar.HOUR_OF_DAY);
-        if (hourOfDay >= 15) {//15点-24点，只能挂第二天的号，所以使用第二天的日历，日期为第二天日期，时间默认为8点，范围为8-17
-            calendar.setTime(new Date(System.currentTimeMillis() + 9 * 60 * 60 * 1000));
-//            timePicker.setValue(8);
-//            timePicker.setMinValue(8);
-//        } else {//0-15点，只能挂2个小时以后的号，而且必须在工作时间8点以后
-//            timePicker.setValue(Math.max(hourOfDay + 2, 8));
-//            timePicker.setMinValue(Math.max(hourOfDay + 2, 8));
-        }
-//        timePicker.setMaxValue(17);
-        date = String.valueOf(calendar.get(Calendar.YEAR)) + "-" + (calendar.get(Calendar.MONTH) + 1) + "-" + calendar.get(Calendar.DAY_OF_MONTH);
-        tv_appointment_date.setText(String.format("%s：%s", getString(R.string.appointment_date), date));
+        getDoctorWorkDays();
+    }
 
+    /**
+     * 获取此医生可预约的时间
+     */
+    private void getDoctorWorkDays() {
+        calendar = Calendar.getInstance(Locale.CHINA);
+        calendar.setTimeZone(TimeZone.getTimeZone("GMT+8:00"));
+        int todayOfWeek = calendar.get(Calendar.DAY_OF_WEEK) - 1;
+        if (todayOfWeek == 0)
+            todayOfWeek = 7;
+        today = "今天：" + String.valueOf(calendar.get(Calendar.YEAR)) + "年" + (calendar.get(Calendar.MONTH) + 1)
+                + "月" + calendar.get(Calendar.DAY_OF_MONTH) + "日,  星期" + days[todayOfWeek - 1];
+        int i = 0;
+        int hourOfDay = calendar.get(Calendar.HOUR_OF_DAY);
+        if (hourOfDay >= DATE_LIMIT_LAST_HOUR) {//15点-24点，只能挂第二天的号，所以使用第二天的日历，日期为第二天日期，时间默认为8点，范围为8-17
+            i = 1;
+            calendar.setTime(new Date(System.currentTimeMillis() + (24 - DATE_LIMIT_LAST_HOUR) * 60 * 60 * 1000));
+//            timePicker.setValue(DATE_LIMIT_FIRST_HOUR);
+//            timePicker.setMinValue(DATE_LIMIT_FIRST_HOUR);
+//        } else {//0-15点，只能挂2个小时以后的号，而且必须在工作时间8点以后
+//            timePicker.setValue(Math.max(hourOfDay + DATE_LIMIT_AFTER_HOURS, DATE_LIMIT_FIRST_HOUR));
+//            timePicker.setMinValue(Math.max(hourOfDay + DATE_LIMIT_AFTER_HOURS, DATE_LIMIT_FIRST_HOUR));
+        }
+//        timePicker.setMaxValue(DATE_LIMIT_LAST_HOUR+DATE_LIMIT_AFTER_HOURS);
+//        date = String.valueOf(calendar.get(Calendar.YEAR)) + "-" + (calendar.get(Calendar.MONTH) + 1) + "-" + calendar.get(Calendar.DAY_OF_MONTH);
+//        tv_appointment_date.setText(String.format("%s：%s", getString(R.string.appointment_date), date));
+        int dayOfWeek;
+        workDays.clear();
+        while (i < DATE_LIMIT_DAYS) {
+            dayOfWeek = (todayOfWeek + i) % 7;
+            if (dayOfWeek == 0)
+                dayOfWeek = 7;
+            if (doctorBean.Is_Order == 1 || doctorBean.week.contains(String.valueOf(dayOfWeek))) {// 当天坐诊
+                workDays.add(String.valueOf(calendar.get(Calendar.YEAR)) + "-" + (calendar.get(Calendar.MONTH) + 1)
+                        + "-" + calendar.get(Calendar.DAY_OF_MONTH) + ",  星期" + days[dayOfWeek - 1]);
+            }
+            calendar.setTime(new Date(System.currentTimeMillis() + (i + 1) * 24 * 60 * 60 * 1000));
+            i++;
+        }
+        if (workDays.size() == 0)
+            bt_appoint.setEnabled(false);
     }
 
     @Override
@@ -275,45 +327,66 @@ public class DoctorDetailActivity extends BaseActivity implements View.OnClickLi
     }
 
     /**
-     * 选择日期
+     * 选择预约日期
      */
     private void showDatePickDialog() {
-        calendar = Calendar.getInstance();
-        int hourOfDay = calendar.get(Calendar.HOUR_OF_DAY);
-        if (hourOfDay > 15) {//15点-24点，只能挂第二天的号，所以使用第二天的日历
-            calendar.setTime(new Date(System.currentTimeMillis() + 9 * 60 * 60 * 1000));
+        if (workDays.size() == 0) {
+            MyToast.show("该医生" + DATE_LIMIT_DAYS + "天内不可预约，看看其它医生吧！");
+            return;
         }
-        int year = calendar.get(Calendar.YEAR);
-        int monthOfYear = calendar.get(Calendar.MONTH);
-        int dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
-        DatePickerDialog datePickerDialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
-            private boolean isFirst = true;
-
-            @Override
-            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                if (isFirst) {
-                    date = String.valueOf(year) + "-" + (monthOfYear + 1) + "-" + dayOfMonth;
-                    tv_appointment_date.setText(String.format("%s：%s", getString(R.string.appointment_date), date));
-                    isFirst = false;
-                }
-            }
-        }, year, monthOfYear, dayOfMonth);
-        if (onDateChangedListener == null) {
-            onDateChangedListener = new DatePicker.OnDateChangedListener() {
-                @Override
-                public void onDateChanged(DatePicker view, int tempYear, int tempMonthOfYear, int tempDayOfMonth) {
-                    Calendar tempCalendar = Calendar.getInstance();
-                    tempCalendar.set(tempYear, tempMonthOfYear, tempDayOfMonth);
-                    if (!tempCalendar.after(calendar) // 所选时间在目前时刻之前
-                            || tempCalendar.getTimeInMillis() - calendar.getTimeInMillis() > 5 * 24 * 60 * 60 * 1000// 所选时间在5天之后
-                            ) {
-                        view.init(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH), this);
-                    }
-                }
-            };
-        }
-        datePickerDialog.getDatePicker().init(year, monthOfYear, dayOfMonth, onDateChangedListener);
+        if (datePickerDialog == null)
+            datePickerDialog = new AlertDialog.Builder(this)
+                    .setSingleChoiceItems(new ArrayAdapter(this, android.R.layout.simple_list_item_1, workDays)
+                            , 0, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                    String s = workDays.get(which);
+                                    date = s.substring(0, s.indexOf(","));
+                                    tv_appointment_date.setText(String.format("%s：%s", getString(R.string.appointment_date), date));
+                                }
+                            })
+                    .setTitle(today)
+                    .create();
         datePickerDialog.show();
+
+//        calendar = Calendar.getInstance();
+//        int hourOfDay = calendar.get(Calendar.HOUR_OF_DAY);
+//        if (hourOfDay > 15) {//15点-24点，只能挂第二天的号，所以使用第二天的日历
+//            calendar.setTime(new Date(System.currentTimeMillis() + 9 * 60 * 60 * 1000));
+//        }
+//        int year = calendar.get(Calendar.YEAR);
+//        int monthOfYear = calendar.get(Calendar.MONTH);
+//        int dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
+//        DatePickerDialog datePickerDialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
+//            private boolean isFirst = true;
+//
+//            @Override
+//            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+//                if (isFirst) {
+//                    date = String.valueOf(year) + "-" + (monthOfYear + 1) + "-" + dayOfMonth;
+//                    tv_appointment_date.setText(String.format("%s：%s", getString(R.string.appointment_date), date));
+//                    isFirst = false;
+//                }
+//            }
+//        }, year, monthOfYear, dayOfMonth);
+//        if (onDateChangedListener == null) {
+//            onDateChangedListener = new DatePicker.OnDateChangedListener() {
+//                @Override
+//                public void onDateChanged(DatePicker view, int tempYear, int tempMonthOfYear, int tempDayOfMonth) {
+//                    Calendar tempCalendar = Calendar.getInstance();
+//                    tempCalendar.set(tempYear, tempMonthOfYear, tempDayOfMonth);
+//                    if (!tempCalendar.after(calendar) // 所选时间在目前时刻之前
+//                            || tempCalendar.getTimeInMillis() - calendar.getTimeInMillis() > DATE_LIMIT_DAYS * 24 * 60 * 60 * 1000// 所选时间在5天之后
+//                            ) {
+//                        MyToast.show("当前日期不可预约，请选择" + DATE_LIMIT_DAYS + "天之内的时间");
+//                        view.init(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH), this);
+//                    }
+//                }
+//            };
+//        }
+//        datePickerDialog.getDatePicker().init(year, monthOfYear, dayOfMonth, onDateChangedListener);
+//        datePickerDialog.show();
     }
 
     /**
@@ -336,6 +409,12 @@ public class DoctorDetailActivity extends BaseActivity implements View.OnClickLi
         if (TextUtils.isEmpty(module)) {
             MyToast.show("请选择病情模板");
             ObjectAnimator.ofFloat(tv_disease_description, "translationX", -25, 25, -25, 25, 0).setDuration(500).start();
+            return;
+        }
+
+        if (TextUtils.isEmpty(date)) {
+            MyToast.show("请选择预约日期");
+            ObjectAnimator.ofFloat(ll_choose_date, "translationX", -25, 25, -25, 25, 0).setDuration(500).start();
             return;
         }
 
@@ -393,6 +472,17 @@ public class DoctorDetailActivity extends BaseActivity implements View.OnClickLi
                     }
                 })
                 .show();
+    }
+
+    @Override
+    protected void onDestroy() {
+        dismissDialog();
+        super.onDestroy();
+    }
+
+    private void dismissDialog() {
+        if (datePickerDialog != null && datePickerDialog.isShowing())
+            datePickerDialog.dismiss();
     }
 
 }

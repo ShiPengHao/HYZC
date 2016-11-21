@@ -86,7 +86,7 @@ public class CycleViewPager extends ViewPager {
         public void handleMessage(android.os.Message msg) {
             switch (msg.what) {
                 case WHAT_ROLL:
-                    if (innerPagerAdapter != null && innerPagerAdapter.getCount() > 2) {
+                    if (innerPagerAdapter != null && innerPagerAdapter.getCount() > 3) {
                         setCurrentItem(position + 1);
                     }
                     handler.sendEmptyMessageDelayed(WHAT_ROLL, duration);

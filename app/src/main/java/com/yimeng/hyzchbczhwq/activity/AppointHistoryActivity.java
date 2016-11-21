@@ -193,7 +193,7 @@ public class AppointHistoryActivity extends BaseActivity implements View.OnClick
     /**
      * 解析预约列表
      *
-     * @param result
+     * @param result json字符串
      */
     private void parseAppointList(String result) {
         try {

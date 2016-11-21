@@ -8,8 +8,8 @@ android {
         applicationId "com.yimeng.hyzchbczhwq"
         minSdkVersion 14
         targetSdkVersion 23
-        versionCode 12
-        versionName "华医之春  2016·霜降版"
+        versionCode 13
+        versionName "华医之春  V1.1.0"
     }
 
     buildTypes {

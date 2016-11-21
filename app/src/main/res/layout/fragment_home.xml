@@ -78,6 +78,13 @@
                 android:orientation="horizontal"
                 android:paddingBottom="10dp" />
 
+            <ImageView
+                android:id="@+id/iv_mask"
+                android:src="@drawable/banner_mask1"
+                android:scaleType="centerCrop"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
         </RelativeLayout>
 
         <LinearLayout

@@ -239,10 +239,8 @@ public class AppointDetailActivity extends BaseActivity implements View.OnClickL
                     String result = WebServiceUtils.callWebService(MyConstant.WEB_SERVICE_URL, MyConstant.NAMESPACE, "Load_patient_detail",
                             (Map<String, Object>) params[0]);
                     parseAppointDetail(result);
-                    return result;
-                } else {
-                    return null;
                 }
+                return null;
             }
         }.execute(params);
     }
@@ -259,7 +257,7 @@ public class AppointDetailActivity extends BaseActivity implements View.OnClickL
         }
         try {
             JSONObject object = new JSONObject(result);
-            if (object.optInt("total") == 1) {
+            if (object.optInt("total") >= 1) {
                 ArrayList<AppointmentBean> tempData = new Gson().fromJson(object.optString("data"),
                         new TypeToken<ArrayList<AppointmentBean>>() {
                         }.getType());
@@ -328,24 +326,17 @@ public class AppointDetailActivity extends BaseActivity implements View.OnClickL
         if (null == cancelDialog) {
             cancelDialog = new AlertDialog.Builder(this).setTitle("温馨提示")
                     .setMessage("您确定要取消此预约单吗？")
-                    .setNegativeButton("确定", new DialogInterface.OnClickListener() {
+                    .setNegativeButton("是", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             dialog.dismiss();
-                            requestCancelAppointment(false);
+                            requestCancelAppointment();
                         }
                     })
-                    .setPositiveButton("点错了", new DialogInterface.OnClickListener() {
+                    .setPositiveButton("否", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             dialog.dismiss();
-                        }
-                    })
-                    .setNeutralButton("确定并且重新预约", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
-                            requestCancelAppointment(true);
                         }
                     })
                     .create();
@@ -438,10 +429,8 @@ public class AppointDetailActivity extends BaseActivity implements View.OnClickL
 
     /**
      * 请求取消此预约单
-     *
-     * @param needJump 取消订单操作成功之后是否继续预约，是true，否false
      */
-    private void requestCancelAppointment(final boolean needJump) {
+    private void requestCancelAppointment() {
         params.clear();
         params.put("appointment_id", appointment_id);
         params.put("type", "patient");
@@ -464,13 +453,8 @@ public class AppointDetailActivity extends BaseActivity implements View.OnClickL
                 try {
                     if ("ok".equalsIgnoreCase(new JSONObject(s).optString("status"))) {
                         MyToast.show("操作成功！");
-                        if (needJump) {
-                            startActivity(new Intent(AppointDetailActivity.this, DoctorListActivity.class));
-                            finish();
-                        } else {
-                            setResult(101, new Intent());
-                            finish();
-                        }
+                        setResult(RESULT_OK, new Intent());
+                        finish();
                     } else {
                         MyToast.show(getString(R.string.connect_error));
                     }

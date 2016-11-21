@@ -71,7 +71,7 @@
             android:windowSoftInputMode="stateHidden" />
         <activity android:name="com.yimeng.hyzchbczhwq.activity.TestActivity" />
         <activity
-            android:name=".activity.DoctorListActivity"
+            android:name=".activity.DepartmentActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity
@@ -271,7 +271,7 @@
         <!-- Required. AppKey copied from Portal -->
         <meta-data
             android:name="JPUSH_APPKEY"
-            android:value="c5a7f4242f0f2bf2625b60c0" />
+            android:value="03817ca415a8aa478cf411b7" />
     </application>
 
 </manifest>

@@ -116,7 +116,7 @@
     <string name="appointment_limit">每日预约量</string>
     <string name="empty_content">无</string>
     <string name="wechat">微信号</string>
-    <string name="isOrder">可坐诊</string>
+    <string name="isOrder">可预约</string>
     <string name="prescribe_detail">药方详情</string>
     <string name="patient_phone">用户手机号</string>
     <string name="prescribe_build_time">开药时间</string>
@@ -514,4 +514,6 @@
     <string name="forget_pwd_submit">忘记密码(提交个人信息)</string>
     <string name="please_check_info">请检查您的以下个人信息</string>
     <string name="remark_">备注</string>
+    <string name="doctor_on_duty">今日坐诊医生</string>
+    <string name="doctor_duty_list">科室医生排班表</string>
 </resources>

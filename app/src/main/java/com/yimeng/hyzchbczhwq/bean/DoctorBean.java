@@ -28,6 +28,7 @@ public class DoctorBean implements Serializable, Comparable<DoctorBean> {
     public String hospital_id;//科室id
     public String doctor_Audit;//审核状态（0未受理 1已通过 -1未通过）
     public String add_time;//注册时间
+    public String week;//坐诊时间
 
     @Override
     public int compareTo(@NonNull DoctorBean another) {

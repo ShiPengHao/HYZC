@@ -305,6 +305,7 @@
                         android:textSize="18dp" />
 
                     <TextView
+                        android:paddingRight="8dp"
                         android:drawableRight="@mipmap/r_arrow"
                         android:id="@+id/tv_invite_code"
                         android:layout_width="match_parent"

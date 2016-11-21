@@ -77,7 +77,7 @@ public class MyFragment extends BaseFragment implements View.OnClickListener {
                         .putExtra(PatientListActivity.EXTRA_CHOOSE_OR_QUERY, PatientListActivity.EXTRA_QUERY));
                 break;
 //            case rl_booking:
-//                startActivity(new Intent(getActivity(), DoctorListActivity.class));
+//                startActivity(new Intent(getActivity(), DepartmentActivity.class));
 //                break;
             case R.id.rl_conversation_history:
                 startActivity(new Intent(getActivity(), ConversationListActivity.class));

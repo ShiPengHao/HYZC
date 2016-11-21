@@ -5,7 +5,7 @@ import java.io.Serializable;
 /**
  * 预约信息
  */
-public class AppointmentBean implements Serializable {
+public class AppointmentBean implements Serializable, Comparable<AppointmentBean> {
     /*
     "appointment_id":22,
     "user_id":12,
@@ -42,4 +42,10 @@ public class AppointmentBean implements Serializable {
     public String patient_phone;
     public String registration_time;
     public String prescription_id;
+
+    @Override
+    public int compareTo(AppointmentBean another) {
+        return appointment_id - another.appointment_id;
+    }
+
 }

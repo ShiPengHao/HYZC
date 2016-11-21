@@ -116,12 +116,12 @@ public class DepartmentChoiceActivity extends BaseActivity implements View.OnCli
                 intent.putExtra("departments_id", String.valueOf(departmentBean.departments_id));
                 intent.putExtra("hospital_name", hospitalBean.hospital_name);
                 intent.putExtra("departments_name", departmentBean.departments_name);
-                int chatOrBooking = getIntent().getIntExtra(DoctorListActivity.EXTRA_CHAT_OR_BOOKING, -1);
+                int chatOrBooking = getIntent().getIntExtra(DepartmentActivity.EXTRA_CHAT_OR_BOOKING, -1);
                 if (chatOrBooking == -1)
                     setResult(RESULT_OK, intent);
                 else
-                    startActivity(intent.setClass(this,DoctorListActivity.class)
-                            .putExtra(DoctorListActivity.EXTRA_CHAT_OR_BOOKING, chatOrBooking));
+                    startActivity(intent.setClass(this,DepartmentActivity.class)
+                            .putExtra(DepartmentActivity.EXTRA_CHAT_OR_BOOKING, chatOrBooking));
                 finish();
                 break;
             case R.id.iv_back:

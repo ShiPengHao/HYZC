@@ -5,6 +5,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -14,6 +15,8 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.easeui.ui.EaseChatFragment;
@@ -22,10 +25,27 @@ import com.hyphenate.easeui.widget.chatrow.EaseChatRow;
 import com.hyphenate.easeui.widget.chatrow.EaseCustomChatRowProvider;
 import com.hyphenate.easeui.widget.emojicon.EaseEmojiconMenu;
 import com.yimeng.hyzchbczhwq.R;
+import com.yimeng.hyzchbczhwq.activity.AccountInfoActivity;
+import com.yimeng.hyzchbczhwq.activity.AppointDetailActivity;
+import com.yimeng.hyzchbczhwq.activity.BaseActivity;
+import com.yimeng.hyzchbczhwq.bean.AppointmentBean;
+import com.yimeng.hyzchbczhwq.bean.DoctorBean;
+import com.yimeng.hyzchbczhwq.bean.UserBean;
+import com.yimeng.hyzchbczhwq.utils.MyConstant;
+import com.yimeng.hyzchbczhwq.utils.MyToast;
 
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+
+/**
+ * 集成环信的聊天UI，只能做单聊
+ */
 public class ChatFragment extends EaseChatFragment implements EaseChatFragmentHelper {
 
     // constant start from 11 to avoid conflict with constant in base class
@@ -61,12 +81,17 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentHe
     private boolean isRobot;
     private MyReceiver myReceiver;
     private String nick;
+    private DoctorBean doctorBean;
+    private UserBean userBean;
+    private String selfUserId;
+    private HashMap<String, Object> params;
+    private String selfType;
 
     private class MyReceiver extends BroadcastReceiver {
 
         @Override
         public void onReceive(Context context, Intent intent) {
-            if (toChatUsername.equalsIgnoreCase(intent.getStringExtra("username"))) {
+            if (toChatUsername.equalsIgnoreCase(intent.getStringExtra("username"))) {//防止获得自己的信息
                 nick = intent.getStringExtra("nick");
                 titleBar.setTitle(nick);
             }
@@ -123,6 +148,61 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentHe
 //        }
         setRefreshProfileReceiver();
         nick = PreferenceManager.getInstance().getUserNick(toChatUsername);
+        if (selfUserId == null) {
+            params = new HashMap<>();
+            SharedPreferences sp = getActivity().getSharedPreferences(MyConstant.PREFS_ACCOUNT, Context.MODE_PRIVATE);
+            selfUserId = sp.getString(MyConstant.KEY_ACCOUNT_LAST_ID, "");
+            selfType = sp.getString(MyConstant.KEY_ACCOUNT_LAST_TYPE, "");
+            boolean isDoctor = "doctor".equalsIgnoreCase(selfType);
+            getDoctorInfo(isDoctor);
+            getUserInfo(!isDoctor);
+        }
+    }
+
+    /**
+     * 获得用户信息，如果自己是用户，则根据自身id，否则根据聊天对象id
+     *
+     * @param selfIsUser 自己是用户
+     */
+    private void getUserInfo(boolean selfIsUser) {
+        HashMap<String, Object> params = new HashMap<>();
+        if (selfIsUser)
+            params.put("user_id", selfUserId);
+        else
+            params.put("user_id", toChatUsername.substring(toChatUsername.indexOf("_") + 1));
+        new BaseActivity.SoapAsyncTask() {
+            @Override
+            protected void onPostExecute(String s) {
+                try {
+                    userBean = new Gson().fromJson(new JSONObject(s).optJSONArray("data").optString(0), UserBean.class);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }.execute("Get_User_Msg", params);
+    }
+
+    /**
+     * 获得医生信息，如果自己是医生，则根据自身id，否则根据聊天对象id
+     *
+     * @param selfIsDoctor 自己是医生
+     */
+    private void getDoctorInfo(boolean selfIsDoctor) {
+        HashMap<String, Object> params = new HashMap<>();
+        if (selfIsDoctor)
+            params.put("doctor_id", selfUserId);
+        else
+            params.put("doctor_id", toChatUsername.substring(toChatUsername.indexOf("_") + 1));
+        new BaseActivity.SoapAsyncTask() {
+            @Override
+            protected void onPostExecute(String s) {
+                try {
+                    doctorBean = new Gson().fromJson(new JSONObject(s).optJSONArray("data").optString(0), DoctorBean.class);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }.execute("Get_Doctor_Msg", params);
     }
 
     @Override
@@ -138,16 +218,16 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentHe
         }
         //聊天室暂时不支持红包功能
         //red packet code : 注册红包菜单选项
-        if (chatType != Constant.CHATTYPE_CHATROOM) {
+//        if (chatType != Constant.CHATTYPE_CHATROOM) {
 //            inputMenu.registerExtendMenuItem(R.string.attach_red_packet, R.drawable.em_chat_red_packet_selector, ITEM_RED_PACKET, extendMenuItemClickListener);
-        }
+//        }
         //end of red packet code
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_CODE_CONTEXT_MENU) {
+//        if (requestCode == REQUEST_CODE_CONTEXT_MENU) {
 //            switch (resultCode) {
 //            case ContextMenuActivity.RESULT_CODE_COPY: // copy
 //                clipboard.setPrimaryClip(ClipData.newPlainText(null,
@@ -168,7 +248,7 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentHe
 //            default:
 //                break;
 //            }
-        }
+//        }
         if (resultCode == Activity.RESULT_OK) {
             switch (requestCode) {
 //            case REQUEST_CODE_SELECT_VIDEO: //send the video
@@ -262,11 +342,53 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentHe
     }
 
     @Override
-    public void onAvatarClick(String username) {
+    public void onAvatarClick(String username) {//TODO 聊天头像点击事件回调
+        if (toChatUsername.equalsIgnoreCase(username)) {// 点击了对方
+            getAppointmentList();
+        } else {// 点击了自己
+            startActivity(new Intent(getActivity(), AccountInfoActivity.class));
+        }
         //handling when user click avatar
 //        Intent intent = new Intent(getActivity(), UserProfileActivity.class);
 //        intent.putExtra("username", username);
 //        startActivity(intent);
+    }
+
+    /**
+     * 获取对话者之间发生的预约数据
+     */
+    private void getAppointmentList() {
+        if (selfUserId == null || doctorBean == null || userBean == null)
+            return;
+        params.clear();
+        params.put("pagesize", 10);
+        params.put("pageindex", 1);
+        params.put("starttime", "");
+        params.put("endtime", "");
+        params.put("userid", userBean.user_id);
+        params.put("doctorname", doctorBean.doctor_name);
+        new BaseActivity.SoapAsyncTask() {
+            @Override
+            protected void onPostExecute(String s) {
+                if (s == null)
+                    return;
+                try {
+                    ArrayList<AppointmentBean> tempData = new Gson().fromJson(new JSONObject(s).optString("data")
+                            , new TypeToken<ArrayList<AppointmentBean>>() {
+                            }.getType());
+                    if (tempData.size() == 0) {
+                        MyToast.show("您没有与" + nick + "有过预约业务");
+                        return;
+                    }
+                    Collections.sort(tempData);
+                    int id = tempData.get(0).appointment_id;
+                    if (selfType != null && id > 0)
+                        startActivity(new Intent(getActivity(), AppointDetailActivity.class).putExtra("type", selfType).putExtra("id", id));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }.execute("Patient_AppointmentList", params);
     }
 
     @Override
@@ -420,8 +542,8 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentHe
 
         @Override
         public EaseChatRow getCustomChatRow(EMMessage message, int position, BaseAdapter adapter) {
-            if (message.getType() == EMMessage.Type.TXT) {
-                // voice call or video call
+//            if (message.getType() == EMMessage.Type.TXT) {
+            // voice call or video call
 //                if (message.getBooleanAttribute(Constant.MESSAGE_ATTR_IS_VOICE_CALL, false) ||
 //                    message.getBooleanAttribute(Constant.MESSAGE_ATTR_IS_VIDEO_CALL, false)){
 //                    return new ChatRowVoiceCall(getActivity(), message, position, adapter);
@@ -432,8 +554,8 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentHe
 //                } else if (message.getBooleanAttribute(RedPacketConstant.MESSAGE_ATTR_IS_RED_PACKET_ACK_MESSAGE, false)) {//open redpacket message
 //                    return new ChatRowRedPacketAck(getActivity(), message, position, adapter);
 //                }
-                //end of red packet code
-            }
+            //end of red packet code
+//            }
             return null;
         }
 
