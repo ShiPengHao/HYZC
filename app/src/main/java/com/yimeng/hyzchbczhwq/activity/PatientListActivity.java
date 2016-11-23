@@ -54,7 +54,7 @@ public class PatientListActivity extends BaseActivity implements AdapterView.OnI
     protected void initView() {
         iv_back = (ImageView) findViewById(R.id.iv_back);
         listView = (ListView) findViewById(R.id.lv);
-        tv_tip = (TextView) findViewById(R.id.tv_tip);
+        tv_tip = (TextView) findViewById(R.id.tv_doctor_tip);
         tv_add = (TextView) findViewById(R.id.tv_add);
         tv_tip.setVisibility(View.GONE);
     }

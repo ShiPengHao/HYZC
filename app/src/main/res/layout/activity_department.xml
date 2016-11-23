@@ -1,39 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white">
+    android:background="@color/white"
+    android:orientation="vertical">
 
-
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_height="wrap_content">
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/tv_title"
+            style="@style/TextTitle"
+            android:text="@string/booking" />
 
-            <TextView
-                android:id="@+id/tv_title"
-                style="@style/TextTitle"
-                android:text="@string/booking" />
+        <ImageView
+            android:id="@+id/iv_back"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="20dp"
+            android:src="@mipmap/back" />
+    </RelativeLayout>
 
-            <ImageView
-                android:id="@+id/iv_back"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="20dp"
-                android:src="@mipmap/back" />
-        </RelativeLayout>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:scrollbars="none">
+
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp">
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/tv_department"
@@ -58,9 +59,8 @@
                 <com.yimeng.hyzchbczhwq.view.CycleViewPager
                     android:id="@+id/vp"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_height="match_parent"/>
 
-                </com.yimeng.hyzchbczhwq.view.CycleViewPager>
 
                 <TextView
                     android:id="@+id/tv_img_title"
@@ -94,61 +94,91 @@
             </RelativeLayout>
 
 
-            <TextView
-                android:id="@+id/tv_schedule"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:drawableRight="@mipmap/r_arrow"
-                android:gravity="center_vertical"
-                android:minHeight="@dimen/finger_width"
-                android:text="@string/doctor_duty_list"
-                android:textColor="@color/black"
-                android:textSize="18dp" />
+                android:layout_height="match_parent"
+                android:orientation="vertical">
 
 
-            <include layout="@layout/layout_divider" />
+                <TextView
+                    android:id="@+id/tv_schedule"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawableRight="@mipmap/r_arrow"
+                    android:gravity="center_vertical"
+                    android:minHeight="@dimen/finger_width"
+                    android:text="@string/doctor_duty_list"
+                    android:textColor="@color/black"
+                    android:textSize="18dp" />
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:minHeight="@dimen/finger_width"
-                android:text="@string/doctor_on_duty"
-                android:textColor="@color/black"
-                android:textSize="18dp" />
+
+                <include layout="@layout/layout_divider" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:minHeight="@dimen/finger_width"
+                    android:text="@string/doctor_on_duty"
+                    android:textColor="@color/black"
+                    android:textSize="18dp" />
 
 
-            <com.yimeng.hyzchbczhwq.view.ListViewForScrollView
-                android:id="@+id/lv"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:cacheColorHint="@android:color/transparent"
-                android:divider="@color/grey_line"
-                android:dividerHeight="1dp"
-                android:listSelector="@android:color/transparent"
-                android:scrollbars="none" />
+                <com.yimeng.hyzchbczhwq.view.ListViewForScrollView
+                    android:id="@+id/lv"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:cacheColorHint="@android:color/transparent"
+                    android:divider="@color/grey_line"
+                    android:dividerHeight="1dp"
+                    android:listSelector="@android:color/transparent"
+                    android:scrollbars="none" />
 
-            <TextView
-                android:id="@+id/tv_tip"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:gravity="center"
-                android:text="抱歉，暂时没有医生可以提供服务！"
-                android:textColor="@color/black"
-                android:textSize="20dp" />
+                <TextView
+                    android:id="@+id/tv_doctor_tip"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:gravity="center"
+                    android:paddingBottom="6dp"
+                    android:text="@string/tip_today_no_doctor"
+                    android:textColor="@color/black_item_content"
+                    android:textSize="16dp" />
 
-            <com.yimeng.hyzchbczhwq.view.ListViewForScrollView
-                android:id="@+id/lv_news"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@null"
-                android:cacheColorHint="@null"
-                android:divider="@drawable/listview_divider"
-                android:padding="10dp"
-                android:scrollbars="none" />
+                <include layout="@layout/layout_divider" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:minHeight="@dimen/finger_width"
+                    android:text="@string/department_news"
+                    android:textColor="@color/black"
+                    android:textSize="18dp" />
+
+                <com.yimeng.hyzchbczhwq.view.ListViewForScrollView
+                    android:id="@+id/lv_news"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:cacheColorHint="@android:color/transparent"
+                    android:divider="@color/grey_line"
+                    android:dividerHeight="1dp"
+                    android:listSelector="@android:color/transparent"
+                    android:scrollbars="none" />
+
+                <TextView
+                    android:id="@+id/tv_news_tip"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:gravity="center"
+                    android:paddingBottom="6dp"
+                    android:text="@string/tip_no_news"
+                    android:textColor="@color/black_item_content"
+                    android:textSize="16dp" />
+            </LinearLayout>
         </LinearLayout>
-    </LinearLayout>
-</ScrollView>
+    </ScrollView>
+</LinearLayout>
 
 

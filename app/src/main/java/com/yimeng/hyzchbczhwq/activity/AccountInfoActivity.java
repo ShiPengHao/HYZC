@@ -480,7 +480,7 @@ public class AccountInfoActivity extends BaseActivity implements View.OnClickLis
         if (null == selectOrderDialog) {
             selectOrderDialog = new AlertDialog.Builder(this)
                     .setTitle("请选择是否坐诊")
-                    .setSingleChoiceItems(isOrderStates, 1, new DialogInterface.OnClickListener() {
+                    .setSingleChoiceItems(isOrderStates, doctorBean.Is_Order, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             dialog.dismiss();
@@ -511,9 +511,9 @@ public class AccountInfoActivity extends BaseActivity implements View.OnClickLis
                                 @Override
                                 public void onClick(DialogInterface dialog, int which, boolean isChecked) {
                                     if (isChecked)
-                                        doctorSchedule.add(String.valueOf(which+1));
+                                        doctorSchedule.add(String.valueOf(which + 1));
                                     else
-                                        doctorSchedule.remove(String.valueOf(which+1));
+                                        doctorSchedule.remove(String.valueOf(which + 1));
                                 }
                             })
                     .setCancelable(false)

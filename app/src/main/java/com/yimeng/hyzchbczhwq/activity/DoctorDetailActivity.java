@@ -68,15 +68,13 @@ public class DoctorDetailActivity extends BaseActivity implements View.OnClickLi
     private EditText et_disease_description;
     private Button bt_appoint;
     private Button bt_chat;
-    private Button bt_back;
     private TextView tv_name;
     private TextView tv_sex;
     private TextView tv_age;
     private TextView tv_email;
     private TextView tv_remark;
     private DoctorBean doctorBean;
-    private Calendar calendar;
-    private DatePicker.OnDateChangedListener onDateChangedListener;
+//    private DatePicker.OnDateChangedListener onDateChangedListener;
     private String date;
     private ImageView iv_back;
     private LinearLayout ll_choose_date;
@@ -107,7 +105,6 @@ public class DoctorDetailActivity extends BaseActivity implements View.OnClickLi
         et_disease_description = (EditText) findViewById(R.id.et_disease_description);
         bt_appoint = (Button) findViewById(R.id.bt_appoint);
         bt_chat = (Button) findViewById(R.id.bt_chat);
-        bt_back = (Button) findViewById(R.id.bt_back);
         ll_choose_date = (LinearLayout) findViewById(R.id.ll_choose_date);
 //        timePicker = (NumberPicker) findViewById(R.id.numberPicker1);
 
@@ -132,7 +129,6 @@ public class DoctorDetailActivity extends BaseActivity implements View.OnClickLi
     protected void setListener() {
         bt_appoint.setOnClickListener(this);
         bt_chat.setOnClickListener(this);
-        bt_back.setOnClickListener(this);
         rl_score.setOnClickListener(this);
         ll_choose_date.setOnClickListener(this);
         iv_back.setOnClickListener(this);
@@ -212,7 +208,7 @@ public class DoctorDetailActivity extends BaseActivity implements View.OnClickLi
      * 获取此医生可预约的时间
      */
     private void getDoctorWorkDays() {
-        calendar = Calendar.getInstance(Locale.CHINA);
+        Calendar calendar = Calendar.getInstance(Locale.CHINA);
         calendar.setTimeZone(TimeZone.getTimeZone("GMT+8:00"));
         int todayOfWeek = calendar.get(Calendar.DAY_OF_WEEK) - 1;
         if (todayOfWeek == 0)
@@ -239,7 +235,7 @@ public class DoctorDetailActivity extends BaseActivity implements View.OnClickLi
             dayOfWeek = (todayOfWeek + i) % 7;
             if (dayOfWeek == 0)
                 dayOfWeek = 7;
-            if (doctorBean.Is_Order == 1 || doctorBean.week.contains(String.valueOf(dayOfWeek))) {// 当天坐诊
+            if (doctorBean.Is_Order == 1 || doctorBean.weekday.contains(String.valueOf(dayOfWeek))) {// 当天坐诊
                 workDays.add(String.valueOf(calendar.get(Calendar.YEAR)) + "-" + (calendar.get(Calendar.MONTH) + 1)
                         + "-" + calendar.get(Calendar.DAY_OF_MONTH) + ",  星期" + days[dayOfWeek - 1]);
             }
@@ -261,7 +257,6 @@ public class DoctorDetailActivity extends BaseActivity implements View.OnClickLi
                 startActivity(new Intent(this, ChatActivity.class).putExtra(EaseConstant.EXTRA_USER_ID, "doctor_" + doctorBean.doctor_id));
                 break;
             case R.id.iv_back:
-            case R.id.bt_back:
                 finish();
                 break;
             case R.id.ll_choose_date:

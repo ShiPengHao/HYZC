@@ -1,12 +1,15 @@
 package com.yimeng.hyzchbczhwq.activity;
 
+import android.app.Dialog;
 import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
@@ -56,12 +59,13 @@ public class DepartmentActivity extends BaseActivity implements AdapterView.OnIt
 
     private ImageView iv_back;
     private ListView listView;
-    private TextView tv_tip;
+    private TextView tv_doctor_tip;
+    private TextView tv_news_tip;
     private TextView tv_title;
     private String departments_id;
     private TextView tv_department;
     private TextView tv_schedule;
-    private AlertDialog scheduleDialog;
+    private Dialog scheduleDialog;
 
     private String[] days = new String[]{"一", "二", "三", "四", "五", "六", "日"};
 
@@ -94,11 +98,12 @@ public class DepartmentActivity extends BaseActivity implements AdapterView.OnIt
     protected void initView() {
         iv_back = (ImageView) findViewById(R.id.iv_back);
         listView = (ListView) findViewById(R.id.lv);
-        tv_tip = (TextView) findViewById(R.id.tv_tip);
+        tv_doctor_tip = (TextView) findViewById(R.id.tv_doctor_tip);
+        tv_news_tip = (TextView) findViewById(R.id.tv_news_tip);
         tv_title = (TextView) findViewById(R.id.tv_title);
         tv_schedule = (TextView) findViewById(R.id.tv_schedule);
         tv_department = (TextView) findViewById(R.id.tv_department);
-        tv_tip.setVisibility(View.GONE);
+        tv_doctor_tip.setVisibility(View.GONE);
 
         viewPager = (CycleViewPager) findViewById(R.id.vp);
         ll_points = (LinearLayout) findViewById(R.id.ll_points);
@@ -241,13 +246,13 @@ public class DepartmentActivity extends BaseActivity implements AdapterView.OnIt
                     parseListResult(doctor, DoctorBean.class, result);
                     Collections.sort(doctor);
                     doctorAdapter.notifyDataSetChanged();
-                    if (doctor.size() > 0) {
-                        listView.setVisibility(View.VISIBLE);
-                        tv_tip.setVisibility(View.GONE);
-                    } else {
-                        listView.setVisibility(View.GONE);
-                        tv_tip.setVisibility(View.VISIBLE);
-                    }
+                }
+                if (doctor.size() > 0) {
+                    listView.setVisibility(View.VISIBLE);
+                    tv_doctor_tip.setVisibility(View.GONE);
+                } else {
+                    listView.setVisibility(View.GONE);
+                    tv_doctor_tip.setVisibility(View.VISIBLE);
                 }
             }
         }.execute(params);
@@ -286,6 +291,10 @@ public class DepartmentActivity extends BaseActivity implements AdapterView.OnIt
                         newsImgList.clear();
                         newsImgList.addAll(tempList);
                         listAdapter.notifyDataSetChanged();
+                        if (newsImgList.size() > 0)
+                            tv_news_tip.setVisibility(View.GONE);
+                        else
+                            tv_news_tip.setVisibility(View.VISIBLE);
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -335,10 +344,14 @@ public class DepartmentActivity extends BaseActivity implements AdapterView.OnIt
      */
     private void showScheduleWindow() {
         if (scheduleDialog == null) {
-            scheduleDialog = new AlertDialog.Builder(this)
-                    .setTitle(R.string.doctor_duty_list)
-                    .setView(initScheduleView(), DensityUtil.dip2px(10), DensityUtil.dip2px(10), DensityUtil.dip2px(10), DensityUtil.dip2px(10))
-                    .create();
+            scheduleDialog = new Dialog(this);
+            scheduleDialog.setTitle(R.string.doctor_duty_list);
+            scheduleDialog.setContentView(initScheduleView());
+            Window dialogWindow = scheduleDialog.getWindow();
+            assert dialogWindow != null;
+            WindowManager.LayoutParams lp = dialogWindow.getAttributes();
+            lp.width = DensityUtil.SCREEN_WIDTH; // 宽度
+            dialogWindow.setAttributes(lp);
         }
         scheduleDialog.show();
     }
@@ -346,14 +359,27 @@ public class DepartmentActivity extends BaseActivity implements AdapterView.OnIt
     /**
      * 创建排班表视图
      *
-     * @return 返回一个view用来构建视图
+     * @return view视图
      */
     private View initScheduleView() {
-        final GridView gridView = (GridView) UiUtils.inflate(R.layout.layout_schedule);
+        View parentView = UiUtils.inflate(R.layout.layout_schedule_parent);
+        initDoctorNameView(parentView);
+        initScheduleGridView(parentView);
+        return parentView;
+    }
+
+    /**
+     * 创建排班表的排班视图
+     *
+     * @param parentView 父控件
+     */
+    private void initScheduleGridView(View parentView) {
+        // 排班表视图
+        final GridView gridView = (GridView) parentView.findViewById(R.id.gd_schedule);
         BaseAdapter gridViewAdapter = new BaseAdapter() {
             @Override
             public int getCount() {
-                return (doctorAll.size() + 1) * 8;
+                return (doctorAll.size() + 1) * 7;
             }
 
             @Override
@@ -375,23 +401,21 @@ public class DepartmentActivity extends BaseActivity implements AdapterView.OnIt
                     textView.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            int doctorIndex = position / 8 - 1;
+                            int doctorIndex = position / 7 - 1;
                             if (doctorIndex >= 0) {
-                                dismissDialog();
                                 startActivity(new Intent(DepartmentActivity.this, DoctorDetailActivity.class).putExtra("doctor", doctorAll.get(doctorIndex)));
+                                dismissDialog();
                             }
                         }
                     });
                     convertView.setTag(textView);
                 }
                 TextView textView = (TextView) convertView.getTag();
-                if (position == 0)
-                    textView.setText("");
-                else if (position < 8)
-                    textView.setText(days[position - 1]);
-                else if (position % 8 == 0)
-                    textView.setText(doctorAll.get(position / 8 - 1).doctor_name);
-                else if (doctorAll.get(position / 8 - 1).Is_Order == 1 || doctorAll.get(position / 8 - 1).week.contains(String.valueOf(position % 8))) {
+                if (position < 7)
+                    textView.setText(days[position]);
+//                else if (position % 8 == 0)
+//                    textView.setText(doctorAll.get(position / 8 - 1).doctor_name);
+                else if (doctorAll.get(position / 7 - 1).Is_Order == 1 || doctorAll.get(position / 7 - 1).weekday.contains(String.valueOf(position % 7 + 1))) {
                     textView.setText("班");
                 } else
                     textView.setText("");
@@ -400,7 +424,55 @@ public class DepartmentActivity extends BaseActivity implements AdapterView.OnIt
             }
         };
         gridView.setAdapter(gridViewAdapter);
-        return gridView;
+    }
+
+    /**
+     * 创建医生姓名视图
+     *
+     * @param parentView 父控件
+     */
+    private void initDoctorNameView(View parentView) {
+        // 医生姓名列表
+        ListView listView = (ListView) parentView.findViewById(R.id.lv);
+        listView.setAdapter(new BaseAdapter() {
+            @Override
+            public int getCount() {
+                return doctorAll.size() + 1;
+            }
+
+            @Override
+            public Object getItem(int position) {
+                return null;
+            }
+
+            @Override
+            public long getItemId(int position) {
+                return 0;
+            }
+
+            @NonNull
+            @Override
+            public View getView(final int position, View convertView, ViewGroup parent) {
+                if (convertView == null) {
+                    convertView = UiUtils.inflate(R.layout.item_text_schedule);
+                    TextView textView = (TextView) convertView.findViewById(R.id.tv);
+                    textView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            if (position >= 1) {
+                                startActivity(new Intent(DepartmentActivity.this, DoctorDetailActivity.class).putExtra("doctor", doctorAll.get(position - 1)));
+                                dismissDialog();
+                            }
+                        }
+                    });
+                    convertView.setTag(textView);
+                }
+                TextView textView = (TextView) convertView.getTag();
+                textView.setText(position == 0 ? "" : doctorAll.get(position - 1).doctor_name);
+                return convertView;
+            }
+        });
+
     }
 
     @Override

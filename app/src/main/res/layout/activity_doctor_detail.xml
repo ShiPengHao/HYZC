@@ -291,7 +291,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="@color/colorAccent"
+            android:background="@drawable/selector_tv_bg_green_grey"
             android:gravity="center"
             android:text="@string/appoint_now"
             android:textColor="@color/white" />
@@ -301,20 +301,11 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="@color/bt_yellow"
+            android:background="@drawable/selector_tv_bg_yellow_grey"
             android:gravity="center"
             android:text="@string/chat_online"
             android:textColor="@color/white" />
 
-        <Button
-            android:id="@+id/bt_back"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@color/bg_grey_aaa"
-            android:gravity="center"
-            android:text="@string/back"
-            android:textColor="@color/white" />
     </LinearLayout>
 
 </LinearLayout>

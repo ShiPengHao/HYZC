@@ -516,4 +516,7 @@
     <string name="remark_">备注</string>
     <string name="doctor_on_duty">今日坐诊医生</string>
     <string name="doctor_duty_list">科室医生排班表</string>
+    <string name="department_news">科室快报</string>
+    <string name="tip_today_no_doctor">抱歉，今天没有医生可以提供服务！</string>
+    <string name="tip_no_news">暂无内容</string>
 </resources>

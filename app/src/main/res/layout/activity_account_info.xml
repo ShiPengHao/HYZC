@@ -29,6 +29,7 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="10dp"
+            android:background="@drawable/selector_tv_bg_grey_transparent"
             android:gravity="center"
             android:padding="5dp"
             android:text="@string/edit"
@@ -305,15 +306,15 @@
                         android:textSize="18dp" />
 
                     <TextView
-                        android:paddingRight="8dp"
-                        android:drawableRight="@mipmap/r_arrow"
                         android:id="@+id/tv_invite_code"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textIsSelectable="true"
                         android:layout_marginLeft="10dp"
+                        android:drawableRight="@mipmap/r_arrow"
+                        android:paddingRight="8dp"
                         android:text="@string/invite_code"
                         android:textColor="@color/black_item_content"
+                        android:textIsSelectable="true"
                         android:textSize="18dp" />
                 </LinearLayout>
 

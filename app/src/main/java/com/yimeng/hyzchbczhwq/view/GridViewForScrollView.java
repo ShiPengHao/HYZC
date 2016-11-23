@@ -2,22 +2,24 @@ package com.yimeng.hyzchbczhwq.view;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.widget.ListView;
+import android.widget.GridView;
+
 
 /**
- * 适应scrollview的list
+ * 适应scrollview的grid
  */
-public class ListViewForScrollView extends ListView {
-    public ListViewForScrollView(Context context) {
+
+public class GridViewForScrollView extends GridView {
+    public GridViewForScrollView(Context context) {
         super(context);
     }
 
-    public ListViewForScrollView(Context context, AttributeSet attrs) {
+    public GridViewForScrollView(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
-    public ListViewForScrollView(Context context, AttributeSet attrs,int defStyle) {
-        super(context, attrs, defStyle);
+    public GridViewForScrollView(Context context, AttributeSet attrs, int defStyleAttr) {
+        super(context, attrs, defStyleAttr);
     }
 
     @Override
