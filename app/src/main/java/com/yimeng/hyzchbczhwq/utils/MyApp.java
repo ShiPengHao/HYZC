@@ -26,9 +26,15 @@ public class MyApp extends Application {
      * 存储本应用已经打开的activity的集合
      */
     private CopyOnWriteArrayList<Activity> activities = new CopyOnWriteArrayList<>();
-
+    /**
+     * 应用实例
+     */
     private static MyApp instance;
 
+    /**
+     * 获得应用实例
+     * @return 应用实例
+     */
     public static MyApp getAppContext() {
         return instance;
     }
@@ -38,6 +44,7 @@ public class MyApp extends Application {
     public void onCreate() {
         super.onCreate();
         instance = this;
+//        LeakCanary.install(this);
         ThreadUtils.runOnUIThread(null);
         activities.clear();
 

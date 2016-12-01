@@ -24,6 +24,7 @@ import com.yimeng.hyzchbczhwq.activity.AddressChoiceActivity;
 import com.yimeng.hyzchbczhwq.activity.BaseActivity;
 import com.yimeng.hyzchbczhwq.activity.DepartmentActivity;
 import com.yimeng.hyzchbczhwq.activity.DepartmentChoiceActivity;
+import com.yimeng.hyzchbczhwq.activity.TestActivity;
 import com.yimeng.hyzchbczhwq.activity.WebViewActivity;
 import com.yimeng.hyzchbczhwq.adapter.DefaultAdapter;
 import com.yimeng.hyzchbczhwq.bean.DecorateImgBean;
@@ -309,6 +310,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
                 startActivity(new Intent(getActivity(), WebViewActivity.class));// 健康教育
                 break;
             case R.id.ll_location:
+//                startActivity(new Intent(getActivity(), TestActivity.class));// 测试
                 startActivityForResult(new Intent(getActivity(),
                         AddressChoiceActivity.class).putExtra(MyConstant.REQUEST_CODE, REQUEST_CODE_FOR_CITY), REQUEST_CODE_FOR_CITY);// 选择市
                 break;

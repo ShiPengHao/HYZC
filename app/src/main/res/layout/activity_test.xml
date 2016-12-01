@@ -1,155 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorAccent"
-    android:orientation="vertical"
-    tools:context=".activity.TestActivity">
+    android:background="@color/white"
+    android:orientation="vertical">
 
     <TextView
         android:id="@+id/tv_title"
         android:layout_width="match_parent"
         android:layout_height="55dp"
+        android:background="@color/colorAccent"
         android:gravity="center"
         android:text="@string/test"
+        android:textColor="@color/white"
         android:textSize="24dp" />
-    <LinearLayout
+
+    <ListView
+        android:id="@+id/lv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <Button
-            android:id="@+id/bt_province"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/province" />
-
-        <Button
-            android:id="@+id/bt_city"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/city" />
-
-        <Button
-            android:id="@+id/bt_area"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/area" />
-    </LinearLayout>
-<LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <Button
-            android:id="@+id/bt_hospital"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/hospital" />
-
-        <Button
-            android:id="@+id/bt_department"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/department" />
-
-        <Button
-            android:id="@+id/bt_professional"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/professional" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <Button
-            android:id="@+id/bt_login"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/login" />
-
-        <Button
-            android:id="@+id/bt_register"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/register" />
-        <Button
-            android:id="@+id/bt_upload_img"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/upload_img" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <Button
-            android:id="@+id/bt_pick_doctor"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:ellipsize="middle"
-            android:maxLines="1"
-            android:text="@string/pick_doctor" />
-        <Button
-            android:id="@+id/bt_Load_Classify"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="药品分类" />
-        <Button
-            android:id="@+id/bt_Search_Medicine"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="搜索药品" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <Button
-            android:id="@+id/bt_Load_Usage"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:ellipsize="middle"
-            android:maxLines="1"
-            android:text="药品用法" />
+        android:cacheColorHint="@null"
+        android:descendantFocusability="afterDescendants"
+        android:divider="@color/bt_yellow"
+        android:dividerHeight="2dp"
+        android:listSelector="@null"
+        android:padding="8dp"
+        android:scrollbars="none" />
 
 
-    </LinearLayout>
-
-
-
-    <ScrollView
-        android:padding="10dp"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <TextView
-            android:id="@+id/tv"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="@string/app_name" />
-    </ScrollView>
 </LinearLayout>

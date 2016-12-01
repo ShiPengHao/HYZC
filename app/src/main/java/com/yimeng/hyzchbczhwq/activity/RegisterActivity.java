@@ -33,7 +33,6 @@ import com.yimeng.hyzchbczhwq.utils.MyToast;
 import com.yimeng.hyzchbczhwq.utils.ThreadUtils;
 import com.yimeng.hyzchbczhwq.utils.WebServiceUtils;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.InputStream;
@@ -234,7 +233,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.ll_invite_code:
-                startActivityForResult(new Intent(this, CaptureActivity.class),REQUEST_SCAN_QRCODE);
+                startActivityForResult(new Intent(this, CaptureActivity.class), REQUEST_SCAN_QRCODE);
                 break;
             case R.id.bt_register:
                 checkInfo();
@@ -305,7 +304,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
             tv_select_department.setText(String.format("%s%s", data.getStringExtra("hospital_name"), data.getStringExtra("departments_name")));
             return;
         }
-        if (requestCode == REQUEST_SCAN_QRCODE){
+        if (requestCode == REQUEST_SCAN_QRCODE) {
             String code = data.getStringExtra("result");
             if (!isEmpty(code)) {
                 et_invite_code.setText(code);
@@ -453,7 +452,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
                             }
                         }, 500);
 
-                    } catch (JSONException e) {
+                    } catch (Exception e) {
                         e.printStackTrace();
                         MyToast.show(getString(R.string.connect_error));
                         uploadImageDialog.dismiss();

@@ -143,7 +143,7 @@ public class DepartmentActivity extends BaseActivity implements AdapterView.OnIt
                         .resize(viewPager.getWidth(), viewPager.getHeight())
                         .placeholder(bannerPlaceHolder[position % 3])
                         .error(bannerPlaceHolder[position % 3])
-//                        .memoryPolicy(MemoryPolicy.NO_CACHE, MemoryPolicy.NO_STORE)
+//                        .memoryPolicy(MemoryPolicy.NO_CACHE, MemoryPolicy.NO_STORE)// 会导致跳页
                         .into(imageView);
                 container.addView(imageView);
                 return imageView;

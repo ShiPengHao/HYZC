@@ -8,7 +8,7 @@ android {
         applicationId "com.yimeng.hyzchbczhwq"
         minSdkVersion 14
         targetSdkVersion 23
-        versionCode 13
+        versionCode 14
         versionName "华医之春  V1.1.0"
     }
 
@@ -37,4 +37,6 @@ dependencies {
     compile 'com.github.armcha:AutoLinkTextView:0.1.1'
     compile project(':easeui')
     compile files('libs/zxing.jar')
+//    debugCompile 'com.squareup.leakcanary:leakcanary-android:1.3'
+//    releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.3'
 }

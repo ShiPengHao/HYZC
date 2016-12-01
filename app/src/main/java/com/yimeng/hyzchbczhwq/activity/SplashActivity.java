@@ -14,6 +14,7 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
+import android.view.KeyEvent;
 import android.widget.ImageView;
 
 import com.hyphenate.EMCallBack;
@@ -31,6 +32,7 @@ import com.yimeng.hyzchbczhwq.utils.ThreadUtils;
 import com.yimeng.hyzchbczhwq.utils.WebServiceUtils;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.FileCallBack;
+import com.zhy.http.okhttp.request.RequestCall;
 
 import org.json.JSONObject;
 
@@ -57,6 +59,7 @@ public class SplashActivity extends BaseActivity {
     private AlertDialog updateDialog;
     private int apkSize;
     private ProgressDialog progressDialog;
+    private RequestCall requestCall;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -360,21 +363,39 @@ public class SplashActivity extends BaseActivity {
         } else {
             fileDir = getFilesDir().getAbsolutePath();
         }
-        OkHttpUtils.get().url(downloadUrl).build().execute(new FileCallBack(fileDir, getString(R.string.apk_name)) {
+        requestCall = OkHttpUtils.get().url(downloadUrl).build().connTimeOut(300000).readTimeOut(300000).writeTimeOut(300000);
+        requestCall.execute(new FileCallBack(fileDir, getString(R.string.apk_name)) {
 
             @Override
             public void onBefore(Request request, int id) {
+                int contentLength = 0;
+                try {
+                    contentLength = (int) request.body().contentLength();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
                 progressDialog = new ProgressDialog(SplashActivity.this);
                 progressDialog.setMessage("拼命下载中...");
+                progressDialog.setOnKeyListener(new DialogInterface.OnKeyListener() {
+                    @Override
+                    public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
+                        if (progressDialog != null && progressDialog.isShowing()) {
+                            requestCall.cancel();
+                            MyToast.show("下载已取消");
+                            return true;
+                        }
+                        return false;
+                    }
+                });
                 progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
                 progressDialog.show();
-                progressDialog.setMax(apkSize);
+                progressDialog.setMax(contentLength == 0 ? apkSize : contentLength);
             }
 
             @Override
             public void inProgress(float progress, long total, int id) {
                 if (progressDialog != null && progressDialog.isShowing())
-                    progressDialog.setProgress(-(int) progress);
+                    progressDialog.setProgress(progress > 0 ? (int) (progress * progressDialog.getMax()) : -(int) progress);
             }
 
             @Override
@@ -383,7 +404,6 @@ public class SplashActivity extends BaseActivity {
                 Intent intent = new Intent(Intent.ACTION_VIEW);
                 intent.setDataAndType(Uri.fromFile(file), "application/vnd.android.package-archive");
                 startActivity(intent);
-                finish();
             }
 
             @Override
@@ -394,6 +414,7 @@ public class SplashActivity extends BaseActivity {
                     attemptToLogin();
                 else
                     goToLogin();
+
             }
         });
     }
@@ -404,6 +425,8 @@ public class SplashActivity extends BaseActivity {
             updateDialog.dismiss();
         if (progressDialog != null && progressDialog.isShowing())
             progressDialog.dismiss();
+        if (requestCall != null)
+            requestCall.cancel();
         super.onDestroy();
     }
 
@@ -436,6 +459,7 @@ public class SplashActivity extends BaseActivity {
         startActivity(new Intent(this, IntroduceActivity.class));
         finish();
     }
+
 
     /**
      * 判断本应用是否在本机首次运行
